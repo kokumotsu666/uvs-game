@@ -419,7 +419,24 @@ async function showResult(bs){
 
 /* ---------- コントローラ：CPU ---------- */
 // 重撃の判断（純粋関数。実戦とシミュレーションで共用）
+function isCounterDeck(p){return p.deckKey==='雲雀・反撃'||p.deckKey==='雲雀・LO';}
+// Optional draw value only: mandatory card effects and draw counts stay unchanged.
+function counterDrawValue(p,n){
+  if(p.deck.length<=n+4)return -1000;
+  const handAfter=p.hand.length-1;
+  const gain=handAfter>=7?35:handAfter>=5?90:220;
+  return n*(gain-(p.deck.length<=10?160:25))-110;
+}
 function heavyPolicy(p,o,elig,ctx,committed,hp){
+  if(isCounterDeck(p)&&!(hp&&hp.counterDisabled)){
+    hp=Object.assign({},hp,{minHand:ctx.isAtk?3:1,budgetExtra:ctx.isAtk?0:1});
+    // Keep the last dedicated guard for the next enemy turn unless this hit wins.
+    if(ctx.isAtk&&o.damage.length+ctx.dp<CONFIG.winDamage){
+      const guards=p.hand.filter(c=>c.tech==='防御');
+      if(guards.length===1)elig=elig.filter(c=>c!==guards[0]);
+      if(!elig.length)return null;
+    }
+  }
   hp=hp||{minHand:2,budgetExtra:1};
   const losing=ctx.isAtk?ctx.at<ctx.df:ctx.df<=ctx.at;
   if(!losing)return null;
@@ -701,7 +718,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=__f;else window.UV
       note:'重撃札を厚くし、Lv5で相手の対抗テキスト（鉄壁・くぐつのDF強化）を封じる。対雲雀LO 52%（v1.2計測）'},
     '葛城・削り':{char:'葛城',list:[['サマーソルト',3],['ドラゴンベアード',3],['ドラゴンバイト',3],['はじめのチョップ',3],['省刃',3],['もっかいウサギ蹴り',3],['ハーフムーン',3],['残月',2],['鉄壁のガード',2],['くぐつダミー',2],['牛乳',2],['緑の巻物',1]],
       note:'勝利時に相手の山札を削る札とLv4/Lv5で山札切れを狙う。Lv4の削りはリメイク追加。対雲雀LO 65%（v1.2計測）'},
-    '雲雀・LO':{char:'雲雀',chars:'雲雀v2',list:[['緑の巻物',3],['鉄壁のガード',3],['くぐつダミー',3],['はじめのチョップ',3],['本能のままに',2],['雲雀つっこみ',2],['えあウサギ',2],['ドラゴンベアード',3],['もっかいウサギ蹴り',3],['ハーフムーン',3],['牛乳',2],['病院の待合室にて',1]],
+    '雲雀・反撃':{char:'雲雀',chars:'雲雀v2',list:[['緑の巻物',3],['鉄壁のガード',3],['くぐつダミー',3],['はじめのチョップ',3],['本能のままに',2],['雲雀つっこみ',2],['えあウサギ',2],['ドラゴンベアード',3],['もっかいウサギ蹴り',3],['ハーフムーン',3],['牛乳',2],['病院の待合室にて',1]],
       note:'高DFキャラ＋防御札＋緑の巻物で守る。Lv4は防御属性のカード（鉄壁・くぐつ）でディフェンスするたび1枚引き、守りきった手札で反撃する（2026-11-02 試験採用、旧Lv4の連撃封じから変更）'},
   };
   for(const [k,v] of Object.entries(FIXED)){
@@ -765,7 +782,7 @@ function gaugeValue(p,card){ // この札がゲージに入る価値
 function deckValue(p){return useW().deck+(p.deck.length<=6?200:0);}
 
 // 1バトルをロールアウトして、攻撃側から見た利得を返す（状態は変更しない）
-function evalBattle(A,D,atkCard,defCard,mode){
+function evalBattle(A,D,atkCard,defCard,mode,counterSeat=null){
   // A,D は仮想プレイヤー（hand差し替え済み）。atkCard は A.hand の要素、defCard は D.hand の要素か null
   const aHand=A.hand.filter(c=>c!==atkCard), dHand=defCard?D.hand.filter(c=>c!==defCard):D.hand.slice();
   const a=vplayer(A,aHand), d=vplayer(D,dHand);
@@ -788,7 +805,7 @@ function evalBattle(A,D,atkCard,defCard,mode){
     while(passes<2&&count<CONFIG.heavy.maxCards){
       const side=who===0?bs.atk:bs.def;const pl=side.p;const opp=who===0?d:a;
       const elig=blocked(who)?[]:pl.hand.filter(c=>heavyOK(pl,c));
-      const add=elig.length?heavyPolicy(pl,opp,elig,{at:bs.at,df:bs.df,dp:bs.dp,isAtk:who===0},side.heavy.length,useHP()):null;
+      const add=elig.length?heavyPolicy(pl,opp,elig,{at:bs.at,df:bs.df,dp:bs.dp,isAtk:who===0},side.heavy.length,Object.assign({},useHP(),{counterDisabled:counterSeat===null})):null;
       if(add){pl.hand=pl.hand.filter(c=>c!==add);side.heavy.push(add);count++;passes=0;computeTotals(bs);}
       else passes++;
       who=1-who;
@@ -814,6 +831,22 @@ function evalBattle(A,D,atkCard,defCard,mode){
     if(atkCard.color!=='飛'&&atkCard.color!=='秘')pay+=gaugeValue(A,atkCard);
     if(defCard&&defCard.onDefWin)pay-=gaugeValue(A,atkCard)+useW().hand*0.3; // 零雹
   }
+  if(counterSeat===A.idx){
+    const lethal=success&&D.damage.length+dp>=CONFIG.winDamage;
+    if(!lethal){
+      // Spending guards/heavy cards on a failed attack delays the counterattack.
+      const reserve=c=>c.tech==='防御'?300:c.icons.includes('U')?140:0;
+      pay-=reserve(atkCard)+aHeavy.reduce((n,c)=>n+reserve(c),0);
+      if(!success)pay-=350;
+      if(A.hand.length-aHeavy.length-1<3)pay-=250;
+    }else pay+=useW().lethal;
+  }else if(counterSeat===D.idx&&defCard&&!success){
+    // The existing payoff already rewards enemy heavy-card expenditure.
+    // Value Lv4's mandatory guard draw according to remaining deck/hand space.
+    if(D.charDeck[0].onGuard&&defCard.tech==='防御')
+      pay-=Math.max(-250,counterDrawValue(d,1));
+    pay-=120; // A successful guard preserves the next turn's attacking resources.
+  }
   return pay;
 }
 
@@ -837,6 +870,7 @@ function sampleFrom(items,probs){let r=rng();for(let i=0;i<items.length;i++){r-=
 
 // 攻撃側の判断：行＝自分の攻撃札（＋攻撃しない）、列＝相手の防御札（名前）＋なし
 function solveAttack(p,o,usable,mode){
+  const counterSeat=isCounterDeck(p)?p.idx:null;
   const rows=usable.slice();const allowNone=!mode;
   const colNames=new Map();  // name -> index
   const samples=[];
@@ -853,11 +887,11 @@ function solveAttack(p,o,usable,mode){
   for(const smp of samples){
     const a=vplayer(p,p.hand);
     rows.forEach((atk,i)=>{
-      const vNone=evalBattle(a,smp.d,atk,null,mode);
+      const vNone=evalBattle(a,smp.d,atk,null,mode,counterSeat);
       cols.forEach((nm,j)=>{
         let v;
         if(nm==='__none')v=vNone;
-        else{const dc=smp.defs.find(c=>c.name===nm);v=dc?evalBattle(a,smp.d,atk,dc,mode):vNone;}
+        else{const dc=smp.defs.find(c=>c.name===nm);v=dc?evalBattle(a,smp.d,atk,dc,mode,counterSeat):vNone;}
         M[i][j]+=v;cnt[i][j]++;
       });
     });
@@ -871,6 +905,7 @@ function solveAttack(p,o,usable,mode){
 }
 // 防御側の判断：行＝自分の防御札（＋なし）、列＝相手の攻撃札（名前）
 function solveDefend(p,o,usable,mode){
+  const counterSeat=isCounterDeck(p)?p.idx:null;
   const rows=usable.slice();rows.push(null);
   const colNames=new Map();const samples=[];
   for(let s=0;s<useS().samples;s++){
@@ -887,7 +922,7 @@ function solveDefend(p,o,usable,mode){
     const d=vplayer(p,p.hand);
     cols.forEach((nm,j)=>{
       const ac=smp.atks.find(c=>c.name===nm);if(!ac)return;
-      rows.forEach((def,i)=>{M[i][j]+=-evalBattle(smp.a,d,ac,def,mode);cnt[i][j]++;});
+      rows.forEach((def,i)=>{M[i][j]+=-evalBattle(smp.a,d,ac,def,mode,counterSeat);cnt[i][j]++;});
     });
   }
   for(let i=0;i<rows.length;i++)for(let j=0;j<cols.length;j++){if(cnt[i][j])M[i][j]/=cnt[i][j];else M[i][j]=M[rows.length-1][j]||0;}
@@ -911,6 +946,7 @@ function handUtility(p,hand,extraYo,extraIn,extraNames){
     let v=cardVal(c)/600*W_.hand;                 // 素の価値（基準600で手札1枚分）
     if(c.icons.includes('U'))v+=W_.hand*0.5;       // 重撃札はGP無視で使えるので常に価値あり
     if(c.dp===0)v*=0.6;
+    if(isCounterDeck(p)){if(c.tech==='防御')v+=W_.hand*0.9;if(c.icons.includes('U'))v+=W_.hand*0.4;}
     u+= c.icons.includes('U') ? v*(0.6+0.4/(1+d)) : v/(1+d);
   }
   // 山札にある緑の前提札が揃う価値（将来の連撃）
@@ -919,6 +955,7 @@ function handUtility(p,hand,extraYo,extraIn,extraNames){
 }
 function supportValue(p,o,c){
   const W_=useW();const n=c.name;
+  if(isCounterDeck(p)&&n.startsWith('緑の巻物'))return counterDrawValue(p,p.damage.length);
   if(n.startsWith('緑の巻物'))return p.damage.length*W_.hand-W_.hand*0.5;
   if(n.startsWith('赤の巻物'))return (p.charDeck.length>=2&&p.damage.length<=2)?2*W_.hand-dmgValue(p,1)*0.9:-1;
   if(n.startsWith('牛乳'))return p.damage.some(x=>x.type==='char')?dmgValue(p,1)*0.9-W_.hand*0.3:-1;
@@ -1061,6 +1098,13 @@ async function assess(method,p,a,ctl){
   return{kind:'heur',options:[]};
 }
 const Solver=makeSolver();Solver.assess=assess;
+const counterAI=makeSolver();
+for(const method of ['prepAction','chooseGauge','attack','defend','heavy','chain']){
+  const original=AI[method];
+  AI[method]=async function(p,...args){
+    return isCounterDeck(p)?counterAI[method](p,...args):original.call(this,p,...args);
+  };
+}
 Solver.makeSolver=makeSolver;Solver.evalBattle=evalBattle;Solver.solveMatrix=solveMatrix;Solver.defaults={W,S};
 
 if(typeof module!=='undefined'&&module.exports)module.exports=Solver; else root.Solver=Solver;
@@ -1166,6 +1210,8 @@ if(typeof module!=='undefined'&&module.exports)module.exports=Replay;else root.R
 window.UVS_CARDS_EXTRA({CARDS,CHARS,yo,inn,gaugeAll,draw,mill,log,rm,toBottom,applyDamage,cardVal,get G(){return G},get P(){return P},get RNG(){return RNG}});
 const FIXED=window.UVS_DECKS_FIXED({DECKS,CHARS,CARDS});
 const DECK_KEYS=Object.keys(FIXED);
+DECKS['雲雀・LO']=DECKS['雲雀・反撃'];
+CHARS['雲雀・LO']=CHARS['雲雀・反撃'];
 /* ---------- コントローラ：人間 ---------- */
 const Human={
   async prepAction(p,opts,ctx){
@@ -1389,7 +1435,7 @@ function showGameOver(){const o=G.over;if(!o)return;const w=P[1-o.loser];openOv(
 function startScreen(){
   $('#app').innerHTML=`<header><h1>UVS Engine — 固定デッキ5種（v1.3・再現ログ）</h1></header>
   <div class="board"><h3 style="margin:6px 0">Unlimited VS 再現エンジン（試作）</h3>
-   <p class="small">リメイク向けルールv2で、固定デッキ5種（飛鳥・連撃／柳生・射撃／斑鳩・対抗封じ／葛城・削り／雲雀・LO、各30枚＋キャラ5枚）を対戦させます。1台の端末で交代して遊ぶか、CPUと対戦できます。</p>
+   <p class="small">リメイク向けルールv2で、固定デッキ5種（飛鳥・連撃／柳生・射撃／斑鳩・対抗封じ／葛城・削り／雲雀・反撃、各30枚＋キャラ5枚）を対戦させます。1台の端末で交代して遊ぶか、CPUと対戦できます。</p>
    <h4>モード</h4>
    <label><input type="radio" name="mode" value="cpu" checked> CPU対戦（あなたがプレイヤー1）</label>
    <label><input type="radio" name="mode" value="hotseat"> 2人対戦（端末を交代）</label>
@@ -1438,3 +1484,4 @@ startScreen();
 </script>
 </body>
 </html>
+
