@@ -3,7 +3,7 @@ const a=load(BASE),b=load('candidate');
 const invariant=`JSON.stringify({CONFIG,CARDS,CHARS,DECKS},(k,v)=>typeof v==='function'?v.toString():v)`;
 assert.equal(a.run(invariant),b.run(invariant));assert.equal(a.html.match(/<style>[\s\S]*?<\/style>/)[0],b.html.match(/<style>[\s\S]*?<\/style>/)[0]);
 console.log('PASS unchanged rules/cards/deck definitions/CSS');
-function setup(){b.run(`CONFIG.deckSize=30;setupGame({decks:['柳生・射撃','葛城・削り'],ctls:[Solver.makeSolver(),Solver.makeSolver()],ai:[true,true],first:0,rng:Replay.mulberry32(100)});`);}
+function setup(){b.run(`CONFIG.deckSize=30;setupGame({decks:['柳生・射撃','葛城・削り'],ctls:[Solver.makeSolver(),Solver.makeSolver()],ai:[true,true],first:0,rng:Replay.mulberry32(100)});CPU_RESOURCES.beginDecision();`);}
 (async()=>{
  setup();assert(b.run(`(()=>{const p=P[0];p.hand=[CARDS['天刃'],CARDS['連刃']];p.deck=Array(20).fill(null);const rich=CPU_RESOURCES.drawValue(p,2);p.deck=Array(3).fill(null);return CPU_RESOURCES.drawValue(p,2)<rich})()`));
  setup();assert(b.run(`(()=>{const p=P[0];p.deck=Array(20).fill(null);p.hand=[CARDS['天刃']];const low=CPU_RESOURCES.drawValue(p,2);p.hand=Array(8).fill(CARDS['天刃']);return CPU_RESOURCES.drawValue(p,2)<low})()`));

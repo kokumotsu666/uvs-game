@@ -2,7 +2,7 @@ const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),cryp
 const ROOT=path.resolve(__dirname,'../..'),BASE='d757ca80709711ad9564898c39902f0fe001c411';
 const DECKS=['飛鳥・連撃','柳生・射撃','斑鳩・対抗封じ','葛城・削り','雲雀・反撃'];
 const CONFIGS=[];for(let i=0;i<5;i++)for(let j=i+1;j<5;j++)CONFIGS.push([DECKS[i],DECKS[j]],[DECKS[j],DECKS[i]]);
-function source(ref){const file=ref==='worktree'?path.join(ROOT,'index.html'):path.join(__dirname,ref==='refactor'?'refactor.html':ref==='candidate'?'candidate.html':'baseline.html');return fs.readFileSync(file,'utf8');}
+function source(ref){const file=ref==='worktree'?path.join(ROOT,'index.html'):path.join(__dirname,ref==='refactor'?'refactor.html':ref==='candidate'?'candidate.html':ref==='pre-cache'?'pre-cache.html':'baseline.html');return fs.readFileSync(file,'utf8');}
 function load(ref){
  const html=source(ref),errors=[],c=vm.createContext({console:{log(){},error(...a){errors.push(a.map(String).join(' '));}},setTimeout,clearTimeout});c.window=c;
  const run=s=>vm.runInContext(s,c);
