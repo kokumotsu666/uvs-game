@@ -1,0 +1,1398 @@
+{
+  "baselineCommit": "d757ca80709711ad9564898c39902f0fe001c411",
+  "manifest": {
+    "phase": "main",
+    "completed": 6000,
+    "errors": [],
+    "started": "2026-11-03T06:24:58.951Z",
+    "updated": "2026-11-03T06:29:17.331Z",
+    "countPerSeat": 500,
+    "parallel": 4,
+    "sourceCommit": "d757ca80709711ad9564898c39902f0fe001c411",
+    "sourceSHA256": "ffd3a0bc3f9a3447b0007bf0dc664ba841efdcdcaaff8d521a3a6ca48988d48d",
+    "configs": [
+      [
+        "柳生・射撃",
+        "葛城・削り"
+      ],
+      [
+        "葛城・削り",
+        "柳生・射撃"
+      ],
+      [
+        "葛城・削り",
+        "雲雀・反撃"
+      ],
+      [
+        "雲雀・反撃",
+        "葛城・削り"
+      ]
+    ],
+    "sizes": [
+      30,
+      35,
+      40
+    ],
+    "first": "game % 2 (0=P1,1=P2)",
+    "seed": "1000000 + [10,11,18,19][config] * 10000 + game",
+    "matchedSeedsAcrossSizes": true,
+    "solver": {
+      "samples": 24,
+      "iters": 120
+    },
+    "pilotUsesFirst10MainSeeds": true
+  },
+  "pilot": {
+    "phase": "pilot",
+    "completed": 120,
+    "errors": [],
+    "started": "2026-11-03T06:24:26.520Z",
+    "updated": "2026-11-03T06:24:34.252Z",
+    "countPerSeat": 10,
+    "parallel": 4,
+    "sourceCommit": "d757ca80709711ad9564898c39902f0fe001c411",
+    "sourceSHA256": "ffd3a0bc3f9a3447b0007bf0dc664ba841efdcdcaaff8d521a3a6ca48988d48d",
+    "configs": [
+      [
+        "柳生・射撃",
+        "葛城・削り"
+      ],
+      [
+        "葛城・削り",
+        "柳生・射撃"
+      ],
+      [
+        "葛城・削り",
+        "雲雀・反撃"
+      ],
+      [
+        "雲雀・反撃",
+        "葛城・削り"
+      ]
+    ],
+    "sizes": [
+      30,
+      35,
+      40
+    ],
+    "first": "game % 2 (0=P1,1=P2)",
+    "seed": "1000000 + [10,11,18,19][config] * 10000 + game",
+    "matchedSeedsAcrossSizes": true,
+    "solver": {
+      "samples": 24,
+      "iters": 120
+    },
+    "pilotUsesFirst10MainSeeds": true
+  },
+  "baselineMatches": 2000,
+  "groups": [
+    {
+      "opponent": "柳生・射撃",
+      "size": 30,
+      "games": 1000,
+      "katsuragiWin": {
+        "count": 490,
+        "n": 1000,
+        "pct": 49.0,
+        "ci95": [
+          45.911403097425705,
+          52.0962504195454
+        ]
+      },
+      "opponentWin": {
+        "count": 510,
+        "n": 1000,
+        "pct": 51.0,
+        "ci95": [
+          47.903749580454594,
+          54.08859690257428
+        ]
+      },
+      "turnMean": 13.214,
+      "turnMedian": 13.0,
+      "turnRange": [
+        7,
+        20
+      ],
+      "players": {
+        "葛城・削り": {
+          "destroyNeutral": 0,
+          "destroyNormal": 0,
+          "drawNeutral": 0,
+          "costNeutral": 0,
+          "costNormal": 0,
+          "neutralDamage": 0,
+          "neutralHand": 0,
+          "neutralDeck": 0,
+          "neutralDiscard": 0,
+          "neutralDrawGameRate": {
+            "count": 0,
+            "n": 1000,
+            "pct": 0.0,
+            "ci95": [
+              2.168404344971009e-17,
+              0.38267584855551234
+            ]
+          },
+          "deckoutLossRate": {
+            "count": 0,
+            "n": 1000,
+            "pct": 0.0,
+            "ci95": [
+              2.168404344971009e-17,
+              0.38267584855551234
+            ]
+          },
+          "damageDeckoutLossRate": {
+            "count": 0,
+            "n": 1000,
+            "pct": 0.0,
+            "ci95": [
+              2.168404344971009e-17,
+              0.38267584855551234
+            ]
+          },
+          "win": {
+            "count": 490,
+            "n": 1000,
+            "pct": 49.0,
+            "ci95": [
+              45.911403097425705,
+              52.0962504195454
+            ]
+          }
+        },
+        "柳生・射撃": {
+          "destroyNeutral": 0,
+          "destroyNormal": 2869,
+          "drawNeutral": 0,
+          "costNeutral": 0,
+          "costNormal": 1371,
+          "neutralDamage": 0,
+          "neutralHand": 0,
+          "neutralDeck": 0,
+          "neutralDiscard": 0,
+          "neutralDrawGameRate": {
+            "count": 0,
+            "n": 1000,
+            "pct": 0.0,
+            "ci95": [
+              2.168404344971009e-17,
+              0.38267584855551234
+            ]
+          },
+          "deckoutLossRate": {
+            "count": 158,
+            "n": 1000,
+            "pct": 15.8,
+            "ci95": [
+              13.670765691270592,
+              18.19098458914138
+            ]
+          },
+          "damageDeckoutLossRate": {
+            "count": 127,
+            "n": 1000,
+            "pct": 12.7,
+            "ci95": [
+              10.778000925843848,
+              14.907475257178568
+            ]
+          },
+          "win": {
+            "count": 510,
+            "n": 1000,
+            "pct": 51.0,
+            "ci95": [
+              47.903749580454594,
+              54.08859690257428
+            ]
+          }
+        }
+      },
+      "totalMetrics": {
+        "destroyNeutral": 0,
+        "destroyNormal": 2869,
+        "drawNeutral": 0,
+        "costNeutral": 0,
+        "costNormal": 1371,
+        "neutralDamage": 0,
+        "neutralHand": 0,
+        "neutralDeck": 0,
+        "neutralDiscard": 0
+      },
+      "anyNeutralDrawGameRate": {
+        "count": 0,
+        "n": 1000,
+        "pct": 0.0,
+        "ci95": [
+          2.168404344971009e-17,
+          0.38267584855551234
+        ]
+      },
+      "hibariCounterWins": 0,
+      "lossReasons": {
+        "5ダメージ": 715,
+        "ドロー時に山札切れ": 158,
+        "山札残数以上のダメージ": 127
+      },
+      "katsuragiWinReasons": {
+        "ドロー時に山札切れ": 158,
+        "5ダメージ": 205,
+        "山札残数以上のダメージ": 127
+      },
+      "pairedDeltaVs30": {
+        "percentagePoints": 0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "changedWinnerSeeds": 0
+      },
+      "seatStats": [
+        {
+          "config": 0,
+          "decks": [
+            "柳生・射撃",
+            "葛城・削り"
+          ],
+          "games": 500,
+          "katsuragiWin": {
+            "count": 243,
+            "n": 500,
+            "pct": 48.6,
+            "ci95": [
+              44.24649931129956,
+              52.974848841992795
+            ]
+          },
+          "firstWin": {
+            "count": 231,
+            "n": 500,
+            "pct": 46.2,
+            "ci95": [
+              41.875629515879304,
+              50.582315471628505
+            ]
+          }
+        },
+        {
+          "config": 1,
+          "decks": [
+            "葛城・削り",
+            "柳生・射撃"
+          ],
+          "games": 500,
+          "katsuragiWin": {
+            "count": 247,
+            "n": 500,
+            "pct": 49.4,
+            "ci95": [
+              45.039013091903215,
+              53.770136116650654
+            ]
+          },
+          "firstWin": {
+            "count": 213,
+            "n": 500,
+            "pct": 42.6,
+            "ci95": [
+              38.3382578366752,
+              46.97458240215578
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "opponent": "柳生・射撃",
+      "size": 35,
+      "games": 1000,
+      "katsuragiWin": {
+        "count": 404,
+        "n": 1000,
+        "pct": 40.400000000000006,
+        "ci95": [
+          37.40102086208163,
+          43.472452900841034
+        ]
+      },
+      "opponentWin": {
+        "count": 596,
+        "n": 1000,
+        "pct": 59.599999999999994,
+        "ci95": [
+          56.52754709915896,
+          62.59897913791838
+        ]
+      },
+      "turnMean": 13.369,
+      "turnMedian": 13.0,
+      "turnRange": [
+        7,
+        22
+      ],
+      "players": {
+        "葛城・削り": {
+          "destroyNeutral": 0,
+          "destroyNormal": 0,
+          "drawNeutral": 0,
+          "costNeutral": 0,
+          "costNormal": 0,
+          "neutralDamage": 0,
+          "neutralHand": 0,
+          "neutralDeck": 5000,
+          "neutralDiscard": 0,
+          "neutralDrawGameRate": {
+            "count": 0,
+            "n": 1000,
+            "pct": 0.0,
+            "ci95": [
+              2.168404344971009e-17,
+              0.38267584855551234
+            ]
+          },
+          "deckoutLossRate": {
+            "count": 0,
+            "n": 1000,
+            "pct": 0.0,
+            "ci95": [
+              2.168404344971009e-17,
+              0.38267584855551234
+            ]
+          },
+          "damageDeckoutLossRate": {
+            "count": 0,
+            "n": 1000,
+            "pct": 0.0,
+            "ci95": [
+              2.168404344971009e-17,
+              0.38267584855551234
+            ]
+          },
+          "win": {
+            "count": 404,
+            "n": 1000,
+            "pct": 40.400000000000006,
+            "ci95": [
+              37.40102086208163,
+              43.472452900841034
+            ]
+          }
+        },
+        "柳生・射撃": {
+          "destroyNeutral": 2784,
+          "destroyNormal": 119,
+          "drawNeutral": 712,
+          "costNeutral": 80,
+          "costNormal": 1539,
+          "neutralDamage": 35,
+          "neutralHand": 327,
+          "neutralDeck": 1774,
+          "neutralDiscard": 2864,
+          "neutralDrawGameRate": {
+            "count": 260,
+            "n": 1000,
+            "pct": 26.0,
+            "ci95": [
+              23.376861850763092,
+              28.806822556543548
+            ]
+          },
+          "deckoutLossRate": {
+            "count": 37,
+            "n": 1000,
+            "pct": 3.6999999999999997,
+            "ci95": [
+              2.6961180875554733,
+              5.058239748206931
+            ]
+          },
+          "damageDeckoutLossRate": {
+            "count": 56,
+            "n": 1000,
+            "pct": 5.6000000000000005,
+            "ci95": [
+              4.3374813385442,
+              7.202334814973097
+            ]
+          },
+          "win": {
+            "count": 596,
+            "n": 1000,
+            "pct": 59.599999999999994,
+            "ci95": [
+              56.52754709915896,
+              62.59897913791838
+            ]
+          }
+        }
+      },
+      "totalMetrics": {
+        "destroyNeutral": 2784,
+        "destroyNormal": 119,
+        "drawNeutral": 712,
+        "costNeutral": 80,
+        "costNormal": 1539,
+        "neutralDamage": 35,
+        "neutralHand": 327,
+        "neutralDeck": 6774,
+        "neutralDiscard": 2864
+      },
+      "anyNeutralDrawGameRate": {
+        "count": 260,
+        "n": 1000,
+        "pct": 26.0,
+        "ci95": [
+          23.376861850763092,
+          28.806822556543548
+        ]
+      },
+      "hibariCounterWins": 0,
+      "lossReasons": {
+        "5ダメージ": 907,
+        "山札残数以上のダメージ": 56,
+        "ドロー時に山札切れ": 37
+      },
+      "katsuragiWinReasons": {
+        "5ダメージ": 311,
+        "山札残数以上のダメージ": 56,
+        "ドロー時に山札切れ": 37
+      },
+      "pairedDeltaVs30": {
+        "percentagePoints": -8.6,
+        "ci95": [
+          -12.49534644013861,
+          -4.70465355986139
+        ],
+        "changedWinnerSeeds": 402
+      },
+      "seatStats": [
+        {
+          "config": 0,
+          "decks": [
+            "柳生・射撃",
+            "葛城・削り"
+          ],
+          "games": 500,
+          "katsuragiWin": {
+            "count": 207,
+            "n": 500,
+            "pct": 41.4,
+            "ci95": [
+              37.164260890980145,
+              45.766877764958565
+            ]
+          },
+          "firstWin": {
+            "count": 241,
+            "n": 500,
+            "pct": 48.199999999999996,
+            "ci95": [
+              43.850658762453506,
+              52.576788863208094
+            ]
+          }
+        },
+        {
+          "config": 1,
+          "decks": [
+            "葛城・削り",
+            "柳生・射撃"
+          ],
+          "games": 500,
+          "katsuragiWin": {
+            "count": 197,
+            "n": 500,
+            "pct": 39.4,
+            "ci95": [
+              35.21341694850665,
+              43.74821906927827
+            ]
+          },
+          "firstWin": {
+            "count": 227,
+            "n": 500,
+            "pct": 45.4,
+            "ci95": [
+              41.08757266738578,
+              49.782571264860515
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "opponent": "柳生・射撃",
+      "size": 40,
+      "games": 1000,
+      "katsuragiWin": {
+        "count": 432,
+        "n": 1000,
+        "pct": 43.2,
+        "ci95": [
+          40.161609445686075,
+          46.29043446971748
+        ]
+      },
+      "opponentWin": {
+        "count": 568,
+        "n": 1000,
+        "pct": 56.8,
+        "ci95": [
+          53.70956553028252,
+          59.838390554313925
+        ]
+      },
+      "turnMean": 13.37,
+      "turnMedian": 13.0,
+      "turnRange": [
+        7,
+        23
+      ],
+      "players": {
+        "葛城・削り": {
+          "destroyNeutral": 0,
+          "destroyNormal": 0,
+          "drawNeutral": 4,
+          "costNeutral": 0,
+          "costNormal": 0,
+          "neutralDamage": 0,
+          "neutralHand": 4,
+          "neutralDeck": 9996,
+          "neutralDiscard": 0,
+          "neutralDrawGameRate": {
+            "count": 3,
+            "n": 1000,
+            "pct": 0.3,
+            "ci95": [
+              0.10207838811386186,
+              0.8783014053503173
+            ]
+          },
+          "deckoutLossRate": {
+            "count": 0,
+            "n": 1000,
+            "pct": 0.0,
+            "ci95": [
+              2.168404344971009e-17,
+              0.38267584855551234
+            ]
+          },
+          "damageDeckoutLossRate": {
+            "count": 0,
+            "n": 1000,
+            "pct": 0.0,
+            "ci95": [
+              2.168404344971009e-17,
+              0.38267584855551234
+            ]
+          },
+          "win": {
+            "count": 432,
+            "n": 1000,
+            "pct": 43.2,
+            "ci95": [
+              40.161609445686075,
+              46.29043446971748
+            ]
+          }
+        },
+        "柳生・射撃": {
+          "destroyNeutral": 2934,
+          "destroyNormal": 2,
+          "drawNeutral": 1447,
+          "costNeutral": 167,
+          "costNormal": 1571,
+          "neutralDamage": 133,
+          "neutralHand": 772,
+          "neutralDeck": 5994,
+          "neutralDiscard": 3101,
+          "neutralDrawGameRate": {
+            "count": 294,
+            "n": 1000,
+            "pct": 29.4,
+            "ci95": [
+              26.659400902031273,
+              32.298261547573595
+            ]
+          },
+          "deckoutLossRate": {
+            "count": 4,
+            "n": 1000,
+            "pct": 0.4,
+            "ci95": [
+              0.15565881404084309,
+              1.0239556277262254
+            ]
+          },
+          "damageDeckoutLossRate": {
+            "count": 12,
+            "n": 1000,
+            "pct": 1.2,
+            "ci95": [
+              0.6877647806403522,
+              2.0857268475498283
+            ]
+          },
+          "win": {
+            "count": 568,
+            "n": 1000,
+            "pct": 56.8,
+            "ci95": [
+              53.70956553028252,
+              59.838390554313925
+            ]
+          }
+        }
+      },
+      "totalMetrics": {
+        "destroyNeutral": 2934,
+        "destroyNormal": 2,
+        "drawNeutral": 1451,
+        "costNeutral": 167,
+        "costNormal": 1571,
+        "neutralDamage": 133,
+        "neutralHand": 776,
+        "neutralDeck": 15990,
+        "neutralDiscard": 3101
+      },
+      "anyNeutralDrawGameRate": {
+        "count": 294,
+        "n": 1000,
+        "pct": 29.4,
+        "ci95": [
+          26.659400902031273,
+          32.298261547573595
+        ]
+      },
+      "hibariCounterWins": 0,
+      "lossReasons": {
+        "5ダメージ": 984,
+        "山札残数以上のダメージ": 12,
+        "ドロー時に山札切れ": 4
+      },
+      "katsuragiWinReasons": {
+        "5ダメージ": 416,
+        "山札残数以上のダメージ": 12,
+        "ドロー時に山札切れ": 4
+      },
+      "pairedDeltaVs30": {
+        "percentagePoints": -5.800000000000001,
+        "ci95": [
+          -9.585364906922493,
+          -2.0146350930775094
+        ],
+        "changedWinnerSeeds": 376
+      },
+      "seatStats": [
+        {
+          "config": 0,
+          "decks": [
+            "柳生・射撃",
+            "葛城・削り"
+          ],
+          "games": 500,
+          "katsuragiWin": {
+            "count": 219,
+            "n": 500,
+            "pct": 43.8,
+            "ci95": [
+              39.514834408666566,
+              48.1797074130567
+            ]
+          },
+          "firstWin": {
+            "count": 231,
+            "n": 500,
+            "pct": 46.2,
+            "ci95": [
+              41.875629515879304,
+              50.582315471628505
+            ]
+          }
+        },
+        {
+          "config": 1,
+          "decks": [
+            "葛城・削り",
+            "柳生・射撃"
+          ],
+          "games": 500,
+          "katsuragiWin": {
+            "count": 213,
+            "n": 500,
+            "pct": 42.6,
+            "ci95": [
+              38.3382578366752,
+              46.97458240215578
+            ]
+          },
+          "firstWin": {
+            "count": 241,
+            "n": 500,
+            "pct": 48.199999999999996,
+            "ci95": [
+              43.850658762453506,
+              52.576788863208094
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "opponent": "雲雀・反撃",
+      "size": 30,
+      "games": 1000,
+      "katsuragiWin": {
+        "count": 768,
+        "n": 1000,
+        "pct": 76.8,
+        "ci95": [
+          74.08422968503318,
+          79.31065606014108
+        ]
+      },
+      "opponentWin": {
+        "count": 232,
+        "n": 1000,
+        "pct": 23.200000000000003,
+        "ci95": [
+          20.68934393985893,
+          25.915770314966828
+        ]
+      },
+      "turnMean": 18.584,
+      "turnMedian": 19.0,
+      "turnRange": [
+        8,
+        26
+      ],
+      "players": {
+        "葛城・削り": {
+          "destroyNeutral": 0,
+          "destroyNormal": 660,
+          "drawNeutral": 0,
+          "costNeutral": 0,
+          "costNormal": 0,
+          "neutralDamage": 0,
+          "neutralHand": 0,
+          "neutralDeck": 0,
+          "neutralDiscard": 0,
+          "neutralDrawGameRate": {
+            "count": 0,
+            "n": 1000,
+            "pct": 0.0,
+            "ci95": [
+              2.168404344971009e-17,
+              0.38267584855551234
+            ]
+          },
+          "deckoutLossRate": {
+            "count": 31,
+            "n": 1000,
+            "pct": 3.1,
+            "ci95": [
+              2.1924003447158573,
+              4.366549601229214
+            ]
+          },
+          "damageDeckoutLossRate": {
+            "count": 0,
+            "n": 1000,
+            "pct": 0.0,
+            "ci95": [
+              2.168404344971009e-17,
+              0.38267584855551234
+            ]
+          },
+          "win": {
+            "count": 768,
+            "n": 1000,
+            "pct": 76.8,
+            "ci95": [
+              74.08422968503318,
+              79.31065606014108
+            ]
+          }
+        },
+        "雲雀・反撃": {
+          "destroyNeutral": 0,
+          "destroyNormal": 2889,
+          "drawNeutral": 0,
+          "costNeutral": 0,
+          "costNormal": 0,
+          "neutralDamage": 0,
+          "neutralHand": 0,
+          "neutralDeck": 0,
+          "neutralDiscard": 0,
+          "neutralDrawGameRate": {
+            "count": 0,
+            "n": 1000,
+            "pct": 0.0,
+            "ci95": [
+              2.168404344971009e-17,
+              0.38267584855551234
+            ]
+          },
+          "deckoutLossRate": {
+            "count": 617,
+            "n": 1000,
+            "pct": 61.7,
+            "ci95": [
+              58.64772698839885,
+              64.66272686303917
+            ]
+          },
+          "damageDeckoutLossRate": {
+            "count": 57,
+            "n": 1000,
+            "pct": 5.7,
+            "ci95": [
+              4.425344035871594,
+              7.3137067659485915
+            ]
+          },
+          "win": {
+            "count": 232,
+            "n": 1000,
+            "pct": 23.200000000000003,
+            "ci95": [
+              20.68934393985893,
+              25.915770314966828
+            ]
+          }
+        }
+      },
+      "totalMetrics": {
+        "destroyNeutral": 0,
+        "destroyNormal": 3549,
+        "drawNeutral": 0,
+        "costNeutral": 0,
+        "costNormal": 0,
+        "neutralDamage": 0,
+        "neutralHand": 0,
+        "neutralDeck": 0,
+        "neutralDiscard": 0
+      },
+      "anyNeutralDrawGameRate": {
+        "count": 0,
+        "n": 1000,
+        "pct": 0.0,
+        "ci95": [
+          2.168404344971009e-17,
+          0.38267584855551234
+        ]
+      },
+      "hibariCounterWins": 166,
+      "lossReasons": {
+        "ドロー時に山札切れ": 648,
+        "5ダメージ": 295,
+        "山札残数以上のダメージ": 57
+      },
+      "katsuragiWinReasons": {
+        "ドロー時に山札切れ": 617,
+        "山札残数以上のダメージ": 57,
+        "5ダメージ": 94
+      },
+      "pairedDeltaVs30": {
+        "percentagePoints": 0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "changedWinnerSeeds": 0
+      },
+      "seatStats": [
+        {
+          "config": 2,
+          "decks": [
+            "葛城・削り",
+            "雲雀・反撃"
+          ],
+          "games": 500,
+          "katsuragiWin": {
+            "count": 377,
+            "n": 500,
+            "pct": 75.4,
+            "ci95": [
+              71.44078267312022,
+              78.97190083143293
+            ]
+          },
+          "firstWin": {
+            "count": 243,
+            "n": 500,
+            "pct": 48.6,
+            "ci95": [
+              44.24649931129956,
+              52.974848841992795
+            ]
+          }
+        },
+        {
+          "config": 3,
+          "decks": [
+            "雲雀・反撃",
+            "葛城・削り"
+          ],
+          "games": 500,
+          "katsuragiWin": {
+            "count": 391,
+            "n": 500,
+            "pct": 78.2,
+            "ci95": [
+              74.3733598415673,
+              81.59662735640116
+            ]
+          },
+          "firstWin": {
+            "count": 241,
+            "n": 500,
+            "pct": 48.199999999999996,
+            "ci95": [
+              43.850658762453506,
+              52.576788863208094
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "opponent": "雲雀・反撃",
+      "size": 35,
+      "games": 1000,
+      "katsuragiWin": {
+        "count": 679,
+        "n": 1000,
+        "pct": 67.9,
+        "ci95": [
+          64.94265062245327,
+          70.72035142376386
+        ]
+      },
+      "opponentWin": {
+        "count": 321,
+        "n": 1000,
+        "pct": 32.1,
+        "ci95": [
+          29.279648576236138,
+          35.05734937754673
+        ]
+      },
+      "turnMean": 20,
+      "turnMedian": 21.0,
+      "turnRange": [
+        9,
+        30
+      ],
+      "players": {
+        "葛城・削り": {
+          "destroyNeutral": 756,
+          "destroyNormal": 0,
+          "drawNeutral": 570,
+          "costNeutral": 0,
+          "costNormal": 0,
+          "neutralDamage": 1,
+          "neutralHand": 570,
+          "neutralDeck": 3673,
+          "neutralDiscard": 756,
+          "neutralDrawGameRate": {
+            "count": 258,
+            "n": 1000,
+            "pct": 25.8,
+            "ci95": [
+              23.184403439388106,
+              28.60081167131276
+            ]
+          },
+          "deckoutLossRate": {
+            "count": 13,
+            "n": 1000,
+            "pct": 1.3,
+            "ci95": [
+              0.7612820389351026,
+              2.211444237557967
+            ]
+          },
+          "damageDeckoutLossRate": {
+            "count": 0,
+            "n": 1000,
+            "pct": 0.0,
+            "ci95": [
+              2.168404344971009e-17,
+              0.38267584855551234
+            ]
+          },
+          "win": {
+            "count": 679,
+            "n": 1000,
+            "pct": 67.9,
+            "ci95": [
+              64.94265062245327,
+              70.72035142376386
+            ]
+          }
+        },
+        "雲雀・反撃": {
+          "destroyNeutral": 3335,
+          "destroyNormal": 257,
+          "drawNeutral": 770,
+          "costNeutral": 0,
+          "costNormal": 0,
+          "neutralDamage": 28,
+          "neutralHand": 770,
+          "neutralDeck": 867,
+          "neutralDiscard": 3335,
+          "neutralDrawGameRate": {
+            "count": 409,
+            "n": 1000,
+            "pct": 40.9,
+            "ci95": [
+              37.89324249556991,
+              43.97640450886719
+            ]
+          },
+          "deckoutLossRate": {
+            "count": 450,
+            "n": 1000,
+            "pct": 45.0,
+            "ci95": [
+              41.94153840742968,
+              48.09672917742588
+            ]
+          },
+          "damageDeckoutLossRate": {
+            "count": 103,
+            "n": 1000,
+            "pct": 10.299999999999999,
+            "ci95": [
+              8.565481000508717,
+              12.33836362324436
+            ]
+          },
+          "win": {
+            "count": 321,
+            "n": 1000,
+            "pct": 32.1,
+            "ci95": [
+              29.279648576236138,
+              35.05734937754673
+            ]
+          }
+        }
+      },
+      "totalMetrics": {
+        "destroyNeutral": 4091,
+        "destroyNormal": 257,
+        "drawNeutral": 1340,
+        "costNeutral": 0,
+        "costNormal": 0,
+        "neutralDamage": 29,
+        "neutralHand": 1340,
+        "neutralDeck": 4540,
+        "neutralDiscard": 4091
+      },
+      "anyNeutralDrawGameRate": {
+        "count": 470,
+        "n": 1000,
+        "pct": 47.0,
+        "ci95": [
+          43.923991460215,
+          50.09896909069833
+        ]
+      },
+      "hibariCounterWins": 280,
+      "lossReasons": {
+        "ドロー時に山札切れ": 463,
+        "5ダメージ": 434,
+        "山札残数以上のダメージ": 103
+      },
+      "katsuragiWinReasons": {
+        "ドロー時に山札切れ": 450,
+        "5ダメージ": 126,
+        "山札残数以上のダメージ": 103
+      },
+      "pairedDeltaVs30": {
+        "percentagePoints": -8.9,
+        "ci95": [
+          -12.291238287626992,
+          -5.508761712373008
+        ],
+        "changedWinnerSeeds": 307
+      },
+      "seatStats": [
+        {
+          "config": 2,
+          "decks": [
+            "葛城・削り",
+            "雲雀・反撃"
+          ],
+          "games": 500,
+          "katsuragiWin": {
+            "count": 336,
+            "n": 500,
+            "pct": 67.2,
+            "ci95": [
+              62.967341672181576,
+              71.17038101594103
+            ]
+          },
+          "firstWin": {
+            "count": 266,
+            "n": 500,
+            "pct": 53.2,
+            "ci95": [
+              48.818610813244,
+              57.53259340780207
+            ]
+          }
+        },
+        {
+          "config": 3,
+          "decks": [
+            "雲雀・反撃",
+            "葛城・削り"
+          ],
+          "games": 500,
+          "katsuragiWin": {
+            "count": 343,
+            "n": 500,
+            "pct": 68.60000000000001,
+            "ci95": [
+              64.40316011844003,
+              72.51321441639024
+            ]
+          },
+          "firstWin": {
+            "count": 219,
+            "n": 500,
+            "pct": 43.8,
+            "ci95": [
+              39.514834408666566,
+              48.1797074130567
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "opponent": "雲雀・反撃",
+      "size": 40,
+      "games": 1000,
+      "katsuragiWin": {
+        "count": 630,
+        "n": 1000,
+        "pct": 63.0,
+        "ci95": [
+          59.96317181277412,
+          65.93733246660143
+        ]
+      },
+      "opponentWin": {
+        "count": 370,
+        "n": 1000,
+        "pct": 37.0,
+        "ci95": [
+          34.06266753339855,
+          40.03682818722588
+        ]
+      },
+      "turnMean": 20.825,
+      "turnMedian": 22.0,
+      "turnRange": [
+        8,
+        34
+      ],
+      "players": {
+        "葛城・削り": {
+          "destroyNeutral": 769,
+          "destroyNormal": 0,
+          "drawNeutral": 1435,
+          "costNeutral": 0,
+          "costNormal": 0,
+          "neutralDamage": 7,
+          "neutralHand": 1435,
+          "neutralDeck": 7789,
+          "neutralDiscard": 769,
+          "neutralDrawGameRate": {
+            "count": 429,
+            "n": 1000,
+            "pct": 42.9,
+            "ci95": [
+              39.86535230179055,
+              45.98898766870433
+            ]
+          },
+          "deckoutLossRate": {
+            "count": 5,
+            "n": 1000,
+            "pct": 0.5,
+            "ci95": [
+              0.21375355273244595,
+              1.1650955373375114
+            ]
+          },
+          "damageDeckoutLossRate": {
+            "count": 0,
+            "n": 1000,
+            "pct": 0.0,
+            "ci95": [
+              2.168404344971009e-17,
+              0.38267584855551234
+            ]
+          },
+          "win": {
+            "count": 630,
+            "n": 1000,
+            "pct": 63.0,
+            "ci95": [
+              59.96317181277412,
+              65.93733246660143
+            ]
+          }
+        },
+        "雲雀・反撃": {
+          "destroyNeutral": 4005,
+          "destroyNormal": 3,
+          "drawNeutral": 2568,
+          "costNeutral": 0,
+          "costNormal": 0,
+          "neutralDamage": 162,
+          "neutralHand": 2568,
+          "neutralDeck": 3265,
+          "neutralDiscard": 4005,
+          "neutralDrawGameRate": {
+            "count": 602,
+            "n": 1000,
+            "pct": 60.199999999999996,
+            "ci95": [
+              57.13271941320692,
+              63.18921471368775
+            ]
+          },
+          "deckoutLossRate": {
+            "count": 286,
+            "n": 1000,
+            "pct": 28.599999999999998,
+            "ci95": [
+              25.885269614280205,
+              31.47851564890155
+            ]
+          },
+          "damageDeckoutLossRate": {
+            "count": 137,
+            "n": 1000,
+            "pct": 13.700000000000001,
+            "ci95": [
+              11.707313063299473,
+              15.97050960275183
+            ]
+          },
+          "win": {
+            "count": 370,
+            "n": 1000,
+            "pct": 37.0,
+            "ci95": [
+              34.06266753339855,
+              40.03682818722588
+            ]
+          }
+        }
+      },
+      "totalMetrics": {
+        "destroyNeutral": 4774,
+        "destroyNormal": 3,
+        "drawNeutral": 4003,
+        "costNeutral": 0,
+        "costNormal": 0,
+        "neutralDamage": 169,
+        "neutralHand": 4003,
+        "neutralDeck": 11054,
+        "neutralDiscard": 4774
+      },
+      "anyNeutralDrawGameRate": {
+        "count": 616,
+        "n": 1000,
+        "pct": 61.6,
+        "ci95": [
+          58.54663334716732,
+          64.5645858559678
+        ]
+      },
+      "hibariCounterWins": 328,
+      "lossReasons": {
+        "ドロー時に山札切れ": 291,
+        "5ダメージ": 572,
+        "山札残数以上のダメージ": 137
+      },
+      "katsuragiWinReasons": {
+        "ドロー時に山札切れ": 286,
+        "山札残数以上のダメージ": 137,
+        "5ダメージ": 207
+      },
+      "pairedDeltaVs30": {
+        "percentagePoints": -13.8,
+        "ci95": [
+          -17.235606457290945,
+          -10.364393542709056
+        ],
+        "changedWinnerSeeds": 326
+      },
+      "seatStats": [
+        {
+          "config": 2,
+          "decks": [
+            "葛城・削り",
+            "雲雀・反撃"
+          ],
+          "games": 500,
+          "katsuragiWin": {
+            "count": 315,
+            "n": 500,
+            "pct": 63.0,
+            "ci95": [
+              58.68399352542358,
+              67.11777362257607
+            ]
+          },
+          "firstWin": {
+            "count": 247,
+            "n": 500,
+            "pct": 49.4,
+            "ci95": [
+              45.039013091903215,
+              53.770136116650654
+            ]
+          }
+        },
+        {
+          "config": 3,
+          "decks": [
+            "雲雀・反撃",
+            "葛城・削り"
+          ],
+          "games": 500,
+          "katsuragiWin": {
+            "count": 315,
+            "n": 500,
+            "pct": 63.0,
+            "ci95": [
+              58.68399352542358,
+              67.11777362257607
+            ]
+          },
+          "firstWin": {
+            "count": 229,
+            "n": 500,
+            "pct": 45.800000000000004,
+            "ci95": [
+              41.481460977485106,
+              50.18258348239194
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

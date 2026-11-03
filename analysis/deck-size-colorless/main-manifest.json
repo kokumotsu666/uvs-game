@@ -1,0 +1,42 @@
+{
+  "phase": "main",
+  "completed": 6000,
+  "errors": [],
+  "started": "2026-11-03T06:24:58.951Z",
+  "updated": "2026-11-03T06:29:17.331Z",
+  "countPerSeat": 500,
+  "parallel": 4,
+  "sourceCommit": "d757ca80709711ad9564898c39902f0fe001c411",
+  "sourceSHA256": "ffd3a0bc3f9a3447b0007bf0dc664ba841efdcdcaaff8d521a3a6ca48988d48d",
+  "configs": [
+    [
+      "柳生・射撃",
+      "葛城・削り"
+    ],
+    [
+      "葛城・削り",
+      "柳生・射撃"
+    ],
+    [
+      "葛城・削り",
+      "雲雀・反撃"
+    ],
+    [
+      "雲雀・反撃",
+      "葛城・削り"
+    ]
+  ],
+  "sizes": [
+    30,
+    35,
+    40
+  ],
+  "first": "game % 2 (0=P1,1=P2)",
+  "seed": "1000000 + [10,11,18,19][config] * 10000 + game",
+  "matchedSeedsAcrossSizes": true,
+  "solver": {
+    "samples": 24,
+    "iters": 120
+  },
+  "pilotUsesFirst10MainSeeds": true
+}
