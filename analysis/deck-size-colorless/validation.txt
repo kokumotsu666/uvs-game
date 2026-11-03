@@ -1,0 +1,10 @@
+PASS ordinary 30 cards, unchanged lists
+PASS destruction neutral priority and normal top fallback
+PASS mill shortage and empty library
+PASS self-cost stays top-first
+PASS neutral normal draw; inert in all battle roles
+PASS return-to-bottom is ordinary, not destruction
+PASS damage placement uses top, not draw or mill
+PASS extra-card closure uses experimental destruction
+PASS identical normal shuffle and neutral bottom in 3 conditions
+PASS 13 scenario/configuration checks; baseline first seed matches for all four seats
