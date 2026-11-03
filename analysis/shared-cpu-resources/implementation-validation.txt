@@ -1,0 +1,5 @@
+PASS unchanged rules/cards/deck definitions/CSS
+PASS deck horizon, hand saturation, public mill threat, option cost, parameter override
+PASS actual solver attack/defense cannot read opponent hidden arrays or face-down card
+PASS hidden partition/order invariance under same public state and RNG
+PASS all 20 configurations complete with shared resource management

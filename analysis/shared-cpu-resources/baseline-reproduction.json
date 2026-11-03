@@ -1,0 +1,12 @@
+{
+  "completed": 10000,
+  "matches": 10000,
+  "priorAnalysisCommit": "6d79eb8796c119f9e85f1aef623a37eaba039c06",
+  "fields": [
+    "winner",
+    "reason",
+    "turn",
+    "final deck/hand/damage"
+  ],
+  "errors": []
+}
