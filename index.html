@@ -423,38 +423,102 @@ function isCounterDeck(p){return p.deckKey==='雲雀・反撃'||p.deckKey==='雲
 // Shared resource parameters. Stage 1 preserves all historical arithmetic/order.
 const CPU_RESOURCES=(()=>{
   const defaults=Object.freeze({
-    shared:false,drawMode:'classic',panicBuffer:4,panicValue:-1000,
+    shared:true,drawMode:'shared',panicBuffer:4,panicValue:-1000,
     softHand:5,hardHand:7,baseGain:220,softGain:90,hardGain:35,
     nearDeck:10,nearDrawCost:160,normalDrawCost:25,drawOverhead:110,
     lowDeck:6,lowDeckPremium:200,
-    guardHandBonus:0,heavyHandBonus:0,guardReserve:0,heavyReserve:0,
-    attackFailure:0,shortHand:3,shortHandPenalty:0,finishMultiplier:0,guardSuccess:0,
-    attackMinHand:2,defenseMinHand:2,attackBudget:1,defenseBudget:1,preserveFinalGuard:false,
+    guardHandBonus:0.25,heavyHandBonus:0.2,guardReserve:100,heavyReserve:60,
+    attackFailure:100,shortHand:3,shortHandPenalty:120,finishMultiplier:0,guardSuccess:0,
+    attackMinHand:2,defenseMinHand:1,attackBudget:1,defenseBudget:1,preserveFinalGuard:true,
+    horizonTurns:2,riskScale:260,criticalPenalty:900,millThreatWeight:1,
+    optionTarget:2,optionPenalty:100,optionUtility:45,drawNeedBonus:0.1,
   });
   const overrides=Object.freeze({
-    '雲雀・反撃':Object.freeze({drawMode:'bounded',guardHandBonus:0.9,heavyHandBonus:0.4,
-      guardReserve:300,heavyReserve:140,attackFailure:350,shortHandPenalty:250,
-      finishMultiplier:1,guardSuccess:120,attackMinHand:3,defenseMinHand:1,
-      attackBudget:0,defenseBudget:1,preserveFinalGuard:true}),
+    '雲雀・反撃':Object.freeze({guardHandBonus:0.9,heavyHandBonus:0.4,
+      attackFailure:350,finishMultiplier:1,guardSuccess:120,attackMinHand:3,attackBudget:0}),
   });
   const profiles=Object.fromEntries(Object.entries(overrides).map(([k,v])=>[k,Object.freeze({...defaults,...v})]));
-  function profile(p){return profiles[p.deckKey==='雲雀・LO'?'雲雀・反撃':p.deckKey]||defaults;}
-  function drawValue(p,n,unit=220){
+  const customProfiles=new WeakMap(),threatCache=new Map();
+  function profile(p){
+    const key=p.deckKey==='雲雀・LO'?'雲雀・反撃':p.deckKey,base=profiles[key]||defaults;
+    const custom=p.ctl&&p.ctl.resourceParams;if(!custom)return base;
+    let cache=customProfiles.get(custom);if(!cache){cache=new Map();customProfiles.set(custom,cache);}
+    if(!cache.has(key))cache.set(key,Object.freeze({...base,...custom}));return cache.get(key);
+  }
+  function beginDecision(){threatCache.clear();}
+  function visibleCards(p,own){
+    const out=[...p.gYo,...p.gIn,...p.discard,...p.damage,...p.supports.map(s=>s.card)];
+    if(own)out.push(...p.hand);
+    const bs=G.bs;
+    if(bs)for(const side of [bs.atk,bs.def])if(side.p.idx===p.idx){
+      if(own||bs.stage!=='def'){if(side.card)out.push(side.card);out.push(...side.heavy);}
+    }
+    return [...new Map(out.filter(c=>c.type!=='char').map(c=>[c.uid,c])).values()];
+  }
+  function remainingCards(p,own=false){
+    const definition=DECKS[p.deckKey],list=CONFIG.deckSize===30&&definition.list30?definition.list30:definition.list;
+    const used=new Map();for(const c of visibleCards(p,own))used.set(c.name,(used.get(c.name)||0)+1);
+    let uid=-1;const cards=[];
+    for(const [name,n] of list)for(let i=0;i<Math.max(0,n-(used.get(name)||0));i++)cards.push(Object.assign(Object.create(CARDS[name]),{uid:uid--}));
+    return cards;
+  }
+  // Public effect catalogue; these describe existing effects, never alter them.
+  const battleDraws=Object.freeze({'狂い傘':1,'踊り傘':1,'返し雨':1});
+  const charMill=Object.freeze({C016:0.45,C017:0.9,C030:0.35});
+  const millCards=Object.freeze({'サマーソルト':1,'ドラゴンバイト':1,'ドラゴンベアード':1});
+  function publicMillThreat(o){
+    if(!o)return 0;
+    const key=[o.idx,o.charDeck[0].id,o.gYo.length,o.gIn.length,o.hand.length,o.deck.length].join(':');
+    if(threatCache.has(key))return threatCache.get(key);
+    const unseen=remainingCards(o,false),ready=unseen.filter(c=>millCards[c.name]&&baseUsable(o,c)).length;
+    const value=(charMill[o.charDeck[0].id]||0)+0.35*Math.min(1,ready*o.hand.length/Math.max(1,unseen.length));
+    threatCache.set(key,value);return value;
+  }
+  function options(p,hand=p.hand){
+    return {attack:hand.filter(c=>c.dp>0&&c.tech!=='防御'&&canAttack(p,c,null)).length,
+      defense:hand.filter(c=>c.color!=='飛'&&canDefend(p,c)).length,
+      heavy:hand.filter(c=>heavyOK(p,c)).length};
+  }
+  function optionValue(p,hand){const r=profile(p),v=options(p,hand);return r.optionUtility*(Math.min(r.optionTarget,v.attack)+Math.min(r.optionTarget,v.defense));}
+  function depletionCost(p,n,unit=25,{opponent=P[1-p.idx],returned=0}={}){
+    const r=profile(p),net=Math.max(0,n-returned);if(!net)return 0;
+    const rate=CONFIG.drawPerTurn+publicMillThreat(opponent)*r.millThreatWeight;
+    const reserve=Math.max(1,rate*r.horizonTurns),left=Math.max(0,p.deck.length+returned-n);
+    const pressure=Math.min(3,Math.max(0,(reserve-left)/reserve));
+    return net*(unit+r.riskScale*pressure)+(left<rate?r.criticalPenalty*(1-left/rate):0);
+  }
+  function spendCost(p,cards,rest,unit=220){
+    const r=profile(p),before=options(p),after=options(p,rest);
+    const lost=Math.max(0,Math.min(r.optionTarget,before.attack)-Math.min(r.optionTarget,after.attack))+
+      Math.max(0,Math.min(r.optionTarget,before.defense)-Math.min(r.optionTarget,after.defense));
+    return cards.reduce((n,c)=>n+unit*(baseUsable(p,c)||heavyOK(p,c)?1:0.5)+reserve(p,c),0)+r.optionPenalty*lost;
+  }
+  function drawValue(p,n,unit=220,context={}){
     const r=profile(p);
+    if(r.shared){
+      const spent=context.spent??1,returned=context.returned||0;
+      const actual=Math.min(n,p.deck.length+(context.returnBefore?returned:0));
+      const handAfter=p.hand.length-spent-returned,available=options(p),need=available.attack===0||available.defense===0;
+      let benefit=0;for(let i=0;i<actual;i++){
+        const h=handAfter+i,gain=h>=r.hardHand?r.hardGain:h>=r.softHand?r.softGain:r.baseGain;
+        benefit+=gain*(need?1+r.drawNeedBonus:1);
+      }
+      return benefit-depletionCost(p,actual,r.normalDrawCost,{...context,returned})-(context.overhead??spent*r.drawOverhead);
+    }
     if(r.drawMode==='classic')return n*unit-unit*0.5;
     if(p.deck.length<=n+r.panicBuffer)return r.panicValue;
     const handAfter=p.hand.length-1;
     const gain=handAfter>=r.hardHand?r.hardGain:handAfter>=r.softHand?r.softGain:r.baseGain;
     return n*(gain-(p.deck.length<=r.nearDeck?r.nearDrawCost:r.normalDrawCost))-r.drawOverhead;
   }
-  function deckCost(p,unit){const r=profile(p);return unit+(p.deck.length<=r.lowDeck?r.lowDeckPremium:0);}
+  function deckCost(p,unit){const r=profile(p);return r.shared?depletionCost(p,1,unit):unit+(p.deck.length<=r.lowDeck?r.lowDeckPremium:0);}
   function handCost(p,n,unit){return n*unit;}
-  function reserve(p,c){const r=profile(p);return c.tech==='防御'?r.guardReserve:c.icons.includes('U')?r.heavyReserve:0;}
-  return {defaults,overrides,profile,drawValue,deckCost,handCost,reserve};
+  function reserve(p,c){const r=profile(p);return c.tech==='防御'?r.guardReserve:(c.icons||[]).includes('U')?r.heavyReserve:0;}
+  return {defaults,overrides,profile,drawValue,deckCost,handCost,reserve,beginDecision,remainingCards,publicMillThreat,options,optionValue,depletionCost,spendCost,battleDraws};
 })();
 function counterDrawValue(p,n){return CPU_RESOURCES.drawValue(p,n);}
 function heavyPolicy(p,o,elig,ctx,committed,hp){
-  if(isCounterDeck(p)&&!(hp&&hp.counterDisabled)){
+  if(CPU_RESOURCES.profile(p).shared||(isCounterDeck(p)&&!(hp&&hp.counterDisabled))){
     const r=CPU_RESOURCES.profile(p);
     hp=Object.assign({},hp,{minHand:ctx.isAtk?r.attackMinHand:r.defenseMinHand,budgetExtra:ctx.isAtk?r.attackBudget:r.defenseBudget});
     // Keep the last dedicated guard for the next enemy turn unless this hit wins.
@@ -476,7 +540,10 @@ function heavyPolicy(p,o,elig,ctx,committed,hp){
   const gap=ctx.isAtk?ctx.df-ctx.at:ctx.at-ctx.df+100;
   const sorted=[...elig].sort((a,b)=>a[key]-b[key]);
   const enough=sorted.find(c=>c[key]>=gap);       // 足りる中で最小の札
-  if(enough)return enough;
+  if(enough){
+    if(CPU_RESOURCES.profile(p).shared)return sorted.filter(c=>c[key]>=gap).sort((a,b)=>CPU_RESOURCES.spendCost(p,[a],p.hand.filter(x=>x!==a))-CPU_RESOURCES.spendCost(p,[b],p.hand.filter(x=>x!==b))||a[key]-b[key])[0];
+    return enough;
+  }
   const best=sorted[sorted.length-1];
   const rest=p.hand.filter(c=>c!==best&&heavyOK(p,c)).sort((a,b)=>b[key]-a[key]).slice(0,budget-committed-1);
   const potential=best[key]+rest.reduce((s,c)=>s+c[key],0);
@@ -489,12 +556,13 @@ const AI={
     const has=v=>opts.some(o=>o.value===v);
     if(has('support')){
       const o=P[1-p.idx];
+      if(CPU_RESOURCES.profile(p).shared)ctx={...ctx,sups:ctx.sups.filter(c=>c.name!=='緑の巻物'||CPU_RESOURCES.drawValue(p,p.damage.length)>0)};
       const pick=ctx.sups.find(c=>c.name.startsWith('牛乳')&&p.damage.length>=2)||ctx.sups.find(c=>c.name==='緑の巻物'&&p.damage.length>=2)||ctx.sups.find(c=>c.name==='朝食のパン'&&p.hand.some(c2=>canAttack(p,c2,null)))||ctx.sups.find(c=>c.name==='病院の待合室にて'&&p.damage.length>=3&&p.hand.length<=3)||ctx.sups.find(c=>c.name==='赤の巻物'&&p.damage.length<=1)||ctx.sups.find(c=>c.name==='緑の巻物'&&p.damage.length>=1);
       if(pick)return{type:'support',card:pick};
     }
     if(has('gauge')){
       // 方針：使える技は置かずに攻撃に使う。ゲージに置くのは今使えない札だけ
-      const needs=new Set();for(const c of [...p.hand,...p.deck])if(c.needs)c.needs.forEach(n=>needs.add(n));
+      const needs=new Set();for(const c of [...p.hand,...CPU_RESOURCES.remainingCards(p,true)])if(c.needs)c.needs.forEach(n=>needs.add(n));
       const have=new Set(gaugeAll(p).map(x=>x.name));
       const usableAtk=p.hand.filter(c=>c.type==='battle'&&baseUsable(p,c)&&c.color!=='飛'&&c.dp>0);
       const dist=c=>Math.max(0,c.gp.yo-yo(p))+Math.max(0,c.gp.in-inn(p));   // 使用条件までの距離
@@ -791,9 +859,11 @@ function pick(arr){return arr[Math.floor(rng()*arr.length)];}
 function shuffled(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a;}
 
 // 相手の手札を情報集合からサンプリング（相手の山札＋手札の中身は区別できない）
-function sampleHand(o){
-  const pool=o.deck.concat(o.hand);
-  return shuffled(pool).slice(0,o.hand.length);
+function sampleHand(o,knownPool){
+  // Candidate B never reads opponent card arrays. A face-down attack is still unknown.
+  const pool=knownPool||CPU_RESOURCES.remainingCards(o,false);
+  const hiddenAttack=E.G.bs&&E.G.bs.stage==='def'&&E.G.bs.atk.p.idx===o.idx;
+  return shuffled(pool).slice(0,o.hand.length+(hiddenAttack?1:0));
 }
 function vplayer(p,hand){const v=Object.create(p);v.hand=hand;return v;}
 
@@ -818,7 +888,7 @@ function evalBattle(A,D,atkCard,defCard,mode,counterSeat=null){
   for(const [pp,c] of [[a,atkCard],[d,defCard]]){
     if(!c)continue;const sign=pp===a?-1:1;
     if(c.hiden)pay+=sign*3*useW().gauge;
-    if(c.costMill)pay+=sign*c.costMill*deckValue(pp);
+    if(c.costMill)pay+=sign*CPU_RESOURCES.depletionCost(pp,c.costMill,useW().deck,{opponent:pp===a?d:a});
     if(c.costHand)pay+=sign*CPU_RESOURCES.handCost(pp,c.costHand,useW().hand);
   }
   let success,dp=atkCard.dp,aHeavy=[],dHeavy=[];
@@ -840,13 +910,19 @@ function evalBattle(A,D,atkCard,defCard,mode,counterSeat=null){
     success=CONFIG.tieWinner==='attacker'?bs.at>=bs.df:bs.at>bs.df;dp=bs.dp;
   }
   // カードの収支
-  pay-=useW().hand;                                          // 攻撃札は手札から出る
-  pay-=aHeavy.length*useW().hand;
-  pay+=dHeavy.length*useW().hand;
-  if(defCard){pay+=useW().hand;if(defCard.color!=='飛'&&defCard.color!=='秘')pay-=gaugeValue(D,defCard);}
+  if(CPU_RESOURCES.profile(A).shared){
+    pay-=CPU_RESOURCES.spendCost(A,[atkCard,...aHeavy],a.hand,useW().hand);
+    pay+=CPU_RESOURCES.spendCost(D,defCard?[defCard,...dHeavy]:dHeavy,d.hand,useW().hand);
+  }else{
+    pay-=useW().hand;pay-=aHeavy.length*useW().hand;pay+=dHeavy.length*useW().hand;
+    if(defCard)pay+=useW().hand;
+  }
+  if(defCard&&defCard.color!=='飛'&&defCard.color!=='秘')pay-=gaugeValue(D,defCard);
+  if(CPU_RESOURCES.profile(D).shared&&defCard&&D.charDeck[0].onGuard&&defCard.tech==='防御')
+    pay-=CPU_RESOURCES.drawValue(d,1,useW().hand,{spent:0,opponent:a});
   if(success){
     pay+=dmgValue(D,dp);
-    if(atkCard.onWin){ if(atkCard.hiden)pay+=useW().hand; else pay+=useW().hand*0.8; } // 1ハンデス／1ドロー
+    if(atkCard.onWin){if(CPU_RESOURCES.profile(A).shared&&CPU_RESOURCES.battleDraws[atkCard.name])pay+=CPU_RESOURCES.drawValue(a,CPU_RESOURCES.battleDraws[atkCard.name],useW().hand,{spent:0,opponent:d});else if(atkCard.hiden)pay+=useW().hand;else pay+=useW().hand*0.8;} // 1ハンデス／1ドロー
     // 連撃の見込み
     const chainable=atkCard.icons.includes('R')||A.charDeck[0].grantR||(A.charDeck[0].id==='C006'&&!A.flags.l5);
     const greens=a.hand.filter(c=>canAttack(a,c,'R'));
@@ -858,22 +934,16 @@ function evalBattle(A,D,atkCard,defCard,mode,counterSeat=null){
     if(atkCard.color!=='飛'&&atkCard.color!=='秘')pay+=gaugeValue(A,atkCard);
     if(defCard&&defCard.onDefWin)pay-=gaugeValue(A,atkCard)+useW().hand*0.3; // 零雹
   }
-  if(counterSeat===A.idx){
+  const resource=CPU_RESOURCES.profile(A);
+  if(resource.shared){
     const lethal=success&&D.damage.length+dp>=CONFIG.winDamage;
     if(!lethal){
-      // Spending guards/heavy cards on a failed attack delays the counterattack.
-      const reserve=c=>CPU_RESOURCES.reserve(A,c);
-      pay-=reserve(atkCard)+aHeavy.reduce((n,c)=>n+reserve(c),0);
-      if(!success)pay-=CPU_RESOURCES.profile(A).attackFailure;
-      if(A.hand.length-aHeavy.length-1<CPU_RESOURCES.profile(A).shortHand)pay-=CPU_RESOURCES.profile(A).shortHandPenalty;
-    }else pay+=useW().lethal*CPU_RESOURCES.profile(A).finishMultiplier;
-  }else if(counterSeat===D.idx&&defCard&&!success){
-    // The existing payoff already rewards enemy heavy-card expenditure.
-    // Value Lv4's mandatory guard draw according to remaining deck/hand space.
-    if(D.charDeck[0].onGuard&&defCard.tech==='防御')
-      pay-=Math.max(-250,counterDrawValue(d,1));
-    pay-=CPU_RESOURCES.profile(D).guardSuccess; // A successful guard preserves the next turn's attacking resources.
+      if(!success)pay-=resource.attackFailure;
+      if(a.hand.length<resource.shortHand)pay-=resource.shortHandPenalty;
+    }else pay+=useW().lethal*resource.finishMultiplier;
+    if(defCard&&!success)pay-=CPU_RESOURCES.profile(D).guardSuccess;
   }
+
   return pay;
 }
 
@@ -898,11 +968,12 @@ function sampleFrom(items,probs){let r=rng();for(let i=0;i<items.length;i++){r-=
 // 攻撃側の判断：行＝自分の攻撃札（＋攻撃しない）、列＝相手の防御札（名前）＋なし
 function solveAttack(p,o,usable,mode){
   const counterSeat=isCounterDeck(p)?p.idx:null;
+  const knownPool=CPU_RESOURCES.remainingCards(o,false);
   const rows=usable.slice();const allowNone=!mode;
   const colNames=new Map();  // name -> index
   const samples=[];
   for(let s=0;s<useS().samples;s++){
-    const oh=sampleHand(o);const d=vplayer(o,oh);
+    const oh=sampleHand(o,knownPool);const d=vplayer(o,oh);
     const defs=oh.filter(c=>canDefend(d,c));
     const names=[...new Set(defs.map(c=>c.name))];
     for(const nm of names)if(!colNames.has(nm))colNames.set(nm,colNames.size);
@@ -933,10 +1004,11 @@ function solveAttack(p,o,usable,mode){
 // 防御側の判断：行＝自分の防御札（＋なし）、列＝相手の攻撃札（名前）
 function solveDefend(p,o,usable,mode){
   const counterSeat=isCounterDeck(p)?p.idx:null;
+  const knownPool=CPU_RESOURCES.remainingCards(o,false);
   const rows=usable.slice();rows.push(null);
   const colNames=new Map();const samples=[];
   for(let s=0;s<useS().samples;s++){
-    const oh=sampleHand(o);const a=vplayer(o,oh);
+    const oh=sampleHand(o,knownPool);const a=vplayer(o,oh);
     const atks=oh.filter(c=>canAttack(a,c,mode)&&c.dp>0);
     const names=[...new Set(atks.map(c=>c.name))];
     for(const nm of names)if(!colNames.has(nm))colNames.set(nm,colNames.size);
@@ -973,18 +1045,23 @@ function handUtility(p,hand,extraYo,extraIn,extraNames){
     let v=cardVal(c)/600*W_.hand;                 // 素の価値（基準600で手札1枚分）
     if(c.icons.includes('U'))v+=W_.hand*0.5;       // 重撃札はGP無視で使えるので常に価値あり
     if(c.dp===0)v*=0.6;
-    if(isCounterDeck(p)){const r=CPU_RESOURCES.profile(p);if(c.tech==='防御')v+=W_.hand*r.guardHandBonus;if(c.icons.includes('U'))v+=W_.hand*r.heavyHandBonus;}
+    if(CPU_RESOURCES.profile(p).shared||isCounterDeck(p)){const r=CPU_RESOURCES.profile(p);if(c.tech==='防御')v+=W_.hand*r.guardHandBonus;if(c.icons.includes('U'))v+=W_.hand*r.heavyHandBonus;}
     u+= c.icons.includes('U') ? v*(0.6+0.4/(1+d)) : v/(1+d);
   }
   // 山札にある緑の前提札が揃う価値（将来の連撃）
-  for(const c of p.deck)if(c.color==='飛'&&(!c.only||c.only===p.charName)){const have=c.needs.filter(n=>gaugeNames.has(n)).length;u+=W_.hand*0.15*have;}
+  for(const c of CPU_RESOURCES.remainingCards(p,true))if(c.color==='飛'&&(!c.only||c.only===p.charName)){const have=c.needs.filter(n=>gaugeNames.has(n)).length;u+=W_.hand*0.15*have;}
+  if(CPU_RESOURCES.profile(p).shared)u+=CPU_RESOURCES.optionValue(p,hand);
   return u;
 }
 function supportValue(p,o,c){
   const W_=useW();const n=c.name;
   if(n.startsWith('緑の巻物'))return CPU_RESOURCES.drawValue(p,p.damage.length,W_.hand);
-  if(n.startsWith('赤の巻物'))return (p.charDeck.length>=2&&p.damage.length<=2)?2*W_.hand-dmgValue(p,1)*0.9:-1;
-  if(n.startsWith('牛乳'))return p.damage.some(x=>x.type==='char')?dmgValue(p,1)*0.9-W_.hand*0.3:-1;
+  if(n.startsWith('赤の巻物'))return (p.charDeck.length>=2&&p.damage.length<=2)?CPU_RESOURCES.drawValue(p,2,W_.hand,{opponent:o})-dmgValue(p,1)*0.9:-1;
+  if(n.startsWith('牛乳')){
+    const chars=p.damage.filter(x=>x.type==='char').sort((a,b)=>b.lv-a.lv);if(!chars.length)return -1;
+    const restored=chars[0],forced=restored.lv===2&&restored.onTop?(restored.name==='柳生'?2:1):0;
+    return dmgValue(p,1)*0.9-W_.hand*0.3+(forced?CPU_RESOURCES.drawValue(p,forced,W_.hand,{spent:1,overhead:0,opponent:o}):0);
+  }
   if(n.startsWith('朝食のパン'))return p.hand.some(x=>canAttack(p,x,null)&&x.dp>0)?W_.dmg*0.25:-1;
   if(n.startsWith('病院の待合室'))return (p.damage.length>=3&&p.hand.length<=3)?W_.dmg*0.5-W_.hand:-1;
   return 0;
@@ -1001,7 +1078,7 @@ function swapCandidates(p,hand,maxN,required){
 }
 const TurnLayer={
   async prepAction(p,opts,ctx){
-    cur=this;const o=E.P[1-p.idx];
+    cur=this;CPU_RESOURCES.beginDecision();const o=E.P[1-p.idx];
     const has=v=>opts.some(x=>x.value===v);
     // 1) サポート
     if(has('support')){
@@ -1031,7 +1108,7 @@ const TurnLayer={
   },
   async pickCards(p,cards,n,title,allowLess){
     if(/^Lv3の効果：捨てる/.test(title)){ // 飛鳥v4: 手札効用の落ちが最小の札。緑は追加の1ドロー分だけ損失を軽く見る
-      cur=this;const W_=useW();const base=handUtility(p,cards,0,0,[]);
+      cur=this;CPU_RESOURCES.beginDecision();const W_=useW();const base=handUtility(p,cards,0,0,[]);
       const o=E.P[1-p.idx];const greens=cards.filter(x=>x.type==='battle'&&x.color==='飛').length;
       // 手札効用はサポートと緑の価値を含まないので、別に足す（サポート＝使ったときの価値、緑＝連撃の決め手。2枚目以降は軽く）
       const extra=c=>c.type==='support'?Math.max(supportValue(p,o,c),W_.hand):(c.type==='battle'&&c.color==='飛')?(greens>=2?W_.hand*0.5:W_.hand*2):0;
@@ -1039,21 +1116,21 @@ const TurnLayer={
       const sc=cards.map(c=>({c,loss:base-handUtility(p,cards.filter(x=>x!==c),0,0,[])+extra(c)-bonus(c)})).sort((a,b)=>a.loss-b.loss);
       if(allowLess){ // 任意: 引く枚数の価値（1枚=手札価値の6割）から、捨てる札の損失と山札の消費を引いて正なら捨てる
         const best=sc[0];if(!best)return[];const draws=bonus(best.c)>0?2:1;const left=p.deck.length;
-        const deckCost=draws*(W_.deck+(left-draws<=10?200:0));const gain=draws*W_.hand*0.6-(best.loss+bonus(best.c))-deckCost;
+        const gain=CPU_RESOURCES.drawValue(p,draws,W_.hand,{spent:1,overhead:0,opponent:o})-(best.loss+bonus(best.c));
         return gain>0?[best.c]:[];}
       return sc.slice(0,n).map(x=>x.c);}
-    cur=this;
+    cur=this;CPU_RESOURCES.beginDecision();
     if(title.startsWith('入れ替え')||title.startsWith('山札の下へ'))return swapCandidates(p,cards,n,!allowLess);
     if(title.startsWith('捨てるカード'))return swapCandidates(p,cards,n,!allowLess);
     return AI.pickCards.call(this,p,cards,n,title,allowLess);
   },
   async chooseGauge(p,card){
-    cur=this;const rest=p.hand.filter(x=>x!==card);
+    cur=this;CPU_RESOURCES.beginDecision();const rest=p.hand.filter(x=>x!==card);
     const a=handUtility(p,rest,1,0,[card.name]),b=handUtility(p,rest,0,1,[card.name]);
     return a>=b?'yo':'in';
   },
   async chain(p,avail){
-    cur=this;const o=E.P[1-p.idx];
+    cur=this;CPU_RESOURCES.beginDecision();const o=E.P[1-p.idx];
     const usable=p.hand.filter(c=>canAttack(p,c,'R')&&c.dp>0);
     if(!usable.length)return null;
     const r=solveAttack(p,o,usable,'R');
@@ -1070,6 +1147,7 @@ function makeSolver(params){
   inst.S=Object.assign({},S,params&&params.S||{});
   inst.hp=Object.assign({minHand:2,budgetExtra:1},params&&params.hp||{});
   inst.chainMargin=(params&&params.chainMargin)??400;
+  inst.resourceParams=params&&params.resources?Object.freeze({...params.resources}):null;
   inst.trace=null;
   return inst;
 }
@@ -1079,9 +1157,9 @@ function useS(){return cur?cur.S:S;}
 function useHP(){return cur?cur.hp:{minHand:2,budgetExtra:1};}
 const SolverProto={
   name:'solver',
-  async heavy(p,elig,ctx){const bs=E.G.bs;const side=ctx.isAtk?bs.atk:bs.def;return heavyPolicy(p,E.P[1-p.idx],elig,ctx,side.heavy.length,this.hp);},
+  async heavy(p,elig,ctx){CPU_RESOURCES.beginDecision();const bs=E.G.bs;const side=ctx.isAtk?bs.atk:bs.def;return heavyPolicy(p,E.P[1-p.idx],elig,ctx,side.heavy.length,this.hp);},
   async attack(p,usable,mode){
-    cur=this;
+    cur=this;CPU_RESOURCES.beginDecision();
     const o=E.P[1-p.idx];
     const cand=usable.filter(c=>c.dp>0&&c.tech!=='防御');
     let list=cand.length?cand:(!mode&&yo(p)+inn(p)<4?usable:[]);
@@ -1091,7 +1169,7 @@ const SolverProto={
     return r.choice;
   },
   async defend(p,usable,info){
-    cur=this;
+    cur=this;CPU_RESOURCES.beginDecision();
     const o=info.attacker;
     const r=solveDefend(p,o,usable,info.mode||null);
     if(this.trace&&r.probs)this.trace.push({kind:'def',turn:E.G.turn,p:p.idx,rows:r.rows.map(c=>c?c.name:'出さない'),probs:r.probs.map(x=>+x.toFixed(2))});
@@ -1131,6 +1209,7 @@ for(const method of ['prepAction','chooseGauge','attack','defend','heavy','chain
     return isCounterDeck(p)?counterAI[method](p,...args):original.call(this,p,...args);
   };
 }
+Solver.resources=CPU_RESOURCES;
 Solver.makeSolver=makeSolver;Solver.evalBattle=evalBattle;Solver.solveMatrix=solveMatrix;Solver.defaults={W,S};
 
 if(typeof module!=='undefined'&&module.exports)module.exports=Solver; else root.Solver=Solver;
