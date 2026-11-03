@@ -1,0 +1,10 @@
+{
+  "completed": 2000,
+  "errors": [],
+  "baseline": "d757ca80709711ad9564898c39902f0fe001c411",
+  "candidateHash": "858b0c9ffbe0dbf4b0ff97e810ca0e81cf750d5516e2bafb755577a0a99d8ee8",
+  "started": "2026-11-03T07:41:15.662Z",
+  "updated": "2026-11-03T07:45:03.708Z",
+  "target": 2000,
+  "legacySmokeGames": 40
+}
