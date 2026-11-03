@@ -1,0 +1,4066 @@
+{
+  "manifest": {
+    "phase": "main",
+    "completed": 6000,
+    "drawCalls": 150785,
+    "unclassified": 0,
+    "errors": [],
+    "started": "2026-11-03T07:02:41.447Z",
+    "updated": "2026-11-03T07:07:17.074Z",
+    "sourceCommit": "d757ca80709711ad9564898c39902f0fe001c411",
+    "PR3Head": "fcbdf073e874501bef8594c23be21e5a74d4edc9",
+    "seedAndSeats": "identical to PR3",
+    "countPerSeat": 500,
+    "parallel": 4,
+    "referenceMatches": 6000
+  },
+  "drawCalls": 150785,
+  "actualDraws": 297037,
+  "unclassified": [],
+  "groups": [
+    {
+      "opponent": "柳生・射撃",
+      "size": 30,
+      "deck": "葛城・削り",
+      "categories": {
+        "初期手札": {
+          "calls": 1000,
+          "requested": 4000,
+          "actual": 4000,
+          "normal": 4000,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 4000,
+          "shareOfAllDrawPct": 21.10372480742851,
+          "actualPerGame": 4.0
+        },
+        "ターン通常": {
+          "calls": 6523,
+          "requested": 12546,
+          "actual": 12546,
+          "normal": 12546,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 12546,
+          "shareOfAllDrawPct": 66.19183285849952,
+          "actualPerGame": 12.546
+        },
+        "緑の巻物": {
+          "calls": 587,
+          "requested": 1116,
+          "actual": 1116,
+          "normal": 1116,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 1116,
+          "shareOfAllDrawPct": 5.887939221272554,
+          "actualPerGame": 1.116
+        },
+        "その他サポート": {
+          "calls": 0,
+          "requested": 0,
+          "actual": 0,
+          "normal": 0,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.0,
+          "actualPerGame": 0.0
+        },
+        "バトルカード": {
+          "calls": 0,
+          "requested": 0,
+          "actual": 0,
+          "normal": 0,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.0,
+          "actualPerGame": 0.0
+        },
+        "キャラクター能力": {
+          "calls": 1292,
+          "requested": 1292,
+          "actual": 1292,
+          "normal": 1292,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 1292,
+          "shareOfAllDrawPct": 6.816503112799409,
+          "actualPerGame": 1.292
+        },
+        "その他": {
+          "calls": 0,
+          "requested": 0,
+          "actual": 0,
+          "normal": 0,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.0,
+          "actualPerGame": 0.0
+        }
+      },
+      "sources": {
+        "初期手札": {
+          "calls": 1000,
+          "requested": 4000,
+          "actual": 4000,
+          "normal": 4000,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 4000,
+          "shareOfAllDrawPct": 21.10372480742851,
+          "actualPerGame": 4.0
+        },
+        "ターン開始ドロー": {
+          "calls": 6523,
+          "requested": 12546,
+          "actual": 12546,
+          "normal": 12546,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 12546,
+          "shareOfAllDrawPct": 66.19183285849952,
+          "actualPerGame": 12.546
+        },
+        "葛城Lv2:忍転身(onTop)": {
+          "calls": 1292,
+          "requested": 1292,
+          "actual": 1292,
+          "normal": 1292,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 1292,
+          "shareOfAllDrawPct": 6.816503112799409,
+          "actualPerGame": 1.292
+        },
+        "緑の巻物:use": {
+          "calls": 587,
+          "requested": 1116,
+          "actual": 1116,
+          "normal": 1116,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 1116,
+          "shareOfAllDrawPct": 5.887939221272554,
+          "actualPerGame": 1.116
+        }
+      },
+      "sourceCategory": {
+        "初期手札": "初期手札",
+        "ターン開始ドロー": "ターン通常",
+        "葛城Lv2:忍転身(onTop)": "キャラクター能力",
+        "緑の巻物:use": "緑の巻物"
+      },
+      "damageDistribution": {
+        "4": 70,
+        "2": 139,
+        "1": 288,
+        "3": 90
+      },
+      "beforeDeckDistribution": {
+        "12": 17,
+        "19": 64,
+        "20": 76,
+        "18": 73,
+        "14": 27,
+        "13": 28,
+        "17": 65,
+        "21": 78,
+        "15": 43,
+        "16": 57,
+        "11": 14,
+        "7": 2,
+        "9": 9,
+        "8": 12,
+        "10": 6,
+        "22": 14,
+        "5": 1,
+        "6": 1
+      },
+      "beforeDeckBins": {
+        "11–15": 129,
+        "16–20": 335,
+        "21+": 92,
+        "7–10": 29,
+        "4–6": 2
+      },
+      "eventActual": 18954,
+      "eventCalls": 9402,
+      "greenActual": 1116,
+      "greenNeutral": 0,
+      "greenShortCalls": 0,
+      "greenZeroCalls": 0,
+      "greenEmptyingCalls": 0,
+      "greenLow6Calls": 2,
+      "games": 1000,
+      "totalActual": 18954,
+      "totalRequested": 18954,
+      "returned": 0,
+      "netDrawDecrease": 18954,
+      "libraryBudget": {
+        "initial": 30000,
+        "grossDraw": 18954,
+        "returnToBottom": 0,
+        "destruction": 0,
+        "usageCost": 0,
+        "damageMove": 510,
+        "finalLibrary": 10536
+      },
+      "perGame": {
+        "initial": 4.0,
+        "turn": 12.546,
+        "abilityGross": 1.292,
+        "abilityNet": 1.292,
+        "cardEffects": 1.116,
+        "green": 1.116,
+        "all": 18.954
+      },
+      "green": {
+        "uses": 587,
+        "actual": 1116,
+        "requested": 1116,
+        "actualPerUse": 1.9011925042589437,
+        "shareOfAllDrawPct": 5.887939221272554,
+        "shareExcludingOpeningPct": 7.462886184298515,
+        "neutralDrawn": 0,
+        "shortCalls": 0,
+        "zeroCalls": 0,
+        "emptyingCalls": 0,
+        "beforeDeckAtMost6Calls": 2
+      },
+      "deckoutLoss": {
+        "count": 0,
+        "n": 1000,
+        "pct": 0.0,
+        "ci95": [
+          2.168404344971009e-17,
+          0.38267584855551234
+        ]
+      },
+      "crossByUses": [
+        {
+          "uses": "0",
+          "games": 413,
+          "deckoutLoss": {
+            "count": 0,
+            "n": 413,
+            "pct": 0.0,
+            "ci95": [
+              0,
+              0.921563519992032
+            ]
+          },
+          "notDeckoutLoss": 413,
+          "meanTurn": 12.365617433414043,
+          "meanFinalDamage": 4.467312348668281,
+          "greenActualPerGame": 0
+        },
+        {
+          "uses": "1",
+          "games": 587,
+          "deckoutLoss": {
+            "count": 0,
+            "n": 587,
+            "pct": 0.0,
+            "ci95": [
+              0,
+              0.6501674456565029
+            ]
+          },
+          "notDeckoutLoss": 587,
+          "meanTurn": 13.810902896081771,
+          "meanFinalDamage": 3.787052810902896,
+          "greenActualPerGame": 1.9011925042589437
+        },
+        {
+          "uses": "2",
+          "games": 0,
+          "deckoutLoss": {
+            "count": 0,
+            "n": 0,
+            "pct": null,
+            "ci95": null
+          },
+          "notDeckoutLoss": 0,
+          "meanTurn": null,
+          "meanFinalDamage": null,
+          "greenActualPerGame": null
+        },
+        {
+          "uses": "3+",
+          "games": 0,
+          "deckoutLoss": {
+            "count": 0,
+            "n": 0,
+            "pct": null,
+            "ci95": null
+          },
+          "notDeckoutLoss": 0,
+          "meanTurn": null,
+          "meanFinalDamage": null,
+          "greenActualPerGame": null
+        }
+      ],
+      "lossUsageSummary": [
+        {
+          "deckoutLoss": false,
+          "games": 1000,
+          "meanTurn": 13.214,
+          "greenUsesPerGame": 0.587,
+          "greenActual": 1116,
+          "allDrawActual": 18954,
+          "greenSharePct": 5.887939221272554
+        },
+        {
+          "deckoutLoss": true,
+          "games": 0,
+          "meanTurn": null,
+          "greenUsesPerGame": null,
+          "greenActual": 0,
+          "allDrawActual": 0,
+          "greenSharePct": null
+        }
+      ]
+    },
+    {
+      "opponent": "柳生・射撃",
+      "size": 30,
+      "deck": "柳生・射撃",
+      "categories": {
+        "初期手札": {
+          "calls": 1000,
+          "requested": 4000,
+          "actual": 4000,
+          "normal": 4000,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 4000,
+          "shareOfAllDrawPct": 16.291951775822742,
+          "actualPerGame": 4.0
+        },
+        "ターン通常": {
+          "calls": 6533,
+          "requested": 12566,
+          "actual": 12488,
+          "normal": 12488,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 12488,
+          "shareOfAllDrawPct": 50.863473444118604,
+          "actualPerGame": 12.488
+        },
+        "緑の巻物": {
+          "calls": 1328,
+          "requested": 3169,
+          "actual": 2987,
+          "normal": 2987,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 2987,
+          "shareOfAllDrawPct": 12.166014988595634,
+          "actualPerGame": 2.987
+        },
+        "その他サポート": {
+          "calls": 0,
+          "requested": 0,
+          "actual": 0,
+          "normal": 0,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.0,
+          "actualPerGame": 0.0
+        },
+        "バトルカード": {
+          "calls": 978,
+          "requested": 978,
+          "actual": 951,
+          "normal": 951,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 951,
+          "shareOfAllDrawPct": 3.8734115347018574,
+          "actualPerGame": 0.951
+        },
+        "キャラクター能力": {
+          "calls": 2438,
+          "requested": 4200,
+          "actual": 4126,
+          "normal": 4126,
+          "neutral": 0,
+          "returned": 2463,
+          "netLibraryDecrease": 1663,
+          "shareOfAllDrawPct": 16.80514825676116,
+          "actualPerGame": 4.126
+        },
+        "その他": {
+          "calls": 0,
+          "requested": 0,
+          "actual": 0,
+          "normal": 0,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.0,
+          "actualPerGame": 0.0
+        }
+      },
+      "sources": {
+        "初期手札": {
+          "calls": 1000,
+          "requested": 4000,
+          "actual": 4000,
+          "normal": 4000,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 4000,
+          "shareOfAllDrawPct": 16.291951775822742,
+          "actualPerGame": 4.0
+        },
+        "ターン開始ドロー": {
+          "calls": 6533,
+          "requested": 12566,
+          "actual": 12488,
+          "normal": 12488,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 12488,
+          "shareOfAllDrawPct": 50.863473444118604,
+          "actualPerGame": 12.488
+        },
+        "柳生Lv2:忍転身(onTop)": {
+          "calls": 995,
+          "requested": 1990,
+          "actual": 1990,
+          "normal": 1990,
+          "neutral": 0,
+          "returned": 995,
+          "netLibraryDecrease": 995,
+          "shareOfAllDrawPct": 8.105246008471815,
+          "actualPerGame": 1.99
+        },
+        "緑の巻物:use": {
+          "calls": 1328,
+          "requested": 3169,
+          "actual": 2987,
+          "normal": 2987,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 2987,
+          "shareOfAllDrawPct": 12.166014988595634,
+          "actualPerGame": 2.987
+        },
+        "踊り傘:onWin": {
+          "calls": 503,
+          "requested": 503,
+          "actual": 495,
+          "normal": 495,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 495,
+          "shareOfAllDrawPct": 2.0161290322580645,
+          "actualPerGame": 0.495
+        },
+        "柳生Lv4:破れ2(onDamaged)": {
+          "calls": 742,
+          "requested": 1484,
+          "actual": 1410,
+          "normal": 1410,
+          "neutral": 0,
+          "returned": 742,
+          "netLibraryDecrease": 668,
+          "shareOfAllDrawPct": 5.742913000977517,
+          "actualPerGame": 1.41
+        },
+        "返し雨:onWin": {
+          "calls": 372,
+          "requested": 372,
+          "actual": 361,
+          "normal": 361,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 361,
+          "shareOfAllDrawPct": 1.4703486477680026,
+          "actualPerGame": 0.361
+        },
+        "柳生Lv4:スタンバイ入れ替え": {
+          "calls": 562,
+          "requested": 562,
+          "actual": 562,
+          "normal": 562,
+          "neutral": 0,
+          "returned": 562,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 2.2890192245030954,
+          "actualPerGame": 0.562
+        },
+        "狂い傘:onWin": {
+          "calls": 103,
+          "requested": 103,
+          "actual": 95,
+          "normal": 95,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 95,
+          "shareOfAllDrawPct": 0.38693385467579017,
+          "actualPerGame": 0.095
+        },
+        "柳生Lv5:スタンバイ入れ替え": {
+          "calls": 139,
+          "requested": 164,
+          "actual": 164,
+          "normal": 164,
+          "neutral": 0,
+          "returned": 164,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.6679700228087325,
+          "actualPerGame": 0.164
+        }
+      },
+      "sourceCategory": {
+        "初期手札": "初期手札",
+        "ターン開始ドロー": "ターン通常",
+        "柳生Lv2:忍転身(onTop)": "キャラクター能力",
+        "柳生Lv4:スタンバイ入れ替え": "キャラクター能力",
+        "柳生Lv4:破れ2(onDamaged)": "キャラクター能力",
+        "緑の巻物:use": "緑の巻物",
+        "狂い傘:onWin": "バトルカード",
+        "柳生Lv5:スタンバイ入れ替え": "キャラクター能力",
+        "踊り傘:onWin": "バトルカード",
+        "返し雨:onWin": "バトルカード"
+      },
+      "damageDistribution": {
+        "4": 298,
+        "1": 402,
+        "3": 319,
+        "2": 309
+      },
+      "beforeDeckDistribution": {
+        "10": 52,
+        "20": 70,
+        "11": 74,
+        "13": 73,
+        "18": 80,
+        "14": 72,
+        "19": 101,
+        "22": 52,
+        "12": 65,
+        "5": 39,
+        "16": 91,
+        "6": 40,
+        "7": 35,
+        "17": 96,
+        "9": 50,
+        "2": 26,
+        "4": 36,
+        "8": 38,
+        "0": 18,
+        "15": 96,
+        "21": 80,
+        "3": 27,
+        "1": 17
+      },
+      "beforeDeckBins": {
+        "7–10": 175,
+        "16–20": 438,
+        "11–15": 380,
+        "21+": 132,
+        "4–6": 115,
+        "1–3": 70,
+        "0": 18
+      },
+      "eventActual": 24552,
+      "eventCalls": 12277,
+      "greenActual": 2987,
+      "greenNeutral": 0,
+      "greenShortCalls": 82,
+      "greenZeroCalls": 18,
+      "greenEmptyingCalls": 96,
+      "greenLow6Calls": 203,
+      "games": 1000,
+      "totalActual": 24552,
+      "totalRequested": 24913,
+      "returned": 2463,
+      "netDrawDecrease": 22089,
+      "libraryBudget": {
+        "initial": 30000,
+        "grossDraw": 24552,
+        "returnToBottom": 2463,
+        "destruction": 2869,
+        "usageCost": 1371,
+        "damageMove": 235,
+        "finalLibrary": 3436
+      },
+      "perGame": {
+        "initial": 4.0,
+        "turn": 12.488,
+        "abilityGross": 4.126,
+        "abilityNet": 1.663,
+        "cardEffects": 3.938,
+        "green": 2.987,
+        "all": 24.552
+      },
+      "green": {
+        "uses": 1328,
+        "actual": 2987,
+        "requested": 3169,
+        "actualPerUse": 2.2492469879518073,
+        "shareOfAllDrawPct": 12.166014988595634,
+        "shareExcludingOpeningPct": 14.533865317244064,
+        "neutralDrawn": 0,
+        "shortCalls": 82,
+        "zeroCalls": 18,
+        "emptyingCalls": 96,
+        "beforeDeckAtMost6Calls": 203
+      },
+      "deckoutLoss": {
+        "count": 158,
+        "n": 1000,
+        "pct": 15.8,
+        "ci95": [
+          13.670765691270592,
+          18.19098458914138
+        ]
+      },
+      "crossByUses": [
+        {
+          "uses": "0",
+          "games": 139,
+          "deckoutLoss": {
+            "count": 2,
+            "n": 139,
+            "pct": 1.4388489208633095,
+            "ci95": [
+              0.3954752436952022,
+              5.094148627016833
+            ]
+          },
+          "notDeckoutLoss": 137,
+          "meanTurn": 11.798561151079136,
+          "meanFinalDamage": 4.35251798561151,
+          "greenActualPerGame": 0
+        },
+        {
+          "uses": "1",
+          "games": 394,
+          "deckoutLoss": {
+            "count": 34,
+            "n": 394,
+            "pct": 8.629441624365482,
+            "ci95": [
+              6.240911698681003,
+              11.816899328267006
+            ]
+          },
+          "notDeckoutLoss": 360,
+          "meanTurn": 12.870558375634518,
+          "meanFinalDamage": 4.00253807106599,
+          "greenActualPerGame": 2.233502538071066
+        },
+        {
+          "uses": "2",
+          "games": 467,
+          "deckoutLoss": {
+            "count": 122,
+            "n": 467,
+            "pct": 26.124197002141326,
+            "ci95": [
+              22.34610778214028,
+              30.291877717576966
+            ]
+          },
+          "notDeckoutLoss": 345,
+          "meanTurn": 13.925053533190578,
+          "meanFinalDamage": 3.691648822269807,
+          "greenActualPerGame": 4.511777301927195
+        },
+        {
+          "uses": "3+",
+          "games": 0,
+          "deckoutLoss": {
+            "count": 0,
+            "n": 0,
+            "pct": null,
+            "ci95": null
+          },
+          "notDeckoutLoss": 0,
+          "meanTurn": null,
+          "meanFinalDamage": null,
+          "greenActualPerGame": null
+        }
+      ],
+      "lossUsageSummary": [
+        {
+          "deckoutLoss": false,
+          "games": 842,
+          "meanTurn": 12.64251781472684,
+          "greenUsesPerGame": 1.2470308788598574,
+          "greenActual": 2354,
+          "allDrawActual": 20274,
+          "greenSharePct": 11.610930255499655
+        },
+        {
+          "deckoutLoss": true,
+          "games": 158,
+          "meanTurn": 16.259493670886076,
+          "greenUsesPerGame": 1.759493670886076,
+          "greenActual": 633,
+          "allDrawActual": 4278,
+          "greenSharePct": 14.796633941093969
+        }
+      ]
+    },
+    {
+      "opponent": "柳生・射撃",
+      "size": 35,
+      "deck": "葛城・削り",
+      "categories": {
+        "初期手札": {
+          "calls": 1000,
+          "requested": 4000,
+          "actual": 4000,
+          "normal": 4000,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 4000,
+          "shareOfAllDrawPct": 20.898641588296762,
+          "actualPerGame": 4.0
+        },
+        "ターン通常": {
+          "calls": 6618,
+          "requested": 12736,
+          "actual": 12736,
+          "normal": 12736,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 12736,
+          "shareOfAllDrawPct": 66.54127481713688,
+          "actualPerGame": 12.736
+        },
+        "緑の巻物": {
+          "calls": 587,
+          "requested": 1114,
+          "actual": 1114,
+          "normal": 1114,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 1114,
+          "shareOfAllDrawPct": 5.820271682340648,
+          "actualPerGame": 1.114
+        },
+        "その他サポート": {
+          "calls": 0,
+          "requested": 0,
+          "actual": 0,
+          "normal": 0,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.0,
+          "actualPerGame": 0.0
+        },
+        "バトルカード": {
+          "calls": 0,
+          "requested": 0,
+          "actual": 0,
+          "normal": 0,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.0,
+          "actualPerGame": 0.0
+        },
+        "キャラクター能力": {
+          "calls": 1290,
+          "requested": 1290,
+          "actual": 1290,
+          "normal": 1290,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 1290,
+          "shareOfAllDrawPct": 6.739811912225705,
+          "actualPerGame": 1.29
+        },
+        "その他": {
+          "calls": 0,
+          "requested": 0,
+          "actual": 0,
+          "normal": 0,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.0,
+          "actualPerGame": 0.0
+        }
+      },
+      "sources": {
+        "初期手札": {
+          "calls": 1000,
+          "requested": 4000,
+          "actual": 4000,
+          "normal": 4000,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 4000,
+          "shareOfAllDrawPct": 20.898641588296762,
+          "actualPerGame": 4.0
+        },
+        "ターン開始ドロー": {
+          "calls": 6618,
+          "requested": 12736,
+          "actual": 12736,
+          "normal": 12736,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 12736,
+          "shareOfAllDrawPct": 66.54127481713688,
+          "actualPerGame": 12.736
+        },
+        "葛城Lv2:忍転身(onTop)": {
+          "calls": 1290,
+          "requested": 1290,
+          "actual": 1290,
+          "normal": 1290,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 1290,
+          "shareOfAllDrawPct": 6.739811912225705,
+          "actualPerGame": 1.29
+        },
+        "緑の巻物:use": {
+          "calls": 587,
+          "requested": 1114,
+          "actual": 1114,
+          "normal": 1114,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 1114,
+          "shareOfAllDrawPct": 5.820271682340648,
+          "actualPerGame": 1.114
+        }
+      },
+      "sourceCategory": {
+        "初期手札": "初期手札",
+        "ターン開始ドロー": "ターン通常",
+        "葛城Lv2:忍転身(onTop)": "キャラクター能力",
+        "緑の巻物:use": "緑の巻物"
+      },
+      "damageDistribution": {
+        "3": 100,
+        "4": 63,
+        "1": 286,
+        "2": 138
+      },
+      "beforeDeckDistribution": {
+        "20": 45,
+        "21": 59,
+        "26": 79,
+        "24": 68,
+        "23": 71,
+        "25": 72,
+        "12": 4,
+        "14": 8,
+        "15": 9,
+        "17": 16,
+        "18": 20,
+        "22": 58,
+        "16": 19,
+        "19": 34,
+        "13": 8,
+        "27": 15,
+        "11": 1,
+        "10": 1
+      },
+      "beforeDeckBins": {
+        "16–20": 134,
+        "21+": 422,
+        "11–15": 30,
+        "7–10": 1
+      },
+      "eventActual": 19140,
+      "eventCalls": 9495,
+      "greenActual": 1114,
+      "greenNeutral": 0,
+      "greenShortCalls": 0,
+      "greenZeroCalls": 0,
+      "greenEmptyingCalls": 0,
+      "greenLow6Calls": 0,
+      "games": 1000,
+      "totalActual": 19140,
+      "totalRequested": 19140,
+      "returned": 0,
+      "netDrawDecrease": 19140,
+      "libraryBudget": {
+        "initial": 35000,
+        "grossDraw": 19140,
+        "returnToBottom": 0,
+        "destruction": 0,
+        "usageCost": 0,
+        "damageMove": 596,
+        "finalLibrary": 15264
+      },
+      "perGame": {
+        "initial": 4.0,
+        "turn": 12.736,
+        "abilityGross": 1.29,
+        "abilityNet": 1.29,
+        "cardEffects": 1.114,
+        "green": 1.114,
+        "all": 19.14
+      },
+      "green": {
+        "uses": 587,
+        "actual": 1114,
+        "requested": 1114,
+        "actualPerUse": 1.89778534923339,
+        "shareOfAllDrawPct": 5.820271682340648,
+        "shareExcludingOpeningPct": 7.357992073976222,
+        "neutralDrawn": 0,
+        "shortCalls": 0,
+        "zeroCalls": 0,
+        "emptyingCalls": 0,
+        "beforeDeckAtMost6Calls": 0
+      },
+      "deckoutLoss": {
+        "count": 0,
+        "n": 1000,
+        "pct": 0.0,
+        "ci95": [
+          2.168404344971009e-17,
+          0.38267584855551234
+        ]
+      },
+      "crossByUses": [
+        {
+          "uses": "0",
+          "games": 413,
+          "deckoutLoss": {
+            "count": 0,
+            "n": 413,
+            "pct": 0.0,
+            "ci95": [
+              0,
+              0.921563519992032
+            ]
+          },
+          "notDeckoutLoss": 413,
+          "meanTurn": 12.4818401937046,
+          "meanFinalDamage": 4.506053268765133,
+          "greenActualPerGame": 0
+        },
+        {
+          "uses": "1",
+          "games": 587,
+          "deckoutLoss": {
+            "count": 0,
+            "n": 587,
+            "pct": 0.0,
+            "ci95": [
+              0,
+              0.6501674456565029
+            ]
+          },
+          "notDeckoutLoss": 587,
+          "meanTurn": 13.993185689948893,
+          "meanFinalDamage": 4.080068143100511,
+          "greenActualPerGame": 1.89778534923339
+        },
+        {
+          "uses": "2",
+          "games": 0,
+          "deckoutLoss": {
+            "count": 0,
+            "n": 0,
+            "pct": null,
+            "ci95": null
+          },
+          "notDeckoutLoss": 0,
+          "meanTurn": null,
+          "meanFinalDamage": null,
+          "greenActualPerGame": null
+        },
+        {
+          "uses": "3+",
+          "games": 0,
+          "deckoutLoss": {
+            "count": 0,
+            "n": 0,
+            "pct": null,
+            "ci95": null
+          },
+          "notDeckoutLoss": 0,
+          "meanTurn": null,
+          "meanFinalDamage": null,
+          "greenActualPerGame": null
+        }
+      ],
+      "lossUsageSummary": [
+        {
+          "deckoutLoss": false,
+          "games": 1000,
+          "meanTurn": 13.369,
+          "greenUsesPerGame": 0.587,
+          "greenActual": 1114,
+          "allDrawActual": 19140,
+          "greenSharePct": 5.820271682340648
+        },
+        {
+          "deckoutLoss": true,
+          "games": 0,
+          "meanTurn": null,
+          "greenUsesPerGame": null,
+          "greenActual": 0,
+          "allDrawActual": 0,
+          "greenSharePct": null
+        }
+      ]
+    },
+    {
+      "opponent": "柳生・射撃",
+      "size": 35,
+      "deck": "柳生・射撃",
+      "categories": {
+        "初期手札": {
+          "calls": 1000,
+          "requested": 4000,
+          "actual": 4000,
+          "normal": 4000,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 4000,
+          "shareOfAllDrawPct": 15.465511908444169,
+          "actualPerGame": 4.0
+        },
+        "ターン通常": {
+          "calls": 6714,
+          "requested": 12928,
+          "actual": 12906,
+          "normal": 12619,
+          "neutral": 287,
+          "returned": 0,
+          "netLibraryDecrease": 12906,
+          "shareOfAllDrawPct": 49.89947417259511,
+          "actualPerGame": 12.906
+        },
+        "緑の巻物": {
+          "calls": 1371,
+          "requested": 3309,
+          "actual": 3257,
+          "normal": 3114,
+          "neutral": 143,
+          "returned": 0,
+          "netLibraryDecrease": 3257,
+          "shareOfAllDrawPct": 12.592793071450664,
+          "actualPerGame": 3.257
+        },
+        "その他サポート": {
+          "calls": 0,
+          "requested": 0,
+          "actual": 0,
+          "normal": 0,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.0,
+          "actualPerGame": 0.0
+        },
+        "バトルカード": {
+          "calls": 1082,
+          "requested": 1082,
+          "actual": 1077,
+          "normal": 1036,
+          "neutral": 41,
+          "returned": 0,
+          "netLibraryDecrease": 1077,
+          "shareOfAllDrawPct": 4.1640890813485925,
+          "actualPerGame": 1.077
+        },
+        "キャラクター能力": {
+          "calls": 2728,
+          "requested": 4645,
+          "actual": 4624,
+          "normal": 4383,
+          "neutral": 241,
+          "returned": 2890,
+          "netLibraryDecrease": 1734,
+          "shareOfAllDrawPct": 17.87813176616146,
+          "actualPerGame": 4.624
+        },
+        "その他": {
+          "calls": 0,
+          "requested": 0,
+          "actual": 0,
+          "normal": 0,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.0,
+          "actualPerGame": 0.0
+        }
+      },
+      "sources": {
+        "初期手札": {
+          "calls": 1000,
+          "requested": 4000,
+          "actual": 4000,
+          "normal": 4000,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 4000,
+          "shareOfAllDrawPct": 15.465511908444169,
+          "actualPerGame": 4.0
+        },
+        "ターン開始ドロー": {
+          "calls": 6714,
+          "requested": 12928,
+          "actual": 12906,
+          "normal": 12619,
+          "neutral": 287,
+          "returned": 0,
+          "netLibraryDecrease": 12906,
+          "shareOfAllDrawPct": 49.89947417259511,
+          "actualPerGame": 12.906
+        },
+        "柳生Lv2:忍転身(onTop)": {
+          "calls": 995,
+          "requested": 1990,
+          "actual": 1990,
+          "normal": 1990,
+          "neutral": 0,
+          "returned": 995,
+          "netLibraryDecrease": 995,
+          "shareOfAllDrawPct": 7.694092174450974,
+          "actualPerGame": 1.99
+        },
+        "緑の巻物:use": {
+          "calls": 1371,
+          "requested": 3309,
+          "actual": 3257,
+          "normal": 3114,
+          "neutral": 143,
+          "returned": 0,
+          "netLibraryDecrease": 3257,
+          "shareOfAllDrawPct": 12.592793071450664,
+          "actualPerGame": 3.257
+        },
+        "柳生Lv4:スタンバイ入れ替え": {
+          "calls": 607,
+          "requested": 607,
+          "actual": 607,
+          "normal": 558,
+          "neutral": 49,
+          "returned": 607,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 2.346891432106403,
+          "actualPerGame": 0.607
+        },
+        "返し雨:onWin": {
+          "calls": 375,
+          "requested": 375,
+          "actual": 373,
+          "normal": 352,
+          "neutral": 21,
+          "returned": 0,
+          "netLibraryDecrease": 373,
+          "shareOfAllDrawPct": 1.4421589854624188,
+          "actualPerGame": 0.373
+        },
+        "柳生Lv4:破れ2(onDamaged)": {
+          "calls": 760,
+          "requested": 1520,
+          "actual": 1499,
+          "normal": 1457,
+          "neutral": 42,
+          "returned": 760,
+          "netLibraryDecrease": 739,
+          "shareOfAllDrawPct": 5.795700587689453,
+          "actualPerGame": 1.499
+        },
+        "踊り傘:onWin": {
+          "calls": 577,
+          "requested": 577,
+          "actual": 575,
+          "normal": 564,
+          "neutral": 11,
+          "returned": 0,
+          "netLibraryDecrease": 575,
+          "shareOfAllDrawPct": 2.2231673368388494,
+          "actualPerGame": 0.575
+        },
+        "柳生Lv5:スタンバイ入れ替え": {
+          "calls": 366,
+          "requested": 528,
+          "actual": 528,
+          "normal": 378,
+          "neutral": 150,
+          "returned": 528,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 2.0414475719146306,
+          "actualPerGame": 0.528
+        },
+        "狂い傘:onWin": {
+          "calls": 130,
+          "requested": 130,
+          "actual": 129,
+          "normal": 120,
+          "neutral": 9,
+          "returned": 0,
+          "netLibraryDecrease": 129,
+          "shareOfAllDrawPct": 0.4987627590473245,
+          "actualPerGame": 0.129
+        }
+      },
+      "sourceCategory": {
+        "初期手札": "初期手札",
+        "ターン開始ドロー": "ターン通常",
+        "柳生Lv2:忍転身(onTop)": "キャラクター能力",
+        "緑の巻物:use": "緑の巻物",
+        "柳生Lv4:スタンバイ入れ替え": "キャラクター能力",
+        "返し雨:onWin": "バトルカード",
+        "柳生Lv4:破れ2(onDamaged)": "キャラクター能力",
+        "踊り傘:onWin": "バトルカード",
+        "柳生Lv5:スタンバイ入れ替え": "キャラクター能力",
+        "狂い傘:onWin": "バトルカード"
+      },
+      "damageDistribution": {
+        "3": 300,
+        "4": 338,
+        "1": 409,
+        "2": 324
+      },
+      "beforeDeckDistribution": {
+        "22": 95,
+        "13": 40,
+        "23": 76,
+        "7": 26,
+        "19": 76,
+        "15": 58,
+        "2": 9,
+        "16": 71,
+        "8": 31,
+        "21": 88,
+        "11": 48,
+        "24": 108,
+        "27": 55,
+        "25": 76,
+        "14": 59,
+        "26": 80,
+        "18": 68,
+        "5": 14,
+        "12": 32,
+        "20": 93,
+        "17": 57,
+        "6": 18,
+        "9": 32,
+        "3": 13,
+        "0": 1,
+        "10": 30,
+        "1": 6,
+        "4": 11
+      },
+      "beforeDeckBins": {
+        "21+": 578,
+        "11–15": 237,
+        "7–10": 119,
+        "16–20": 365,
+        "1–3": 28,
+        "4–6": 43,
+        "0": 1
+      },
+      "eventActual": 25864,
+      "eventCalls": 12895,
+      "greenActual": 3257,
+      "greenNeutral": 143,
+      "greenShortCalls": 29,
+      "greenZeroCalls": 1,
+      "greenEmptyingCalls": 37,
+      "greenLow6Calls": 72,
+      "games": 1000,
+      "totalActual": 25864,
+      "totalRequested": 25964,
+      "returned": 2890,
+      "netDrawDecrease": 22974,
+      "libraryBudget": {
+        "initial": 35000,
+        "grossDraw": 25864,
+        "returnToBottom": 2890,
+        "destruction": 2903,
+        "usageCost": 1619,
+        "damageMove": 331,
+        "finalLibrary": 7173
+      },
+      "perGame": {
+        "initial": 4.0,
+        "turn": 12.906,
+        "abilityGross": 4.624,
+        "abilityNet": 1.734,
+        "cardEffects": 4.334,
+        "green": 3.257,
+        "all": 25.864
+      },
+      "green": {
+        "uses": 1371,
+        "actual": 3257,
+        "requested": 3309,
+        "actualPerUse": 2.3756382202771698,
+        "shareOfAllDrawPct": 12.592793071450664,
+        "shareExcludingOpeningPct": 14.896633735821442,
+        "neutralDrawn": 143,
+        "shortCalls": 29,
+        "zeroCalls": 1,
+        "emptyingCalls": 37,
+        "beforeDeckAtMost6Calls": 72
+      },
+      "deckoutLoss": {
+        "count": 37,
+        "n": 1000,
+        "pct": 3.6999999999999997,
+        "ci95": [
+          2.6961180875554733,
+          5.058239748206931
+        ]
+      },
+      "crossByUses": [
+        {
+          "uses": "0",
+          "games": 134,
+          "deckoutLoss": {
+            "count": 0,
+            "n": 134,
+            "pct": 0.0,
+            "ci95": [
+              0,
+              2.7868675023899323
+            ]
+          },
+          "notDeckoutLoss": 134,
+          "meanTurn": 11.634328358208956,
+          "meanFinalDamage": 4.2611940298507465,
+          "greenActualPerGame": 0
+        },
+        {
+          "uses": "1",
+          "games": 361,
+          "deckoutLoss": {
+            "count": 3,
+            "n": 361,
+            "pct": 0.8310249307479225,
+            "ci95": [
+              0.2830179803137566,
+              2.4144437754048647
+            ]
+          },
+          "notDeckoutLoss": 358,
+          "meanTurn": 12.739612188365651,
+          "meanFinalDamage": 4.166204986149585,
+          "greenActualPerGame": 2.2437673130193905
+        },
+        {
+          "uses": "2",
+          "games": 505,
+          "deckoutLoss": {
+            "count": 34,
+            "n": 505,
+            "pct": 6.732673267326733,
+            "ci95": [
+              4.857665370550826,
+              9.260967766614531
+            ]
+          },
+          "notDeckoutLoss": 471,
+          "meanTurn": 14.279207920792079,
+          "meanFinalDamage": 3.869306930693069,
+          "greenActualPerGame": 4.845544554455445
+        },
+        {
+          "uses": "3+",
+          "games": 0,
+          "deckoutLoss": {
+            "count": 0,
+            "n": 0,
+            "pct": null,
+            "ci95": null
+          },
+          "notDeckoutLoss": 0,
+          "meanTurn": null,
+          "meanFinalDamage": null,
+          "greenActualPerGame": null
+        }
+      ],
+      "lossUsageSummary": [
+        {
+          "deckoutLoss": false,
+          "games": 963,
+          "meanTurn": 13.18483904465213,
+          "greenUsesPerGame": 1.3499480789200415,
+          "greenActual": 3088,
+          "allDrawActual": 24704,
+          "greenSharePct": 12.5
+        },
+        {
+          "deckoutLoss": true,
+          "games": 37,
+          "meanTurn": 18.16216216216216,
+          "greenUsesPerGame": 1.9189189189189189,
+          "greenActual": 169,
+          "allDrawActual": 1160,
+          "greenSharePct": 14.568965517241379
+        }
+      ]
+    },
+    {
+      "opponent": "柳生・射撃",
+      "size": 40,
+      "deck": "葛城・削り",
+      "categories": {
+        "初期手札": {
+          "calls": 1000,
+          "requested": 4000,
+          "actual": 4000,
+          "normal": 4000,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 4000,
+          "shareOfAllDrawPct": 20.743660218845616,
+          "actualPerGame": 4.0
+        },
+        "ターン通常": {
+          "calls": 6649,
+          "requested": 12798,
+          "actual": 12798,
+          "normal": 12794,
+          "neutral": 4,
+          "returned": 0,
+          "netLibraryDecrease": 12798,
+          "shareOfAllDrawPct": 66.36934087019655,
+          "actualPerGame": 12.798
+        },
+        "緑の巻物": {
+          "calls": 603,
+          "requested": 1166,
+          "actual": 1166,
+          "normal": 1166,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 1166,
+          "shareOfAllDrawPct": 6.046776953793497,
+          "actualPerGame": 1.166
+        },
+        "その他サポート": {
+          "calls": 0,
+          "requested": 0,
+          "actual": 0,
+          "normal": 0,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.0,
+          "actualPerGame": 0.0
+        },
+        "バトルカード": {
+          "calls": 0,
+          "requested": 0,
+          "actual": 0,
+          "normal": 0,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.0,
+          "actualPerGame": 0.0
+        },
+        "キャラクター能力": {
+          "calls": 1319,
+          "requested": 1319,
+          "actual": 1319,
+          "normal": 1319,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 1319,
+          "shareOfAllDrawPct": 6.840221957164341,
+          "actualPerGame": 1.319
+        },
+        "その他": {
+          "calls": 0,
+          "requested": 0,
+          "actual": 0,
+          "normal": 0,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.0,
+          "actualPerGame": 0.0
+        }
+      },
+      "sources": {
+        "初期手札": {
+          "calls": 1000,
+          "requested": 4000,
+          "actual": 4000,
+          "normal": 4000,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 4000,
+          "shareOfAllDrawPct": 20.743660218845616,
+          "actualPerGame": 4.0
+        },
+        "ターン開始ドロー": {
+          "calls": 6649,
+          "requested": 12798,
+          "actual": 12798,
+          "normal": 12794,
+          "neutral": 4,
+          "returned": 0,
+          "netLibraryDecrease": 12798,
+          "shareOfAllDrawPct": 66.36934087019655,
+          "actualPerGame": 12.798
+        },
+        "葛城Lv2:忍転身(onTop)": {
+          "calls": 1319,
+          "requested": 1319,
+          "actual": 1319,
+          "normal": 1319,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 1319,
+          "shareOfAllDrawPct": 6.840221957164341,
+          "actualPerGame": 1.319
+        },
+        "緑の巻物:use": {
+          "calls": 603,
+          "requested": 1166,
+          "actual": 1166,
+          "normal": 1166,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 1166,
+          "shareOfAllDrawPct": 6.046776953793497,
+          "actualPerGame": 1.166
+        }
+      },
+      "sourceCategory": {
+        "初期手札": "初期手札",
+        "ターン開始ドロー": "ターン通常",
+        "葛城Lv2:忍転身(onTop)": "キャラクター能力",
+        "緑の巻物:use": "緑の巻物"
+      },
+      "damageDistribution": {
+        "2": 141,
+        "4": 80,
+        "1": 291,
+        "3": 91
+      },
+      "beforeDeckDistribution": {
+        "21": 14,
+        "29": 71,
+        "24": 33,
+        "30": 76,
+        "28": 73,
+        "23": 28,
+        "27": 64,
+        "31": 73,
+        "25": 43,
+        "26": 57,
+        "20": 12,
+        "15": 2,
+        "19": 9,
+        "18": 12,
+        "22": 16,
+        "32": 14,
+        "17": 3,
+        "16": 3
+      },
+      "beforeDeckBins": {
+        "21+": 562,
+        "16–20": 39,
+        "11–15": 2
+      },
+      "eventActual": 19283,
+      "eventCalls": 9571,
+      "greenActual": 1166,
+      "greenNeutral": 0,
+      "greenShortCalls": 0,
+      "greenZeroCalls": 0,
+      "greenEmptyingCalls": 0,
+      "greenLow6Calls": 0,
+      "games": 1000,
+      "totalActual": 19283,
+      "totalRequested": 19283,
+      "returned": 0,
+      "netDrawDecrease": 19283,
+      "libraryBudget": {
+        "initial": 40000,
+        "grossDraw": 19283,
+        "returnToBottom": 0,
+        "destruction": 0,
+        "usageCost": 0,
+        "damageMove": 568,
+        "finalLibrary": 20149
+      },
+      "perGame": {
+        "initial": 4.0,
+        "turn": 12.798,
+        "abilityGross": 1.319,
+        "abilityNet": 1.319,
+        "cardEffects": 1.166,
+        "green": 1.166,
+        "all": 19.283
+      },
+      "green": {
+        "uses": 603,
+        "actual": 1166,
+        "requested": 1166,
+        "actualPerUse": 1.933665008291874,
+        "shareOfAllDrawPct": 6.046776953793497,
+        "shareExcludingOpeningPct": 7.629392135052019,
+        "neutralDrawn": 0,
+        "shortCalls": 0,
+        "zeroCalls": 0,
+        "emptyingCalls": 0,
+        "beforeDeckAtMost6Calls": 0
+      },
+      "deckoutLoss": {
+        "count": 0,
+        "n": 1000,
+        "pct": 0.0,
+        "ci95": [
+          2.168404344971009e-17,
+          0.38267584855551234
+        ]
+      },
+      "crossByUses": [
+        {
+          "uses": "0",
+          "games": 397,
+          "deckoutLoss": {
+            "count": 0,
+            "n": 397,
+            "pct": 0.0,
+            "ci95": [
+              0,
+              0.9583486778029368
+            ]
+          },
+          "notDeckoutLoss": 397,
+          "meanTurn": 12.397984886649875,
+          "meanFinalDamage": 4.506297229219143,
+          "greenActualPerGame": 0
+        },
+        {
+          "uses": "1",
+          "games": 603,
+          "deckoutLoss": {
+            "count": 0,
+            "n": 603,
+            "pct": 0.0,
+            "ci95": [
+              0,
+              0.6330251113955574
+            ]
+          },
+          "notDeckoutLoss": 603,
+          "meanTurn": 14.009950248756219,
+          "meanFinalDamage": 3.96849087893864,
+          "greenActualPerGame": 1.933665008291874
+        },
+        {
+          "uses": "2",
+          "games": 0,
+          "deckoutLoss": {
+            "count": 0,
+            "n": 0,
+            "pct": null,
+            "ci95": null
+          },
+          "notDeckoutLoss": 0,
+          "meanTurn": null,
+          "meanFinalDamage": null,
+          "greenActualPerGame": null
+        },
+        {
+          "uses": "3+",
+          "games": 0,
+          "deckoutLoss": {
+            "count": 0,
+            "n": 0,
+            "pct": null,
+            "ci95": null
+          },
+          "notDeckoutLoss": 0,
+          "meanTurn": null,
+          "meanFinalDamage": null,
+          "greenActualPerGame": null
+        }
+      ],
+      "lossUsageSummary": [
+        {
+          "deckoutLoss": false,
+          "games": 1000,
+          "meanTurn": 13.37,
+          "greenUsesPerGame": 0.603,
+          "greenActual": 1166,
+          "allDrawActual": 19283,
+          "greenSharePct": 6.046776953793497
+        },
+        {
+          "deckoutLoss": true,
+          "games": 0,
+          "meanTurn": null,
+          "greenUsesPerGame": null,
+          "greenActual": 0,
+          "allDrawActual": 0,
+          "greenSharePct": null
+        }
+      ]
+    },
+    {
+      "opponent": "柳生・射撃",
+      "size": 40,
+      "deck": "柳生・射撃",
+      "categories": {
+        "初期手札": {
+          "calls": 1000,
+          "requested": 4000,
+          "actual": 4000,
+          "normal": 4000,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 4000,
+          "shareOfAllDrawPct": 15.295782188061642,
+          "actualPerGame": 4.0
+        },
+        "ターン通常": {
+          "calls": 6717,
+          "requested": 12934,
+          "actual": 12930,
+          "normal": 12455,
+          "neutral": 475,
+          "returned": 0,
+          "netLibraryDecrease": 12930,
+          "shareOfAllDrawPct": 49.44361592290926,
+          "actualPerGame": 12.93
+        },
+        "緑の巻物": {
+          "calls": 1348,
+          "requested": 3237,
+          "actual": 3236,
+          "normal": 2985,
+          "neutral": 251,
+          "returned": 0,
+          "netLibraryDecrease": 3236,
+          "shareOfAllDrawPct": 12.374287790141869,
+          "actualPerGame": 3.236
+        },
+        "その他サポート": {
+          "calls": 0,
+          "requested": 0,
+          "actual": 0,
+          "normal": 0,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.0,
+          "actualPerGame": 0.0
+        },
+        "バトルカード": {
+          "calls": 1079,
+          "requested": 1079,
+          "actual": 1079,
+          "normal": 1001,
+          "neutral": 78,
+          "returned": 0,
+          "netLibraryDecrease": 1079,
+          "shareOfAllDrawPct": 4.126037245229628,
+          "actualPerGame": 1.079
+        },
+        "キャラクター能力": {
+          "calls": 2854,
+          "requested": 4907,
+          "actual": 4906,
+          "normal": 4263,
+          "neutral": 643,
+          "returned": 3148,
+          "netLibraryDecrease": 1758,
+          "shareOfAllDrawPct": 18.760276853657604,
+          "actualPerGame": 4.906
+        },
+        "その他": {
+          "calls": 0,
+          "requested": 0,
+          "actual": 0,
+          "normal": 0,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.0,
+          "actualPerGame": 0.0
+        }
+      },
+      "sources": {
+        "初期手札": {
+          "calls": 1000,
+          "requested": 4000,
+          "actual": 4000,
+          "normal": 4000,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 4000,
+          "shareOfAllDrawPct": 15.295782188061642,
+          "actualPerGame": 4.0
+        },
+        "ターン開始ドロー": {
+          "calls": 6717,
+          "requested": 12934,
+          "actual": 12930,
+          "normal": 12455,
+          "neutral": 475,
+          "returned": 0,
+          "netLibraryDecrease": 12930,
+          "shareOfAllDrawPct": 49.44361592290926,
+          "actualPerGame": 12.93
+        },
+        "柳生Lv2:忍転身(onTop)": {
+          "calls": 995,
+          "requested": 1990,
+          "actual": 1990,
+          "normal": 1990,
+          "neutral": 0,
+          "returned": 995,
+          "netLibraryDecrease": 995,
+          "shareOfAllDrawPct": 7.609651638560667,
+          "actualPerGame": 1.99
+        },
+        "緑の巻物:use": {
+          "calls": 1348,
+          "requested": 3237,
+          "actual": 3236,
+          "normal": 2985,
+          "neutral": 251,
+          "returned": 0,
+          "netLibraryDecrease": 3236,
+          "shareOfAllDrawPct": 12.374287790141869,
+          "actualPerGame": 3.236
+        },
+        "返し雨:onWin": {
+          "calls": 382,
+          "requested": 382,
+          "actual": 382,
+          "normal": 339,
+          "neutral": 43,
+          "returned": 0,
+          "netLibraryDecrease": 382,
+          "shareOfAllDrawPct": 1.4607471989598868,
+          "actualPerGame": 0.382
+        },
+        "柳生Lv4:破れ2(onDamaged)": {
+          "calls": 764,
+          "requested": 1528,
+          "actual": 1527,
+          "normal": 1420,
+          "neutral": 107,
+          "returned": 764,
+          "netLibraryDecrease": 763,
+          "shareOfAllDrawPct": 5.839164850292532,
+          "actualPerGame": 1.527
+        },
+        "踊り傘:onWin": {
+          "calls": 573,
+          "requested": 573,
+          "actual": 573,
+          "normal": 554,
+          "neutral": 19,
+          "returned": 0,
+          "netLibraryDecrease": 573,
+          "shareOfAllDrawPct": 2.1911207984398304,
+          "actualPerGame": 0.573
+        },
+        "柳生Lv4:スタンバイ入れ替え": {
+          "calls": 608,
+          "requested": 608,
+          "actual": 608,
+          "normal": 543,
+          "neutral": 65,
+          "returned": 608,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 2.3249588925853697,
+          "actualPerGame": 0.608
+        },
+        "柳生Lv5:スタンバイ入れ替え": {
+          "calls": 487,
+          "requested": 781,
+          "actual": 781,
+          "normal": 310,
+          "neutral": 471,
+          "returned": 781,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 2.9865014722190355,
+          "actualPerGame": 0.781
+        },
+        "狂い傘:onWin": {
+          "calls": 124,
+          "requested": 124,
+          "actual": 124,
+          "normal": 108,
+          "neutral": 16,
+          "returned": 0,
+          "netLibraryDecrease": 124,
+          "shareOfAllDrawPct": 0.4741692478299109,
+          "actualPerGame": 0.124
+        }
+      },
+      "sourceCategory": {
+        "初期手札": "初期手札",
+        "ターン開始ドロー": "ターン通常",
+        "柳生Lv2:忍転身(onTop)": "キャラクター能力",
+        "柳生Lv4:スタンバイ入れ替え": "キャラクター能力",
+        "柳生Lv4:破れ2(onDamaged)": "キャラクター能力",
+        "緑の巻物:use": "緑の巻物",
+        "踊り傘:onWin": "バトルカード",
+        "狂い傘:onWin": "バトルカード",
+        "柳生Lv5:スタンバイ入れ替え": "キャラクター能力",
+        "返し雨:onWin": "バトルカード"
+      },
+      "damageDistribution": {
+        "4": 330,
+        "1": 405,
+        "3": 286,
+        "2": 327
+      },
+      "beforeDeckDistribution": {
+        "20": 61,
+        "30": 79,
+        "16": 42,
+        "21": 60,
+        "26": 78,
+        "22": 71,
+        "27": 99,
+        "24": 74,
+        "28": 76,
+        "19": 61,
+        "12": 21,
+        "32": 56,
+        "29": 98,
+        "13": 30,
+        "15": 26,
+        "25": 95,
+        "11": 17,
+        "10": 22,
+        "18": 42,
+        "31": 84,
+        "8": 8,
+        "17": 36,
+        "9": 8,
+        "23": 63,
+        "4": 2,
+        "6": 6,
+        "14": 26,
+        "5": 2,
+        "7": 4,
+        "3": 1
+      },
+      "beforeDeckBins": {
+        "16–20": 242,
+        "21+": 933,
+        "11–15": 120,
+        "7–10": 42,
+        "4–6": 10,
+        "1–3": 1
+      },
+      "eventActual": 26151,
+      "eventCalls": 12998,
+      "greenActual": 3236,
+      "greenNeutral": 251,
+      "greenShortCalls": 1,
+      "greenZeroCalls": 0,
+      "greenEmptyingCalls": 3,
+      "greenLow6Calls": 11,
+      "games": 1000,
+      "totalActual": 26151,
+      "totalRequested": 26157,
+      "returned": 3148,
+      "netDrawDecrease": 23003,
+      "libraryBudget": {
+        "initial": 40000,
+        "grossDraw": 26151,
+        "returnToBottom": 3148,
+        "destruction": 2936,
+        "usageCost": 1738,
+        "damageMove": 422,
+        "finalLibrary": 11901
+      },
+      "perGame": {
+        "initial": 4.0,
+        "turn": 12.93,
+        "abilityGross": 4.906,
+        "abilityNet": 1.758,
+        "cardEffects": 4.315,
+        "green": 3.236,
+        "all": 26.151
+      },
+      "green": {
+        "uses": 1348,
+        "actual": 3236,
+        "requested": 3237,
+        "actualPerUse": 2.400593471810089,
+        "shareOfAllDrawPct": 12.374287790141869,
+        "shareExcludingOpeningPct": 14.608821272177329,
+        "neutralDrawn": 251,
+        "shortCalls": 1,
+        "zeroCalls": 0,
+        "emptyingCalls": 3,
+        "beforeDeckAtMost6Calls": 11
+      },
+      "deckoutLoss": {
+        "count": 4,
+        "n": 1000,
+        "pct": 0.4,
+        "ci95": [
+          0.15565881404084309,
+          1.0239556277262254
+        ]
+      },
+      "crossByUses": [
+        {
+          "uses": "0",
+          "games": 138,
+          "deckoutLoss": {
+            "count": 0,
+            "n": 138,
+            "pct": 0.0,
+            "ci95": [
+              1.734723475976807e-16,
+              2.7082764465572957
+            ]
+          },
+          "notDeckoutLoss": 138,
+          "meanTurn": 11.456521739130435,
+          "meanFinalDamage": 4.239130434782608,
+          "greenActualPerGame": 0
+        },
+        {
+          "uses": "1",
+          "games": 376,
+          "deckoutLoss": {
+            "count": 0,
+            "n": 376,
+            "pct": 0.0,
+            "ci95": [
+              0,
+              1.0113321575324679
+            ]
+          },
+          "notDeckoutLoss": 376,
+          "meanTurn": 12.553191489361701,
+          "meanFinalDamage": 4.172872340425532,
+          "greenActualPerGame": 2.3031914893617023
+        },
+        {
+          "uses": "2",
+          "games": 486,
+          "deckoutLoss": {
+            "count": 4,
+            "n": 486,
+            "pct": 0.823045267489712,
+            "ci95": [
+              0.3205183749129615,
+              2.0968880343368275
+            ]
+          },
+          "notDeckoutLoss": 482,
+          "meanTurn": 14.545267489711934,
+          "meanFinalDamage": 4.053497942386831,
+          "greenActualPerGame": 4.8765432098765435
+        },
+        {
+          "uses": "3+",
+          "games": 0,
+          "deckoutLoss": {
+            "count": 0,
+            "n": 0,
+            "pct": null,
+            "ci95": null
+          },
+          "notDeckoutLoss": 0,
+          "meanTurn": null,
+          "meanFinalDamage": null,
+          "greenActualPerGame": null
+        }
+      ],
+      "lossUsageSummary": [
+        {
+          "deckoutLoss": false,
+          "games": 996,
+          "meanTurn": 13.34136546184739,
+          "greenUsesPerGame": 1.3453815261044177,
+          "greenActual": 3219,
+          "allDrawActual": 26013,
+          "greenSharePct": 12.37458193979933
+        },
+        {
+          "deckoutLoss": true,
+          "games": 4,
+          "meanTurn": 20.5,
+          "greenUsesPerGame": 2,
+          "greenActual": 17,
+          "allDrawActual": 138,
+          "greenSharePct": 12.318840579710145
+        }
+      ]
+    },
+    {
+      "opponent": "雲雀・反撃",
+      "size": 30,
+      "deck": "葛城・削り",
+      "categories": {
+        "初期手札": {
+          "calls": 1000,
+          "requested": 4000,
+          "actual": 4000,
+          "normal": 4000,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 4000,
+          "shareOfAllDrawPct": 16.1773032435493,
+          "actualPerGame": 4.0
+        },
+        "ターン通常": {
+          "calls": 9102,
+          "requested": 17704,
+          "actual": 17648,
+          "normal": 17648,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 17648,
+          "shareOfAllDrawPct": 71.37426191053952,
+          "actualPerGame": 17.648
+        },
+        "緑の巻物": {
+          "calls": 720,
+          "requested": 1297,
+          "actual": 1277,
+          "normal": 1277,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 1277,
+          "shareOfAllDrawPct": 5.164604060503114,
+          "actualPerGame": 1.277
+        },
+        "その他サポート": {
+          "calls": 16,
+          "requested": 16,
+          "actual": 15,
+          "normal": 15,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 15,
+          "shareOfAllDrawPct": 0.06066488716330987,
+          "actualPerGame": 0.015
+        },
+        "バトルカード": {
+          "calls": 0,
+          "requested": 0,
+          "actual": 0,
+          "normal": 0,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.0,
+          "actualPerGame": 0.0
+        },
+        "キャラクター能力": {
+          "calls": 1794,
+          "requested": 1794,
+          "actual": 1786,
+          "normal": 1786,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 1786,
+          "shareOfAllDrawPct": 7.223165898244763,
+          "actualPerGame": 1.786
+        },
+        "その他": {
+          "calls": 0,
+          "requested": 0,
+          "actual": 0,
+          "normal": 0,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.0,
+          "actualPerGame": 0.0
+        }
+      },
+      "sources": {
+        "初期手札": {
+          "calls": 1000,
+          "requested": 4000,
+          "actual": 4000,
+          "normal": 4000,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 4000,
+          "shareOfAllDrawPct": 16.1773032435493,
+          "actualPerGame": 4.0
+        },
+        "ターン開始ドロー": {
+          "calls": 9102,
+          "requested": 17704,
+          "actual": 17648,
+          "normal": 17648,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 17648,
+          "shareOfAllDrawPct": 71.37426191053952,
+          "actualPerGame": 17.648
+        },
+        "葛城Lv2:忍転身(onTop)": {
+          "calls": 1794,
+          "requested": 1794,
+          "actual": 1786,
+          "normal": 1786,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 1786,
+          "shareOfAllDrawPct": 7.223165898244763,
+          "actualPerGame": 1.786
+        },
+        "緑の巻物:use": {
+          "calls": 720,
+          "requested": 1297,
+          "actual": 1277,
+          "normal": 1277,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 1277,
+          "shareOfAllDrawPct": 5.164604060503114,
+          "actualPerGame": 1.277
+        },
+        "病院の待合室にて:解除時": {
+          "calls": 16,
+          "requested": 16,
+          "actual": 15,
+          "normal": 15,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 15,
+          "shareOfAllDrawPct": 0.06066488716330987,
+          "actualPerGame": 0.015
+        }
+      },
+      "sourceCategory": {
+        "初期手札": "初期手札",
+        "ターン開始ドロー": "ターン通常",
+        "葛城Lv2:忍転身(onTop)": "キャラクター能力",
+        "緑の巻物:use": "緑の巻物",
+        "病院の待合室にて:解除時": "その他サポート"
+      },
+      "damageDistribution": {
+        "1": 358,
+        "4": 47,
+        "3": 121,
+        "2": 194
+      },
+      "beforeDeckDistribution": {
+        "9": 16,
+        "11": 34,
+        "4": 15,
+        "19": 53,
+        "21": 44,
+        "7": 26,
+        "17": 54,
+        "12": 25,
+        "5": 27,
+        "15": 54,
+        "18": 53,
+        "16": 61,
+        "10": 20,
+        "14": 43,
+        "6": 24,
+        "13": 30,
+        "8": 30,
+        "20": 46,
+        "22": 27,
+        "2": 12,
+        "3": 19,
+        "1": 2,
+        "0": 5
+      },
+      "beforeDeckBins": {
+        "7–10": 92,
+        "11–15": 186,
+        "4–6": 66,
+        "16–20": 267,
+        "21+": 71,
+        "1–3": 33,
+        "0": 5
+      },
+      "eventActual": 24726,
+      "eventCalls": 12632,
+      "greenActual": 1277,
+      "greenNeutral": 0,
+      "greenShortCalls": 13,
+      "greenZeroCalls": 5,
+      "greenEmptyingCalls": 14,
+      "greenLow6Calls": 104,
+      "games": 1000,
+      "totalActual": 24726,
+      "totalRequested": 24811,
+      "returned": 0,
+      "netDrawDecrease": 24726,
+      "libraryBudget": {
+        "initial": 30000,
+        "grossDraw": 24726,
+        "returnToBottom": 0,
+        "destruction": 660,
+        "usageCost": 0,
+        "damageMove": 201,
+        "finalLibrary": 4413
+      },
+      "perGame": {
+        "initial": 4.0,
+        "turn": 17.648,
+        "abilityGross": 1.786,
+        "abilityNet": 1.786,
+        "cardEffects": 1.292,
+        "green": 1.277,
+        "all": 24.726
+      },
+      "green": {
+        "uses": 720,
+        "actual": 1277,
+        "requested": 1297,
+        "actualPerUse": 1.773611111111111,
+        "shareOfAllDrawPct": 5.164604060503114,
+        "shareExcludingOpeningPct": 6.161343240374409,
+        "neutralDrawn": 0,
+        "shortCalls": 13,
+        "zeroCalls": 5,
+        "emptyingCalls": 14,
+        "beforeDeckAtMost6Calls": 104
+      },
+      "deckoutLoss": {
+        "count": 31,
+        "n": 1000,
+        "pct": 3.1,
+        "ci95": [
+          2.1924003447158573,
+          4.366549601229214
+        ]
+      },
+      "crossByUses": [
+        {
+          "uses": "0",
+          "games": 280,
+          "deckoutLoss": {
+            "count": 1,
+            "n": 280,
+            "pct": 0.35714285714285715,
+            "ci95": [
+              0.06307232802881257,
+              1.994928235019393
+            ]
+          },
+          "notDeckoutLoss": 279,
+          "meanTurn": 16.2,
+          "meanFinalDamage": 3.475,
+          "greenActualPerGame": 0
+        },
+        {
+          "uses": "1",
+          "games": 720,
+          "deckoutLoss": {
+            "count": 30,
+            "n": 720,
+            "pct": 4.166666666666666,
+            "ci95": [
+              2.9340004432634874,
+              5.885811967689968
+            ]
+          },
+          "notDeckoutLoss": 690,
+          "meanTurn": 19.511111111111113,
+          "meanFinalDamage": 2.4277777777777776,
+          "greenActualPerGame": 1.773611111111111
+        },
+        {
+          "uses": "2",
+          "games": 0,
+          "deckoutLoss": {
+            "count": 0,
+            "n": 0,
+            "pct": null,
+            "ci95": null
+          },
+          "notDeckoutLoss": 0,
+          "meanTurn": null,
+          "meanFinalDamage": null,
+          "greenActualPerGame": null
+        },
+        {
+          "uses": "3+",
+          "games": 0,
+          "deckoutLoss": {
+            "count": 0,
+            "n": 0,
+            "pct": null,
+            "ci95": null
+          },
+          "notDeckoutLoss": 0,
+          "meanTurn": null,
+          "meanFinalDamage": null,
+          "greenActualPerGame": null
+        }
+      ],
+      "lossUsageSummary": [
+        {
+          "deckoutLoss": false,
+          "games": 969,
+          "meanTurn": 18.446852425180598,
+          "greenUsesPerGame": 0.7120743034055728,
+          "greenActual": 1216,
+          "allDrawActual": 23832,
+          "greenSharePct": 5.102383350117489
+        },
+        {
+          "deckoutLoss": true,
+          "games": 31,
+          "meanTurn": 22.870967741935484,
+          "greenUsesPerGame": 0.967741935483871,
+          "greenActual": 61,
+          "allDrawActual": 894,
+          "greenSharePct": 6.823266219239374
+        }
+      ]
+    },
+    {
+      "opponent": "雲雀・反撃",
+      "size": 30,
+      "deck": "雲雀・反撃",
+      "categories": {
+        "初期手札": {
+          "calls": 1000,
+          "requested": 4000,
+          "actual": 4000,
+          "normal": 4000,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 4000,
+          "shareOfAllDrawPct": 15.725124818178244,
+          "actualPerGame": 4.0
+        },
+        "ターン通常": {
+          "calls": 8834,
+          "requested": 17168,
+          "actual": 16916,
+          "normal": 16916,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 16916,
+          "shareOfAllDrawPct": 66.50155285607579,
+          "actualPerGame": 16.916
+        },
+        "緑の巻物": {
+          "calls": 1121,
+          "requested": 2152,
+          "actual": 2152,
+          "normal": 2152,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 2152,
+          "shareOfAllDrawPct": 8.460117152179896,
+          "actualPerGame": 2.152
+        },
+        "その他サポート": {
+          "calls": 0,
+          "requested": 0,
+          "actual": 0,
+          "normal": 0,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.0,
+          "actualPerGame": 0.0
+        },
+        "バトルカード": {
+          "calls": 0,
+          "requested": 0,
+          "actual": 0,
+          "normal": 0,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.0,
+          "actualPerGame": 0.0
+        },
+        "キャラクター能力": {
+          "calls": 2453,
+          "requested": 2453,
+          "actual": 2369,
+          "normal": 2369,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 2369,
+          "shareOfAllDrawPct": 9.313205173566065,
+          "actualPerGame": 2.369
+        },
+        "その他": {
+          "calls": 0,
+          "requested": 0,
+          "actual": 0,
+          "normal": 0,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.0,
+          "actualPerGame": 0.0
+        }
+      },
+      "sources": {
+        "初期手札": {
+          "calls": 1000,
+          "requested": 4000,
+          "actual": 4000,
+          "normal": 4000,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 4000,
+          "shareOfAllDrawPct": 15.725124818178244,
+          "actualPerGame": 4.0
+        },
+        "ターン開始ドロー": {
+          "calls": 8834,
+          "requested": 17168,
+          "actual": 16916,
+          "normal": 16916,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 16916,
+          "shareOfAllDrawPct": 66.50155285607579,
+          "actualPerGame": 16.916
+        },
+        "雲雀Lv2:忍転身(onTop)": {
+          "calls": 1860,
+          "requested": 1860,
+          "actual": 1845,
+          "normal": 1845,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 1845,
+          "shareOfAllDrawPct": 7.253213822384716,
+          "actualPerGame": 1.845
+        },
+        "緑の巻物:use": {
+          "calls": 1121,
+          "requested": 2152,
+          "actual": 2152,
+          "normal": 2152,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 2152,
+          "shareOfAllDrawPct": 8.460117152179896,
+          "actualPerGame": 2.152
+        },
+        "雲雀Lv4:防御時(onGuard)": {
+          "calls": 593,
+          "requested": 593,
+          "actual": 524,
+          "normal": 524,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 524,
+          "shareOfAllDrawPct": 2.05999135118135,
+          "actualPerGame": 0.524
+        }
+      },
+      "sourceCategory": {
+        "初期手札": "初期手札",
+        "ターン開始ドロー": "ターン通常",
+        "雲雀Lv2:忍転身(onTop)": "キャラクター能力",
+        "緑の巻物:use": "緑の巻物",
+        "雲雀Lv4:防御時(onGuard)": "キャラクター能力"
+      },
+      "damageDistribution": {
+        "1": 298,
+        "2": 635,
+        "3": 168,
+        "4": 20
+      },
+      "beforeDeckDistribution": {
+        "19": 109,
+        "14": 91,
+        "13": 94,
+        "18": 117,
+        "22": 32,
+        "15": 103,
+        "17": 113,
+        "16": 83,
+        "9": 24,
+        "20": 102,
+        "10": 25,
+        "12": 76,
+        "11": 73,
+        "7": 29,
+        "21": 21,
+        "8": 29
+      },
+      "beforeDeckBins": {
+        "16–20": 524,
+        "11–15": 437,
+        "21+": 53,
+        "7–10": 107
+      },
+      "eventActual": 25437,
+      "eventCalls": 13408,
+      "greenActual": 2152,
+      "greenNeutral": 0,
+      "greenShortCalls": 0,
+      "greenZeroCalls": 0,
+      "greenEmptyingCalls": 0,
+      "greenLow6Calls": 0,
+      "games": 1000,
+      "totalActual": 25437,
+      "totalRequested": 25773,
+      "returned": 0,
+      "netDrawDecrease": 25437,
+      "libraryBudget": {
+        "initial": 30000,
+        "grossDraw": 25437,
+        "returnToBottom": 0,
+        "destruction": 2889,
+        "usageCost": 0,
+        "damageMove": 108,
+        "finalLibrary": 1566
+      },
+      "perGame": {
+        "initial": 4.0,
+        "turn": 16.916,
+        "abilityGross": 2.369,
+        "abilityNet": 2.369,
+        "cardEffects": 2.152,
+        "green": 2.152,
+        "all": 25.437
+      },
+      "green": {
+        "uses": 1121,
+        "actual": 2152,
+        "requested": 2152,
+        "actualPerUse": 1.9197145405887601,
+        "shareOfAllDrawPct": 8.460117152179896,
+        "shareExcludingOpeningPct": 10.038718104212343,
+        "neutralDrawn": 0,
+        "shortCalls": 0,
+        "zeroCalls": 0,
+        "emptyingCalls": 0,
+        "beforeDeckAtMost6Calls": 0
+      },
+      "deckoutLoss": {
+        "count": 617,
+        "n": 1000,
+        "pct": 61.7,
+        "ci95": [
+          58.64772698839885,
+          64.66272686303917
+        ]
+      },
+      "crossByUses": [
+        {
+          "uses": "0",
+          "games": 253,
+          "deckoutLoss": {
+            "count": 133,
+            "n": 253,
+            "pct": 52.569169960474305,
+            "ci95": [
+              46.42385478506623,
+              58.637633363961726
+            ]
+          },
+          "notDeckoutLoss": 120,
+          "meanTurn": 19.56916996047431,
+          "meanFinalDamage": 3.3952569169960474,
+          "greenActualPerGame": 0
+        },
+        {
+          "uses": "1",
+          "games": 414,
+          "deckoutLoss": {
+            "count": 262,
+            "n": 414,
+            "pct": 63.28502415458937,
+            "ci95": [
+              58.53943883472468,
+              67.78633561342642
+            ]
+          },
+          "notDeckoutLoss": 152,
+          "meanTurn": 18.57246376811594,
+          "meanFinalDamage": 3.2246376811594204,
+          "greenActualPerGame": 2.0458937198067635
+        },
+        {
+          "uses": "2",
+          "games": 292,
+          "deckoutLoss": {
+            "count": 197,
+            "n": 292,
+            "pct": 67.46575342465754,
+            "ci95": [
+              61.89550815027008,
+              72.58241810340654
+            ]
+          },
+          "notDeckoutLoss": 95,
+          "meanTurn": 17.965753424657535,
+          "meanFinalDamage": 2.7294520547945207,
+          "greenActualPerGame": 3.73972602739726
+        },
+        {
+          "uses": "3+",
+          "games": 41,
+          "deckoutLoss": {
+            "count": 25,
+            "n": 41,
+            "pct": 60.97560975609756,
+            "ci95": [
+              45.726856934123795,
+              74.34385493987648
+            ]
+          },
+          "notDeckoutLoss": 16,
+          "meanTurn": 17.024390243902438,
+          "meanFinalDamage": 2.268292682926829,
+          "greenActualPerGame": 5.195121951219512
+        }
+      ],
+      "lossUsageSummary": [
+        {
+          "deckoutLoss": false,
+          "games": 383,
+          "meanTurn": 15.778067885117494,
+          "greenUsesPerGame": 1.0182767624020888,
+          "greenActual": 760,
+          "allDrawActual": 8820,
+          "greenSharePct": 8.616780045351474
+        },
+        {
+          "deckoutLoss": true,
+          "games": 617,
+          "meanTurn": 20.3257698541329,
+          "greenUsesPerGame": 1.1847649918962724,
+          "greenActual": 1392,
+          "allDrawActual": 16617,
+          "greenSharePct": 8.37696335078534
+        }
+      ]
+    },
+    {
+      "opponent": "雲雀・反撃",
+      "size": 35,
+      "deck": "葛城・削り",
+      "categories": {
+        "初期手札": {
+          "calls": 1000,
+          "requested": 4000,
+          "actual": 4000,
+          "normal": 4000,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 4000,
+          "shareOfAllDrawPct": 15.073293891547651,
+          "actualPerGame": 4.0
+        },
+        "ターン通常": {
+          "calls": 9858,
+          "requested": 19216,
+          "actual": 19195,
+          "normal": 18698,
+          "neutral": 497,
+          "returned": 0,
+          "netLibraryDecrease": 19195,
+          "shareOfAllDrawPct": 72.3329690620643,
+          "actualPerGame": 19.195
+        },
+        "緑の巻物": {
+          "calls": 787,
+          "requested": 1532,
+          "actual": 1532,
+          "normal": 1474,
+          "neutral": 58,
+          "returned": 0,
+          "netLibraryDecrease": 1532,
+          "shareOfAllDrawPct": 5.77307156046275,
+          "actualPerGame": 1.532
+        },
+        "その他サポート": {
+          "calls": 25,
+          "requested": 25,
+          "actual": 25,
+          "normal": 22,
+          "neutral": 3,
+          "returned": 0,
+          "netLibraryDecrease": 25,
+          "shareOfAllDrawPct": 0.09420808682217281,
+          "actualPerGame": 0.025
+        },
+        "バトルカード": {
+          "calls": 0,
+          "requested": 0,
+          "actual": 0,
+          "normal": 0,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.0,
+          "actualPerGame": 0.0
+        },
+        "キャラクター能力": {
+          "calls": 1785,
+          "requested": 1785,
+          "actual": 1785,
+          "normal": 1773,
+          "neutral": 12,
+          "returned": 0,
+          "netLibraryDecrease": 1785,
+          "shareOfAllDrawPct": 6.726457399103139,
+          "actualPerGame": 1.785
+        },
+        "その他": {
+          "calls": 0,
+          "requested": 0,
+          "actual": 0,
+          "normal": 0,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.0,
+          "actualPerGame": 0.0
+        }
+      },
+      "sources": {
+        "初期手札": {
+          "calls": 1000,
+          "requested": 4000,
+          "actual": 4000,
+          "normal": 4000,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 4000,
+          "shareOfAllDrawPct": 15.073293891547651,
+          "actualPerGame": 4.0
+        },
+        "ターン開始ドロー": {
+          "calls": 9858,
+          "requested": 19216,
+          "actual": 19195,
+          "normal": 18698,
+          "neutral": 497,
+          "returned": 0,
+          "netLibraryDecrease": 19195,
+          "shareOfAllDrawPct": 72.3329690620643,
+          "actualPerGame": 19.195
+        },
+        "葛城Lv2:忍転身(onTop)": {
+          "calls": 1785,
+          "requested": 1785,
+          "actual": 1785,
+          "normal": 1773,
+          "neutral": 12,
+          "returned": 0,
+          "netLibraryDecrease": 1785,
+          "shareOfAllDrawPct": 6.726457399103139,
+          "actualPerGame": 1.785
+        },
+        "緑の巻物:use": {
+          "calls": 787,
+          "requested": 1532,
+          "actual": 1532,
+          "normal": 1474,
+          "neutral": 58,
+          "returned": 0,
+          "netLibraryDecrease": 1532,
+          "shareOfAllDrawPct": 5.77307156046275,
+          "actualPerGame": 1.532
+        },
+        "病院の待合室にて:解除時": {
+          "calls": 25,
+          "requested": 25,
+          "actual": 25,
+          "normal": 22,
+          "neutral": 3,
+          "returned": 0,
+          "netLibraryDecrease": 25,
+          "shareOfAllDrawPct": 0.09420808682217281,
+          "actualPerGame": 0.025
+        }
+      },
+      "sourceCategory": {
+        "初期手札": "初期手札",
+        "ターン開始ドロー": "ターン通常",
+        "葛城Lv2:忍転身(onTop)": "キャラクター能力",
+        "緑の巻物:use": "緑の巻物",
+        "病院の待合室にて:解除時": "その他サポート"
+      },
+      "damageDistribution": {
+        "3": 158,
+        "1": 340,
+        "4": 70,
+        "2": 219
+      },
+      "beforeDeckDistribution": {
+        "12": 28,
+        "5": 14,
+        "27": 23,
+        "9": 22,
+        "20": 59,
+        "22": 50,
+        "4": 5,
+        "10": 22,
+        "21": 70,
+        "14": 19,
+        "18": 31,
+        "11": 28,
+        "23": 57,
+        "19": 36,
+        "25": 52,
+        "26": 47,
+        "13": 19,
+        "17": 30,
+        "15": 29,
+        "8": 26,
+        "24": 48,
+        "6": 14,
+        "7": 20,
+        "16": 35,
+        "3": 3
+      },
+      "beforeDeckBins": {
+        "11–15": 123,
+        "4–6": 33,
+        "21+": 347,
+        "7–10": 90,
+        "16–20": 191,
+        "1–3": 3
+      },
+      "eventActual": 26537,
+      "eventCalls": 13455,
+      "greenActual": 1532,
+      "greenNeutral": 58,
+      "greenShortCalls": 0,
+      "greenZeroCalls": 0,
+      "greenEmptyingCalls": 1,
+      "greenLow6Calls": 36,
+      "games": 1000,
+      "totalActual": 26537,
+      "totalRequested": 26558,
+      "returned": 0,
+      "netDrawDecrease": 26537,
+      "libraryBudget": {
+        "initial": 35000,
+        "grossDraw": 26537,
+        "returnToBottom": 0,
+        "destruction": 756,
+        "usageCost": 0,
+        "damageMove": 308,
+        "finalLibrary": 7399
+      },
+      "perGame": {
+        "initial": 4.0,
+        "turn": 19.195,
+        "abilityGross": 1.785,
+        "abilityNet": 1.785,
+        "cardEffects": 1.557,
+        "green": 1.532,
+        "all": 26.537
+      },
+      "green": {
+        "uses": 787,
+        "actual": 1532,
+        "requested": 1532,
+        "actualPerUse": 1.9466327827191867,
+        "shareOfAllDrawPct": 5.77307156046275,
+        "shareExcludingOpeningPct": 6.797710431734481,
+        "neutralDrawn": 58,
+        "shortCalls": 0,
+        "zeroCalls": 0,
+        "emptyingCalls": 1,
+        "beforeDeckAtMost6Calls": 36
+      },
+      "deckoutLoss": {
+        "count": 13,
+        "n": 1000,
+        "pct": 1.3,
+        "ci95": [
+          0.7612820389351026,
+          2.211444237557967
+        ]
+      },
+      "crossByUses": [
+        {
+          "uses": "0",
+          "games": 213,
+          "deckoutLoss": {
+            "count": 0,
+            "n": 213,
+            "pct": 0.0,
+            "ci95": [
+              0,
+              1.7715518248153008
+            ]
+          },
+          "notDeckoutLoss": 213,
+          "meanTurn": 15.671361502347418,
+          "meanFinalDamage": 4.276995305164319,
+          "greenActualPerGame": 0
+        },
+        {
+          "uses": "1",
+          "games": 787,
+          "deckoutLoss": {
+            "count": 13,
+            "n": 787,
+            "pct": 1.6518424396442184,
+            "ci95": [
+              0.9678481862994682,
+              2.805532494221988
+            ]
+          },
+          "notDeckoutLoss": 774,
+          "meanTurn": 21.1715374841169,
+          "meanFinalDamage": 3.1041931385006354,
+          "greenActualPerGame": 1.9466327827191867
+        },
+        {
+          "uses": "2",
+          "games": 0,
+          "deckoutLoss": {
+            "count": 0,
+            "n": 0,
+            "pct": null,
+            "ci95": null
+          },
+          "notDeckoutLoss": 0,
+          "meanTurn": null,
+          "meanFinalDamage": null,
+          "greenActualPerGame": null
+        },
+        {
+          "uses": "3+",
+          "games": 0,
+          "deckoutLoss": {
+            "count": 0,
+            "n": 0,
+            "pct": null,
+            "ci95": null
+          },
+          "notDeckoutLoss": 0,
+          "meanTurn": null,
+          "meanFinalDamage": null,
+          "greenActualPerGame": null
+        }
+      ],
+      "lossUsageSummary": [
+        {
+          "deckoutLoss": false,
+          "games": 987,
+          "meanTurn": 19.89969604863222,
+          "greenUsesPerGame": 0.78419452887538,
+          "greenActual": 1509,
+          "allDrawActual": 26097,
+          "greenSharePct": 5.782273824577538
+        },
+        {
+          "deckoutLoss": true,
+          "games": 13,
+          "meanTurn": 27.615384615384617,
+          "greenUsesPerGame": 1,
+          "greenActual": 23,
+          "allDrawActual": 440,
+          "greenSharePct": 5.2272727272727275
+        }
+      ]
+    },
+    {
+      "opponent": "雲雀・反撃",
+      "size": 35,
+      "deck": "雲雀・反撃",
+      "categories": {
+        "初期手札": {
+          "calls": 1000,
+          "requested": 4000,
+          "actual": 4000,
+          "normal": 4000,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 4000,
+          "shareOfAllDrawPct": 14.085002993063137,
+          "actualPerGame": 4.0
+        },
+        "ターン通常": {
+          "calls": 9679,
+          "requested": 18858,
+          "actual": 18670,
+          "normal": 17977,
+          "neutral": 693,
+          "returned": 0,
+          "netLibraryDecrease": 18670,
+          "shareOfAllDrawPct": 65.74175147012218,
+          "actualPerGame": 18.67
+        },
+        "緑の巻物": {
+          "calls": 1560,
+          "requested": 3136,
+          "actual": 3136,
+          "normal": 3136,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 3136,
+          "shareOfAllDrawPct": 11.042642346561498,
+          "actualPerGame": 3.136
+        },
+        "その他サポート": {
+          "calls": 0,
+          "requested": 0,
+          "actual": 0,
+          "normal": 0,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.0,
+          "actualPerGame": 0.0
+        },
+        "バトルカード": {
+          "calls": 0,
+          "requested": 0,
+          "actual": 0,
+          "normal": 0,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.0,
+          "actualPerGame": 0.0
+        },
+        "キャラクター能力": {
+          "calls": 2629,
+          "requested": 2629,
+          "actual": 2593,
+          "normal": 2516,
+          "neutral": 77,
+          "returned": 0,
+          "netLibraryDecrease": 2593,
+          "shareOfAllDrawPct": 9.130603190253177,
+          "actualPerGame": 2.593
+        },
+        "その他": {
+          "calls": 0,
+          "requested": 0,
+          "actual": 0,
+          "normal": 0,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.0,
+          "actualPerGame": 0.0
+        }
+      },
+      "sources": {
+        "初期手札": {
+          "calls": 1000,
+          "requested": 4000,
+          "actual": 4000,
+          "normal": 4000,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 4000,
+          "shareOfAllDrawPct": 14.085002993063137,
+          "actualPerGame": 4.0
+        },
+        "ターン開始ドロー": {
+          "calls": 9679,
+          "requested": 18858,
+          "actual": 18670,
+          "normal": 17977,
+          "neutral": 693,
+          "returned": 0,
+          "netLibraryDecrease": 18670,
+          "shareOfAllDrawPct": 65.74175147012218,
+          "actualPerGame": 18.67
+        },
+        "雲雀Lv2:忍転身(onTop)": {
+          "calls": 1900,
+          "requested": 1900,
+          "actual": 1900,
+          "normal": 1878,
+          "neutral": 22,
+          "returned": 0,
+          "netLibraryDecrease": 1900,
+          "shareOfAllDrawPct": 6.69037642170499,
+          "actualPerGame": 1.9
+        },
+        "緑の巻物:use": {
+          "calls": 1560,
+          "requested": 3136,
+          "actual": 3136,
+          "normal": 3136,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 3136,
+          "shareOfAllDrawPct": 11.042642346561498,
+          "actualPerGame": 3.136
+        },
+        "雲雀Lv4:防御時(onGuard)": {
+          "calls": 729,
+          "requested": 729,
+          "actual": 693,
+          "normal": 638,
+          "neutral": 55,
+          "returned": 0,
+          "netLibraryDecrease": 693,
+          "shareOfAllDrawPct": 2.440226768548188,
+          "actualPerGame": 0.693
+        }
+      },
+      "sourceCategory": {
+        "初期手札": "初期手札",
+        "ターン開始ドロー": "ターン通常",
+        "雲雀Lv2:忍転身(onTop)": "キャラクター能力",
+        "緑の巻物:use": "緑の巻物",
+        "雲雀Lv4:防御時(onGuard)": "キャラクター能力"
+      },
+      "damageDistribution": {
+        "3": 282,
+        "2": 886,
+        "1": 350,
+        "4": 42
+      },
+      "beforeDeckDistribution": {
+        "18": 107,
+        "10": 27,
+        "21": 100,
+        "16": 67,
+        "25": 106,
+        "17": 81,
+        "24": 108,
+        "19": 100,
+        "20": 96,
+        "27": 33,
+        "13": 77,
+        "12": 83,
+        "22": 114,
+        "23": 112,
+        "15": 66,
+        "14": 80,
+        "26": 29,
+        "11": 85,
+        "9": 25,
+        "7": 32,
+        "8": 32
+      },
+      "beforeDeckBins": {
+        "16–20": 451,
+        "7–10": 116,
+        "21+": 602,
+        "11–15": 391
+      },
+      "eventActual": 28399,
+      "eventCalls": 14868,
+      "greenActual": 3136,
+      "greenNeutral": 0,
+      "greenShortCalls": 0,
+      "greenZeroCalls": 0,
+      "greenEmptyingCalls": 0,
+      "greenLow6Calls": 0,
+      "games": 1000,
+      "totalActual": 28399,
+      "totalRequested": 28623,
+      "returned": 0,
+      "netDrawDecrease": 28399,
+      "libraryBudget": {
+        "initial": 35000,
+        "grossDraw": 28399,
+        "returnToBottom": 0,
+        "destruction": 3592,
+        "usageCost": 0,
+        "damageMove": 156,
+        "finalLibrary": 2853
+      },
+      "perGame": {
+        "initial": 4.0,
+        "turn": 18.67,
+        "abilityGross": 2.593,
+        "abilityNet": 2.593,
+        "cardEffects": 3.136,
+        "green": 3.136,
+        "all": 28.399
+      },
+      "green": {
+        "uses": 1560,
+        "actual": 3136,
+        "requested": 3136,
+        "actualPerUse": 2.01025641025641,
+        "shareOfAllDrawPct": 11.042642346561498,
+        "shareExcludingOpeningPct": 12.85298577810566,
+        "neutralDrawn": 0,
+        "shortCalls": 0,
+        "zeroCalls": 0,
+        "emptyingCalls": 0,
+        "beforeDeckAtMost6Calls": 0
+      },
+      "deckoutLoss": {
+        "count": 450,
+        "n": 1000,
+        "pct": 45.0,
+        "ci95": [
+          41.94153840742968,
+          48.09672917742588
+        ]
+      },
+      "crossByUses": [
+        {
+          "uses": "0",
+          "games": 135,
+          "deckoutLoss": {
+            "count": 39,
+            "n": 135,
+            "pct": 28.888888888888886,
+            "ci95": [
+              21.911242367783302,
+              37.034737828512185
+            ]
+          },
+          "notDeckoutLoss": 96,
+          "meanTurn": 21.2,
+          "meanFinalDamage": 3.8740740740740742,
+          "greenActualPerGame": 0
+        },
+        {
+          "uses": "1",
+          "games": 311,
+          "deckoutLoss": {
+            "count": 125,
+            "n": 311,
+            "pct": 40.19292604501607,
+            "ci95": [
+              34.89557999555262,
+              45.72958918372621
+            ]
+          },
+          "notDeckoutLoss": 186,
+          "meanTurn": 19.781350482315112,
+          "meanFinalDamage": 3.6463022508038585,
+          "greenActualPerGame": 2.2315112540192925
+        },
+        {
+          "uses": "2",
+          "games": 413,
+          "deckoutLoss": {
+            "count": 204,
+            "n": 413,
+            "pct": 49.39467312348668,
+            "ci95": [
+              44.60069512394931,
+              54.199808066365364
+            ]
+          },
+          "notDeckoutLoss": 209,
+          "meanTurn": 19.90556900726392,
+          "meanFinalDamage": 3.1598062953995156,
+          "greenActualPerGame": 4.0556900726392255
+        },
+        {
+          "uses": "3+",
+          "games": 141,
+          "deckoutLoss": {
+            "count": 82,
+            "n": 141,
+            "pct": 58.156028368794324,
+            "ci95": [
+              49.9031066910329,
+              65.97632464531725
+            ]
+          },
+          "notDeckoutLoss": 59,
+          "meanTurn": 19.609929078014183,
+          "meanFinalDamage": 2.765957446808511,
+          "greenActualPerGame": 5.439716312056738
+        }
+      ],
+      "lossUsageSummary": [
+        {
+          "deckoutLoss": false,
+          "games": 550,
+          "meanTurn": 17.68,
+          "greenUsesPerGame": 1.42,
+          "greenActual": 1578,
+          "allDrawActual": 14469,
+          "greenSharePct": 10.906075057018453
+        },
+        {
+          "deckoutLoss": true,
+          "games": 450,
+          "meanTurn": 22.835555555555555,
+          "greenUsesPerGame": 1.731111111111111,
+          "greenActual": 1558,
+          "allDrawActual": 13930,
+          "greenSharePct": 11.184493898061737
+        }
+      ]
+    },
+    {
+      "opponent": "雲雀・反撃",
+      "size": 40,
+      "deck": "葛城・削り",
+      "categories": {
+        "初期手札": {
+          "calls": 1000,
+          "requested": 4000,
+          "actual": 4000,
+          "normal": 4000,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 4000,
+          "shareOfAllDrawPct": 14.53752498637107,
+          "actualPerGame": 4.0
+        },
+        "ターン通常": {
+          "calls": 10332,
+          "requested": 20164,
+          "actual": 20158,
+          "normal": 18848,
+          "neutral": 1310,
+          "returned": 0,
+          "netLibraryDecrease": 20158,
+          "shareOfAllDrawPct": 73.261857168817,
+          "actualPerGame": 20.158
+        },
+        "緑の巻物": {
+          "calls": 793,
+          "requested": 1550,
+          "actual": 1550,
+          "normal": 1440,
+          "neutral": 110,
+          "returned": 0,
+          "netLibraryDecrease": 1550,
+          "shareOfAllDrawPct": 5.63329093221879,
+          "actualPerGame": 1.55
+        },
+        "その他サポート": {
+          "calls": 27,
+          "requested": 27,
+          "actual": 27,
+          "normal": 23,
+          "neutral": 4,
+          "returned": 0,
+          "netLibraryDecrease": 27,
+          "shareOfAllDrawPct": 0.09812829365800473,
+          "actualPerGame": 0.027
+        },
+        "バトルカード": {
+          "calls": 0,
+          "requested": 0,
+          "actual": 0,
+          "normal": 0,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.0,
+          "actualPerGame": 0.0
+        },
+        "キャラクター能力": {
+          "calls": 1780,
+          "requested": 1780,
+          "actual": 1780,
+          "normal": 1769,
+          "neutral": 11,
+          "returned": 0,
+          "netLibraryDecrease": 1780,
+          "shareOfAllDrawPct": 6.469198618935127,
+          "actualPerGame": 1.78
+        },
+        "その他": {
+          "calls": 0,
+          "requested": 0,
+          "actual": 0,
+          "normal": 0,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.0,
+          "actualPerGame": 0.0
+        }
+      },
+      "sources": {
+        "初期手札": {
+          "calls": 1000,
+          "requested": 4000,
+          "actual": 4000,
+          "normal": 4000,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 4000,
+          "shareOfAllDrawPct": 14.53752498637107,
+          "actualPerGame": 4.0
+        },
+        "ターン開始ドロー": {
+          "calls": 10332,
+          "requested": 20164,
+          "actual": 20158,
+          "normal": 18848,
+          "neutral": 1310,
+          "returned": 0,
+          "netLibraryDecrease": 20158,
+          "shareOfAllDrawPct": 73.261857168817,
+          "actualPerGame": 20.158
+        },
+        "葛城Lv2:忍転身(onTop)": {
+          "calls": 1780,
+          "requested": 1780,
+          "actual": 1780,
+          "normal": 1769,
+          "neutral": 11,
+          "returned": 0,
+          "netLibraryDecrease": 1780,
+          "shareOfAllDrawPct": 6.469198618935127,
+          "actualPerGame": 1.78
+        },
+        "緑の巻物:use": {
+          "calls": 793,
+          "requested": 1550,
+          "actual": 1550,
+          "normal": 1440,
+          "neutral": 110,
+          "returned": 0,
+          "netLibraryDecrease": 1550,
+          "shareOfAllDrawPct": 5.63329093221879,
+          "actualPerGame": 1.55
+        },
+        "病院の待合室にて:解除時": {
+          "calls": 27,
+          "requested": 27,
+          "actual": 27,
+          "normal": 23,
+          "neutral": 4,
+          "returned": 0,
+          "netLibraryDecrease": 27,
+          "shareOfAllDrawPct": 0.09812829365800473,
+          "actualPerGame": 0.027
+        }
+      },
+      "sourceCategory": {
+        "初期手札": "初期手札",
+        "ターン開始ドロー": "ターン通常",
+        "葛城Lv2:忍転身(onTop)": "キャラクター能力",
+        "緑の巻物:use": "緑の巻物",
+        "病院の待合室にて:解除時": "その他サポート"
+      },
+      "damageDistribution": {
+        "3": 185,
+        "1": 351,
+        "2": 192,
+        "4": 65
+      },
+      "beforeDeckDistribution": {
+        "17": 26,
+        "10": 16,
+        "32": 29,
+        "14": 23,
+        "25": 61,
+        "26": 67,
+        "19": 19,
+        "23": 29,
+        "28": 56,
+        "24": 37,
+        "30": 52,
+        "31": 46,
+        "12": 25,
+        "22": 31,
+        "27": 52,
+        "20": 26,
+        "11": 16,
+        "29": 42,
+        "8": 5,
+        "16": 21,
+        "9": 9,
+        "18": 26,
+        "13": 29,
+        "21": 34,
+        "15": 15,
+        "7": 1
+      },
+      "beforeDeckBins": {
+        "16–20": 118,
+        "7–10": 31,
+        "21+": 536,
+        "11–15": 108
+      },
+      "eventActual": 27515,
+      "eventCalls": 13932,
+      "greenActual": 1550,
+      "greenNeutral": 110,
+      "greenShortCalls": 0,
+      "greenZeroCalls": 0,
+      "greenEmptyingCalls": 0,
+      "greenLow6Calls": 0,
+      "games": 1000,
+      "totalActual": 27515,
+      "totalRequested": 27521,
+      "returned": 0,
+      "netDrawDecrease": 27515,
+      "libraryBudget": {
+        "initial": 40000,
+        "grossDraw": 27515,
+        "returnToBottom": 0,
+        "destruction": 769,
+        "usageCost": 0,
+        "damageMove": 365,
+        "finalLibrary": 11351
+      },
+      "perGame": {
+        "initial": 4.0,
+        "turn": 20.158,
+        "abilityGross": 1.78,
+        "abilityNet": 1.78,
+        "cardEffects": 1.577,
+        "green": 1.55,
+        "all": 27.515
+      },
+      "green": {
+        "uses": 793,
+        "actual": 1550,
+        "requested": 1550,
+        "actualPerUse": 1.9546027742749055,
+        "shareOfAllDrawPct": 5.63329093221879,
+        "shareExcludingOpeningPct": 6.591537316606422,
+        "neutralDrawn": 110,
+        "shortCalls": 0,
+        "zeroCalls": 0,
+        "emptyingCalls": 0,
+        "beforeDeckAtMost6Calls": 0
+      },
+      "deckoutLoss": {
+        "count": 5,
+        "n": 1000,
+        "pct": 0.5,
+        "ci95": [
+          0.21375355273244595,
+          1.1650955373375114
+        ]
+      },
+      "crossByUses": [
+        {
+          "uses": "0",
+          "games": 207,
+          "deckoutLoss": {
+            "count": 0,
+            "n": 207,
+            "pct": 0.0,
+            "ci95": [
+              0,
+              1.8219655859813684
+            ]
+          },
+          "notDeckoutLoss": 207,
+          "meanTurn": 15.16425120772947,
+          "meanFinalDamage": 4.492753623188406,
+          "greenActualPerGame": 0
+        },
+        {
+          "uses": "1",
+          "games": 793,
+          "deckoutLoss": {
+            "count": 5,
+            "n": 793,
+            "pct": 0.6305170239596469,
+            "ci95": [
+              0.26961103664776326,
+              1.4674294583559915
+            ]
+          },
+          "notDeckoutLoss": 788,
+          "meanTurn": 22.302648171500632,
+          "meanFinalDamage": 3.239596469104666,
+          "greenActualPerGame": 1.9546027742749055
+        },
+        {
+          "uses": "2",
+          "games": 0,
+          "deckoutLoss": {
+            "count": 0,
+            "n": 0,
+            "pct": null,
+            "ci95": null
+          },
+          "notDeckoutLoss": 0,
+          "meanTurn": null,
+          "meanFinalDamage": null,
+          "greenActualPerGame": null
+        },
+        {
+          "uses": "3+",
+          "games": 0,
+          "deckoutLoss": {
+            "count": 0,
+            "n": 0,
+            "pct": null,
+            "ci95": null
+          },
+          "notDeckoutLoss": 0,
+          "meanTurn": null,
+          "meanFinalDamage": null,
+          "greenActualPerGame": null
+        }
+      ],
+      "lossUsageSummary": [
+        {
+          "deckoutLoss": false,
+          "games": 995,
+          "meanTurn": 20.769849246231157,
+          "greenUsesPerGame": 0.7919597989949749,
+          "greenActual": 1538,
+          "allDrawActual": 27322,
+          "greenSharePct": 5.629163311617012
+        },
+        {
+          "deckoutLoss": true,
+          "games": 5,
+          "meanTurn": 31.8,
+          "greenUsesPerGame": 1,
+          "greenActual": 12,
+          "allDrawActual": 193,
+          "greenSharePct": 6.217616580310881
+        }
+      ]
+    },
+    {
+      "opponent": "雲雀・反撃",
+      "size": 40,
+      "deck": "雲雀・反撃",
+      "categories": {
+        "初期手札": {
+          "calls": 1000,
+          "requested": 4000,
+          "actual": 4000,
+          "normal": 4000,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 4000,
+          "shareOfAllDrawPct": 13.123790150595491,
+          "actualPerGame": 4.0
+        },
+        "ターン通常": {
+          "calls": 10202,
+          "requested": 19904,
+          "actual": 19773,
+          "normal": 17477,
+          "neutral": 2296,
+          "returned": 0,
+          "netLibraryDecrease": 19773,
+          "shareOfAllDrawPct": 64.87417566193116,
+          "actualPerGame": 19.773
+        },
+        "緑の巻物": {
+          "calls": 1976,
+          "requested": 4042,
+          "actual": 4042,
+          "normal": 3963,
+          "neutral": 79,
+          "returned": 0,
+          "netLibraryDecrease": 4042,
+          "shareOfAllDrawPct": 13.261589947176745,
+          "actualPerGame": 4.042
+        },
+        "その他サポート": {
+          "calls": 0,
+          "requested": 0,
+          "actual": 0,
+          "normal": 0,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.0,
+          "actualPerGame": 0.0
+        },
+        "バトルカード": {
+          "calls": 0,
+          "requested": 0,
+          "actual": 0,
+          "normal": 0,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.0,
+          "actualPerGame": 0.0
+        },
+        "キャラクター能力": {
+          "calls": 2674,
+          "requested": 2674,
+          "actual": 2664,
+          "normal": 2471,
+          "neutral": 193,
+          "returned": 0,
+          "netLibraryDecrease": 2664,
+          "shareOfAllDrawPct": 8.740444240296597,
+          "actualPerGame": 2.664
+        },
+        "その他": {
+          "calls": 0,
+          "requested": 0,
+          "actual": 0,
+          "normal": 0,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 0,
+          "shareOfAllDrawPct": 0.0,
+          "actualPerGame": 0.0
+        }
+      },
+      "sources": {
+        "初期手札": {
+          "calls": 1000,
+          "requested": 4000,
+          "actual": 4000,
+          "normal": 4000,
+          "neutral": 0,
+          "returned": 0,
+          "netLibraryDecrease": 4000,
+          "shareOfAllDrawPct": 13.123790150595491,
+          "actualPerGame": 4.0
+        },
+        "ターン開始ドロー": {
+          "calls": 10202,
+          "requested": 19904,
+          "actual": 19773,
+          "normal": 17477,
+          "neutral": 2296,
+          "returned": 0,
+          "netLibraryDecrease": 19773,
+          "shareOfAllDrawPct": 64.87417566193116,
+          "actualPerGame": 19.773
+        },
+        "雲雀Lv2:忍転身(onTop)": {
+          "calls": 1904,
+          "requested": 1904,
+          "actual": 1904,
+          "normal": 1880,
+          "neutral": 24,
+          "returned": 0,
+          "netLibraryDecrease": 1904,
+          "shareOfAllDrawPct": 6.246924111683454,
+          "actualPerGame": 1.904
+        },
+        "緑の巻物:use": {
+          "calls": 1976,
+          "requested": 4042,
+          "actual": 4042,
+          "normal": 3963,
+          "neutral": 79,
+          "returned": 0,
+          "netLibraryDecrease": 4042,
+          "shareOfAllDrawPct": 13.261589947176745,
+          "actualPerGame": 4.042
+        },
+        "雲雀Lv4:防御時(onGuard)": {
+          "calls": 770,
+          "requested": 770,
+          "actual": 760,
+          "normal": 591,
+          "neutral": 169,
+          "returned": 0,
+          "netLibraryDecrease": 760,
+          "shareOfAllDrawPct": 2.4935201286131434,
+          "actualPerGame": 0.76
+        }
+      },
+      "sourceCategory": {
+        "初期手札": "初期手札",
+        "ターン開始ドロー": "ターン通常",
+        "雲雀Lv2:忍転身(onTop)": "キャラクター能力",
+        "緑の巻物:use": "緑の巻物",
+        "雲雀Lv4:防御時(onGuard)": "キャラクター能力"
+      },
+      "damageDistribution": {
+        "3": 410,
+        "2": 1078,
+        "1": 432,
+        "4": 56
+      },
+      "beforeDeckDistribution": {
+        "23": 97,
+        "15": 79,
+        "26": 111,
+        "21": 82,
+        "30": 104,
+        "12": 96,
+        "29": 103,
+        "22": 89,
+        "24": 112,
+        "11": 75,
+        "32": 40,
+        "20": 69,
+        "25": 90,
+        "14": 83,
+        "13": 79,
+        "19": 78,
+        "16": 72,
+        "8": 22,
+        "27": 114,
+        "28": 122,
+        "18": 70,
+        "31": 31,
+        "17": 82,
+        "9": 22,
+        "10": 35,
+        "7": 19
+      },
+      "beforeDeckBins": {
+        "21+": 1095,
+        "11–15": 412,
+        "16–20": 371,
+        "7–10": 98
+      },
+      "eventActual": 30479,
+      "eventCalls": 15852,
+      "greenActual": 4042,
+      "greenNeutral": 79,
+      "greenShortCalls": 0,
+      "greenZeroCalls": 0,
+      "greenEmptyingCalls": 0,
+      "greenLow6Calls": 0,
+      "games": 1000,
+      "totalActual": 30479,
+      "totalRequested": 30620,
+      "returned": 0,
+      "netDrawDecrease": 30479,
+      "libraryBudget": {
+        "initial": 40000,
+        "grossDraw": 30479,
+        "returnToBottom": 0,
+        "destruction": 4008,
+        "usageCost": 0,
+        "damageMove": 248,
+        "finalLibrary": 5265
+      },
+      "perGame": {
+        "initial": 4.0,
+        "turn": 19.773,
+        "abilityGross": 2.664,
+        "abilityNet": 2.664,
+        "cardEffects": 4.042,
+        "green": 4.042,
+        "all": 30.479
+      },
+      "green": {
+        "uses": 1976,
+        "actual": 4042,
+        "requested": 4042,
+        "actualPerUse": 2.0455465587044532,
+        "shareOfAllDrawPct": 13.261589947176745,
+        "shareExcludingOpeningPct": 15.264926923222177,
+        "neutralDrawn": 79,
+        "shortCalls": 0,
+        "zeroCalls": 0,
+        "emptyingCalls": 0,
+        "beforeDeckAtMost6Calls": 0
+      },
+      "deckoutLoss": {
+        "count": 286,
+        "n": 1000,
+        "pct": 28.599999999999998,
+        "ci95": [
+          25.885269614280205,
+          31.47851564890155
+        ]
+      },
+      "crossByUses": [
+        {
+          "uses": "0",
+          "games": 80,
+          "deckoutLoss": {
+            "count": 19,
+            "n": 80,
+            "pct": 23.75,
+            "ci95": [
+              15.764672866774617,
+              34.140778933840544
+            ]
+          },
+          "notDeckoutLoss": 61,
+          "meanTurn": 21.075,
+          "meanFinalDamage": 3.7875,
+          "greenActualPerGame": 0
+        },
+        {
+          "uses": "1",
+          "games": 198,
+          "deckoutLoss": {
+            "count": 41,
+            "n": 198,
+            "pct": 20.707070707070706,
+            "ci95": [
+              15.646745513880541,
+              26.882405495155414
+            ]
+          },
+          "notDeckoutLoss": 157,
+          "meanTurn": 19.828282828282827,
+          "meanFinalDamage": 3.797979797979798,
+          "greenActualPerGame": 2.3585858585858586
+        },
+        {
+          "uses": "2",
+          "games": 388,
+          "deckoutLoss": {
+            "count": 103,
+            "n": 388,
+            "pct": 26.54639175257732,
+            "ci95": [
+              22.398057861936056,
+              31.154585457697255
+            ]
+          },
+          "notDeckoutLoss": 285,
+          "meanTurn": 20.783505154639176,
+          "meanFinalDamage": 3.5747422680412373,
+          "greenActualPerGame": 4.301546391752577
+        },
+        {
+          "uses": "3+",
+          "games": 334,
+          "deckoutLoss": {
+            "count": 123,
+            "n": 334,
+            "pct": 36.82634730538922,
+            "ci95": [
+              31.83069337389826,
+              42.12158580841931
+            ]
+          },
+          "notDeckoutLoss": 211,
+          "meanTurn": 21.404191616766468,
+          "meanFinalDamage": 3.4221556886227544,
+          "greenActualPerGame": 5.706586826347305
+        }
+      ],
+      "lossUsageSummary": [
+        {
+          "deckoutLoss": false,
+          "games": 714,
+          "meanTurn": 18.91736694677871,
+          "greenUsesPerGame": 1.9047619047619047,
+          "greenActual": 2798,
+          "allDrawActual": 20551,
+          "greenSharePct": 13.614909250158144
+        },
+        {
+          "deckoutLoss": true,
+          "games": 286,
+          "meanTurn": 25.587412587412587,
+          "greenUsesPerGame": 2.1538461538461537,
+          "greenActual": 1244,
+          "allDrawActual": 9928,
+          "greenSharePct": 12.530217566478646
+        }
+      ]
+    }
+  ]
+}

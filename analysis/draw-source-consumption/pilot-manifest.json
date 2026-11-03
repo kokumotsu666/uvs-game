@@ -1,0 +1,15 @@
+{
+  "phase": "pilot",
+  "completed": 120,
+  "drawCalls": 2973,
+  "unclassified": 0,
+  "errors": [],
+  "started": "2026-11-03T07:01:09.098Z",
+  "updated": "2026-11-03T07:01:17.731Z",
+  "sourceCommit": "d757ca80709711ad9564898c39902f0fe001c411",
+  "PR3Head": "fcbdf073e874501bef8594c23be21e5a74d4edc9",
+  "seedAndSeats": "identical to PR3",
+  "countPerSeat": 10,
+  "parallel": 4,
+  "referenceMatches": 120
+}

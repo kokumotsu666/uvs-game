@@ -1,0 +1,5 @@
+PASS static draw-call site coverage: 21 lines
+PASS all 12 seat/size first seeds match PR3, including final state and independent library accounting
+PASS short/empty draws measure actual 2/0 rather than requested/logged 3
+PASS cow-milk-triggered draw remains character ability, with parent support retained
+PASS synthetic unlabelled draw detected (unit test only; excluded from real matches)
