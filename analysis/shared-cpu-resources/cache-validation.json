@@ -1,5 +1,9 @@
 {
-  "pilotPairs": 200,
+  "matchesByReference": {
+    "pre-cache-games.jsonl": 1000,
+    "pre-cache-pilot-games.jsonl": 200
+  },
+  "uniqueMatchedSeeds": 1180,
   "operationHashesIdentical": true,
   "outcomesAndAllMetricsIdentical": true,
   "errors": []
