@@ -1,0 +1,4909 @@
+{
+  "seconds": 304.99223700000005,
+  "workers": 15,
+  "cpu": "AMD Ryzen Z1 Extreme",
+  "games": 52000,
+  "baseline": "F15",
+  "opponents": [
+    "柳生・射撃",
+    "斑鳩・対抗封じ",
+    "葛城・削り",
+    "雲雀・反撃"
+  ],
+  "bonferroniComparisons": 12,
+  "bonferroniZ": 2.8652602396906945,
+  "rows": {
+    "DRAW0": {
+      "games": 4000,
+      "wins": 1377,
+      "averageTurns": 14.7175,
+      "medianTurns": 13,
+      "attackSuccess": 62.40122655973582,
+      "defenseSuccess": 16.809342372210402,
+      "defenseWithCardSuccess": 50.058944886531094,
+      "chainSuccess": 71.2828560219694,
+      "chainBattlesPerGame": 0.63725,
+      "chainOffersPerGame": 0.65175,
+      "chainDeclaredPercent": 97.77522056003069,
+      "heavyAtkPerGame": 3.76275,
+      "heavyDefPerGame": 0.37925,
+      "heavyAtkSuccess": 53.003454808871055,
+      "heavyDefSuccess": 36.43564356435643,
+      "gpUsable": 52.79624823294464,
+      "highGPUsable": 14.688128772635816,
+      "rightUsable": 46.78909081001553,
+      "rightExposures": 36703,
+      "depleted": 21.0965,
+      "remaining": 8.9035,
+      "opponentRemaining": 7.5885,
+      "scrollUsesPerGame": null,
+      "scrollDrawDeclared": null,
+      "noAttackPerGame": 0.63975,
+      "deckoutLossPercent": 12.65,
+      "reasons": {
+        "ドロー時に山札切れ": {
+          "n": 913,
+          "wins": 467,
+          "losses": 446
+        },
+        "5ダメージ": {
+          "n": 3012,
+          "wins": 895,
+          "losses": 2117
+        },
+        "山札残数以上のダメージ": {
+          "n": 75,
+          "wins": 15,
+          "losses": 60
+        }
+      },
+      "counts": {
+        "atk": 25437,
+        "atkWin": 15873,
+        "oppAtk": 20209,
+        "defWin": 3397,
+        "chain": 2549,
+        "chainWin": 1817,
+        "heavyAtkBattles": 8973,
+        "heavyAtkWins": 4756,
+        "heavyDefBattles": 505,
+        "heavyDefWins": 184
+      },
+      "rate": {
+        "rate": 34.425000000000004,
+        "se": 0.8160214851687598,
+        "low": 32.825627278458356,
+        "high": 36.02437272154166
+      },
+      "delta": {
+        "rate": -7.974999999999999,
+        "se": 0.870905509009152,
+        "low": -9.68194343159546,
+        "high": -6.268056568404537
+      },
+      "adjustedDelta": {
+        "rate": -7.974999999999999,
+        "se": 0.870905509009152,
+        "low": -10.470370927491508,
+        "high": -5.479629072508489
+      },
+      "byOpponent": {
+        "柳生・射撃": {
+          "games": 1000,
+          "wins": 272,
+          "averageTurns": 11.82,
+          "medianTurns": 12,
+          "attackSuccess": 79.78227060653188,
+          "defenseSuccess": 6.698853349426675,
+          "defenseWithCardSuccess": 20.441988950276244,
+          "chainSuccess": 64.29906542056075,
+          "chainBattlesPerGame": 0.535,
+          "chainOffersPerGame": 0.538,
+          "chainDeclaredPercent": 99.44237918215613,
+          "heavyAtkPerGame": 2.653,
+          "heavyDefPerGame": 0.427,
+          "heavyAtkSuccess": 80.61721710882512,
+          "heavyDefSuccess": 42.567567567567565,
+          "gpUsable": 46.540456780974196,
+          "highGPUsable": 9.922506738544474,
+          "rightUsable": 36.150589658300575,
+          "rightExposures": 6614,
+          "depleted": 17.046,
+          "remaining": 12.954,
+          "opponentRemaining": 6.12,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.644,
+          "deckoutLossPercent": 0,
+          "reasons": {
+            "5ダメージ": {
+              "n": 964,
+              "wins": 236,
+              "losses": 728
+            },
+            "ドロー時に山札切れ": {
+              "n": 32,
+              "wins": 32,
+              "losses": 0
+            },
+            "山札残数以上のダメージ": {
+              "n": 4,
+              "wins": 4,
+              "losses": 0
+            }
+          },
+          "counts": {
+            "atk": 5144,
+            "atkWin": 4104,
+            "oppAtk": 4971,
+            "defWin": 333,
+            "chain": 535,
+            "chainWin": 344,
+            "heavyAtkBattles": 1847,
+            "heavyAtkWins": 1489,
+            "heavyDefBattles": 148,
+            "heavyDefWins": 63
+          },
+          "rate": {
+            "rate": 27.200000000000003,
+            "se": 1.558961656290214,
+            "low": 24.14449130039227,
+            "high": 30.25550869960773
+          },
+          "delta": {
+            "rate": -12.2,
+            "se": 1.5794361252977573,
+            "low": -15.295637921465097,
+            "high": -9.104362078534903
+          }
+        },
+        "斑鳩・対抗封じ": {
+          "games": 1000,
+          "wins": 255,
+          "averageTurns": 10.637,
+          "medianTurns": 11,
+          "attackSuccess": 89.6080627099664,
+          "defenseSuccess": 0.8688281415554143,
+          "defenseWithCardSuccess": 6.047197640117994,
+          "chainSuccess": 100,
+          "chainBattlesPerGame": 0.402,
+          "chainOffersPerGame": 0.402,
+          "chainDeclaredPercent": 100,
+          "heavyAtkPerGame": 1.751,
+          "heavyDefPerGame": 0.781,
+          "heavyAtkSuccess": 82.11920529801324,
+          "heavyDefSuccess": 21.27659574468085,
+          "gpUsable": 39.94884357662656,
+          "highGPUsable": 5.388243831640058,
+          "rightUsable": 26.017029328287606,
+          "rightExposures": 5285,
+          "depleted": 16.387,
+          "remaining": 13.613,
+          "opponentRemaining": 13.093,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.623,
+          "deckoutLossPercent": 0,
+          "reasons": {
+            "5ダメージ": {
+              "n": 1000,
+              "wins": 255,
+              "losses": 745
+            }
+          },
+          "counts": {
+            "atk": 4465,
+            "atkWin": 4001,
+            "oppAtk": 4719,
+            "defWin": 41,
+            "chain": 402,
+            "chainWin": 402,
+            "heavyAtkBattles": 1208,
+            "heavyAtkWins": 992,
+            "heavyDefBattles": 188,
+            "heavyDefWins": 40
+          },
+          "rate": {
+            "rate": 25.5,
+            "se": 1.6184801239578432,
+            "low": 22.327837247348707,
+            "high": 28.672162752651296
+          },
+          "delta": {
+            "rate": -22,
+            "se": 1.5010036802728934,
+            "low": -24.941913153996946,
+            "high": -19.058086846003057
+          }
+        },
+        "葛城・削り": {
+          "games": 1000,
+          "wins": 315,
+          "averageTurns": 13.421,
+          "medianTurns": 13,
+          "attackSuccess": 68.49184997626206,
+          "defenseSuccess": 1.9649271075427848,
+          "defenseWithCardSuccess": 8.24468085106383,
+          "chainSuccess": 99.39320388349515,
+          "chainBattlesPerGame": 0.824,
+          "chainOffersPerGame": 0.824,
+          "chainDeclaredPercent": 100,
+          "heavyAtkPerGame": 4.313,
+          "heavyDefPerGame": 0.26,
+          "heavyAtkSuccess": 34.53206239168111,
+          "heavyDefSuccess": 41.1764705882353,
+          "gpUsable": 51.86431086519115,
+          "highGPUsable": 12.210456651224355,
+          "rightUsable": 43.774912075029306,
+          "rightExposures": 8530,
+          "depleted": 22.418,
+          "remaining": 7.582,
+          "opponentRemaining": 9.827,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.581,
+          "deckoutLossPercent": 10.1,
+          "reasons": {
+            "5ダメージ": {
+              "n": 899,
+              "wins": 315,
+              "losses": 584
+            },
+            "山札残数以上のダメージ": {
+              "n": 57,
+              "wins": 0,
+              "losses": 57
+            },
+            "ドロー時に山札切れ": {
+              "n": 44,
+              "wins": 0,
+              "losses": 44
+            }
+          },
+          "counts": {
+            "atk": 6319,
+            "atkWin": 4328,
+            "oppAtk": 4733,
+            "defWin": 93,
+            "chain": 824,
+            "chainWin": 819,
+            "heavyAtkBattles": 2308,
+            "heavyAtkWins": 797,
+            "heavyDefBattles": 136,
+            "heavyDefWins": 56
+          },
+          "rate": {
+            "rate": 31.5,
+            "se": 1.6709783585369373,
+            "low": 28.224942598321746,
+            "high": 34.775057401678254
+          },
+          "delta": {
+            "rate": -23.5,
+            "se": 1.8038891496588796,
+            "low": -27.03555776543399,
+            "high": -19.96444223456601
+          }
+        },
+        "雲雀・反撃": {
+          "games": 1000,
+          "wins": 535,
+          "averageTurns": 22.992,
+          "medianTurns": 24,
+          "attackSuccess": 36.17625407508676,
+          "defenseSuccess": 50.63947459384722,
+          "defenseWithCardSuccess": 87.43658609370337,
+          "chainSuccess": 31.97969543147208,
+          "chainBattlesPerGame": 0.788,
+          "chainOffersPerGame": 0.843,
+          "chainDeclaredPercent": 93.47568208778173,
+          "heavyAtkPerGame": 6.334,
+          "heavyDefPerGame": 0.049,
+          "heavyAtkSuccess": 40.94182825484764,
+          "heavyDefSuccess": 75.75757575757575,
+          "gpUsable": 65.66542918213523,
+          "highGPUsable": 27.534656156564285,
+          "rightUsable": 59.43836794887551,
+          "rightExposures": 16274,
+          "depleted": 28.535,
+          "remaining": 1.465,
+          "opponentRemaining": 1.314,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.711,
+          "deckoutLossPercent": 40.5,
+          "reasons": {
+            "ドロー時に山札切れ": {
+              "n": 837,
+              "wins": 435,
+              "losses": 402
+            },
+            "5ダメージ": {
+              "n": 149,
+              "wins": 89,
+              "losses": 60
+            },
+            "山札残数以上のダメージ": {
+              "n": 14,
+              "wins": 11,
+              "losses": 3
+            }
+          },
+          "counts": {
+            "atk": 9509,
+            "atkWin": 3440,
+            "oppAtk": 5786,
+            "defWin": 2930,
+            "chain": 788,
+            "chainWin": 252,
+            "heavyAtkBattles": 3610,
+            "heavyAtkWins": 1478,
+            "heavyDefBattles": 33,
+            "heavyDefWins": 25
+          },
+          "rate": {
+            "rate": 53.5,
+            "se": 1.6769761465160837,
+            "low": 50.21318714989571,
+            "high": 56.7868128501043
+          },
+          "delta": {
+            "rate": 25.8,
+            "se": 2.0332181151107336,
+            "low": 21.81496572166855,
+            "high": 29.78503427833145
+          }
+        }
+      },
+      "conditions": [
+        {
+          "seat": 0,
+          "ownFirst": 0,
+          "games": 1000,
+          "wins": 373
+        },
+        {
+          "seat": 0,
+          "ownFirst": 1,
+          "games": 1000,
+          "wins": 323
+        },
+        {
+          "seat": 1,
+          "ownFirst": 0,
+          "games": 1000,
+          "wins": 364
+        },
+        {
+          "seat": 1,
+          "ownFirst": 1,
+          "games": 1000,
+          "wins": 317
+        }
+      ]
+    },
+    "F0": {
+      "games": 4000,
+      "wins": 1560,
+      "averageTurns": 14.83925,
+      "medianTurns": 14,
+      "attackSuccess": 61.46598831731675,
+      "defenseSuccess": 13.674115087996837,
+      "defenseWithCardSuccess": 45.50839091806515,
+      "chainSuccess": 78.07066741447,
+      "chainBattlesPerGame": 0.8915,
+      "chainOffersPerGame": 0.89675,
+      "chainDeclaredPercent": 99.41455255087817,
+      "heavyAtkPerGame": 3.43,
+      "heavyDefPerGame": 0.2875,
+      "heavyAtkSuccess": 52.78905253392091,
+      "heavyDefSuccess": 42.243436754176614,
+      "gpUsable": 62.37303012168362,
+      "highGPUsable": 18.212335002275832,
+      "rightUsable": 53.92671453330032,
+      "rightExposures": 40390,
+      "depleted": 24.008,
+      "remaining": 5.992,
+      "opponentRemaining": 7.4655,
+      "scrollUsesPerGame": null,
+      "scrollDrawDeclared": null,
+      "noAttackPerGame": 0.7025,
+      "deckoutLossPercent": 29.325,
+      "reasons": {
+        "ドロー時に山札切れ": {
+          "n": 1227,
+          "wins": 198,
+          "losses": 1029
+        },
+        "5ダメージ": {
+          "n": 2610,
+          "wins": 1343,
+          "losses": 1267
+        },
+        "山札残数以上のダメージ": {
+          "n": 163,
+          "wins": 19,
+          "losses": 144
+        }
+      },
+      "counts": {
+        "atk": 26535,
+        "atkWin": 16310,
+        "oppAtk": 20228,
+        "defWin": 2766,
+        "chain": 3566,
+        "chainWin": 2784,
+        "heavyAtkBattles": 8623,
+        "heavyAtkWins": 4552,
+        "heavyDefBattles": 419,
+        "heavyDefWins": 177
+      },
+      "rate": {
+        "rate": 39,
+        "se": 0.8374546681971153,
+        "low": 37.35861901164871,
+        "high": 40.64138098835129
+      },
+      "delta": {
+        "rate": -3.4000000000000004,
+        "se": 1.0995047260336268,
+        "low": -5.554989663857488,
+        "high": -1.2450103361425122
+      },
+      "adjustedDelta": {
+        "rate": -3.4000000000000004,
+        "se": 1.0995047260336268,
+        "low": -6.550367174856161,
+        "high": -0.249632825143839
+      },
+      "byOpponent": {
+        "柳生・射撃": {
+          "games": 1000,
+          "wins": 432,
+          "averageTurns": 12.316,
+          "medianTurns": 12,
+          "attackSuccess": 75.19050150629099,
+          "defenseSuccess": 8.093385214007782,
+          "defenseWithCardSuccess": 25.64734895191122,
+          "chainSuccess": 63.529411764705884,
+          "chainBattlesPerGame": 0.765,
+          "chainOffersPerGame": 0.77,
+          "chainDeclaredPercent": 99.35064935064935,
+          "heavyAtkPerGame": 2.662,
+          "heavyDefPerGame": 0.336,
+          "heavyAtkSuccess": 78.8739946380697,
+          "heavyDefSuccess": 60.273972602739725,
+          "gpUsable": 59.92352077571785,
+          "highGPUsable": 14.942786627776531,
+          "rightUsable": 47.21902570003836,
+          "rightExposures": 7821,
+          "depleted": 20.836,
+          "remaining": 9.164,
+          "opponentRemaining": 5.652,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.657,
+          "deckoutLossPercent": 1.2,
+          "reasons": {
+            "5ダメージ": {
+              "n": 878,
+              "wins": 322,
+              "losses": 556
+            },
+            "ドロー時に山札切れ": {
+              "n": 96,
+              "wins": 92,
+              "losses": 4
+            },
+            "山札残数以上のダメージ": {
+              "n": 26,
+              "wins": 18,
+              "losses": 8
+            }
+          },
+          "counts": {
+            "atk": 5643,
+            "atkWin": 4243,
+            "oppAtk": 5140,
+            "defWin": 416,
+            "chain": 765,
+            "chainWin": 486,
+            "heavyAtkBattles": 1865,
+            "heavyAtkWins": 1471,
+            "heavyDefBattles": 146,
+            "heavyDefWins": 88
+          },
+          "rate": {
+            "rate": 43.2,
+            "se": 1.7282904709010092,
+            "low": 39.81261292221025,
+            "high": 46.58738707778975
+          },
+          "delta": {
+            "rate": 3.8,
+            "se": 2.267776718502048,
+            "low": -0.6447606932424423,
+            "high": 8.244760693242442
+          }
+        },
+        "斑鳩・対抗封じ": {
+          "games": 1000,
+          "wins": 458,
+          "averageTurns": 10.905,
+          "medianTurns": 10,
+          "attackSuccess": 87.26320032245063,
+          "defenseSuccess": 0.9045014724442575,
+          "defenseWithCardSuccess": 6.564885496183206,
+          "chainSuccess": 100,
+          "chainBattlesPerGame": 0.668,
+          "chainOffersPerGame": 0.668,
+          "chainDeclaredPercent": 100,
+          "heavyAtkPerGame": 1.849,
+          "heavyDefPerGame": 0.65,
+          "heavyAtkSuccess": 78.73015873015873,
+          "heavyDefSuccess": 25.146198830409357,
+          "gpUsable": 54.05924683853839,
+          "highGPUsable": 9.794734493529674,
+          "rightUsable": 40.043795620437955,
+          "rightExposures": 6850,
+          "depleted": 20.061,
+          "remaining": 9.939,
+          "opponentRemaining": 12.743,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.624,
+          "deckoutLossPercent": 1,
+          "reasons": {
+            "5ダメージ": {
+              "n": 988,
+              "wins": 456,
+              "losses": 532
+            },
+            "ドロー時に山札切れ": {
+              "n": 1,
+              "wins": 1,
+              "losses": 0
+            },
+            "山札残数以上のダメージ": {
+              "n": 11,
+              "wins": 1,
+              "losses": 10
+            }
+          },
+          "counts": {
+            "atk": 4962,
+            "atkWin": 4330,
+            "oppAtk": 4754,
+            "defWin": 43,
+            "chain": 668,
+            "chainWin": 668,
+            "heavyAtkBattles": 1260,
+            "heavyAtkWins": 992,
+            "heavyDefBattles": 171,
+            "heavyDefWins": 43
+          },
+          "rate": {
+            "rate": 45.800000000000004,
+            "se": 1.7782261817366374,
+            "low": 42.314740727430014,
+            "high": 49.28525927256999
+          },
+          "delta": {
+            "rate": -1.7000000000000002,
+            "se": 2.29772892938478,
+            "low": -6.203465947829946,
+            "high": 2.8034659478299453
+          }
+        },
+        "葛城・削り": {
+          "games": 1000,
+          "wins": 459,
+          "averageTurns": 14.157,
+          "medianTurns": 14,
+          "attackSuccess": 67.54749321525496,
+          "defenseSuccess": 2.565668906536347,
+          "defenseWithCardSuccess": 10.750853242320819,
+          "chainSuccess": 99.53524399690163,
+          "chainBattlesPerGame": 1.291,
+          "chainOffersPerGame": 1.291,
+          "chainDeclaredPercent": 100,
+          "heavyAtkPerGame": 4.055,
+          "heavyDefPerGame": 0.157,
+          "heavyAtkSuccess": 36.27246134559131,
+          "heavyDefSuccess": 46.875,
+          "gpUsable": 62.87645974185617,
+          "highGPUsable": 19.78021978021978,
+          "rightUsable": 53.45336762884634,
+          "rightExposures": 10497,
+          "depleted": 25.97,
+          "remaining": 4.03,
+          "opponentRemaining": 9.244,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.704,
+          "deckoutLossPercent": 37.1,
+          "reasons": {
+            "ドロー時に山札切れ": {
+              "n": 246,
+              "wins": 0,
+              "losses": 246
+            },
+            "5ダメージ": {
+              "n": 629,
+              "wins": 459,
+              "losses": 170
+            },
+            "山札残数以上のダメージ": {
+              "n": 125,
+              "wins": 0,
+              "losses": 125
+            }
+          },
+          "counts": {
+            "atk": 7001,
+            "atkWin": 4729,
+            "oppAtk": 4911,
+            "defWin": 126,
+            "chain": 1291,
+            "chainWin": 1285,
+            "heavyAtkBattles": 2393,
+            "heavyAtkWins": 868,
+            "heavyDefBattles": 96,
+            "heavyDefWins": 45
+          },
+          "rate": {
+            "rate": 45.9,
+            "se": 1.8429176274391914,
+            "low": 42.28794782374518,
+            "high": 49.51205217625482
+          },
+          "delta": {
+            "rate": -9.1,
+            "se": 2.2447529179512387,
+            "low": -13.499634873375625,
+            "high": -4.700365126624376
+          }
+        },
+        "雲雀・反撃": {
+          "games": 1000,
+          "wins": 211,
+          "averageTurns": 21.979,
+          "medianTurns": 23,
+          "attackSuccess": 33.68798297681711,
+          "defenseSuccess": 40.217591738889915,
+          "defenseWithCardSuccess": 82.95930011411183,
+          "chainSuccess": 40.973871733966746,
+          "chainBattlesPerGame": 0.842,
+          "chainOffersPerGame": 0.858,
+          "chainDeclaredPercent": 98.13519813519814,
+          "heavyAtkPerGame": 5.154,
+          "heavyDefPerGame": 0.007,
+          "heavyAtkSuccess": 39.32367149758454,
+          "heavyDefSuccess": 16.666666666666668,
+          "gpUsable": 70.43318628928405,
+          "highGPUsable": 28.6697247706422,
+          "rightUsable": 63.94691893312311,
+          "rightExposures": 15222,
+          "depleted": 29.165,
+          "remaining": 0.835,
+          "opponentRemaining": 2.223,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.825,
+          "deckoutLossPercent": 78,
+          "reasons": {
+            "ドロー時に山札切れ": {
+              "n": 884,
+              "wins": 105,
+              "losses": 779
+            },
+            "5ダメージ": {
+              "n": 115,
+              "wins": 106,
+              "losses": 9
+            },
+            "山札残数以上のダメージ": {
+              "n": 1,
+              "wins": 0,
+              "losses": 1
+            }
+          },
+          "counts": {
+            "atk": 8929,
+            "atkWin": 3008,
+            "oppAtk": 5423,
+            "defWin": 2181,
+            "chain": 842,
+            "chainWin": 345,
+            "heavyAtkBattles": 3105,
+            "heavyAtkWins": 1221,
+            "heavyDefBattles": 6,
+            "heavyDefWins": 1
+          },
+          "rate": {
+            "rate": 21.099999999999998,
+            "se": 1.2945514488869336,
+            "low": 18.562725784047466,
+            "high": 23.637274215952534
+          },
+          "delta": {
+            "rate": -6.6000000000000005,
+            "se": 1.970097748986646,
+            "low": -10.461320634037257,
+            "high": -2.738679365962742
+          }
+        }
+      },
+      "conditions": [
+        {
+          "seat": 0,
+          "ownFirst": 0,
+          "games": 1000,
+          "wins": 394
+        },
+        {
+          "seat": 0,
+          "ownFirst": 1,
+          "games": 1000,
+          "wins": 373
+        },
+        {
+          "seat": 1,
+          "ownFirst": 0,
+          "games": 1000,
+          "wins": 410
+        },
+        {
+          "seat": 1,
+          "ownFirst": 1,
+          "games": 1000,
+          "wins": 383
+        }
+      ]
+    },
+    "F11": {
+      "games": 4000,
+      "wins": 1792,
+      "averageTurns": 14.1895,
+      "medianTurns": 12,
+      "attackSuccess": 67.80142411392912,
+      "defenseSuccess": 13.464431549537933,
+      "defenseWithCardSuccess": 43.014074836937866,
+      "chainSuccess": 78.14992025518342,
+      "chainBattlesPerGame": 0.9405,
+      "chainOffersPerGame": 0.945,
+      "chainDeclaredPercent": 99.52380952380952,
+      "heavyAtkPerGame": 3.8745,
+      "heavyDefPerGame": 0.69325,
+      "heavyAtkSuccess": 56.73496076721883,
+      "heavyDefSuccess": 44.72222222222222,
+      "gpUsable": 53.63612663204695,
+      "highGPUsable": 12.009520571234274,
+      "rightUsable": 53.9214936108348,
+      "rightExposures": 39207,
+      "depleted": 23.36825,
+      "remaining": 6.63175,
+      "opponentRemaining": 8.22075,
+      "scrollUsesPerGame": null,
+      "scrollDrawDeclared": null,
+      "noAttackPerGame": 0.85925,
+      "deckoutLossPercent": 21.8,
+      "reasons": {
+        "ドロー時に山札切れ": {
+          "n": 956,
+          "wins": 181,
+          "losses": 775
+        },
+        "5ダメージ": {
+          "n": 2927,
+          "wins": 1591,
+          "losses": 1336
+        },
+        "山札残数以上のダメージ": {
+          "n": 117,
+          "wins": 20,
+          "losses": 97
+        }
+      },
+      "counts": {
+        "atk": 24998,
+        "atkWin": 16949,
+        "oppAtk": 18612,
+        "defWin": 2506,
+        "chain": 3762,
+        "chainWin": 2940,
+        "heavyAtkBattles": 9176,
+        "heavyAtkWins": 5206,
+        "heavyDefBattles": 720,
+        "heavyDefWins": 322
+      },
+      "rate": {
+        "rate": 44.8,
+        "se": 0.8632356009869179,
+        "low": 43.10808931189285,
+        "high": 46.49191068810714
+      },
+      "delta": {
+        "rate": 2.4,
+        "se": 0.7894255956607545,
+        "low": 0.8527542640308419,
+        "high": 3.9472457359691586
+      },
+      "adjustedDelta": {
+        "rate": 2.4,
+        "se": 0.7894255956607545,
+        "low": 0.13809022855909708,
+        "high": 4.661909771440903
+      },
+      "byOpponent": {
+        "柳生・射撃": {
+          "games": 1000,
+          "wins": 428,
+          "averageTurns": 11.771,
+          "medianTurns": 11,
+          "attackSuccess": 80.68978586317984,
+          "defenseSuccess": 7.626766417290108,
+          "defenseWithCardSuccess": 22.310030395136778,
+          "chainSuccess": 64.72222222222223,
+          "chainBattlesPerGame": 0.72,
+          "chainOffersPerGame": 0.724,
+          "chainDeclaredPercent": 99.4475138121547,
+          "heavyAtkPerGame": 2.663,
+          "heavyDefPerGame": 0.886,
+          "heavyAtkSuccess": 86.89138576779027,
+          "heavyDefSuccess": 52.340425531914896,
+          "gpUsable": 51.44181095212749,
+          "highGPUsable": 8.917850344120662,
+          "rightUsable": 47.47789911596464,
+          "rightExposures": 7692,
+          "depleted": 20.386,
+          "remaining": 9.614,
+          "opponentRemaining": 6.612,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.745,
+          "deckoutLossPercent": 0.5,
+          "reasons": {
+            "5ダメージ": {
+              "n": 942,
+              "wins": 375,
+              "losses": 567
+            },
+            "ドロー時に山札切れ": {
+              "n": 35,
+              "wins": 34,
+              "losses": 1
+            },
+            "山札残数以上のダメージ": {
+              "n": 23,
+              "wins": 19,
+              "losses": 4
+            }
+          },
+          "counts": {
+            "atk": 5277,
+            "atkWin": 4258,
+            "oppAtk": 4812,
+            "defWin": 367,
+            "chain": 720,
+            "chainWin": 466,
+            "heavyAtkBattles": 1869,
+            "heavyAtkWins": 1624,
+            "heavyDefBattles": 235,
+            "heavyDefWins": 123
+          },
+          "rate": {
+            "rate": 42.8,
+            "se": 1.7391776665491354,
+            "low": 39.39127441084728,
+            "high": 46.208725589152714
+          },
+          "delta": {
+            "rate": 3.4000000000000004,
+            "se": 1.607512483790458,
+            "low": 0.24933342707217504,
+            "high": 6.550666572927826
+          }
+        },
+        "斑鳩・対抗封じ": {
+          "games": 1000,
+          "wins": 467,
+          "averageTurns": 10.459,
+          "medianTurns": 10,
+          "attackSuccess": 92.52132079597638,
+          "defenseSuccess": 1.8391313981830268,
+          "defenseWithCardSuccess": 11.511789181692095,
+          "chainSuccess": 100,
+          "chainBattlesPerGame": 0.676,
+          "chainOffersPerGame": 0.676,
+          "chainDeclaredPercent": 100,
+          "heavyAtkPerGame": 1.734,
+          "heavyDefPerGame": 1.389,
+          "heavyAtkSuccess": 90.05998286203942,
+          "heavyDefSuccess": 29.927007299270073,
+          "gpUsable": 45.55978330968657,
+          "highGPUsable": 5.283075991522858,
+          "rightUsable": 39.367816091954026,
+          "rightExposures": 6264,
+          "depleted": 19.317,
+          "remaining": 10.683,
+          "opponentRemaining": 13.304,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.807,
+          "deckoutLossPercent": 0.1,
+          "reasons": {
+            "5ダメージ": {
+              "n": 999,
+              "wins": 467,
+              "losses": 532
+            },
+            "山札残数以上のダメージ": {
+              "n": 1,
+              "wins": 0,
+              "losses": 1
+            }
+          },
+          "counts": {
+            "atk": 4573,
+            "atkWin": 4231,
+            "oppAtk": 4513,
+            "defWin": 83,
+            "chain": 676,
+            "chainWin": 676,
+            "heavyAtkBattles": 1167,
+            "heavyAtkWins": 1051,
+            "heavyDefBattles": 274,
+            "heavyDefWins": 82
+          },
+          "rate": {
+            "rate": 46.7,
+            "se": 1.8655726857410662,
+            "low": 43.04354472540585,
+            "high": 50.35645527459415
+          },
+          "delta": {
+            "rate": -0.8,
+            "se": 1.4649314306087988,
+            "low": -3.671212843813983,
+            "high": 2.071212843813983
+          }
+        },
+        "葛城・削り": {
+          "games": 1000,
+          "wins": 590,
+          "averageTurns": 13.091,
+          "medianTurns": 13,
+          "attackSuccess": 74.94270435446906,
+          "defenseSuccess": 3.7155231365397765,
+          "defenseWithCardSuccess": 13.907849829351536,
+          "chainSuccess": 99.56772334293949,
+          "chainBattlesPerGame": 1.388,
+          "chainOffersPerGame": 1.388,
+          "chainDeclaredPercent": 100,
+          "heavyAtkPerGame": 4.279,
+          "heavyDefPerGame": 0.461,
+          "heavyAtkSuccess": 39.62429008300568,
+          "heavyDefSuccess": 53.191489361702125,
+          "gpUsable": 53.331494760066185,
+          "highGPUsable": 12.51269035532995,
+          "rightUsable": 55.95714857829395,
+          "rightExposures": 9988,
+          "depleted": 24.8,
+          "remaining": 5.2,
+          "opponentRemaining": 10.347,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.861,
+          "deckoutLossPercent": 19.4,
+          "reasons": {
+            "5ダメージ": {
+              "n": 806,
+              "wins": 590,
+              "losses": 216
+            },
+            "ドロー時に山札切れ": {
+              "n": 103,
+              "wins": 0,
+              "losses": 103
+            },
+            "山札残数以上のダメージ": {
+              "n": 91,
+              "wins": 0,
+              "losses": 91
+            }
+          },
+          "counts": {
+            "atk": 6545,
+            "atkWin": 4905,
+            "oppAtk": 4387,
+            "defWin": 163,
+            "chain": 1388,
+            "chainWin": 1382,
+            "heavyAtkBattles": 2289,
+            "heavyAtkWins": 907,
+            "heavyDefBattles": 188,
+            "heavyDefWins": 100
+          },
+          "rate": {
+            "rate": 59,
+            "se": 1.6814604476311057,
+            "low": 55.704398081214435,
+            "high": 62.29560191878556
+          },
+          "delta": {
+            "rate": 4,
+            "se": 1.5703068024482538,
+            "low": 0.9222552225231689,
+            "high": 7.077744777476831
+          }
+        },
+        "雲雀・反撃": {
+          "games": 1000,
+          "wins": 307,
+          "averageTurns": 21.437,
+          "medianTurns": 23,
+          "attackSuccess": 41.32279437405556,
+          "defenseSuccess": 38.63265306122449,
+          "defenseWithCardSuccess": 82.73601398601399,
+          "chainSuccess": 42.535787321063395,
+          "chainBattlesPerGame": 0.978,
+          "chainOffersPerGame": 0.992,
+          "chainDeclaredPercent": 98.58870967741936,
+          "heavyAtkPerGame": 6.822,
+          "heavyDefPerGame": 0.037,
+          "heavyAtkSuccess": 42.17086471046481,
+          "heavyDefSuccess": 73.91304347826087,
+          "gpUsable": 61.39960666791534,
+          "highGPUsable": 19.61704756022236,
+          "rightUsable": 61.80960492694752,
+          "rightExposures": 15263,
+          "depleted": 28.97,
+          "remaining": 1.03,
+          "opponentRemaining": 2.62,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 1.024,
+          "deckoutLossPercent": 67.2,
+          "reasons": {
+            "ドロー時に山札切れ": {
+              "n": 818,
+              "wins": 147,
+              "losses": 671
+            },
+            "5ダメージ": {
+              "n": 180,
+              "wins": 159,
+              "losses": 21
+            },
+            "山札残数以上のダメージ": {
+              "n": 2,
+              "wins": 1,
+              "losses": 1
+            }
+          },
+          "counts": {
+            "atk": 8603,
+            "atkWin": 3555,
+            "oppAtk": 4900,
+            "defWin": 1893,
+            "chain": 978,
+            "chainWin": 416,
+            "heavyAtkBattles": 3851,
+            "heavyAtkWins": 1624,
+            "heavyDefBattles": 23,
+            "heavyDefWins": 17
+          },
+          "rate": {
+            "rate": 30.7,
+            "se": 1.609472462152024,
+            "low": 27.54549194007303,
+            "high": 33.85450805992697
+          },
+          "delta": {
+            "rate": 3,
+            "se": 1.6658632601766656,
+            "low": -0.2650319931147428,
+            "high": 6.265031993114742
+          }
+        }
+      },
+      "conditions": [
+        {
+          "seat": 0,
+          "ownFirst": 0,
+          "games": 1000,
+          "wins": 465
+        },
+        {
+          "seat": 0,
+          "ownFirst": 1,
+          "games": 1000,
+          "wins": 429
+        },
+        {
+          "seat": 1,
+          "ownFirst": 0,
+          "games": 1000,
+          "wins": 460
+        },
+        {
+          "seat": 1,
+          "ownFirst": 1,
+          "games": 1000,
+          "wins": 438
+        }
+      ]
+    },
+    "F13": {
+      "games": 4000,
+      "wins": 1684,
+      "averageTurns": 14.319,
+      "medianTurns": 13,
+      "attackSuccess": 65.73656777834385,
+      "defenseSuccess": 13.979005116843382,
+      "defenseWithCardSuccess": 43.286507677229665,
+      "chainSuccess": 77.2174428952833,
+      "chainBattlesPerGame": 0.84275,
+      "chainOffersPerGame": 0.84725,
+      "chainDeclaredPercent": 99.46886987311892,
+      "heavyAtkPerGame": 3.76575,
+      "heavyDefPerGame": 0.59625,
+      "heavyAtkSuccess": 53.3862733976177,
+      "heavyDefSuccess": 43.4654919236417,
+      "gpUsable": 60.12308182984553,
+      "highGPUsable": 11.873929794520548,
+      "rightUsable": 51.52974939783734,
+      "rightExposures": 39026,
+      "depleted": 23.55475,
+      "remaining": 6.44525,
+      "opponentRemaining": 8.03,
+      "scrollUsesPerGame": null,
+      "scrollDrawDeclared": null,
+      "noAttackPerGame": 0.67975,
+      "deckoutLossPercent": 23.3,
+      "reasons": {
+        "ドロー時に山札切れ": {
+          "n": 1034,
+          "wins": 208,
+          "losses": 826
+        },
+        "5ダメージ": {
+          "n": 2848,
+          "wins": 1464,
+          "losses": 1384
+        },
+        "山札残数以上のダメージ": {
+          "n": 118,
+          "wins": 12,
+          "losses": 106
+        }
+      },
+      "counts": {
+        "atk": 25517,
+        "atkWin": 16774,
+        "oppAtk": 18957,
+        "defWin": 2650,
+        "chain": 3371,
+        "chainWin": 2603,
+        "heavyAtkBattles": 8815,
+        "heavyAtkWins": 4706,
+        "heavyDefBattles": 681,
+        "heavyDefWins": 296
+      },
+      "rate": {
+        "rate": 42.1,
+        "se": 0.8242466439849673,
+        "low": 40.484506263411454,
+        "high": 43.71549373658854
+      },
+      "delta": {
+        "rate": -0.3,
+        "se": 0.6447346205406497,
+        "low": -1.5636566358457715,
+        "high": 0.9636566358457714
+      },
+      "adjustedDelta": {
+        "rate": -0.3,
+        "se": 0.6447346205406497,
+        "low": -2.147332473387191,
+        "high": 1.5473324733871912
+      },
+      "byOpponent": {
+        "柳生・射撃": {
+          "games": 1000,
+          "wins": 420,
+          "averageTurns": 11.856,
+          "medianTurns": 12,
+          "attackSuccess": 79.38604651162791,
+          "defenseSuccess": 8.118006103763987,
+          "defenseWithCardSuccess": 23.01038062283737,
+          "chainSuccess": 65.21084337349397,
+          "chainBattlesPerGame": 0.664,
+          "chainOffersPerGame": 0.666,
+          "chainDeclaredPercent": 99.69969969969969,
+          "heavyAtkPerGame": 2.699,
+          "heavyDefPerGame": 0.741,
+          "heavyAtkSuccess": 82.59404828747894,
+          "heavyDefSuccess": 57.69230769230769,
+          "gpUsable": 57.95205588188601,
+          "highGPUsable": 9.321663019693654,
+          "rightUsable": 43.557478044304624,
+          "rightExposures": 7629,
+          "depleted": 20.534,
+          "remaining": 9.466,
+          "opponentRemaining": 6.311,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.622,
+          "deckoutLossPercent": 0.3,
+          "reasons": {
+            "5ダメージ": {
+              "n": 931,
+              "wins": 354,
+              "losses": 577
+            },
+            "ドロー時に山札切れ": {
+              "n": 54,
+              "wins": 54,
+              "losses": 0
+            },
+            "山札残数以上のダメージ": {
+              "n": 15,
+              "wins": 12,
+              "losses": 3
+            }
+          },
+          "counts": {
+            "atk": 5375,
+            "atkWin": 4267,
+            "oppAtk": 4915,
+            "defWin": 399,
+            "chain": 664,
+            "chainWin": 433,
+            "heavyAtkBattles": 1781,
+            "heavyAtkWins": 1471,
+            "heavyDefBattles": 234,
+            "heavyDefWins": 135
+          },
+          "rate": {
+            "rate": 42,
+            "se": 1.7134009956479963,
+            "low": 38.64179575745486,
+            "high": 45.35820424254514
+          },
+          "delta": {
+            "rate": 2.6,
+            "se": 1.4426659837128817,
+            "low": -0.2275733697982965,
+            "high": 5.427573369798297
+          }
+        },
+        "斑鳩・対抗封じ": {
+          "games": 1000,
+          "wins": 449,
+          "averageTurns": 10.515,
+          "medianTurns": 10,
+          "attackSuccess": 91.7183821955917,
+          "defenseSuccess": 1.5357612988152698,
+          "defenseWithCardSuccess": 9.549795361527968,
+          "chainSuccess": 100,
+          "chainBattlesPerGame": 0.603,
+          "chainOffersPerGame": 0.603,
+          "chainDeclaredPercent": 100,
+          "heavyAtkPerGame": 1.697,
+          "heavyDefPerGame": 1.265,
+          "heavyAtkSuccess": 86.86131386861314,
+          "heavyDefSuccess": 27.237354085603112,
+          "gpUsable": 51.72153725078699,
+          "highGPUsable": 5.312145289443814,
+          "rightUsable": 36.38535031847134,
+          "rightExposures": 6280,
+          "depleted": 19.476,
+          "remaining": 10.524,
+          "opponentRemaining": 13.23,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.657,
+          "deckoutLossPercent": 0.3,
+          "reasons": {
+            "5ダメージ": {
+              "n": 997,
+              "wins": 449,
+              "losses": 548
+            },
+            "山札残数以上のダメージ": {
+              "n": 3,
+              "wins": 0,
+              "losses": 3
+            }
+          },
+          "counts": {
+            "atk": 4673,
+            "atkWin": 4286,
+            "oppAtk": 4558,
+            "defWin": 70,
+            "chain": 603,
+            "chainWin": 603,
+            "heavyAtkBattles": 1096,
+            "heavyAtkWins": 952,
+            "heavyDefBattles": 257,
+            "heavyDefWins": 70
+          },
+          "rate": {
+            "rate": 44.9,
+            "se": 1.6299037840871236,
+            "low": 41.70544728492369,
+            "high": 48.09455271507631
+          },
+          "delta": {
+            "rate": -2.6,
+            "se": 1.0570854832394145,
+            "low": -4.671849475729371,
+            "high": -0.5281505242706285
+          }
+        },
+        "葛城・削り": {
+          "games": 1000,
+          "wins": 522,
+          "averageTurns": 13.202,
+          "medianTurns": 13,
+          "attackSuccess": 72.55976853966804,
+          "defenseSuccess": 3.42128801431127,
+          "defenseWithCardSuccess": 12.45928338762215,
+          "chainSuccess": 99.83319432860718,
+          "chainBattlesPerGame": 1.199,
+          "chainOffersPerGame": 1.199,
+          "chainDeclaredPercent": 100,
+          "heavyAtkPerGame": 4.269,
+          "heavyDefPerGame": 0.361,
+          "heavyAtkSuccess": 36.72758920800696,
+          "heavyDefSuccess": 45.714285714285715,
+          "gpUsable": 59.88405965975297,
+          "highGPUsable": 11.06957424714434,
+          "rightUsable": 51.79086043639358,
+          "rightExposures": 9716,
+          "depleted": 25.059,
+          "remaining": 4.941,
+          "opponentRemaining": 10.249,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.654,
+          "deckoutLossPercent": 23.3,
+          "reasons": {
+            "5ダメージ": {
+              "n": 767,
+              "wins": 522,
+              "losses": 245
+            },
+            "ドロー時に山札切れ": {
+              "n": 136,
+              "wins": 0,
+              "losses": 136
+            },
+            "山札残数以上のダメージ": {
+              "n": 97,
+              "wins": 0,
+              "losses": 97
+            }
+          },
+          "counts": {
+            "atk": 6567,
+            "atkWin": 4765,
+            "oppAtk": 4472,
+            "defWin": 153,
+            "chain": 1199,
+            "chainWin": 1197,
+            "heavyAtkBattles": 2298,
+            "heavyAtkWins": 844,
+            "heavyDefBattles": 175,
+            "heavyDefWins": 80
+          },
+          "rate": {
+            "rate": 52.2,
+            "se": 1.7586961216175947,
+            "low": 48.75301894187924,
+            "high": 55.64698105812076
+          },
+          "delta": {
+            "rate": -2.8000000000000003,
+            "se": 1.2943497848193306,
+            "low": -5.336878961643056,
+            "high": -0.2631210383569435
+          }
+        },
+        "雲雀・反撃": {
+          "games": 1000,
+          "wins": 293,
+          "averageTurns": 21.703,
+          "medianTurns": 23,
+          "attackSuccess": 38.82273646371602,
+          "defenseSuccess": 40.46288906624102,
+          "defenseWithCardSuccess": 83.55995055624227,
+          "chainSuccess": 40.88397790055249,
+          "chainBattlesPerGame": 0.905,
+          "chainOffersPerGame": 0.921,
+          "chainDeclaredPercent": 98.26275787187839,
+          "heavyAtkPerGame": 6.398,
+          "heavyDefPerGame": 0.018,
+          "heavyAtkSuccess": 39.532967032967036,
+          "heavyDefSuccess": 73.33333333333333,
+          "gpUsable": 68.11566357654065,
+          "highGPUsable": 20.947325438954675,
+          "rightUsable": 61.48951366794364,
+          "rightExposures": 15401,
+          "depleted": 29.15,
+          "remaining": 0.85,
+          "opponentRemaining": 2.33,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.786,
+          "deckoutLossPercent": 69.3,
+          "reasons": {
+            "ドロー時に山札切れ": {
+              "n": 844,
+              "wins": 154,
+              "losses": 690
+            },
+            "5ダメージ": {
+              "n": 153,
+              "wins": 139,
+              "losses": 14
+            },
+            "山札残数以上のダメージ": {
+              "n": 3,
+              "wins": 0,
+              "losses": 3
+            }
+          },
+          "counts": {
+            "atk": 8902,
+            "atkWin": 3456,
+            "oppAtk": 5012,
+            "defWin": 2028,
+            "chain": 905,
+            "chainWin": 370,
+            "heavyAtkBattles": 3640,
+            "heavyAtkWins": 1439,
+            "heavyDefBattles": 15,
+            "heavyDefWins": 11
+          },
+          "rate": {
+            "rate": 29.299999999999997,
+            "se": 1.4780998330511588,
+            "low": 26.402977561665057,
+            "high": 32.19702243833494
+          },
+          "delta": {
+            "rate": 1.6,
+            "se": 1.3329919241614026,
+            "low": -1.012616163039096,
+            "high": 4.212616163039096
+          }
+        }
+      },
+      "conditions": [
+        {
+          "seat": 0,
+          "ownFirst": 0,
+          "games": 1000,
+          "wins": 455
+        },
+        {
+          "seat": 0,
+          "ownFirst": 1,
+          "games": 1000,
+          "wins": 403
+        },
+        {
+          "seat": 1,
+          "ownFirst": 0,
+          "games": 1000,
+          "wins": 428
+        },
+        {
+          "seat": 1,
+          "ownFirst": 1,
+          "games": 1000,
+          "wins": 398
+        }
+      ]
+    },
+    "F14": {
+      "games": 4000,
+      "wins": 1626,
+      "averageTurns": 14.477,
+      "medianTurns": 13,
+      "attackSuccess": 65.36895774870558,
+      "defenseSuccess": 12.542477602718566,
+      "defenseWithCardSuccess": 43.05408271474019,
+      "chainSuccess": 78.02742923840093,
+      "chainBattlesPerGame": 0.85675,
+      "chainOffersPerGame": 0.8605,
+      "chainDeclaredPercent": 99.56420685647879,
+      "heavyAtkPerGame": 3.69625,
+      "heavyDefPerGame": 0.47075,
+      "heavyAtkSuccess": 54.15324436263231,
+      "heavyDefSuccess": 41.527001862197395,
+      "gpUsable": 56.08585743911115,
+      "highGPUsable": 13.407584942901453,
+      "rightUsable": 53.10081440639385,
+      "rightExposures": 39538,
+      "depleted": 23.66125,
+      "remaining": 6.33875,
+      "opponentRemaining": 7.87175,
+      "scrollUsesPerGame": null,
+      "scrollDrawDeclared": null,
+      "noAttackPerGame": 0.805,
+      "deckoutLossPercent": 26.925,
+      "reasons": {
+        "ドロー時に山札切れ": {
+          "n": 1138,
+          "wins": 173,
+          "losses": 965
+        },
+        "5ダメージ": {
+          "n": 2728,
+          "wins": 1431,
+          "losses": 1297
+        },
+        "山札残数以上のダメージ": {
+          "n": 134,
+          "wins": 22,
+          "losses": 112
+        }
+      },
+      "counts": {
+        "atk": 25301,
+        "atkWin": 16539,
+        "oppAtk": 19422,
+        "defWin": 2436,
+        "chain": 3427,
+        "chainWin": 2674,
+        "heavyAtkBattles": 8692,
+        "heavyAtkWins": 4707,
+        "heavyDefBattles": 537,
+        "heavyDefWins": 223
+      },
+      "rate": {
+        "rate": 40.650000000000006,
+        "se": 0.8507231745278336,
+        "low": 38.98261321711187,
+        "high": 42.317386782888136
+      },
+      "delta": {
+        "rate": -1.7500000000000002,
+        "se": 0.8092090441341065,
+        "low": -3.3360205824669324,
+        "high": -0.16397941753306805
+      },
+      "adjustedDelta": {
+        "rate": -1.7500000000000002,
+        "se": 0.8092090441341065,
+        "low": -4.068594499755568,
+        "high": 0.5685944997555679
+      },
+      "byOpponent": {
+        "柳生・射撃": {
+          "games": 1000,
+          "wins": 438,
+          "averageTurns": 11.938,
+          "medianTurns": 12,
+          "attackSuccess": 79.44341372912801,
+          "defenseSuccess": 7.124117053481332,
+          "defenseWithCardSuccess": 22.0625,
+          "chainSuccess": 66.8122270742358,
+          "chainBattlesPerGame": 0.687,
+          "chainOffersPerGame": 0.692,
+          "chainDeclaredPercent": 99.27745664739885,
+          "heavyAtkPerGame": 2.714,
+          "heavyDefPerGame": 0.562,
+          "heavyAtkSuccess": 83.66576819407008,
+          "heavyDefSuccess": 44.705882352941174,
+          "gpUsable": 53.87067848958852,
+          "highGPUsable": 11.767311383434224,
+          "rightUsable": 45.904836193447736,
+          "rightExposures": 7692,
+          "depleted": 20.428,
+          "remaining": 9.572,
+          "opponentRemaining": 6.228,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.671,
+          "deckoutLossPercent": 0.3,
+          "reasons": {
+            "5ダメージ": {
+              "n": 915,
+              "wins": 356,
+              "losses": 559
+            },
+            "山札残数以上のダメージ": {
+              "n": 25,
+              "wins": 22,
+              "losses": 3
+            },
+            "ドロー時に山札切れ": {
+              "n": 60,
+              "wins": 60,
+              "losses": 0
+            }
+          },
+          "counts": {
+            "atk": 5390,
+            "atkWin": 4282,
+            "oppAtk": 4955,
+            "defWin": 353,
+            "chain": 687,
+            "chainWin": 459,
+            "heavyAtkBattles": 1855,
+            "heavyAtkWins": 1552,
+            "heavyDefBattles": 170,
+            "heavyDefWins": 76
+          },
+          "rate": {
+            "rate": 43.8,
+            "se": 1.8053468111234847,
+            "low": 40.261585270593734,
+            "high": 47.33841472940627
+          },
+          "delta": {
+            "rate": 4.3999999999999995,
+            "se": 1.5466507408126229,
+            "low": 1.3686202513450647,
+            "high": 7.431379748654934
+          }
+        },
+        "斑鳩・対抗封じ": {
+          "games": 1000,
+          "wins": 467,
+          "averageTurns": 10.703,
+          "medianTurns": 10,
+          "attackSuccess": 90.4147270418959,
+          "defenseSuccess": 1.2939400474444684,
+          "defenseWithCardSuccess": 8.875739644970414,
+          "chainSuccess": 100,
+          "chainBattlesPerGame": 0.658,
+          "chainOffersPerGame": 0.658,
+          "chainDeclaredPercent": 100,
+          "heavyAtkPerGame": 1.683,
+          "heavyDefPerGame": 1.011,
+          "heavyAtkSuccess": 84.58748866727107,
+          "heavyDefSuccess": 27.96208530805687,
+          "gpUsable": 48.98944494389505,
+          "highGPUsable": 6.279174823068815,
+          "rightUsable": 38.470929345338014,
+          "rightExposures": 6553,
+          "depleted": 19.663,
+          "remaining": 10.337,
+          "opponentRemaining": 13.021,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.759,
+          "deckoutLossPercent": 1.2,
+          "reasons": {
+            "5ダメージ": {
+              "n": 988,
+              "wins": 467,
+              "losses": 521
+            },
+            "ドロー時に山札切れ": {
+              "n": 2,
+              "wins": 0,
+              "losses": 2
+            },
+            "山札残数以上のダメージ": {
+              "n": 10,
+              "wins": 0,
+              "losses": 10
+            }
+          },
+          "counts": {
+            "atk": 4726,
+            "atkWin": 4273,
+            "oppAtk": 4637,
+            "defWin": 60,
+            "chain": 658,
+            "chainWin": 658,
+            "heavyAtkBattles": 1103,
+            "heavyAtkWins": 933,
+            "heavyDefBattles": 211,
+            "heavyDefWins": 59
+          },
+          "rate": {
+            "rate": 46.7,
+            "se": 1.7373871348162155,
+            "low": 43.294783788556984,
+            "high": 50.105216211443015
+          },
+          "delta": {
+            "rate": -0.8,
+            "se": 1.544988010247079,
+            "low": -3.828120856630475,
+            "high": 2.2281208566304747
+          }
+        },
+        "葛城・削り": {
+          "games": 1000,
+          "wins": 498,
+          "averageTurns": 13.599,
+          "medianTurns": 14,
+          "attackSuccess": 71.4113571320982,
+          "defenseSuccess": 2.746191804333834,
+          "defenseWithCardSuccess": 11.973807296538821,
+          "chainSuccess": 99.75961538461539,
+          "chainBattlesPerGame": 1.248,
+          "chainOffersPerGame": 1.248,
+          "chainDeclaredPercent": 100,
+          "heavyAtkPerGame": 4.306,
+          "heavyDefPerGame": 0.288,
+          "heavyAtkSuccess": 35.65823888404534,
+          "heavyDefSuccess": 55.714285714285715,
+          "gpUsable": 55.88315671211247,
+          "highGPUsable": 12.482758620689655,
+          "rightUsable": 54.74860335195531,
+          "rightExposures": 10024,
+          "depleted": 25.394,
+          "remaining": 4.606,
+          "opponentRemaining": 9.892,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.787,
+          "deckoutLossPercent": 30.4,
+          "reasons": {
+            "5ダメージ": {
+              "n": 696,
+              "wins": 498,
+              "losses": 198
+            },
+            "ドロー時に山札切れ": {
+              "n": 207,
+              "wins": 0,
+              "losses": 207
+            },
+            "山札残数以上のダメージ": {
+              "n": 97,
+              "wins": 0,
+              "losses": 97
+            }
+          },
+          "counts": {
+            "atk": 6639,
+            "atkWin": 4741,
+            "oppAtk": 4661,
+            "defWin": 128,
+            "chain": 1248,
+            "chainWin": 1245,
+            "heavyAtkBattles": 2294,
+            "heavyAtkWins": 818,
+            "heavyDefBattles": 140,
+            "heavyDefWins": 78
+          },
+          "rate": {
+            "rate": 49.8,
+            "se": 1.8475643360661667,
+            "low": 46.17884044218965,
+            "high": 53.42115955781035
+          },
+          "delta": {
+            "rate": -5.2,
+            "se": 1.7845386835966914,
+            "low": -8.697631548868035,
+            "high": -1.7023684511319657
+          }
+        },
+        "雲雀・反撃": {
+          "games": 1000,
+          "wins": 223,
+          "averageTurns": 21.668,
+          "medianTurns": 23,
+          "attackSuccess": 37.947577814182075,
+          "defenseSuccess": 36.66086283613852,
+          "defenseWithCardSuccess": 81.9282317336792,
+          "chainSuccess": 37.410071942446045,
+          "chainBattlesPerGame": 0.834,
+          "chainOffersPerGame": 0.844,
+          "chainDeclaredPercent": 98.81516587677726,
+          "heavyAtkPerGame": 6.082,
+          "heavyDefPerGame": 0.022,
+          "heavyAtkSuccess": 40.81395348837209,
+          "heavyDefSuccess": 62.5,
+          "gpUsable": 63.42287894696407,
+          "highGPUsable": 21.86040477426051,
+          "rightUsable": 61.92285021939878,
+          "rightExposures": 15269,
+          "depleted": 29.16,
+          "remaining": 0.84,
+          "opponentRemaining": 2.346,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 1.003,
+          "deckoutLossPercent": 75.8,
+          "reasons": {
+            "ドロー時に山札切れ": {
+              "n": 869,
+              "wins": 113,
+              "losses": 756
+            },
+            "5ダメージ": {
+              "n": 129,
+              "wins": 110,
+              "losses": 19
+            },
+            "山札残数以上のダメージ": {
+              "n": 2,
+              "wins": 0,
+              "losses": 2
+            }
+          },
+          "counts": {
+            "atk": 8546,
+            "atkWin": 3243,
+            "oppAtk": 5169,
+            "defWin": 1895,
+            "chain": 834,
+            "chainWin": 312,
+            "heavyAtkBattles": 3440,
+            "heavyAtkWins": 1404,
+            "heavyDefBattles": 16,
+            "heavyDefWins": 10
+          },
+          "rate": {
+            "rate": 22.3,
+            "se": 1.374188332906806,
+            "low": 19.60664035952752,
+            "high": 24.99335964047248
+          },
+          "delta": {
+            "rate": -5.4,
+            "se": 1.5853749255676008,
+            "low": -8.507277756105367,
+            "high": -2.2927222438946333
+          }
+        }
+      },
+      "conditions": [
+        {
+          "seat": 0,
+          "ownFirst": 0,
+          "games": 1000,
+          "wins": 430
+        },
+        {
+          "seat": 0,
+          "ownFirst": 1,
+          "games": 1000,
+          "wins": 376
+        },
+        {
+          "seat": 1,
+          "ownFirst": 0,
+          "games": 1000,
+          "wins": 418
+        },
+        {
+          "seat": 1,
+          "ownFirst": 1,
+          "games": 1000,
+          "wins": 402
+        }
+      ]
+    },
+    "F15": {
+      "games": 4000,
+      "wins": 1696,
+      "averageTurns": 14.18475,
+      "medianTurns": 13,
+      "attackSuccess": 67.53293413173652,
+      "defenseSuccess": 13.590621989080399,
+      "defenseWithCardSuccess": 42.76570658581775,
+      "chainSuccess": 76.1986792994545,
+      "chainBattlesPerGame": 0.87075,
+      "chainOffersPerGame": 0.876,
+      "chainDeclaredPercent": 99.40068493150685,
+      "heavyAtkPerGame": 3.9085,
+      "heavyDefPerGame": 0.7505,
+      "heavyAtkSuccess": 55.324074074074076,
+      "heavyDefSuccess": 43.29349269588313,
+      "gpUsable": 55.1746789664769,
+      "highGPUsable": 9.675425038639876,
+      "rightUsable": 52.42840955912649,
+      "rightExposures": 38832,
+      "depleted": 23.4005,
+      "remaining": 6.5995,
+      "opponentRemaining": 8.167,
+      "scrollUsesPerGame": null,
+      "scrollDrawDeclared": null,
+      "noAttackPerGame": 0.76075,
+      "deckoutLossPercent": 22.85,
+      "reasons": {
+        "ドロー時に山札切れ": {
+          "n": 981,
+          "wins": 158,
+          "losses": 823
+        },
+        "5ダメージ": {
+          "n": 2910,
+          "wins": 1520,
+          "losses": 1390
+        },
+        "山札残数以上のダメージ": {
+          "n": 109,
+          "wins": 18,
+          "losses": 91
+        }
+      },
+      "counts": {
+        "atk": 25050,
+        "atkWin": 16917,
+        "oppAtk": 18682,
+        "defWin": 2539,
+        "chain": 3483,
+        "chainWin": 2654,
+        "heavyAtkBattles": 9072,
+        "heavyAtkWins": 5019,
+        "heavyDefBattles": 753,
+        "heavyDefWins": 326
+      },
+      "rate": {
+        "rate": 42.400000000000006,
+        "se": 0.8261386203781547,
+        "low": 40.780798057821215,
+        "high": 44.019201942178796
+      },
+      "delta": {
+        "rate": 0,
+        "se": 0,
+        "low": 0,
+        "high": 0
+      },
+      "adjustedDelta": {
+        "rate": 0,
+        "se": 0,
+        "low": 0,
+        "high": 0
+      },
+      "byOpponent": {
+        "柳生・射撃": {
+          "games": 1000,
+          "wins": 394,
+          "averageTurns": 11.775,
+          "medianTurns": 12,
+          "attackSuccess": 81.02857142857142,
+          "defenseSuccess": 7.807684405177728,
+          "defenseWithCardSuccess": 22.485207100591715,
+          "chainSuccess": 64.59909228441755,
+          "chainBattlesPerGame": 0.661,
+          "chainOffersPerGame": 0.662,
+          "chainDeclaredPercent": 99.8489425981873,
+          "heavyAtkPerGame": 2.744,
+          "heavyDefPerGame": 0.972,
+          "heavyAtkSuccess": 85.48827059465357,
+          "heavyDefSuccess": 52.4,
+          "gpUsable": 52.63255641192311,
+          "highGPUsable": 6.825351304846573,
+          "rightUsable": 43.70624752344472,
+          "rightExposures": 7571,
+          "depleted": 20.379,
+          "remaining": 9.621,
+          "opponentRemaining": 6.429,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.708,
+          "deckoutLossPercent": 0.4,
+          "reasons": {
+            "5ダメージ": {
+              "n": 948,
+              "wins": 346,
+              "losses": 602
+            },
+            "ドロー時に山札切れ": {
+              "n": 33,
+              "wins": 32,
+              "losses": 1
+            },
+            "山札残数以上のダメージ": {
+              "n": 19,
+              "wins": 16,
+              "losses": 3
+            }
+          },
+          "counts": {
+            "atk": 5250,
+            "atkWin": 4254,
+            "oppAtk": 4867,
+            "defWin": 380,
+            "chain": 661,
+            "chainWin": 427,
+            "heavyAtkBattles": 1833,
+            "heavyAtkWins": 1567,
+            "heavyDefBattles": 250,
+            "heavyDefWins": 131
+          },
+          "rate": {
+            "rate": 39.4,
+            "se": 1.673847982426448,
+            "low": 36.11931823884913,
+            "high": 42.68068176115087
+          },
+          "delta": {
+            "rate": 0,
+            "se": 0,
+            "low": 0,
+            "high": 0
+          }
+        },
+        "斑鳩・対抗封じ": {
+          "games": 1000,
+          "wins": 475,
+          "averageTurns": 10.436,
+          "medianTurns": 10,
+          "attackSuccess": 92.8897586431833,
+          "defenseSuccess": 1.908566355969818,
+          "defenseWithCardSuccess": 11.168831168831169,
+          "chainSuccess": 100,
+          "chainBattlesPerGame": 0.631,
+          "chainOffersPerGame": 0.631,
+          "chainDeclaredPercent": 100,
+          "heavyAtkPerGame": 1.632,
+          "heavyDefPerGame": 1.546,
+          "heavyAtkSuccess": 90.2439024390244,
+          "heavyDefSuccess": 29.351535836177476,
+          "gpUsable": 47.409808704583384,
+          "highGPUsable": 4.112321620377474,
+          "rightUsable": 37.669376693766935,
+          "rightExposures": 6273,
+          "depleted": 19.301,
+          "remaining": 10.699,
+          "opponentRemaining": 13.344,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.731,
+          "deckoutLossPercent": 0.3,
+          "reasons": {
+            "5ダメージ": {
+              "n": 997,
+              "wins": 475,
+              "losses": 522
+            },
+            "山札残数以上のダメージ": {
+              "n": 2,
+              "wins": 0,
+              "losses": 2
+            },
+            "ドロー時に山札切れ": {
+              "n": 1,
+              "wins": 0,
+              "losses": 1
+            }
+          },
+          "counts": {
+            "atk": 4599,
+            "atkWin": 4272,
+            "oppAtk": 4506,
+            "defWin": 86,
+            "chain": 631,
+            "chainWin": 631,
+            "heavyAtkBattles": 1066,
+            "heavyAtkWins": 962,
+            "heavyDefBattles": 293,
+            "heavyDefWins": 86
+          },
+          "rate": {
+            "rate": 47.5,
+            "se": 1.696026539915099,
+            "low": 44.17584906494232,
+            "high": 50.82415093505767
+          },
+          "delta": {
+            "rate": 0,
+            "se": 0,
+            "low": 0,
+            "high": 0
+          }
+        },
+        "葛城・削り": {
+          "games": 1000,
+          "wins": 550,
+          "averageTurns": 13.103,
+          "medianTurns": 13,
+          "attackSuccess": 74.18761496014714,
+          "defenseSuccess": 3.734721593481213,
+          "defenseWithCardSuccess": 13.46938775510204,
+          "chainSuccess": 99.76019184652279,
+          "chainBattlesPerGame": 1.251,
+          "chainOffersPerGame": 1.251,
+          "chainDeclaredPercent": 100,
+          "heavyAtkPerGame": 4.438,
+          "heavyDefPerGame": 0.466,
+          "heavyAtkSuccess": 37.85744771660264,
+          "heavyDefSuccess": 50.51020408163265,
+          "gpUsable": 55.19522745907433,
+          "highGPUsable": 9.359145527369826,
+          "rightUsable": 53.39924574457242,
+          "rightExposures": 9811,
+          "depleted": 24.929,
+          "remaining": 5.071,
+          "opponentRemaining": 10.354,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.725,
+          "deckoutLossPercent": 20.6,
+          "reasons": {
+            "5ダメージ": {
+              "n": 794,
+              "wins": 550,
+              "losses": 244
+            },
+            "ドロー時に山札切れ": {
+              "n": 121,
+              "wins": 0,
+              "losses": 121
+            },
+            "山札残数以上のダメージ": {
+              "n": 85,
+              "wins": 0,
+              "losses": 85
+            }
+          },
+          "counts": {
+            "atk": 6524,
+            "atkWin": 4840,
+            "oppAtk": 4418,
+            "defWin": 165,
+            "chain": 1251,
+            "chainWin": 1248,
+            "heavyAtkBattles": 2343,
+            "heavyAtkWins": 887,
+            "heavyDefBattles": 196,
+            "heavyDefWins": 99
+          },
+          "rate": {
+            "rate": 55.00000000000001,
+            "se": 1.729730577716061,
+            "low": 51.60979036471887,
+            "high": 58.390209635281145
+          },
+          "delta": {
+            "rate": 0,
+            "se": 0,
+            "low": 0,
+            "high": 0
+          }
+        },
+        "雲雀・反撃": {
+          "games": 1000,
+          "wins": 277,
+          "averageTurns": 21.425,
+          "medianTurns": 22,
+          "attackSuccess": 40.924282586147285,
+          "defenseSuccess": 39.01042731547741,
+          "defenseWithCardSuccess": 84.7246891651865,
+          "chainSuccess": 37.02127659574468,
+          "chainBattlesPerGame": 0.94,
+          "chainOffersPerGame": 0.96,
+          "chainDeclaredPercent": 97.91666666666667,
+          "heavyAtkPerGame": 6.82,
+          "heavyDefPerGame": 0.018,
+          "heavyAtkSuccess": 41.853785900783286,
+          "heavyDefSuccess": 71.42857142857143,
+          "gpUsable": 62.73922605399841,
+          "highGPUsable": 16.867469879518072,
+          "rightUsable": 62.25209198128748,
+          "rightExposures": 15177,
+          "depleted": 28.993,
+          "remaining": 1.007,
+          "opponentRemaining": 2.541,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.879,
+          "deckoutLossPercent": 70.1,
+          "reasons": {
+            "ドロー時に山札切れ": {
+              "n": 826,
+              "wins": 126,
+              "losses": 700
+            },
+            "5ダメージ": {
+              "n": 171,
+              "wins": 149,
+              "losses": 22
+            },
+            "山札残数以上のダメージ": {
+              "n": 3,
+              "wins": 2,
+              "losses": 1
+            }
+          },
+          "counts": {
+            "atk": 8677,
+            "atkWin": 3551,
+            "oppAtk": 4891,
+            "defWin": 1908,
+            "chain": 940,
+            "chainWin": 348,
+            "heavyAtkBattles": 3830,
+            "heavyAtkWins": 1603,
+            "heavyDefBattles": 14,
+            "heavyDefWins": 10
+          },
+          "rate": {
+            "rate": 27.700000000000003,
+            "se": 1.4999464515207592,
+            "low": 24.76015897628066,
+            "high": 30.639841023719345
+          },
+          "delta": {
+            "rate": 0,
+            "se": 0,
+            "low": 0,
+            "high": 0
+          }
+        }
+      },
+      "conditions": [
+        {
+          "seat": 0,
+          "ownFirst": 0,
+          "games": 1000,
+          "wins": 436
+        },
+        {
+          "seat": 0,
+          "ownFirst": 1,
+          "games": 1000,
+          "wins": 409
+        },
+        {
+          "seat": 1,
+          "ownFirst": 0,
+          "games": 1000,
+          "wins": 440
+        },
+        {
+          "seat": 1,
+          "ownFirst": 1,
+          "games": 1000,
+          "wins": 411
+        }
+      ]
+    },
+    "F2": {
+      "games": 4000,
+      "wins": 1598,
+      "averageTurns": 14.614,
+      "medianTurns": 13,
+      "attackSuccess": 63.456838021338505,
+      "defenseSuccess": 12.614315638890307,
+      "defenseWithCardSuccess": 42.73104880581516,
+      "chainSuccess": 79.11781127861529,
+      "chainBattlesPerGame": 0.8955,
+      "chainOffersPerGame": 0.90075,
+      "chainDeclaredPercent": 99.41715237302247,
+      "heavyAtkPerGame": 3.606,
+      "heavyDefPerGame": 0.324,
+      "heavyAtkSuccess": 53.99361022364217,
+      "heavyDefSuccess": 41.6256157635468,
+      "gpUsable": 57.1272635893892,
+      "highGPUsable": 15.84365154956407,
+      "rightUsable": 53.91412570006223,
+      "rightExposures": 40175,
+      "depleted": 23.7695,
+      "remaining": 6.2305,
+      "opponentRemaining": 7.7805,
+      "scrollUsesPerGame": null,
+      "scrollDrawDeclared": null,
+      "noAttackPerGame": 0.78925,
+      "deckoutLossPercent": 27.45,
+      "reasons": {
+        "ドロー時に山札切れ": {
+          "n": 1168,
+          "wins": 180,
+          "losses": 988
+        },
+        "5ダメージ": {
+          "n": 2694,
+          "wins": 1390,
+          "losses": 1304
+        },
+        "山札残数以上のダメージ": {
+          "n": 138,
+          "wins": 28,
+          "losses": 110
+        }
+      },
+      "counts": {
+        "atk": 25775,
+        "atkWin": 16356,
+        "oppAtk": 19573,
+        "defWin": 2469,
+        "chain": 3582,
+        "chainWin": 2834,
+        "heavyAtkBattles": 8764,
+        "heavyAtkWins": 4732,
+        "heavyDefBattles": 406,
+        "heavyDefWins": 169
+      },
+      "rate": {
+        "rate": 39.949999999999996,
+        "se": 0.8416731281313874,
+        "low": 38.30035098210731,
+        "high": 41.59964901789268
+      },
+      "delta": {
+        "rate": -2.45,
+        "se": 0.873405029400178,
+        "low": -4.161842401540496,
+        "high": -0.7381575984595042
+      },
+      "adjustedDelta": {
+        "rate": -2.45,
+        "se": 0.873405029400178,
+        "low": -4.952532703886212,
+        "high": 0.05253270388621209
+      },
+      "byOpponent": {
+        "柳生・射撃": {
+          "games": 1000,
+          "wins": 446,
+          "averageTurns": 11.979,
+          "medianTurns": 12,
+          "attackSuccess": 78.14387699066447,
+          "defenseSuccess": 7.3377804730139475,
+          "defenseWithCardSuccess": 23.344051446945336,
+          "chainSuccess": 67.3076923076923,
+          "chainBattlesPerGame": 0.728,
+          "chainOffersPerGame": 0.736,
+          "chainDeclaredPercent": 98.91304347826087,
+          "heavyAtkPerGame": 2.71,
+          "heavyDefPerGame": 0.376,
+          "heavyAtkSuccess": 82.83898305084746,
+          "heavyDefSuccess": 54.961832061068705,
+          "gpUsable": 54.23310359016562,
+          "highGPUsable": 12.461243171415916,
+          "rightUsable": 45.812743823146945,
+          "rightExposures": 7690,
+          "depleted": 20.439,
+          "remaining": 9.561,
+          "opponentRemaining": 6.295,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.667,
+          "deckoutLossPercent": 0.5,
+          "reasons": {
+            "5ダメージ": {
+              "n": 899,
+              "wins": 350,
+              "losses": 549
+            },
+            "ドロー時に山札切れ": {
+              "n": 69,
+              "wins": 68,
+              "losses": 1
+            },
+            "山札残数以上のダメージ": {
+              "n": 32,
+              "wins": 28,
+              "losses": 4
+            }
+          },
+          "counts": {
+            "atk": 5463,
+            "atkWin": 4269,
+            "oppAtk": 4947,
+            "defWin": 363,
+            "chain": 728,
+            "chainWin": 490,
+            "heavyAtkBattles": 1888,
+            "heavyAtkWins": 1564,
+            "heavyDefBattles": 131,
+            "heavyDefWins": 72
+          },
+          "rate": {
+            "rate": 44.6,
+            "se": 1.7307054531207362,
+            "low": 41.20787964403628,
+            "high": 47.99212035596372
+          },
+          "delta": {
+            "rate": 5.2,
+            "se": 1.790156036366148,
+            "low": 1.6913586420153746,
+            "high": 8.708641357984625
+          }
+        },
+        "斑鳩・対抗封じ": {
+          "games": 1000,
+          "wins": 446,
+          "averageTurns": 10.789,
+          "medianTurns": 10,
+          "attackSuccess": 88.8076842764669,
+          "defenseSuccess": 0.8526966531656364,
+          "defenseWithCardSuccess": 5.532503457814661,
+          "chainSuccess": 100,
+          "chainBattlesPerGame": 0.667,
+          "chainOffersPerGame": 0.667,
+          "chainDeclaredPercent": 100,
+          "heavyAtkPerGame": 1.758,
+          "heavyDefPerGame": 0.71,
+          "heavyAtkSuccess": 82.85953177257525,
+          "heavyDefSuccess": 23.529411764705884,
+          "gpUsable": 49.17639699749792,
+          "highGPUsable": 8.242258652094717,
+          "rightUsable": 39.48122455134972,
+          "rightExposures": 6631,
+          "depleted": 19.822,
+          "remaining": 10.178,
+          "opponentRemaining": 12.904,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.735,
+          "deckoutLossPercent": 0.9,
+          "reasons": {
+            "5ダメージ": {
+              "n": 991,
+              "wins": 446,
+              "losses": 545
+            },
+            "山札残数以上のダメージ": {
+              "n": 8,
+              "wins": 0,
+              "losses": 8
+            },
+            "ドロー時に山札切れ": {
+              "n": 1,
+              "wins": 0,
+              "losses": 1
+            }
+          },
+          "counts": {
+            "atk": 4789,
+            "atkWin": 4253,
+            "oppAtk": 4691,
+            "defWin": 40,
+            "chain": 667,
+            "chainWin": 667,
+            "heavyAtkBattles": 1196,
+            "heavyAtkWins": 991,
+            "heavyDefBattles": 170,
+            "heavyDefWins": 40
+          },
+          "rate": {
+            "rate": 44.6,
+            "se": 1.7989733797039733,
+            "low": 41.07407696663392,
+            "high": 48.125923033366085
+          },
+          "delta": {
+            "rate": -2.9000000000000004,
+            "se": 1.6331038278228946,
+            "low": -6.100824685547375,
+            "high": 0.300824685547375
+          }
+        },
+        "葛城・削り": {
+          "games": 1000,
+          "wins": 500,
+          "averageTurns": 13.807,
+          "medianTurns": 14,
+          "attackSuccess": 69.61069145845438,
+          "defenseSuccess": 2.193630035857414,
+          "defenseWithCardSuccess": 9.515096065873742,
+          "chainSuccess": 99.63556851311954,
+          "chainBattlesPerGame": 1.372,
+          "chainOffersPerGame": 1.372,
+          "chainDeclaredPercent": 100,
+          "heavyAtkPerGame": 4.212,
+          "heavyDefPerGame": 0.196,
+          "heavyAtkSuccess": 35.62736046999581,
+          "heavyDefSuccess": 53,
+          "gpUsable": 57.035381515990935,
+          "highGPUsable": 15.816401110948691,
+          "rightUsable": 56.552254590904724,
+          "rightExposures": 10401,
+          "depleted": 25.571,
+          "remaining": 4.429,
+          "opponentRemaining": 9.634,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.765,
+          "deckoutLossPercent": 31.1,
+          "reasons": {
+            "5ダメージ": {
+              "n": 689,
+              "wins": 500,
+              "losses": 189
+            },
+            "ドロー時に山札切れ": {
+              "n": 215,
+              "wins": 0,
+              "losses": 215
+            },
+            "山札残数以上のダメージ": {
+              "n": 96,
+              "wins": 0,
+              "losses": 96
+            }
+          },
+          "counts": {
+            "atk": 6884,
+            "atkWin": 4792,
+            "oppAtk": 4741,
+            "defWin": 104,
+            "chain": 1372,
+            "chainWin": 1367,
+            "heavyAtkBattles": 2383,
+            "heavyAtkWins": 849,
+            "heavyDefBattles": 100,
+            "heavyDefWins": 53
+          },
+          "rate": {
+            "rate": 50,
+            "se": 1.831232823706061,
+            "low": 46.41084961822853,
+            "high": 53.58915038177147
+          },
+          "delta": {
+            "rate": -5,
+            "se": 1.8692179925344328,
+            "low": -8.66359994462175,
+            "high": -1.336400055378252
+          }
+        },
+        "雲雀・反撃": {
+          "games": 1000,
+          "wins": 206,
+          "averageTurns": 21.881,
+          "medianTurns": 23,
+          "attackSuccess": 35.21240884361616,
+          "defenseSuccess": 37.77435502502888,
+          "defenseWithCardSuccess": 81.51225592023266,
+          "chainSuccess": 38.03680981595092,
+          "chainBattlesPerGame": 0.815,
+          "chainOffersPerGame": 0.828,
+          "chainDeclaredPercent": 98.42995169082126,
+          "heavyAtkPerGame": 5.744,
+          "heavyDefPerGame": 0.014,
+          "heavyAtkSuccess": 40.279041552926905,
+          "heavyDefSuccess": 80,
+          "gpUsable": 65.52677029360967,
+          "highGPUsable": 26.155580608793688,
+          "rightUsable": 62.36329515304472,
+          "rightExposures": 15453,
+          "depleted": 29.246,
+          "remaining": 0.754,
+          "opponentRemaining": 2.289,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.99,
+          "deckoutLossPercent": 77.3,
+          "reasons": {
+            "ドロー時に山札切れ": {
+              "n": 883,
+              "wins": 112,
+              "losses": 771
+            },
+            "5ダメージ": {
+              "n": 115,
+              "wins": 94,
+              "losses": 21
+            },
+            "山札残数以上のダメージ": {
+              "n": 2,
+              "wins": 0,
+              "losses": 2
+            }
+          },
+          "counts": {
+            "atk": 8639,
+            "atkWin": 3042,
+            "oppAtk": 5194,
+            "defWin": 1962,
+            "chain": 815,
+            "chainWin": 310,
+            "heavyAtkBattles": 3297,
+            "heavyAtkWins": 1328,
+            "heavyDefBattles": 5,
+            "heavyDefWins": 4
+          },
+          "rate": {
+            "rate": 20.599999999999998,
+            "se": 1.3227086727362658,
+            "low": 18.007538639398142,
+            "high": 23.192461360601857
+          },
+          "delta": {
+            "rate": -7.1,
+            "se": 1.6851465442216014,
+            "low": -10.40282653534647,
+            "high": -3.797173464653527
+          }
+        }
+      },
+      "conditions": [
+        {
+          "seat": 0,
+          "ownFirst": 0,
+          "games": 1000,
+          "wins": 429
+        },
+        {
+          "seat": 0,
+          "ownFirst": 1,
+          "games": 1000,
+          "wins": 377
+        },
+        {
+          "seat": 1,
+          "ownFirst": 0,
+          "games": 1000,
+          "wins": 412
+        },
+        {
+          "seat": 1,
+          "ownFirst": 1,
+          "games": 1000,
+          "wins": 380
+        }
+      ]
+    },
+    "F7": {
+      "games": 4000,
+      "wins": 1640,
+      "averageTurns": 14.3145,
+      "medianTurns": 12.5,
+      "attackSuccess": 65.28948404883812,
+      "defenseSuccess": 14.324525889622842,
+      "defenseWithCardSuccess": 42.88676236044657,
+      "chainSuccess": 77.93124616329037,
+      "chainBattlesPerGame": 0.8145,
+      "chainOffersPerGame": 0.82075,
+      "chainDeclaredPercent": 99.23850137069753,
+      "heavyAtkPerGame": 3.7865,
+      "heavyDefPerGame": 0.552,
+      "heavyAtkSuccess": 53.07465395960971,
+      "heavyDefSuccess": 40.836012861736336,
+      "gpUsable": 57.70548948385963,
+      "highGPUsable": 10.391489977567117,
+      "rightUsable": 51.90957886044591,
+      "rightExposures": 38752,
+      "depleted": 23.423,
+      "remaining": 6.577,
+      "opponentRemaining": 8.05375,
+      "scrollUsesPerGame": null,
+      "scrollDrawDeclared": null,
+      "noAttackPerGame": 0.65275,
+      "deckoutLossPercent": 23.1,
+      "reasons": {
+        "ドロー時に山札切れ": {
+          "n": 1040,
+          "wins": 215,
+          "losses": 825
+        },
+        "5ダメージ": {
+          "n": 2843,
+          "wins": 1407,
+          "losses": 1436
+        },
+        "山札残数以上のダメージ": {
+          "n": 117,
+          "wins": 18,
+          "losses": 99
+        }
+      },
+      "counts": {
+        "atk": 25390,
+        "atkWin": 16577,
+        "oppAtk": 18772,
+        "defWin": 2689,
+        "chain": 3258,
+        "chainWin": 2539,
+        "heavyAtkBattles": 8814,
+        "heavyAtkWins": 4678,
+        "heavyDefBattles": 622,
+        "heavyDefWins": 254
+      },
+      "rate": {
+        "rate": 41,
+        "se": 0.8422842578870491,
+        "low": 39.34915318979633,
+        "high": 42.65084681020366
+      },
+      "delta": {
+        "rate": -1.4,
+        "se": 0.6136704045836394,
+        "low": -2.6027718913620568,
+        "high": -0.1972281086379429
+      },
+      "adjustedDelta": {
+        "rate": -1.4,
+        "se": 0.6136704045836394,
+        "low": -3.1583254105284038,
+        "high": 0.3583254105284043
+      },
+      "byOpponent": {
+        "柳生・射撃": {
+          "games": 1000,
+          "wins": 395,
+          "averageTurns": 11.672,
+          "medianTurns": 12,
+          "attackSuccess": 80.49886621315193,
+          "defenseSuccess": 7.349896480331263,
+          "defenseWithCardSuccess": 20.32054951345163,
+          "chainSuccess": 66.35071090047393,
+          "chainBattlesPerGame": 0.633,
+          "chainOffersPerGame": 0.636,
+          "chainDeclaredPercent": 99.52830188679245,
+          "heavyAtkPerGame": 2.836,
+          "heavyDefPerGame": 0.702,
+          "heavyAtkSuccess": 82.63700488334237,
+          "heavyDefSuccess": 51.18483412322275,
+          "gpUsable": 54.28515586826933,
+          "highGPUsable": 7.293837451622506,
+          "rightUsable": 42.79918864097363,
+          "rightExposures": 7395,
+          "depleted": 20.261,
+          "remaining": 9.739,
+          "opponentRemaining": 6.518,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.584,
+          "deckoutLossPercent": 0.3,
+          "reasons": {
+            "5ダメージ": {
+              "n": 943,
+              "wins": 341,
+              "losses": 602
+            },
+            "ドロー時に山札切れ": {
+              "n": 39,
+              "wins": 36,
+              "losses": 3
+            },
+            "山札残数以上のダメージ": {
+              "n": 18,
+              "wins": 18,
+              "losses": 0
+            }
+          },
+          "counts": {
+            "atk": 5292,
+            "atkWin": 4260,
+            "oppAtk": 4830,
+            "defWin": 355,
+            "chain": 633,
+            "chainWin": 420,
+            "heavyAtkBattles": 1843,
+            "heavyAtkWins": 1523,
+            "heavyDefBattles": 211,
+            "heavyDefWins": 108
+          },
+          "rate": {
+            "rate": 39.5,
+            "se": 1.673380053428644,
+            "low": 36.22023536283215,
+            "high": 42.77976463716786
+          },
+          "delta": {
+            "rate": 0.1,
+            "se": 1.1642085406422762,
+            "low": -2.1818068101527968,
+            "high": 2.381806810152797
+          }
+        },
+        "斑鳩・対抗封じ": {
+          "games": 1000,
+          "wins": 422,
+          "averageTurns": 10.48,
+          "medianTurns": 10,
+          "attackSuccess": 91.60914581535806,
+          "defenseSuccess": 1.3178124313639359,
+          "defenseWithCardSuccess": 7.444168734491315,
+          "chainSuccess": 100,
+          "chainBattlesPerGame": 0.574,
+          "chainOffersPerGame": 0.574,
+          "chainDeclaredPercent": 100,
+          "heavyAtkPerGame": 1.646,
+          "heavyDefPerGame": 1.147,
+          "heavyAtkSuccess": 87.13886300093196,
+          "heavyDefSuccess": 25.210084033613445,
+          "gpUsable": 49.4119606863235,
+          "highGPUsable": 4.485075793092671,
+          "rightUsable": 35.80106917220152,
+          "rightExposures": 6173,
+          "depleted": 19.398,
+          "remaining": 10.602,
+          "opponentRemaining": 13.265,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.631,
+          "deckoutLossPercent": 0.5,
+          "reasons": {
+            "5ダメージ": {
+              "n": 995,
+              "wins": 422,
+              "losses": 573
+            },
+            "山札残数以上のダメージ": {
+              "n": 5,
+              "wins": 0,
+              "losses": 5
+            }
+          },
+          "counts": {
+            "atk": 4636,
+            "atkWin": 4247,
+            "oppAtk": 4553,
+            "defWin": 60,
+            "chain": 574,
+            "chainWin": 574,
+            "heavyAtkBattles": 1073,
+            "heavyAtkWins": 935,
+            "heavyDefBattles": 238,
+            "heavyDefWins": 60
+          },
+          "rate": {
+            "rate": 42.199999999999996,
+            "se": 1.7229376240087433,
+            "low": 38.82310430933385,
+            "high": 45.57689569066615
+          },
+          "delta": {
+            "rate": -5.3,
+            "se": 1.0108050789497065,
+            "low": -7.281141550131591,
+            "high": -3.318858449868409
+          }
+        },
+        "葛城・削り": {
+          "games": 1000,
+          "wins": 530,
+          "averageTurns": 13.088,
+          "medianTurns": 13,
+          "attackSuccess": 72.66798119217351,
+          "defenseSuccess": 3.5980991174473864,
+          "defenseWithCardSuccess": 12.791633145615446,
+          "chainSuccess": 99.91928974979822,
+          "chainBattlesPerGame": 1.239,
+          "chainOffersPerGame": 1.239,
+          "chainDeclaredPercent": 100,
+          "heavyAtkPerGame": 4.333,
+          "heavyDefPerGame": 0.345,
+          "heavyAtkSuccess": 35.9051724137931,
+          "heavyDefSuccess": 47.82608695652174,
+          "gpUsable": 57.40941763238961,
+          "highGPUsable": 9.53127226100584,
+          "rightUsable": 53.12920244129513,
+          "rightExposures": 9667,
+          "depleted": 24.883,
+          "remaining": 5.117,
+          "opponentRemaining": 10.375,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.62,
+          "deckoutLossPercent": 22.6,
+          "reasons": {
+            "5ダメージ": {
+              "n": 774,
+              "wins": 530,
+              "losses": 244
+            },
+            "ドロー時に山札切れ": {
+              "n": 132,
+              "wins": 0,
+              "losses": 132
+            },
+            "山札残数以上のダメージ": {
+              "n": 94,
+              "wins": 0,
+              "losses": 94
+            }
+          },
+          "counts": {
+            "atk": 6593,
+            "atkWin": 4791,
+            "oppAtk": 4419,
+            "defWin": 159,
+            "chain": 1239,
+            "chainWin": 1238,
+            "heavyAtkBattles": 2320,
+            "heavyAtkWins": 833,
+            "heavyDefBattles": 161,
+            "heavyDefWins": 77
+          },
+          "rate": {
+            "rate": 53,
+            "se": 1.7935627867123902,
+            "low": 49.48468153403242,
+            "high": 56.51531846596758
+          },
+          "delta": {
+            "rate": -2,
+            "se": 1.2690318227169395,
+            "low": -4.487256667760421,
+            "high": 0.48725666776042037
+          }
+        },
+        "雲雀・反撃": {
+          "games": 1000,
+          "wins": 293,
+          "averageTurns": 22.018,
+          "medianTurns": 23,
+          "attackSuccess": 36.971473672341865,
+          "defenseSuccess": 42.55533199195171,
+          "defenseWithCardSuccess": 85.4890864995958,
+          "chainSuccess": 37.80788177339902,
+          "chainBattlesPerGame": 0.812,
+          "chainOffersPerGame": 0.834,
+          "chainDeclaredPercent": 97.3621103117506,
+          "heavyAtkPerGame": 6.331,
+          "heavyDefPerGame": 0.014,
+          "heavyAtkSuccess": 38.76467300167691,
+          "heavyDefSuccess": 75,
+          "gpUsable": 66.42396953512322,
+          "highGPUsable": 19.00826446280992,
+          "rightUsable": 61.899851775472065,
+          "rightExposures": 15517,
+          "depleted": 29.15,
+          "remaining": 0.85,
+          "opponentRemaining": 2.057,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.776,
+          "deckoutLossPercent": 69,
+          "reasons": {
+            "ドロー時に山札切れ": {
+              "n": 869,
+              "wins": 179,
+              "losses": 690
+            },
+            "5ダメージ": {
+              "n": 131,
+              "wins": 114,
+              "losses": 17
+            }
+          },
+          "counts": {
+            "atk": 8869,
+            "atkWin": 3279,
+            "oppAtk": 4970,
+            "defWin": 2115,
+            "chain": 812,
+            "chainWin": 307,
+            "heavyAtkBattles": 3578,
+            "heavyAtkWins": 1387,
+            "heavyDefBattles": 12,
+            "heavyDefWins": 9
+          },
+          "rate": {
+            "rate": 29.299999999999997,
+            "se": 1.538018858152308,
+            "low": 26.285538430478056,
+            "high": 32.31446156952194
+          },
+          "delta": {
+            "rate": 1.6,
+            "se": 1.4275544285897983,
+            "low": -1.1979552660066612,
+            "high": 4.397955266006662
+          }
+        }
+      },
+      "conditions": [
+        {
+          "seat": 0,
+          "ownFirst": 0,
+          "games": 1000,
+          "wins": 436
+        },
+        {
+          "seat": 0,
+          "ownFirst": 1,
+          "games": 1000,
+          "wins": 385
+        },
+        {
+          "seat": 1,
+          "ownFirst": 0,
+          "games": 1000,
+          "wins": 418
+        },
+        {
+          "seat": 1,
+          "ownFirst": 1,
+          "games": 1000,
+          "wins": 401
+        }
+      ]
+    },
+    "G1": {
+      "games": 4000,
+      "wins": 1700,
+      "averageTurns": 14.1965,
+      "medianTurns": 12,
+      "attackSuccess": 67.28542914171656,
+      "defenseSuccess": 13.222873742535908,
+      "defenseWithCardSuccess": 39.786338620912915,
+      "chainSuccess": 76.33794347564643,
+      "chainBattlesPerGame": 0.8315,
+      "chainOffersPerGame": 0.83625,
+      "chainDeclaredPercent": 99.43198804185351,
+      "heavyAtkPerGame": 3.886,
+      "heavyDefPerGame": 0.73225,
+      "heavyAtkSuccess": 54.88413349595299,
+      "heavyDefSuccess": 40.46008119079838,
+      "gpUsable": 56.83449600647053,
+      "highGPUsable": 19.157987384479977,
+      "rightUsable": 53.12380222307397,
+      "rightExposures": 39135,
+      "depleted": 23.38875,
+      "remaining": 6.61125,
+      "opponentRemaining": 8.1325,
+      "scrollUsesPerGame": null,
+      "scrollDrawDeclared": null,
+      "noAttackPerGame": 0.695,
+      "deckoutLossPercent": 23.475,
+      "reasons": {
+        "ドロー時に山札切れ": {
+          "n": 998,
+          "wins": 174,
+          "losses": 824
+        },
+        "5ダメージ": {
+          "n": 2867,
+          "wins": 1506,
+          "losses": 1361
+        },
+        "山札残数以上のダメージ": {
+          "n": 135,
+          "wins": 20,
+          "losses": 115
+        }
+      },
+      "counts": {
+        "atk": 25050,
+        "atkWin": 16855,
+        "oppAtk": 18589,
+        "defWin": 2458,
+        "chain": 3326,
+        "chainWin": 2539,
+        "heavyAtkBattles": 9019,
+        "heavyAtkWins": 4950,
+        "heavyDefBattles": 739,
+        "heavyDefWins": 299
+      },
+      "rate": {
+        "rate": 42.50000000000001,
+        "se": 0.8471189065102178,
+        "low": 40.839677452617025,
+        "high": 44.16032254738298
+      },
+      "delta": {
+        "rate": 0.10000000000000006,
+        "se": 0.7983007807500788,
+        "low": -1.4646407791003606,
+        "high": 1.6646407791003608
+      },
+      "adjustedDelta": {
+        "rate": 0.10000000000000006,
+        "se": 0.7983007807500788,
+        "low": -2.1873394863972395,
+        "high": 2.3873394863972397
+      },
+      "byOpponent": {
+        "柳生・射撃": {
+          "games": 1000,
+          "wins": 420,
+          "averageTurns": 11.729,
+          "medianTurns": 12,
+          "attackSuccess": 81.2083095101963,
+          "defenseSuccess": 7.738340899711102,
+          "defenseWithCardSuccess": 20.161290322580644,
+          "chainSuccess": 65.25157232704403,
+          "chainBattlesPerGame": 0.636,
+          "chainOffersPerGame": 0.639,
+          "chainDeclaredPercent": 99.53051643192488,
+          "heavyAtkPerGame": 2.788,
+          "heavyDefPerGame": 0.926,
+          "heavyAtkSuccess": 84.32226456178552,
+          "heavyDefSuccess": 48.36065573770492,
+          "gpUsable": 53.824810453298916,
+          "highGPUsable": 13.108125733663753,
+          "rightUsable": 44.70744680851064,
+          "rightExposures": 7520,
+          "depleted": 20.166,
+          "remaining": 9.834,
+          "opponentRemaining": 6.495,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.641,
+          "deckoutLossPercent": 0.5,
+          "reasons": {
+            "5ダメージ": {
+              "n": 934,
+              "wins": 359,
+              "losses": 575
+            },
+            "山札残数以上のダメージ": {
+              "n": 23,
+              "wins": 19,
+              "losses": 4
+            },
+            "ドロー時に山札切れ": {
+              "n": 43,
+              "wins": 42,
+              "losses": 1
+            }
+          },
+          "counts": {
+            "atk": 5247,
+            "atkWin": 4261,
+            "oppAtk": 4846,
+            "defWin": 375,
+            "chain": 636,
+            "chainWin": 415,
+            "heavyAtkBattles": 1837,
+            "heavyAtkWins": 1549,
+            "heavyDefBattles": 244,
+            "heavyDefWins": 118
+          },
+          "rate": {
+            "rate": 42,
+            "se": 1.742453608654546,
+            "low": 38.58485368230524,
+            "high": 45.41514631769476
+          },
+          "delta": {
+            "rate": 2.6,
+            "se": 1.5884118511379064,
+            "low": -0.5132300208468943,
+            "high": 5.713230020846894
+          }
+        },
+        "斑鳩・対抗封じ": {
+          "games": 1000,
+          "wins": 466,
+          "averageTurns": 10.518,
+          "medianTurns": 10,
+          "attackSuccess": 92.49028916702633,
+          "defenseSuccess": 2.4181138711804793,
+          "defenseWithCardSuccess": 12.359550561797754,
+          "chainSuccess": 100,
+          "chainBattlesPerGame": 0.566,
+          "chainOffersPerGame": 0.566,
+          "chainDeclaredPercent": 100,
+          "heavyAtkPerGame": 1.604,
+          "heavyDefPerGame": 1.625,
+          "heavyAtkSuccess": 89.21200750469043,
+          "heavyDefSuccess": 33.02469135802469,
+          "gpUsable": 49.13367151986297,
+          "highGPUsable": 7.925112612612613,
+          "rightUsable": 36.45553625019744,
+          "rightExposures": 6331,
+          "depleted": 19.524,
+          "remaining": 10.476,
+          "opponentRemaining": 13.237,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.646,
+          "deckoutLossPercent": 0.6,
+          "reasons": {
+            "5ダメージ": {
+              "n": 994,
+              "wins": 466,
+              "losses": 528
+            },
+            "山札残数以上のダメージ": {
+              "n": 6,
+              "wins": 0,
+              "losses": 6
+            }
+          },
+          "counts": {
+            "atk": 4634,
+            "atkWin": 4286,
+            "oppAtk": 4549,
+            "defWin": 110,
+            "chain": 566,
+            "chainWin": 566,
+            "heavyAtkBattles": 1066,
+            "heavyAtkWins": 951,
+            "heavyDefBattles": 324,
+            "heavyDefWins": 107
+          },
+          "rate": {
+            "rate": 46.6,
+            "se": 1.7395009209009529,
+            "low": 43.190640843959876,
+            "high": 50.00935915604012
+          },
+          "delta": {
+            "rate": -0.8999999999999999,
+            "se": 1.4884967215146407,
+            "low": -3.8173999652746424,
+            "high": 2.0173999652746426
+          }
+        },
+        "葛城・削り": {
+          "games": 1000,
+          "wins": 532,
+          "averageTurns": 13.155,
+          "medianTurns": 13,
+          "attackSuccess": 73.30993438119945,
+          "defenseSuccess": 4.147982062780269,
+          "defenseWithCardSuccess": 14.17624521072797,
+          "chainSuccess": 99.9176276771005,
+          "chainBattlesPerGame": 1.214,
+          "chainOffersPerGame": 1.214,
+          "chainDeclaredPercent": 100,
+          "heavyAtkPerGame": 4.425,
+          "heavyDefPerGame": 0.36,
+          "heavyAtkSuccess": 37.82405439864004,
+          "heavyDefSuccess": 41.139240506329116,
+          "gpUsable": 56.85705066150371,
+          "highGPUsable": 16.704288939051917,
+          "rightUsable": 53.52560812891306,
+          "rightExposures": 9743,
+          "depleted": 24.869,
+          "remaining": 5.131,
+          "opponentRemaining": 10.219,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.646,
+          "deckoutLossPercent": 22.7,
+          "reasons": {
+            "5ダメージ": {
+              "n": 773,
+              "wins": 532,
+              "losses": 241
+            },
+            "山札残数以上のダメージ": {
+              "n": 104,
+              "wins": 0,
+              "losses": 104
+            },
+            "ドロー時に山札切れ": {
+              "n": 123,
+              "wins": 0,
+              "losses": 123
+            }
+          },
+          "counts": {
+            "atk": 6553,
+            "atkWin": 4804,
+            "oppAtk": 4460,
+            "defWin": 185,
+            "chain": 1214,
+            "chainWin": 1213,
+            "heavyAtkBattles": 2353,
+            "heavyAtkWins": 890,
+            "heavyDefBattles": 158,
+            "heavyDefWins": 65
+          },
+          "rate": {
+            "rate": 53.2,
+            "se": 1.780934279424851,
+            "low": 49.709432953494506,
+            "high": 56.6905670465055
+          },
+          "delta": {
+            "rate": -1.7999999999999998,
+            "se": 1.7025376759862358,
+            "low": -5.1369125272555465,
+            "high": 1.5369125272555466
+          }
+        },
+        "雲雀・反撃": {
+          "games": 1000,
+          "wins": 282,
+          "averageTurns": 21.384,
+          "medianTurns": 22,
+          "attackSuccess": 40.66852367688022,
+          "defenseSuccess": 37.76932826362484,
+          "defenseWithCardSuccess": 84.22044276966557,
+          "chainSuccess": 37.91208791208791,
+          "chainBattlesPerGame": 0.91,
+          "chainOffersPerGame": 0.926,
+          "chainDeclaredPercent": 98.27213822894169,
+          "heavyAtkPerGame": 6.727,
+          "heavyDefPerGame": 0.018,
+          "heavyAtkSuccess": 41.456284879085835,
+          "heavyDefSuccess": 69.23076923076923,
+          "gpUsable": 64.41717791411043,
+          "highGPUsable": 32.632834725153714,
+          "rightUsable": 63.73463741072003,
+          "rightExposures": 15541,
+          "depleted": 28.996,
+          "remaining": 1.004,
+          "opponentRemaining": 2.579,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.847,
+          "deckoutLossPercent": 70.1,
+          "reasons": {
+            "ドロー時に山札切れ": {
+              "n": 832,
+              "wins": 132,
+              "losses": 700
+            },
+            "5ダメージ": {
+              "n": 166,
+              "wins": 149,
+              "losses": 17
+            },
+            "山札残数以上のダメージ": {
+              "n": 2,
+              "wins": 1,
+              "losses": 1
+            }
+          },
+          "counts": {
+            "atk": 8616,
+            "atkWin": 3504,
+            "oppAtk": 4734,
+            "defWin": 1788,
+            "chain": 910,
+            "chainWin": 345,
+            "heavyAtkBattles": 3763,
+            "heavyAtkWins": 1560,
+            "heavyDefBattles": 13,
+            "heavyDefWins": 9
+          },
+          "rate": {
+            "rate": 28.199999999999996,
+            "se": 1.4993438993486605,
+            "low": 25.261339956836775,
+            "high": 31.13866004316322
+          },
+          "delta": {
+            "rate": 0.5,
+            "se": 1.5997615284132727,
+            "low": -2.6354749795427646,
+            "high": 3.6354749795427646
+          }
+        }
+      },
+      "conditions": [
+        {
+          "seat": 0,
+          "ownFirst": 0,
+          "games": 1000,
+          "wins": 437
+        },
+        {
+          "seat": 0,
+          "ownFirst": 1,
+          "games": 1000,
+          "wins": 389
+        },
+        {
+          "seat": 1,
+          "ownFirst": 0,
+          "games": 1000,
+          "wins": 457
+        },
+        {
+          "seat": 1,
+          "ownFirst": 1,
+          "games": 1000,
+          "wins": 417
+        }
+      ]
+    },
+    "H127": {
+      "games": 4000,
+      "wins": 1776,
+      "averageTurns": 14.092,
+      "medianTurns": 12,
+      "attackSuccess": 67.47494596187856,
+      "defenseSuccess": 14.352047277332208,
+      "defenseWithCardSuccess": 45.424181696726784,
+      "chainSuccess": 76.5778807180081,
+      "chainBattlesPerGame": 0.8635,
+      "chainOffersPerGame": 0.86975,
+      "chainDeclaredPercent": 99.28140270192584,
+      "heavyAtkPerGame": 3.657,
+      "heavyDefPerGame": 0.625,
+      "heavyAtkSuccess": 54.17792925138089,
+      "heavyDefSuccess": 45.31946508172363,
+      "gpUsable": 57.008453476501394,
+      "highGPUsable": 14.845902479656564,
+      "rightUsable": 50.83337756781145,
+      "rightExposures": 37678,
+      "depleted": 23.4575,
+      "remaining": 6.5425,
+      "opponentRemaining": 8.23575,
+      "scrollUsesPerGame": null,
+      "scrollDrawDeclared": null,
+      "noAttackPerGame": 0.64125,
+      "deckoutLossPercent": 21.225,
+      "reasons": {
+        "ドロー時に山札切れ": {
+          "n": 944,
+          "wins": 202,
+          "losses": 742
+        },
+        "5ダメージ": {
+          "n": 2936,
+          "wins": 1561,
+          "losses": 1375
+        },
+        "山札残数以上のダメージ": {
+          "n": 120,
+          "wins": 13,
+          "losses": 107
+        }
+      },
+      "counts": {
+        "atk": 25445,
+        "atkWin": 17169,
+        "oppAtk": 18952,
+        "defWin": 2720,
+        "chain": 3454,
+        "chainWin": 2645,
+        "heavyAtkBattles": 8509,
+        "heavyAtkWins": 4610,
+        "heavyDefBattles": 673,
+        "heavyDefWins": 305
+      },
+      "rate": {
+        "rate": 44.4,
+        "se": 0.8394245255748403,
+        "low": 42.75475816213369,
+        "high": 46.04524183786631
+      },
+      "delta": {
+        "rate": 1.9999999999999998,
+        "se": 0.9223763399230274,
+        "low": 0.1921755935589919,
+        "high": 3.807824406441007
+      },
+      "adjustedDelta": {
+        "rate": 1.9999999999999998,
+        "se": 0.9223763399230274,
+        "low": -0.6428482528128789,
+        "high": 4.642848252812878
+      },
+      "byOpponent": {
+        "柳生・射撃": {
+          "games": 1000,
+          "wins": 440,
+          "averageTurns": 11.677,
+          "medianTurns": 12,
+          "attackSuccess": 81.1618725324309,
+          "defenseSuccess": 7.645958861416996,
+          "defenseWithCardSuccess": 21.983273596176822,
+          "chainSuccess": 68.45528455284553,
+          "chainBattlesPerGame": 0.615,
+          "chainOffersPerGame": 0.618,
+          "chainDeclaredPercent": 99.51456310679612,
+          "heavyAtkPerGame": 2.565,
+          "heavyDefPerGame": 0.798,
+          "heavyAtkSuccess": 82.05128205128206,
+          "heavyDefSuccess": 55.41125541125541,
+          "gpUsable": 54.42964304190377,
+          "highGPUsable": 12.450119712689546,
+          "rightUsable": 42.87910552061496,
+          "rightExposures": 7155,
+          "depleted": 20.339,
+          "remaining": 9.661,
+          "opponentRemaining": 6.652,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.555,
+          "deckoutLossPercent": 0.4,
+          "reasons": {
+            "5ダメージ": {
+              "n": 939,
+              "wins": 383,
+              "losses": 556
+            },
+            "山札残数以上のダメージ": {
+              "n": 16,
+              "wins": 13,
+              "losses": 3
+            },
+            "ドロー時に山札切れ": {
+              "n": 45,
+              "wins": 44,
+              "losses": 1
+            }
+          },
+          "counts": {
+            "atk": 5319,
+            "atkWin": 4317,
+            "oppAtk": 4813,
+            "defWin": 368,
+            "chain": 615,
+            "chainWin": 421,
+            "heavyAtkBattles": 1638,
+            "heavyAtkWins": 1344,
+            "heavyDefBattles": 231,
+            "heavyDefWins": 128
+          },
+          "rate": {
+            "rate": 44,
+            "se": 1.7459074348556782,
+            "low": 40.57808430734216,
+            "high": 47.42191569265784
+          },
+          "delta": {
+            "rate": 4.6,
+            "se": 1.9261881536373482,
+            "low": 0.8247405914230933,
+            "high": 8.375259408576907
+          }
+        },
+        "斑鳩・対抗封じ": {
+          "games": 1000,
+          "wins": 417,
+          "averageTurns": 10.602,
+          "medianTurns": 11,
+          "attackSuccess": 91.12018920662223,
+          "defenseSuccess": 1.9076522870149577,
+          "defenseWithCardSuccess": 12.171507607192254,
+          "chainSuccess": 100,
+          "chainBattlesPerGame": 0.547,
+          "chainOffersPerGame": 0.547,
+          "chainDeclaredPercent": 100,
+          "heavyAtkPerGame": 1.531,
+          "heavyDefPerGame": 1.345,
+          "heavyAtkSuccess": 85.71428571428571,
+          "heavyDefSuccess": 32.46268656716418,
+          "gpUsable": 49.002596207565155,
+          "highGPUsable": 7.850361343347031,
+          "rightUsable": 34.84486873508353,
+          "rightExposures": 6285,
+          "depleted": 19.592,
+          "remaining": 10.408,
+          "opponentRemaining": 13.158,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.643,
+          "deckoutLossPercent": 0.4,
+          "reasons": {
+            "5ダメージ": {
+              "n": 996,
+              "wins": 417,
+              "losses": 579
+            },
+            "山札残数以上のダメージ": {
+              "n": 3,
+              "wins": 0,
+              "losses": 3
+            },
+            "ドロー時に山札切れ": {
+              "n": 1,
+              "wins": 0,
+              "losses": 1
+            }
+          },
+          "counts": {
+            "atk": 4651,
+            "atkWin": 4238,
+            "oppAtk": 4613,
+            "defWin": 88,
+            "chain": 547,
+            "chainWin": 547,
+            "heavyAtkBattles": 1029,
+            "heavyAtkWins": 882,
+            "heavyDefBattles": 268,
+            "heavyDefWins": 87
+          },
+          "rate": {
+            "rate": 41.699999999999996,
+            "se": 1.7512015381757846,
+            "low": 38.267708055504315,
+            "high": 45.13229194449568
+          },
+          "delta": {
+            "rate": -5.800000000000001,
+            "se": 1.8653035757535237,
+            "low": -9.455927828710687,
+            "high": -2.144072171289314
+          }
+        },
+        "葛城・削り": {
+          "games": 1000,
+          "wins": 583,
+          "averageTurns": 12.96,
+          "medianTurns": 13,
+          "attackSuccess": 74.28657707987317,
+          "defenseSuccess": 2.889245585874799,
+          "defenseWithCardSuccess": 11.864406779661017,
+          "chainSuccess": 99.6852871754524,
+          "chainBattlesPerGame": 1.271,
+          "chainOffersPerGame": 1.271,
+          "chainDeclaredPercent": 100,
+          "heavyAtkPerGame": 4.172,
+          "heavyDefPerGame": 0.328,
+          "heavyAtkSuccess": 37.73841961852861,
+          "heavyDefSuccess": 48.38709677419355,
+          "gpUsable": 57.225923328658254,
+          "highGPUsable": 14.083080040526848,
+          "rightUsable": 52.28390004096682,
+          "rightExposures": 9764,
+          "depleted": 25.086,
+          "remaining": 4.914,
+          "opponentRemaining": 10.452,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.602,
+          "deckoutLossPercent": 19.6,
+          "reasons": {
+            "5ダメージ": {
+              "n": 804,
+              "wins": 583,
+              "losses": 221
+            },
+            "山札残数以上のダメージ": {
+              "n": 99,
+              "wins": 0,
+              "losses": 99
+            },
+            "ドロー時に山札切れ": {
+              "n": 97,
+              "wins": 0,
+              "losses": 97
+            }
+          },
+          "counts": {
+            "atk": 6623,
+            "atkWin": 4920,
+            "oppAtk": 4361,
+            "defWin": 126,
+            "chain": 1271,
+            "chainWin": 1267,
+            "heavyAtkBattles": 2202,
+            "heavyAtkWins": 831,
+            "heavyDefBattles": 155,
+            "heavyDefWins": 75
+          },
+          "rate": {
+            "rate": 58.3,
+            "se": 1.6928979929274623,
+            "low": 54.981980904362025,
+            "high": 61.61801909563797
+          },
+          "delta": {
+            "rate": 3.3000000000000003,
+            "se": 1.8384667087976951,
+            "low": -0.3033285360193698,
+            "high": 6.903328536019371
+          }
+        },
+        "雲雀・反撃": {
+          "games": 1000,
+          "wins": 336,
+          "averageTurns": 21.129,
+          "medianTurns": 22,
+          "attackSuccess": 41.730682331676455,
+          "defenseSuccess": 41.39399806389158,
+          "defenseWithCardSuccess": 84.53934361407671,
+          "chainSuccess": 40.156709108716946,
+          "chainBattlesPerGame": 1.021,
+          "chainOffersPerGame": 1.043,
+          "chainDeclaredPercent": 97.89069990412273,
+          "heavyAtkPerGame": 6.36,
+          "heavyDefPerGame": 0.029,
+          "heavyAtkSuccess": 42.66483516483517,
+          "heavyDefSuccess": 78.94736842105263,
+          "gpUsable": 64.79445977917982,
+          "highGPUsable": 23.241450303099622,
+          "rightUsable": 60.72958408180185,
+          "rightExposures": 14474,
+          "depleted": 28.813,
+          "remaining": 1.187,
+          "opponentRemaining": 2.681,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.765,
+          "deckoutLossPercent": 64.5,
+          "reasons": {
+            "ドロー時に山札切れ": {
+              "n": 801,
+              "wins": 158,
+              "losses": 643
+            },
+            "5ダメージ": {
+              "n": 197,
+              "wins": 178,
+              "losses": 19
+            },
+            "山札残数以上のダメージ": {
+              "n": 2,
+              "wins": 0,
+              "losses": 2
+            }
+          },
+          "counts": {
+            "atk": 8852,
+            "atkWin": 3694,
+            "oppAtk": 5165,
+            "defWin": 2138,
+            "chain": 1021,
+            "chainWin": 410,
+            "heavyAtkBattles": 3640,
+            "heavyAtkWins": 1553,
+            "heavyDefBattles": 19,
+            "heavyDefWins": 15
+          },
+          "rate": {
+            "rate": 33.6,
+            "se": 1.5143755588800731,
+            "low": 30.631878445527345,
+            "high": 36.56812155447266
+          },
+          "delta": {
+            "rate": 5.8999999999999995,
+            "se": 1.744400105167284,
+            "low": 2.4810386192442406,
+            "high": 9.318961380755757
+          }
+        }
+      },
+      "conditions": [
+        {
+          "seat": 0,
+          "ownFirst": 0,
+          "games": 1000,
+          "wins": 475
+        },
+        {
+          "seat": 0,
+          "ownFirst": 1,
+          "games": 1000,
+          "wins": 414
+        },
+        {
+          "seat": 1,
+          "ownFirst": 0,
+          "games": 1000,
+          "wins": 457
+        },
+        {
+          "seat": 1,
+          "ownFirst": 1,
+          "games": 1000,
+          "wins": 430
+        }
+      ]
+    },
+    "H188": {
+      "games": 4000,
+      "wins": 1654,
+      "averageTurns": 14.10525,
+      "medianTurns": 12,
+      "attackSuccess": 66.77289229528036,
+      "defenseSuccess": 12.840275500163989,
+      "defenseWithCardSuccess": 40.119555935098205,
+      "chainSuccess": 78.25443786982248,
+      "chainBattlesPerGame": 0.845,
+      "chainOffersPerGame": 0.85125,
+      "chainDeclaredPercent": 99.26578560939794,
+      "heavyAtkPerGame": 3.75625,
+      "heavyDefPerGame": 0.763,
+      "heavyAtkSuccess": 53.46012832263978,
+      "heavyDefSuccess": 42.13917525773196,
+      "gpUsable": 57.47249659904182,
+      "highGPUsable": 7.48054848051359,
+      "rightUsable": 52.61100608042512,
+      "rightExposures": 39142,
+      "depleted": 24.351,
+      "remaining": 5.649,
+      "opponentRemaining": 8.29825,
+      "scrollUsesPerGame": null,
+      "scrollDrawDeclared": null,
+      "noAttackPerGame": 0.7365,
+      "deckoutLossPercent": 25.925,
+      "reasons": {
+        "ドロー時に山札切れ": {
+          "n": 1057,
+          "wins": 173,
+          "losses": 884
+        },
+        "5ダメージ": {
+          "n": 2771,
+          "wins": 1462,
+          "losses": 1309
+        },
+        "山札残数以上のダメージ": {
+          "n": 172,
+          "wins": 19,
+          "losses": 153
+        }
+      },
+      "counts": {
+        "atk": 24790,
+        "atkWin": 16553,
+        "oppAtk": 18294,
+        "defWin": 2349,
+        "chain": 3380,
+        "chainWin": 2645,
+        "heavyAtkBattles": 8728,
+        "heavyAtkWins": 4666,
+        "heavyDefBattles": 776,
+        "heavyDefWins": 327
+      },
+      "rate": {
+        "rate": 41.349999999999994,
+        "se": 0.8153922110440623,
+        "low": 39.75186063307915,
+        "high": 42.94813936692085
+      },
+      "delta": {
+        "rate": -1.0499999999999998,
+        "se": 0.7798381821643807,
+        "low": -2.578454750811372,
+        "high": 0.4784547508113721
+      },
+      "adjustedDelta": {
+        "rate": -1.0499999999999998,
+        "se": 0.7798381821643807,
+        "low": -3.284439336748269,
+        "high": 1.184439336748269
+      },
+      "byOpponent": {
+        "柳生・射撃": {
+          "games": 1000,
+          "wins": 421,
+          "averageTurns": 11.671,
+          "medianTurns": 12,
+          "attackSuccess": 81.43917761279269,
+          "defenseSuccess": 7.769214746927723,
+          "defenseWithCardSuccess": 21.1092246745897,
+          "chainSuccess": 67.01807228915662,
+          "chainBattlesPerGame": 0.664,
+          "chainOffersPerGame": 0.671,
+          "chainDeclaredPercent": 98.95678092399403,
+          "heavyAtkPerGame": 2.821,
+          "heavyDefPerGame": 0.905,
+          "heavyAtkSuccess": 84.65753424657534,
+          "heavyDefSuccess": 49.2,
+          "gpUsable": 54.85732814526589,
+          "highGPUsable": 6.027554535017222,
+          "rightUsable": 45.50084889643463,
+          "rightExposures": 7657,
+          "depleted": 21.54,
+          "remaining": 8.46,
+          "opponentRemaining": 6.602,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.665,
+          "deckoutLossPercent": 1.6,
+          "reasons": {
+            "5ダメージ": {
+              "n": 925,
+              "wins": 362,
+              "losses": 563
+            },
+            "山札残数以上のダメージ": {
+              "n": 31,
+              "wins": 19,
+              "losses": 12
+            },
+            "ドロー時に山札切れ": {
+              "n": 44,
+              "wins": 40,
+              "losses": 4
+            }
+          },
+          "counts": {
+            "atk": 5253,
+            "atkWin": 4278,
+            "oppAtk": 4801,
+            "defWin": 373,
+            "chain": 664,
+            "chainWin": 445,
+            "heavyAtkBattles": 1825,
+            "heavyAtkWins": 1545,
+            "heavyDefBattles": 250,
+            "heavyDefWins": 123
+          },
+          "rate": {
+            "rate": 42.1,
+            "se": 1.6887175809687915,
+            "low": 38.79017436124156,
+            "high": 45.409825638758434
+          },
+          "delta": {
+            "rate": 2.7,
+            "se": 1.571853330169918,
+            "low": -0.3807759161123855,
+            "high": 5.780775916112385
+          }
+        },
+        "斑鳩・対抗封じ": {
+          "games": 1000,
+          "wins": 424,
+          "averageTurns": 10.492,
+          "medianTurns": 10,
+          "attackSuccess": 92.39485726737851,
+          "defenseSuccess": 2.152426971227762,
+          "defenseWithCardSuccess": 11.421911421911421,
+          "chainSuccess": 100,
+          "chainBattlesPerGame": 0.572,
+          "chainOffersPerGame": 0.572,
+          "chainDeclaredPercent": 100,
+          "heavyAtkPerGame": 1.526,
+          "heavyDefPerGame": 1.734,
+          "heavyAtkSuccess": 89.2578125,
+          "heavyDefSuccess": 29.573170731707318,
+          "gpUsable": 50.87934289404829,
+          "highGPUsable": 2.227684744200338,
+          "rightUsable": 35.88709677419355,
+          "rightExposures": 6448,
+          "depleted": 20.929,
+          "remaining": 9.071,
+          "opponentRemaining": 13.262,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.684,
+          "deckoutLossPercent": 2,
+          "reasons": {
+            "5ダメージ": {
+              "n": 980,
+              "wins": 424,
+              "losses": 556
+            },
+            "山札残数以上のダメージ": {
+              "n": 16,
+              "wins": 0,
+              "losses": 16
+            },
+            "ドロー時に山札切れ": {
+              "n": 4,
+              "wins": 0,
+              "losses": 4
+            }
+          },
+          "counts": {
+            "atk": 4589,
+            "atkWin": 4240,
+            "oppAtk": 4553,
+            "defWin": 98,
+            "chain": 572,
+            "chainWin": 572,
+            "heavyAtkBattles": 1024,
+            "heavyAtkWins": 914,
+            "heavyDefBattles": 328,
+            "heavyDefWins": 97
+          },
+          "rate": {
+            "rate": 42.4,
+            "se": 1.649193547595223,
+            "low": 39.16764004317752,
+            "high": 45.63235995682248
+          },
+          "delta": {
+            "rate": -5.1,
+            "se": 1.3390789857661443,
+            "low": -7.724546584556066,
+            "high": -2.4754534154439334
+          }
+        },
+        "葛城・削り": {
+          "games": 1000,
+          "wins": 560,
+          "averageTurns": 12.986,
+          "medianTurns": 13,
+          "attackSuccess": 73.72920164860327,
+          "defenseSuccess": 4.275862068965517,
+          "defenseWithCardSuccess": 15.656565656565656,
+          "chainSuccess": 99.77168949771689,
+          "chainBattlesPerGame": 1.314,
+          "chainOffersPerGame": 1.314,
+          "chainDeclaredPercent": 100,
+          "heavyAtkPerGame": 4.311,
+          "heavyDefPerGame": 0.405,
+          "heavyAtkSuccess": 37.38562091503268,
+          "heavyDefSuccess": 53.8860103626943,
+          "gpUsable": 57.47001730053074,
+          "highGPUsable": 6.784260515603799,
+          "rightUsable": 54.27074939564867,
+          "rightExposures": 9928,
+          "depleted": 25.69,
+          "remaining": 4.31,
+          "opponentRemaining": 10.508,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.698,
+          "deckoutLossPercent": 26.3,
+          "reasons": {
+            "5ダメージ": {
+              "n": 737,
+              "wins": 560,
+              "losses": 177
+            },
+            "山札残数以上のダメージ": {
+              "n": 123,
+              "wins": 0,
+              "losses": 123
+            },
+            "ドロー時に山札切れ": {
+              "n": 140,
+              "wins": 0,
+              "losses": 140
+            }
+          },
+          "counts": {
+            "atk": 6551,
+            "atkWin": 4830,
+            "oppAtk": 4350,
+            "defWin": 186,
+            "chain": 1314,
+            "chainWin": 1311,
+            "heavyAtkBattles": 2295,
+            "heavyAtkWins": 858,
+            "heavyDefBattles": 193,
+            "heavyDefWins": 104
+          },
+          "rate": {
+            "rate": 56.00000000000001,
+            "se": 1.7401472494588475,
+            "low": 52.58937406326423,
+            "high": 59.410625936735784
+          },
+          "delta": {
+            "rate": 1,
+            "se": 1.6694755447078313,
+            "low": -2.272111940697738,
+            "high": 4.272111940697738
+          }
+        },
+        "雲雀・反撃": {
+          "games": 1000,
+          "wins": 249,
+          "averageTurns": 21.272,
+          "medianTurns": 22,
+          "attackSuccess": 38.16839347385971,
+          "defenseSuccess": 36.86274509803921,
+          "defenseWithCardSuccess": 82.85994123408423,
+          "chainSuccess": 38.19277108433735,
+          "chainBattlesPerGame": 0.83,
+          "chainOffersPerGame": 0.848,
+          "chainDeclaredPercent": 97.87735849056604,
+          "heavyAtkPerGame": 6.367,
+          "heavyDefPerGame": 0.008,
+          "heavyAtkSuccess": 37.63950892857143,
+          "heavyDefSuccess": 60,
+          "gpUsable": 64.44666001994018,
+          "highGPUsable": 13.808548758638342,
+          "rightUsable": 62.26090409689589,
+          "rightExposures": 15109,
+          "depleted": 29.245,
+          "remaining": 0.755,
+          "opponentRemaining": 2.821,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.899,
+          "deckoutLossPercent": 73.8,
+          "reasons": {
+            "ドロー時に山札切れ": {
+              "n": 869,
+              "wins": 133,
+              "losses": 736
+            },
+            "5ダメージ": {
+              "n": 129,
+              "wins": 116,
+              "losses": 13
+            },
+            "山札残数以上のダメージ": {
+              "n": 2,
+              "wins": 0,
+              "losses": 2
+            }
+          },
+          "counts": {
+            "atk": 8397,
+            "atkWin": 3205,
+            "oppAtk": 4590,
+            "defWin": 1692,
+            "chain": 830,
+            "chainWin": 317,
+            "heavyAtkBattles": 3584,
+            "heavyAtkWins": 1349,
+            "heavyDefBattles": 5,
+            "heavyDefWins": 3
+          },
+          "rate": {
+            "rate": 24.9,
+            "se": 1.427624758050657,
+            "low": 22.101906890783006,
+            "high": 27.698093109216998
+          },
+          "delta": {
+            "rate": -2.8000000000000003,
+            "se": 1.6368742864737278,
+            "low": -6.008214648708206,
+            "high": 0.40821464870820534
+          }
+        }
+      },
+      "conditions": [
+        {
+          "seat": 0,
+          "ownFirst": 0,
+          "games": 1000,
+          "wins": 436
+        },
+        {
+          "seat": 0,
+          "ownFirst": 1,
+          "games": 1000,
+          "wins": 369
+        },
+        {
+          "seat": 1,
+          "ownFirst": 0,
+          "games": 1000,
+          "wins": 449
+        },
+        {
+          "seat": 1,
+          "ownFirst": 1,
+          "games": 1000,
+          "wins": 400
+        }
+      ]
+    },
+    "PRE2": {
+      "games": 4000,
+      "wins": 1702,
+      "averageTurns": 14.387,
+      "medianTurns": 13,
+      "attackSuccess": 68.54390066919294,
+      "defenseSuccess": 13.99104073340973,
+      "defenseWithCardSuccess": 44.04722859954083,
+      "chainSuccess": 76.70539171879655,
+      "chainBattlesPerGame": 0.83925,
+      "chainOffersPerGame": 0.84875,
+      "chainDeclaredPercent": 98.88070692194404,
+      "heavyAtkPerGame": 3.7955,
+      "heavyDefPerGame": 0.871,
+      "heavyAtkSuccess": 56.230283911671926,
+      "heavyDefSuccess": 49.11504424778761,
+      "gpUsable": 54.12144623622949,
+      "highGPUsable": 13.865433587990886,
+      "rightUsable": 48.16123052257127,
+      "rightExposures": 39918,
+      "depleted": 23.78875,
+      "remaining": 6.21125,
+      "opponentRemaining": 7.96925,
+      "scrollUsesPerGame": null,
+      "scrollDrawDeclared": null,
+      "noAttackPerGame": 0.9035,
+      "deckoutLossPercent": 22.825,
+      "reasons": {
+        "5ダメージ": {
+          "n": 2873,
+          "wins": 1488,
+          "losses": 1385
+        },
+        "ドロー時に山札切れ": {
+          "n": 992,
+          "wins": 184,
+          "losses": 808
+        },
+        "山札残数以上のダメージ": {
+          "n": 135,
+          "wins": 30,
+          "losses": 105
+        }
+      },
+      "counts": {
+        "atk": 24806,
+        "atkWin": 17003,
+        "oppAtk": 19198,
+        "defWin": 2686,
+        "chain": 3357,
+        "chainWin": 2575,
+        "heavyAtkBattles": 8876,
+        "heavyAtkWins": 4991,
+        "heavyDefBattles": 904,
+        "heavyDefWins": 444
+      },
+      "rate": {
+        "rate": 42.55,
+        "se": 0.8469173963883497,
+        "low": 40.8900724051984,
+        "high": 44.2099275948016
+      },
+      "delta": {
+        "rate": 0.15,
+        "se": 0.9972728878553778,
+        "low": -1.8046189429547925,
+        "high": 2.104618942954793
+      },
+      "adjustedDelta": {
+        "rate": 0.15,
+        "se": 0.9972728878553778,
+        "low": -2.707446353693531,
+        "high": 3.007446353693531
+      },
+      "byOpponent": {
+        "柳生・射撃": {
+          "games": 1000,
+          "wins": 449,
+          "averageTurns": 12.133,
+          "medianTurns": 12,
+          "attackSuccess": 81.27966584393393,
+          "defenseSuccess": 9.15802075019952,
+          "defenseWithCardSuccess": 26.198630136986303,
+          "chainSuccess": 67.62360446570973,
+          "chainBattlesPerGame": 0.627,
+          "chainOffersPerGame": 0.633,
+          "chainDeclaredPercent": 99.0521327014218,
+          "heavyAtkPerGame": 2.609,
+          "heavyDefPerGame": 1.062,
+          "heavyAtkSuccess": 85.91628959276018,
+          "heavyDefSuccess": 58.7248322147651,
+          "gpUsable": 52.88604278853151,
+          "highGPUsable": 12.258894127732534,
+          "rightUsable": 42.25298930144745,
+          "rightExposures": 7945,
+          "depleted": 21.079,
+          "remaining": 8.921,
+          "opponentRemaining": 6.038,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.839,
+          "deckoutLossPercent": 1.1,
+          "reasons": {
+            "ドロー時に山札切れ": {
+              "n": 60,
+              "wins": 58,
+              "losses": 2
+            },
+            "5ダメージ": {
+              "n": 903,
+              "wins": 363,
+              "losses": 540
+            },
+            "山札残数以上のダメージ": {
+              "n": 37,
+              "wins": 28,
+              "losses": 9
+            }
+          },
+          "counts": {
+            "atk": 5267,
+            "atkWin": 4281,
+            "oppAtk": 5012,
+            "defWin": 459,
+            "chain": 627,
+            "chainWin": 424,
+            "heavyAtkBattles": 1768,
+            "heavyAtkWins": 1519,
+            "heavyDefBattles": 298,
+            "heavyDefWins": 175
+          },
+          "rate": {
+            "rate": 44.9,
+            "se": 1.636052158907737,
+            "low": 41.69339669171184,
+            "high": 48.106603308288165
+          },
+          "delta": {
+            "rate": 5.5,
+            "se": 1.929739770624352,
+            "low": 1.717779550041685,
+            "high": 9.282220449958315
+          }
+        },
+        "斑鳩・対抗封じ": {
+          "games": 1000,
+          "wins": 419,
+          "averageTurns": 10.734,
+          "medianTurns": 11,
+          "attackSuccess": 92.18887908208296,
+          "defenseSuccess": 2.797949594190517,
+          "defenseWithCardSuccess": 15.936739659367397,
+          "chainSuccess": 100,
+          "chainBattlesPerGame": 0.571,
+          "chainOffersPerGame": 0.571,
+          "chainDeclaredPercent": 100,
+          "heavyAtkPerGame": 1.494,
+          "heavyDefPerGame": 1.838,
+          "heavyAtkSuccess": 89.05472636815921,
+          "heavyDefSuccess": 35.53719008264463,
+          "gpUsable": 46.47865427070054,
+          "highGPUsable": 5.851462865716429,
+          "rightUsable": 34.284827800186164,
+          "rightExposures": 6446,
+          "depleted": 19.827,
+          "remaining": 10.173,
+          "opponentRemaining": 13.016,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.861,
+          "deckoutLossPercent": 0.6,
+          "reasons": {
+            "5ダメージ": {
+              "n": 994,
+              "wins": 419,
+              "losses": 575
+            },
+            "山札残数以上のダメージ": {
+              "n": 5,
+              "wins": 0,
+              "losses": 5
+            },
+            "ドロー時に山札切れ": {
+              "n": 1,
+              "wins": 0,
+              "losses": 1
+            }
+          },
+          "counts": {
+            "atk": 4532,
+            "atkWin": 4178,
+            "oppAtk": 4682,
+            "defWin": 131,
+            "chain": 571,
+            "chainWin": 571,
+            "heavyAtkBattles": 1005,
+            "heavyAtkWins": 895,
+            "heavyDefBattles": 363,
+            "heavyDefWins": 129
+          },
+          "rate": {
+            "rate": 41.9,
+            "se": 1.8278193824279,
+            "low": 38.31753984019707,
+            "high": 45.482460159802926
+          },
+          "delta": {
+            "rate": -5.6000000000000005,
+            "se": 1.941555704639161,
+            "low": -9.405379255071042,
+            "high": -1.7946207449289577
+          }
+        },
+        "葛城・削り": {
+          "games": 1000,
+          "wins": 547,
+          "averageTurns": 13.272,
+          "medianTurns": 13,
+          "attackSuccess": 75.36793183578621,
+          "defenseSuccess": 4.551509769094139,
+          "defenseWithCardSuccess": 16.63961038961039,
+          "chainSuccess": 99.83646770237122,
+          "chainBattlesPerGame": 1.223,
+          "chainOffersPerGame": 1.223,
+          "chainDeclaredPercent": 100,
+          "heavyAtkPerGame": 4.248,
+          "heavyDefPerGame": 0.545,
+          "heavyAtkSuccess": 40.115504220346516,
+          "heavyDefSuccess": 54.54545454545455,
+          "gpUsable": 53.280539908019705,
+          "highGPUsable": 13.29066265060241,
+          "rightUsable": 48.9168765743073,
+          "rightExposures": 9925,
+          "depleted": 25.161,
+          "remaining": 4.839,
+          "opponentRemaining": 10.146,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.858,
+          "deckoutLossPercent": 19.9,
+          "reasons": {
+            "5ダメージ": {
+              "n": 801,
+              "wins": 547,
+              "losses": 254
+            },
+            "山札残数以上のダメージ": {
+              "n": 88,
+              "wins": 0,
+              "losses": 88
+            },
+            "ドロー時に山札切れ": {
+              "n": 111,
+              "wins": 0,
+              "losses": 111
+            }
+          },
+          "counts": {
+            "atk": 6455,
+            "atkWin": 4865,
+            "oppAtk": 4504,
+            "defWin": 205,
+            "chain": 1223,
+            "chainWin": 1221,
+            "heavyAtkBattles": 2251,
+            "heavyAtkWins": 903,
+            "heavyDefBattles": 220,
+            "heavyDefWins": 120
+          },
+          "rate": {
+            "rate": 54.7,
+            "se": 1.75898154176132,
+            "low": 51.25245952867707,
+            "high": 58.147540471322934
+          },
+          "delta": {
+            "rate": -0.3,
+            "se": 2.169901817037423,
+            "low": -4.552929411381371,
+            "high": 3.952929411381371
+          }
+        },
+        "雲雀・反撃": {
+          "games": 1000,
+          "wins": 287,
+          "averageTurns": 21.409,
+          "medianTurns": 22,
+          "attackSuccess": 43.01917680074836,
+          "defenseSuccess": 37.82,
+          "defenseWithCardSuccess": 82.5043630017452,
+          "chainSuccess": 38.35470085470085,
+          "chainBattlesPerGame": 0.936,
+          "chainOffersPerGame": 0.968,
+          "chainDeclaredPercent": 96.69421487603306,
+          "heavyAtkPerGame": 6.831,
+          "heavyDefPerGame": 0.039,
+          "heavyAtkSuccess": 43.45794392523364,
+          "heavyDefSuccess": 86.95652173913044,
+          "gpUsable": 61.455030102486326,
+          "highGPUsable": 22.296639064783243,
+          "rightUsable": 56.42225355723625,
+          "rightExposures": 15602,
+          "depleted": 29.088,
+          "remaining": 0.912,
+          "opponentRemaining": 2.677,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 1.056,
+          "deckoutLossPercent": 69.7,
+          "reasons": {
+            "5ダメージ": {
+              "n": 175,
+              "wins": 159,
+              "losses": 16
+            },
+            "ドロー時に山札切れ": {
+              "n": 820,
+              "wins": 126,
+              "losses": 694
+            },
+            "山札残数以上のダメージ": {
+              "n": 5,
+              "wins": 2,
+              "losses": 3
+            }
+          },
+          "counts": {
+            "atk": 8552,
+            "atkWin": 3679,
+            "oppAtk": 5000,
+            "defWin": 1891,
+            "chain": 936,
+            "chainWin": 359,
+            "heavyAtkBattles": 3852,
+            "heavyAtkWins": 1674,
+            "heavyDefBattles": 23,
+            "heavyDefWins": 20
+          },
+          "rate": {
+            "rate": 28.7,
+            "se": 1.5377577166708445,
+            "low": 25.686050258376593,
+            "high": 31.713949741623402
+          },
+          "delta": {
+            "rate": 1,
+            "se": 1.9263549448359656,
+            "low": -2.775586313319135,
+            "high": 4.775586313319136
+          }
+        }
+      },
+      "conditions": [
+        {
+          "seat": 0,
+          "ownFirst": 0,
+          "games": 1000,
+          "wins": 439
+        },
+        {
+          "seat": 0,
+          "ownFirst": 1,
+          "games": 1000,
+          "wins": 429
+        },
+        {
+          "seat": 1,
+          "ownFirst": 0,
+          "games": 1000,
+          "wins": 446
+        },
+        {
+          "seat": 1,
+          "ownFirst": 1,
+          "games": 1000,
+          "wins": 388
+        }
+      ]
+    },
+    "SHI": {
+      "games": 4000,
+      "wins": 1864,
+      "averageTurns": 14.06,
+      "medianTurns": 12,
+      "attackSuccess": 69.19061092735026,
+      "defenseSuccess": 13.561037992220387,
+      "defenseWithCardSuccess": 44.61781206171108,
+      "chainSuccess": 76.20365246264527,
+      "chainBattlesPerGame": 0.9035,
+      "chainOffersPerGame": 0.91075,
+      "chainDeclaredPercent": 99.20395278616525,
+      "heavyAtkPerGame": 3.7145,
+      "heavyDefPerGame": 0.76875,
+      "heavyAtkSuccess": 55.32437171244886,
+      "heavyDefSuccess": 46.27450980392157,
+      "gpUsable": 54.948273185327366,
+      "highGPUsable": 13.989144767103125,
+      "rightUsable": 52.17027507582889,
+      "rightExposures": 38244,
+      "depleted": 23.46175,
+      "remaining": 6.53825,
+      "opponentRemaining": 8.3115,
+      "scrollUsesPerGame": null,
+      "scrollDrawDeclared": null,
+      "noAttackPerGame": 0.759,
+      "deckoutLossPercent": 20.875,
+      "reasons": {
+        "5ダメージ": {
+          "n": 2966,
+          "wins": 1665,
+          "losses": 1301
+        },
+        "ドロー時に山札切れ": {
+          "n": 926,
+          "wins": 177,
+          "losses": 749
+        },
+        "山札残数以上のダメージ": {
+          "n": 108,
+          "wins": 22,
+          "losses": 86
+        }
+      },
+      "counts": {
+        "atk": 25093,
+        "atkWin": 17362,
+        "oppAtk": 18767,
+        "defWin": 2545,
+        "chain": 3614,
+        "chainWin": 2754,
+        "heavyAtkBattles": 8555,
+        "heavyAtkWins": 4733,
+        "heavyDefBattles": 765,
+        "heavyDefWins": 354
+      },
+      "rate": {
+        "rate": 46.6,
+        "se": 0.8512246080402828,
+        "low": 44.93163042548682,
+        "high": 48.26836957451318
+      },
+      "delta": {
+        "rate": 4.199999999999999,
+        "se": 0.9136047804051353,
+        "low": 2.4093675343023095,
+        "high": 5.99063246569769
+      },
+      "adjustedDelta": {
+        "rate": 4.199999999999999,
+        "se": 0.9136047804051353,
+        "low": 1.5822845479138172,
+        "high": 6.817715452086182
+      },
+      "byOpponent": {
+        "柳生・射撃": {
+          "games": 1000,
+          "wins": 467,
+          "averageTurns": 11.707,
+          "medianTurns": 12,
+          "attackSuccess": 82.06727135298564,
+          "defenseSuccess": 7.587792642140468,
+          "defenseWithCardSuccess": 22.448979591836736,
+          "chainSuccess": 68.63636363636364,
+          "chainBattlesPerGame": 0.66,
+          "chainOffersPerGame": 0.667,
+          "chainDeclaredPercent": 98.95052473763118,
+          "heavyAtkPerGame": 2.476,
+          "heavyDefPerGame": 1.009,
+          "heavyAtkSuccess": 86,
+          "heavyDefSuccess": 50.75757575757576,
+          "gpUsable": 53.152738106207195,
+          "highGPUsable": 11.714836223506744,
+          "rightUsable": 45.06869813630799,
+          "rightExposures": 7351,
+          "depleted": 20.434,
+          "remaining": 9.566,
+          "opponentRemaining": 6.73,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.659,
+          "deckoutLossPercent": 0.4,
+          "reasons": {
+            "5ダメージ": {
+              "n": 935,
+              "wins": 406,
+              "losses": 529
+            },
+            "山札残数以上のダメージ": {
+              "n": 23,
+              "wins": 21,
+              "losses": 2
+            },
+            "ドロー時に山札切れ": {
+              "n": 42,
+              "wins": 40,
+              "losses": 2
+            }
+          },
+          "counts": {
+            "atk": 5292,
+            "atkWin": 4343,
+            "oppAtk": 4784,
+            "defWin": 363,
+            "chain": 660,
+            "chainWin": 453,
+            "heavyAtkBattles": 1600,
+            "heavyAtkWins": 1376,
+            "heavyDefBattles": 264,
+            "heavyDefWins": 134
+          },
+          "rate": {
+            "rate": 46.7,
+            "se": 1.7660452040224235,
+            "low": 43.23861500504636,
+            "high": 50.161384994953636
+          },
+          "delta": {
+            "rate": 7.3,
+            "se": 1.9213553616400068,
+            "low": 3.534212689682655,
+            "high": 11.065787310317344
+          }
+        },
+        "斑鳩・対抗封じ": {
+          "games": 1000,
+          "wins": 465,
+          "averageTurns": 10.608,
+          "medianTurns": 10,
+          "attackSuccess": 92.35599826764833,
+          "defenseSuccess": 2.4379625598606878,
+          "defenseWithCardSuccess": 16.138328530259365,
+          "chainSuccess": 100,
+          "chainBattlesPerGame": 0.602,
+          "chainOffersPerGame": 0.602,
+          "chainDeclaredPercent": 100,
+          "heavyAtkPerGame": 1.441,
+          "heavyDefPerGame": 1.646,
+          "heavyAtkSuccess": 89.61303462321793,
+          "heavyDefSuccess": 36.27450980392157,
+          "gpUsable": 47.54232230911775,
+          "highGPUsable": 7.403284163651545,
+          "rightUsable": 37.021013597033374,
+          "rightExposures": 6472,
+          "depleted": 19.652,
+          "remaining": 10.348,
+          "opponentRemaining": 13.179,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.76,
+          "deckoutLossPercent": 0.3,
+          "reasons": {
+            "5ダメージ": {
+              "n": 997,
+              "wins": 465,
+              "losses": 532
+            },
+            "山札残数以上のダメージ": {
+              "n": 2,
+              "wins": 0,
+              "losses": 2
+            },
+            "ドロー時に山札切れ": {
+              "n": 1,
+              "wins": 0,
+              "losses": 1
+            }
+          },
+          "counts": {
+            "atk": 4618,
+            "atkWin": 4265,
+            "oppAtk": 4594,
+            "defWin": 112,
+            "chain": 602,
+            "chainWin": 602,
+            "heavyAtkBattles": 982,
+            "heavyAtkWins": 880,
+            "heavyDefBattles": 306,
+            "heavyDefWins": 111
+          },
+          "rate": {
+            "rate": 46.5,
+            "se": 1.7814866766598252,
+            "low": 43.00835027480879,
+            "high": 49.99164972519121
+          },
+          "delta": {
+            "rate": -1,
+            "se": 1.7800771609104986,
+            "low": -4.488887125086888,
+            "high": 2.4888871250868876
+          }
+        },
+        "葛城・削り": {
+          "games": 1000,
+          "wins": 606,
+          "averageTurns": 12.949,
+          "medianTurns": 13,
+          "attackSuccess": 75.66242916219942,
+          "defenseSuccess": 3.344867358708189,
+          "defenseWithCardSuccess": 13.615023474178404,
+          "chainSuccess": 99.68944099378882,
+          "chainBattlesPerGame": 1.288,
+          "chainOffersPerGame": 1.288,
+          "chainDeclaredPercent": 100,
+          "heavyAtkPerGame": 4.175,
+          "heavyDefPerGame": 0.392,
+          "heavyAtkSuccess": 38.15002300966406,
+          "heavyDefSuccess": 53.97727272727273,
+          "gpUsable": 54.93340889770473,
+          "highGPUsable": 13.423867323638985,
+          "rightUsable": 53.04692260816575,
+          "rightExposures": 9846,
+          "depleted": 24.948,
+          "remaining": 5.052,
+          "opponentRemaining": 10.488,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.718,
+          "deckoutLossPercent": 18.1,
+          "reasons": {
+            "5ダメージ": {
+              "n": 819,
+              "wins": 606,
+              "losses": 213
+            },
+            "ドロー時に山札切れ": {
+              "n": 103,
+              "wins": 0,
+              "losses": 103
+            },
+            "山札残数以上のダメージ": {
+              "n": 78,
+              "wins": 0,
+              "losses": 78
+            }
+          },
+          "counts": {
+            "atk": 6529,
+            "atkWin": 4940,
+            "oppAtk": 4335,
+            "defWin": 145,
+            "chain": 1288,
+            "chainWin": 1284,
+            "heavyAtkBattles": 2173,
+            "heavyAtkWins": 829,
+            "heavyDefBattles": 176,
+            "heavyDefWins": 95
+          },
+          "rate": {
+            "rate": 60.6,
+            "se": 1.6798355245553744,
+            "low": 57.307582871920516,
+            "high": 63.89241712807948
+          },
+          "delta": {
+            "rate": 5.6000000000000005,
+            "se": 1.8677564231518242,
+            "low": 1.939264678729071,
+            "high": 9.26073532127093
+          }
+        },
+        "雲雀・反撃": {
+          "games": 1000,
+          "wins": 326,
+          "averageTurns": 20.976,
+          "medianTurns": 22,
+          "attackSuccess": 44.07210538479316,
+          "defenseSuccess": 38.08864265927978,
+          "defenseWithCardSuccess": 82.68900343642612,
+          "chainSuccess": 39.00375939849624,
+          "chainBattlesPerGame": 1.064,
+          "chainOffersPerGame": 1.086,
+          "chainDeclaredPercent": 97.97421731123389,
+          "heavyAtkPerGame": 6.766,
+          "heavyDefPerGame": 0.028,
+          "heavyAtkSuccess": 43.36842105263158,
+          "heavyDefSuccess": 73.6842105263158,
+          "gpUsable": 61.96392022466562,
+          "highGPUsable": 21.47226097220732,
+          "rightUsable": 61.886792452830186,
+          "rightExposures": 14575,
+          "depleted": 28.813,
+          "remaining": 1.187,
+          "opponentRemaining": 2.849,
+          "scrollUsesPerGame": null,
+          "scrollDrawDeclared": null,
+          "noAttackPerGame": 0.899,
+          "deckoutLossPercent": 64.7,
+          "reasons": {
+            "5ダメージ": {
+              "n": 215,
+              "wins": 188,
+              "losses": 27
+            },
+            "ドロー時に山札切れ": {
+              "n": 780,
+              "wins": 137,
+              "losses": 643
+            },
+            "山札残数以上のダメージ": {
+              "n": 5,
+              "wins": 1,
+              "losses": 4
+            }
+          },
+          "counts": {
+            "atk": 8654,
+            "atkWin": 3814,
+            "oppAtk": 5054,
+            "defWin": 1925,
+            "chain": 1064,
+            "chainWin": 415,
+            "heavyAtkBattles": 3800,
+            "heavyAtkWins": 1648,
+            "heavyDefBattles": 19,
+            "heavyDefWins": 14
+          },
+          "rate": {
+            "rate": 32.6,
+            "se": 1.5744445058521521,
+            "low": 29.514145472872823,
+            "high": 35.685854527127184
+          },
+          "delta": {
+            "rate": 4.9,
+            "se": 1.733777360488644,
+            "low": 1.5018588162313398,
+            "high": 8.29814118376866
+          }
+        }
+      },
+      "conditions": [
+        {
+          "seat": 0,
+          "ownFirst": 0,
+          "games": 1000,
+          "wins": 504
+        },
+        {
+          "seat": 0,
+          "ownFirst": 1,
+          "games": 1000,
+          "wins": 433
+        },
+        {
+          "seat": 1,
+          "ownFirst": 0,
+          "games": 1000,
+          "wins": 491
+        },
+        {
+          "seat": 1,
+          "ownFirst": 1,
+          "games": 1000,
+          "wins": 436
+        }
+      ]
+    }
+  }
+}
