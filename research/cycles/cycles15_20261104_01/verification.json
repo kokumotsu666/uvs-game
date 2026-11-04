@@ -1,0 +1,212 @@
+{
+  "completed": true,
+  "startCycle": 1,
+  "endCycle": 16,
+  "additionalCompleted": 15,
+  "candidates": 6000,
+  "productionGames": 3335400,
+  "workers": 15,
+  "deckLegalityChecks": 6085,
+  "allFinalSeatsBalanced": true,
+  "allFinalFirstPlayersBalanced": true,
+  "priorHistoryPreserved": true,
+  "priorVersionsPreserved": true,
+  "rootFilesBackedUp": 94,
+  "oldLogFilesChecked": 31,
+  "allowedControlFilesChanged": [
+    "cycle_state.json",
+    "deck_cycle.js",
+    "deck_tune.js",
+    "matchup3.js"
+  ],
+  "unexpectedChanges": [],
+  "gameCoreChanged": false,
+  "startedUTC": "2026-11-04T14:48:24.577Z",
+  "finishedUTC": "2026-11-04T22:57:15.890Z",
+  "wallSeconds": 29331.313,
+  "errors": [],
+  "details": [
+    {
+      "cycle": 2,
+      "target": "飛鳥・連撃",
+      "adopted": true,
+      "games": 217080,
+      "expectedGames": 217080,
+      "completedCandidates": 400,
+      "actualFirstPerFinalArm": 2000,
+      "seatsPerFinalArm": 2000
+    },
+    {
+      "cycle": 3,
+      "target": "柳生・射撃",
+      "adopted": true,
+      "games": 227480,
+      "expectedGames": 227480,
+      "completedCandidates": 400,
+      "actualFirstPerFinalArm": 2000,
+      "seatsPerFinalArm": 2000
+    },
+    {
+      "cycle": 4,
+      "target": "雲雀・反撃",
+      "adopted": true,
+      "games": 236280,
+      "expectedGames": 236280,
+      "completedCandidates": 400,
+      "actualFirstPerFinalArm": 2000,
+      "seatsPerFinalArm": 2000
+    },
+    {
+      "cycle": 5,
+      "target": "斑鳩・対抗封じ",
+      "adopted": false,
+      "games": 217880,
+      "expectedGames": 217880,
+      "completedCandidates": 400,
+      "actualFirstPerFinalArm": 2000,
+      "seatsPerFinalArm": 2000
+    },
+    {
+      "cycle": 6,
+      "target": "柳生・射撃",
+      "adopted": true,
+      "games": 218680,
+      "expectedGames": 218680,
+      "completedCandidates": 400,
+      "actualFirstPerFinalArm": 2000,
+      "seatsPerFinalArm": 2000
+    },
+    {
+      "cycle": 7,
+      "target": "飛鳥・連撃",
+      "adopted": true,
+      "games": 217080,
+      "expectedGames": 217080,
+      "completedCandidates": 400,
+      "actualFirstPerFinalArm": 2000,
+      "seatsPerFinalArm": 2000
+    },
+    {
+      "cycle": 8,
+      "target": "斑鳩・対抗封じ",
+      "adopted": true,
+      "games": 227480,
+      "expectedGames": 227480,
+      "completedCandidates": 400,
+      "actualFirstPerFinalArm": 2000,
+      "seatsPerFinalArm": 2000
+    },
+    {
+      "cycle": 9,
+      "target": "飛鳥・連撃",
+      "adopted": true,
+      "games": 229080,
+      "expectedGames": 229080,
+      "completedCandidates": 400,
+      "actualFirstPerFinalArm": 2000,
+      "seatsPerFinalArm": 2000
+    },
+    {
+      "cycle": 10,
+      "target": "葛城・削り",
+      "adopted": true,
+      "games": 230680,
+      "expectedGames": 230680,
+      "completedCandidates": 400,
+      "actualFirstPerFinalArm": 2000,
+      "seatsPerFinalArm": 2000
+    },
+    {
+      "cycle": 11,
+      "target": "斑鳩・対抗封じ",
+      "adopted": true,
+      "games": 225880,
+      "expectedGames": 225880,
+      "completedCandidates": 400,
+      "actualFirstPerFinalArm": 2000,
+      "seatsPerFinalArm": 2000
+    },
+    {
+      "cycle": 12,
+      "target": "柳生・射撃",
+      "adopted": false,
+      "games": 217080,
+      "expectedGames": 217080,
+      "completedCandidates": 400,
+      "actualFirstPerFinalArm": 2000,
+      "seatsPerFinalArm": 2000
+    },
+    {
+      "cycle": 13,
+      "target": "斑鳩・対抗封じ",
+      "adopted": false,
+      "games": 216280,
+      "expectedGames": 216280,
+      "completedCandidates": 400,
+      "actualFirstPerFinalArm": 2000,
+      "seatsPerFinalArm": 2000
+    },
+    {
+      "cycle": 14,
+      "target": "飛鳥・連撃",
+      "adopted": false,
+      "games": 218680,
+      "expectedGames": 218680,
+      "completedCandidates": 400,
+      "actualFirstPerFinalArm": 2000,
+      "seatsPerFinalArm": 2000
+    },
+    {
+      "cycle": 15,
+      "target": "葛城・削り",
+      "adopted": true,
+      "games": 218680,
+      "expectedGames": 218680,
+      "completedCandidates": 400,
+      "actualFirstPerFinalArm": 2000,
+      "seatsPerFinalArm": 2000
+    },
+    {
+      "cycle": 16,
+      "target": "柳生・射撃",
+      "adopted": false,
+      "games": 217080,
+      "expectedGames": 217080,
+      "completedCandidates": 400,
+      "actualFirstPerFinalArm": 2000,
+      "seatsPerFinalArm": 2000
+    }
+  ],
+  "hardware": {
+    "cpu": "AMD Ryzen Z1 Extreme",
+    "logicalCPUs": 16,
+    "node": "v26.13.0",
+    "platform": "win32"
+  },
+  "endpointGames": 30000,
+  "endpointSeconds": 259.868,
+  "totalResearchGames": 3365400,
+  "preflight": {
+    "unit": {
+      "passed": 12,
+      "workerControlComparisons": 50,
+      "workerControlExecutions": 100
+    },
+    "integration": {
+      "originalMatchesAfterRestart": true,
+      "interruptedAt": 2,
+      "allFiveMatrixGames": 60,
+      "allFiveMatrixCells": 25,
+      "workers": 15
+    },
+    "invariant225LogsMatch": true
+  },
+  "sourceHashes": {
+    "engine.js": "59df47a87013bdff08f2e41ebfb45eb378daa4dac0dad47bbd50f6839f501c9b",
+    "solver.js": "42b2cbf2df229a660979f0e5d3568bb2a845b106820b0ed750c73c0f844ceabb",
+    "cards_extra.js": "89b114eda2b2d5cf5c4568737508a2a12ea9fee666a23efe865b0862bff53010",
+    "decks_fixed.js": "c6b995411c96998f3a664238b20f5fd617d319f11490186b99373b3f1d984361",
+    "index.html": "db193b0eef3f7d6eec78a4f2e7d73b615754b4cc7f2252fbde3d011d53f8931f",
+    "tune_worker.js": "19a0f933fcff0dbe187fb7e7d062b3a0f34e39eaee798088106af792f60a6a50"
+  }
+}
