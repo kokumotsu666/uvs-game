@@ -1,0 +1,331 @@
+{
+  "created": "2026-11-04T23:43:17.612Z",
+  "screenSeeds": 16,
+  "finalSeeds": 250,
+  "finalGamesPerArm": 4000,
+  "selection": "D・H大、A小。D/H相互作用、用量、交換先とA単独の限定対照を選定。全組合せ探索なし。",
+  "contrasts": [
+    {
+      "id": "O_H_P0",
+      "weights": {
+        "O_A10": 1,
+        "O_A00": -1
+      },
+      "note": "P0で防御重撃変更"
+    },
+    {
+      "id": "O_H_P1",
+      "weights": {
+        "O_A11": 1,
+        "O_A01": -1
+      },
+      "note": "P1で防御重撃変更"
+    },
+    {
+      "id": "O_P_H0",
+      "weights": {
+        "O_A01": 1,
+        "O_A00": -1
+      },
+      "note": "H0で見送り変更"
+    },
+    {
+      "id": "O_P_H1",
+      "weights": {
+        "O_A11": 1,
+        "O_A10": -1
+      },
+      "note": "H1で見送り変更"
+    },
+    {
+      "id": "O_HxP",
+      "weights": {
+        "O_A11": 1,
+        "O_A10": -1,
+        "O_A01": -1,
+        "O_A00": 1
+      },
+      "note": "AI2項目の交互作用"
+    },
+    {
+      "id": "O_bothAI",
+      "weights": {
+        "O_A11": 1,
+        "O_A00": -1
+      },
+      "note": "AI両方変更"
+    },
+    {
+      "id": "N_H_P0",
+      "weights": {
+        "N_A10": 1,
+        "N_A00": -1
+      },
+      "note": "P0で防御重撃変更"
+    },
+    {
+      "id": "N_H_P1",
+      "weights": {
+        "N_A11": 1,
+        "N_A01": -1
+      },
+      "note": "P1で防御重撃変更"
+    },
+    {
+      "id": "N_P_H0",
+      "weights": {
+        "N_A01": 1,
+        "N_A00": -1
+      },
+      "note": "H0で見送り変更"
+    },
+    {
+      "id": "N_P_H1",
+      "weights": {
+        "N_A11": 1,
+        "N_A10": -1
+      },
+      "note": "H1で見送り変更"
+    },
+    {
+      "id": "N_HxP",
+      "weights": {
+        "N_A11": 1,
+        "N_A10": -1,
+        "N_A01": -1,
+        "N_A00": 1
+      },
+      "note": "AI2項目の交互作用"
+    },
+    {
+      "id": "N_bothAI",
+      "weights": {
+        "N_A11": 1,
+        "N_A00": -1
+      },
+      "note": "AI両方変更"
+    },
+    {
+      "id": "deck_A00",
+      "weights": {
+        "N_A00": 1,
+        "O_A00": -1
+      },
+      "note": "カード構成全体の差"
+    },
+    {
+      "id": "deck_A01",
+      "weights": {
+        "N_A01": 1,
+        "O_A01": -1
+      },
+      "note": "カード構成全体の差"
+    },
+    {
+      "id": "deck_A10",
+      "weights": {
+        "N_A10": 1,
+        "O_A10": -1
+      },
+      "note": "カード構成全体の差"
+    },
+    {
+      "id": "deck_A11",
+      "weights": {
+        "N_A11": 1,
+        "O_A11": -1
+      },
+      "note": "カード構成全体の差"
+    },
+    {
+      "id": "total",
+      "weights": {
+        "N_A11": 1,
+        "O_A00": -1
+      },
+      "note": "カードAI両方変更"
+    },
+    {
+      "id": "deck_x_AI",
+      "weights": {
+        "N_A11": 1,
+        "N_A00": -1,
+        "O_A11": -1,
+        "O_A00": 1
+      },
+      "note": "デッキ全体とAIの交互作用"
+    },
+    {
+      "id": "restore_D3_A00",
+      "weights": {
+        "N_A00": 1,
+        "D3_A00": -1
+      },
+      "note": "変更維持の効果（新−取消）"
+    },
+    {
+      "id": "restore_H1_A00",
+      "weights": {
+        "N_A00": 1,
+        "H1_A00": -1
+      },
+      "note": "変更維持の効果（新−取消）"
+    },
+    {
+      "id": "restore_A_A00",
+      "weights": {
+        "N_A00": 1,
+        "A_A00": -1
+      },
+      "note": "変更維持の効果（新−取消）"
+    },
+    {
+      "id": "restore_DH_A00",
+      "weights": {
+        "N_A00": 1,
+        "DH_A00": -1
+      },
+      "note": "変更維持の効果（新−取消）"
+    },
+    {
+      "id": "DxH_A00",
+      "weights": {
+        "N_A00": 1,
+        "D3_A00": -1,
+        "H1_A00": -1,
+        "DH_A00": 1
+      },
+      "note": "D群H群の交互作用"
+    },
+    {
+      "id": "restore_D3_A11",
+      "weights": {
+        "N_A11": 1,
+        "D3_A11": -1
+      },
+      "note": "変更維持の効果（新−取消）"
+    },
+    {
+      "id": "restore_H1_A11",
+      "weights": {
+        "N_A11": 1,
+        "H1_A11": -1
+      },
+      "note": "変更維持の効果（新−取消）"
+    },
+    {
+      "id": "restore_A_A11",
+      "weights": {
+        "N_A11": 1,
+        "A_A11": -1
+      },
+      "note": "変更維持の効果（新−取消）"
+    },
+    {
+      "id": "restore_DH_A11",
+      "weights": {
+        "N_A11": 1,
+        "DH_A11": -1
+      },
+      "note": "変更維持の効果（新−取消）"
+    },
+    {
+      "id": "DxH_A11",
+      "weights": {
+        "N_A11": 1,
+        "D3_A11": -1,
+        "H1_A11": -1,
+        "DH_A11": 1
+      },
+      "note": "D群H群の交互作用"
+    },
+    {
+      "id": "restore_D1_A11",
+      "weights": {
+        "N_A11": 1,
+        "D1_A11": -1
+      },
+      "note": "変更維持の効果（新−取消/対照）"
+    },
+    {
+      "id": "restore_D2_A11",
+      "weights": {
+        "N_A11": 1,
+        "D2_A11": -1
+      },
+      "note": "変更維持の効果（新−取消/対照）"
+    },
+    {
+      "id": "restore_Hguard_A11",
+      "weights": {
+        "N_A11": 1,
+        "Hguard_A11": -1
+      },
+      "note": "変更維持の効果（新−取消/対照）"
+    },
+    {
+      "id": "restore_Hmilk_A11",
+      "weights": {
+        "N_A11": 1,
+        "Hmilk_A11": -1
+      },
+      "note": "変更維持の効果（新−取消/対照）"
+    },
+    {
+      "id": "restore_ONSA_A11",
+      "weights": {
+        "N_A11": 1,
+        "ONSA_A11": -1
+      },
+      "note": "変更維持の効果（新−取消/対照）"
+    },
+    {
+      "id": "restore_ADANCE_A11",
+      "weights": {
+        "N_A11": 1,
+        "ADANCE_A11": -1
+      },
+      "note": "変更維持の効果（新−取消/対照）"
+    },
+    {
+      "id": "restore_ASUNA_A11",
+      "weights": {
+        "N_A11": 1,
+        "ASUNA_A11": -1
+      },
+      "note": "変更維持の効果（新−取消/対照）"
+    },
+    {
+      "id": "D3_x_AI",
+      "weights": {
+        "N_A11": 1,
+        "D3_A11": -1,
+        "N_A00": -1,
+        "D3_A00": 1
+      },
+      "note": "カード群とAIの交互作用"
+    },
+    {
+      "id": "H1_x_AI",
+      "weights": {
+        "N_A11": 1,
+        "H1_A11": -1,
+        "N_A00": -1,
+        "H1_A00": 1
+      },
+      "note": "カード群とAIの交互作用"
+    },
+    {
+      "id": "A_x_AI",
+      "weights": {
+        "N_A11": 1,
+        "A_A11": -1,
+        "N_A00": -1,
+        "A_A00": 1
+      },
+      "note": "カード群とAIの交互作用"
+    }
+  ],
+  "multiplicity": "Bonferroni global family: each contrast E3 + E16 + E16-minus-E3; 95% simultaneous normal cluster CI",
+  "familySize": 114
+}

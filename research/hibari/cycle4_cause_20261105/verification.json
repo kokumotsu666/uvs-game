@@ -1,0 +1,36 @@
+{
+  "gamesChecked": 184000,
+  "uniqueKeys": 184000,
+  "observerNeutralityGames": 256,
+  "observerNeutrality": "same win and full-log digest without observation hooks",
+  "workers": 15,
+  "seconds": 4.569,
+  "protectedFiles": 438,
+  "changed": [],
+  "cycle": 16,
+  "stateSHA256": "949e67393d0eb31ee98db7deecc55854d00236a5ce412933b576aa8ef8bf88a8",
+  "errors": [],
+  "supplementaryReplayGamesMatched": 5120,
+  "preregisteredBeforeFinal": true,
+  "aggregateStatisticalChecks": {
+    "armRates": 46,
+    "pairedComparisons": 114,
+    "maxAbsoluteDifference": 0
+  },
+  "cacheRepair": {
+    "excludedFinalGames": 23000,
+    "excludedProbeGames": 640,
+    "replayedInFreshWorkers": true,
+    "logDifferences": 3056,
+    "winDifferences": 684
+  },
+  "balanceChecks": {
+    "cells": 736,
+    "gamesPerOpponentSeatFirstCell": 250
+  },
+  "metricCompleteness": {
+    "games": 184000,
+    "numericFields": 20,
+    "missing": 0
+  }
+}
