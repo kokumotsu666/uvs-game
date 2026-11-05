@@ -201,6 +201,13 @@ function canAttack(p,c,mode){if(c.defOnly)return false;if(mode==='R'){if(c.color
 function canDefend(p,c){if(c.type!=='battle')return false;if(c.color==='飛'){if(CONFIG.greenDefense==='none')return false;if(CONFIG.greenDefense==='needs')return baseUsable(p,c);return !c.only||c.only===p.charName;} return baseUsable(p,c)}
 function heavyOK(p,c){if(c.type!=='battle'||!c.icons.includes('U')||c.noHeavy)return false;if(c.only&&c.only!==p.charName)return false;if(!CONFIG.heavy.ignoreGP&&!gpOK(p,c))return false;return true}
 function lose(p,why){G.over={loser:p.idx,why};log(`★ ${p.name}の敗北（${why}）。${P[1-p.idx].name}の勝利！`,true);throw new GameOver();}
+function resolveLO(p){
+  const opponent=P[1-p.idx];
+  const dealtByP=opponent.damage.length;
+  const dealtByOpponent=p.damage.length;
+  const loser=dealtByP>dealtByOpponent?opponent:p;
+  lose(loser,`LO：${p.name}のドローフェイズ開始時に山札0枚（与ダメージ ${p.name}=${dealtByP}／${opponent.name}=${dealtByOpponent}。同点ならLO側敗北）`);
+}
 function cardVal(c){return (c.at||0)+(c.df||0)+150*((c.icons||[]).length)+(c.type==='support'?500:0)}
 
 async function applyDamage(p,n,src){
@@ -212,10 +219,10 @@ async function applyDamage(p,n,src){
       if(c.onDamaged)await c.onDamaged(p);
       if(top.onTop)await top.onTop(p);
     }else{
-      if(!p.deck.length)lose(p,'山札残数以上のダメージ');
-      p.damage.push(p.deck.shift());
-      log(`${p.name}：${src}で1ダメージ → 山札の上から1枚がダメージエリアへ（ダメージ${p.damage.length}/${CONFIG.winDamage}、山札${p.deck.length}）`);
-      if(!p.deck.length)lose(p,'山札残数以上のダメージ');
+      // 最後のキャラは山札のカードへ置き換えない。5ダメージ目はここで決着する。
+      p.damage.push({type:'finalDamage',name:'決着ダメージ',id:'FINAL_DAMAGE'});
+      log(`${p.name}：${src}で5ダメージ目。山札は使用しない（ダメージ${p.damage.length}/${CONFIG.winDamage}）`);
+      lose(p,`${CONFIG.winDamage}ダメージ`);
     }
     if(p.damage.length>=CONFIG.winDamage)lose(p,`${CONFIG.winDamage}ダメージ`);
   }
@@ -251,8 +258,10 @@ async function runGame(){
 async function turn(pi){
   const p=P[pi],o=P[1-pi];G.turn++;G.cur=pi;p.flags={};G.bs=null;
   log(`━━ ターン${G.turn}：${p.name}（${p.charName} Lv${p.charDeck[0].lv}）━━`,true);
+  // LO判定は自分のドローフェイズ開始時の山札枚数だけで行う。
+  // 病院の解除・相手への追加ドローなど、開始時の効果処理より先に判定する。
+  if(!p.deck.length)resolveLO(p);
   if(G.noBattle&&G.noBattle.by===pi){G.noBattle=null;const s=p.supports.find(x=>x.expire==='nextTurnStart');if(s)await removeSupport(p,s);draw(o,1);log(`${o.name}：病院の待合室にての効果で1ドロー`);}
-  if(!p.deck.length)lose(p,'ドロー時に山札切れ');
   const n=(G.turn===1)?CONFIG.firstTurnDraw:CONFIG.drawPerTurn;const k=draw(p,n);log(`${p.name}：${k}ドロー（手札${p.hand.length}）`);
   await prep(pi);
   if(!(G.turn===1&&!CONFIG.firstTurnBattle))await battlePhase(pi);
@@ -1416,9 +1425,9 @@ function showDetail(c){if(!c)return;let h=`<h2>${c.name}</h2><dl class="detail">
 function showZone(p,z){const arr=z==='yo'?p.gYo:z==='in'?p.gIn:z==='damage'?p.damage:p.discard;const t=z==='yo'?'陽ゲージ':z==='in'?'陰ゲージ':z==='damage'?'ダメージエリア':'捨て札';openOv(`<h2>${p.name}の${t}（${arr.length}）</h2><div class="hand" style="flex-wrap:wrap">${arr.map(c=>cardHTML(c,{small:true})).join('')||'<span class="small">なし</span>'}</div>`);document.querySelectorAll('#overlay [data-uid]').forEach(el=>el.onclick=e=>{e.stopPropagation();showDetail(findCard(+el.dataset.uid));});}
 function showLog(){openOv(`<h2>ログ</h2><div class="btns" style="margin:0 0 8px"><button id="copylog" class="primary">ログをコピー</button></div><div class="log" style="max-height:60vh;user-select:text;-webkit-user-select:text">${G.log.map(l=>`<div class="${l.hl?'hl':''}">${l.s}</div>`).join('')}</div>`);const d=$('#overlay .log');d.scrollTop=d.scrollHeight;$('#copylog').onclick=e=>{e.stopPropagation();copyText(fullLogText(),e.target);};}
 function showRules(){openOv(`<h2>採用ルール v2（閃乱カグラ版＋リメイク決定事項）</h2><div class="detail"><p><b>固定デッキ版 v1.5 の変更点</b>：飛鳥はLv3「登場時に手札を1枚捨ててよい。捨てたら1枚引き、緑なら2枚引く」、Lv4「アタック札に連撃付与」、Lv5「連撃付与＋登場時に捨て札の緑1枚を手札へ」。柳生はLv2・Lv4「2枚引き1枚を山札の下へ」、Lv4「毎ターン最大1枚を山札の下と入れ替え」、Lv5「最大2枚を入れ替え（捨て札にしない）」。葛城Lv4「勝利時に相手の山札1枚削り」。雲雀Lv4「防御属性のカード（鉄壁・くぐつ）でディフェンスするたび1枚引く」。牛乳でキャラを戻したときも登場時の効果は発動する。詳細は「デッキ内容」から。</p>
-<p><b>勝利</b>：相手に5ダメージ／相手がドロー時に山札切れ／相手のキャラデッキが残り1枚のとき山札残数以上のダメージ。</p>
+<p><b>勝利</b>：5ダメージを受けたプレイヤーは敗北。自分のドローフェイズ開始時に山札0枚ならLOとしてゲーム終了し、相手に与えたダメージが多いプレイヤーが勝利。同点ならLOした側が敗北。</p>
 <p><b>準備</b>：キャラデッキLv1〜5（5枚）＋山札40枚。初期手札4枚、マリガンなし。先攻1ターン目は1ドローでバトルなし。以後毎ターン2ドロー。</p>
-<p><b>ダメージ</b>：キャラデッキの一番上がダメージエリアへ行き、次のレベルが現れる（忍転身・破れが発動）。残り1枚になったら以後は山札から。</p>
+<p><b>ダメージ</b>：Lv1〜4ではキャラデッキの一番上がダメージエリアへ移り、次のレベルが現れる（忍転身・破れが発動）。Lv5でダメージを受けた場合は5ダメージで即敗北。山札はダメージ処理に使用しない。</p>
 <p><b>準備フェイズ</b>：バトルカード1枚をゲージへ（1回）、サポート1枚（1回）、Lv5の合図など。</p>
 <p><b>バトル</b>：攻守が裏向きで同時に出して公開。AT≧DFで攻撃成功（同値は攻撃側）。ディフェンスを出さなければ確定ヒット。</p>
 <p><b>重撃</b>：1枚目は何でもよく、2枚目以降は重撃アイコン必須。GP条件は無視、枚数無制限。攻撃側から交互に追加し、両者が続けてパスで終了。2枚目以降は＋AT/＋DFのみ有効、バトル後は捨て札。</p>
