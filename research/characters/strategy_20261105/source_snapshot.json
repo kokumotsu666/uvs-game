@@ -1,0 +1,2947 @@
+{
+  "study": "キャラ能力からの勝ち筋推論",
+  "date": "2026-11-05",
+  "mode": "static inspection only; no setupGame/runGame/solver decisions/search invoked",
+  "sourceCycle": 16,
+  "sourceCoreSHA256": {
+    "engine.js": "59df47a87013bdff08f2e41ebfb45eb378daa4dac0dad47bbd50f6839f501c9b",
+    "solver.js": "42b2cbf2df229a660979f0e5d3568bb2a845b106820b0ed750c73c0f844ceabb",
+    "cards_extra.js": "89b114eda2b2d5cf5c4568737508a2a12ea9fee666a23efe865b0862bff53010",
+    "decks_fixed.js": "c6b995411c96998f3a664238b20f5fd617d319f11490186b99373b3f1d984361",
+    "index.html": "db193b0eef3f7d6eec78a4f2e7d73b615754b4cc7f2252fbde3d011d53f8931f",
+    "tune_worker.js": "19a0f933fcff0dbe187fb7e7d062b3a0f34e39eaee798088106af792f60a6a50"
+  },
+  "mainCommit": "d757ca80709711ad9564898c39902f0fe001c411",
+  "mainHTMLSHA256": "ffd3a0bc3f9a3447b0007bf0dc664ba841efdcdcaaff8d521a3a6ca48988d48d",
+  "config": {
+    "deckSize": 40,
+    "startHand": 4,
+    "drawPerTurn": 2,
+    "firstTurnDraw": 1,
+    "firstTurnBattle": false,
+    "winDamage": 5,
+    "tieWinner": "attacker",
+    "noDefenseAutoHit": true,
+    "greenDefense": "free",
+    "blowHeavy": true,
+    "heavy": {
+      "firstNeedsIcon": false,
+      "ignoreGP": true,
+      "maxCards": 99,
+      "endMode": "bothPass"
+    }
+  },
+  "characters": {
+    "飛鳥": {
+      "deckKey": "飛鳥・連撃",
+      "definition": "飛鳥v6",
+      "levels": [
+        {
+          "id": "C001",
+          "name": "飛鳥",
+          "lv": 1,
+          "at": 400,
+          "df": 400,
+          "text": "（テキストなし）",
+          "grantR": false,
+          "hooks": {}
+        },
+        {
+          "id": "C002",
+          "name": "飛鳥",
+          "lv": 2,
+          "at": 500,
+          "df": 500,
+          "text": "【忍転身】このカードがキャラエリアの一番上になった時、1ドロー",
+          "grantR": false,
+          "hooks": {
+            "onTop": "p=>{draw(p,1);log(`${p.name}：忍転身で1ドロー`)}"
+          }
+        },
+        {
+          "id": "C003v6",
+          "name": "飛鳥",
+          "lv": 3,
+          "at": 600,
+          "df": 600,
+          "text": "【破れ1】このカードがキャラエリアの一番上になった時、手札を1枚捨ててよい。捨てたら1枚引く。捨てたカードが緑なら2枚引く",
+          "grantR": false,
+          "hooks": {
+            "onTop": "async p=>{if(!p.hand.length){log(`${p.name}：Lv3の効果：手札がない`);return;}const k=await p.ctl.pickCards(p,p.hand,1,'Lv3の効果：捨てるカードを選択（任意。捨てたら1枚、緑なら2枚引く）',true);const x=k[0];if(!x){log(`${p.name}：Lv3の効果：捨てなかった`);return;}rm(p.hand,x);p.discard.push(x);const n=x.type==='battle'&&x.color==='飛'?2:1;const got=draw(p,n);log(`${p.name}：Lv3の効果で「${x.name}」を捨てて${got}枚引いた`);}"
+          }
+        },
+        {
+          "id": "C032v3",
+          "name": "飛鳥",
+          "lv": 4,
+          "at": 700,
+          "df": 700,
+          "text": "【破れ2】自分がアタックに使用するバトルカードに連撃アイコンを付与する",
+          "grantR": true,
+          "hooks": {}
+        },
+        {
+          "id": "C006v3",
+          "name": "飛鳥",
+          "lv": 5,
+          "at": 800,
+          "df": 800,
+          "text": "【合図】自分がアタックに使用するバトルカードに連撃アイコンを付与する。このカードがキャラエリアの一番上になった時、捨て札の緑のバトルカード1枚を手札に戻す",
+          "grantR": true,
+          "hooks": {
+            "onTop": "p=>{const g=p.discard.filter(x=>x.type==='battle'&&x.color==='飛');if(!g.length){log(`${p.name}：Lv5の効果：捨て札に緑がない`);return;}const x=g[g.length-1];p.discard.splice(p.discard.indexOf(x),1);p.hand.push(x);log(`${p.name}：Lv5の効果で「${x.name}」を手札に戻した`);}"
+          }
+        }
+      ],
+      "effectiveAI": {
+        "name": "標準",
+        "atkReserveHeavy": 0,
+        "atkFailPenalty": 0,
+        "atkLowHand": 0,
+        "atkLowHandPen": 0,
+        "atkLethalMul": 0,
+        "defGuardWin": 0,
+        "hUCover": 0,
+        "handHeavy": 0,
+        "drawDeckAware": false,
+        "holdGuard": 0,
+        "holdHeavyMaxDrop": null,
+        "heavy": null,
+        "routeHeuristicToSolver": false,
+        "c_guardGauge": "do",
+        "w_guardGauge": 0,
+        "n_guardGauge": 2,
+        "c_guardDefend": "cond",
+        "w_guardDefend": 1500,
+        "n_guardDefend": 4,
+        "c_guardAttack": "cond",
+        "w_guardAttack": 0,
+        "c_noDefense": "do",
+        "w_noDefense": 0,
+        "n_noDefense": 3,
+        "c_attackPass": "do",
+        "w_attackPass": 0,
+        "n_attackPass": 4,
+        "c_heavyAtk": "do",
+        "w_heavyAtk": 3,
+        "c_heavyDef": "avoid",
+        "w_heavyDef": 1,
+        "c_chain": "cond",
+        "w_chain": 0,
+        "c_gauge": "cond",
+        "w_gauge": 0,
+        "c_sup_hiyaku": "cond",
+        "w_sup_hiyaku": 0,
+        "c_sup_umi": "cond",
+        "w_sup_umi": 0,
+        "c_sup_futomaki": "cond",
+        "w_sup_futomaki": 0,
+        "c_sup_megane": "cond",
+        "w_sup_megane": 0,
+        "c_sup_green": "cond",
+        "w_sup_green": 0,
+        "c_sup_milk": "cond",
+        "w_sup_milk": 0,
+        "c_sup_red": "cond",
+        "w_sup_red": 0,
+        "c_sup_bread": "cond",
+        "w_sup_bread": 0,
+        "c_sup_hospital": "cond",
+        "w_sup_hospital": 0,
+        "c_lv3Discard": "cond",
+        "w_lv3Discard": 0,
+        "c_swap": "cond",
+        "w_swap": 0,
+        "c_standby": "cond",
+        "w_standby": 0,
+        "n_standby": 6,
+        "c_heavySolve": "do",
+        "w_heavySolve": 2,
+        "n_heavySolve": 4,
+        "hAtkMinHand": null,
+        "hDefMinHand": null,
+        "hAtkBudget": null,
+        "hDefBudget": null,
+        "hPick": "min",
+        "gTarget": "weighted",
+        "w_gTarget": 1,
+        "hUChainStart": 0,
+        "hUChainStartDeck": 0,
+        "hULv2": 0,
+        "hULv3": 0,
+        "hULv4": 0,
+        "hULv5": 0,
+        "deckLowN": 6,
+        "deckLowVal": 200,
+        "hUSupport": 1.6,
+        "hUGreenBase": 0.3,
+        "hUGreenNeed": 0.5,
+        "hUHiden": 1.6,
+        "hUHeavy": 0.5,
+        "hUHeavyFloor": 0.6,
+        "hUDp0": 0.6,
+        "hUDp0Add": 1.2,
+        "effVal": true,
+        "hUDeckGreen": 0.15,
+        "supGreenOff": 0.5,
+        "supRedDmg": 0.9,
+        "supMilkDmg": 0.9,
+        "supMilkHand": 0.3,
+        "supBread": 0.25,
+        "supHospital": 0.5,
+        "swapTh": 0.6,
+        "lv3DrawVal": 0.6,
+        "n_sup_green": 3
+      }
+    },
+    "柳生": {
+      "deckKey": "柳生・射撃",
+      "definition": "柳生v2",
+      "levels": [
+        {
+          "id": "C019",
+          "name": "柳生",
+          "lv": 1,
+          "at": 400,
+          "df": 400,
+          "text": "（テキストなし）",
+          "grantR": false,
+          "hooks": {}
+        },
+        {
+          "id": "C020v2",
+          "name": "柳生",
+          "lv": 2,
+          "at": 400,
+          "df": 600,
+          "text": "【忍転身】2枚引き、手札1枚を山札の一番下へ戻す",
+          "grantR": false,
+          "hooks": {
+            "onTop": "async p=>{draw(p,2);log(`${p.name}：${why}で2ドロー`);const cs=await p.ctl.pickCards(p,p.hand,1,'山札の下へ戻すカードを選択（1枚）',false);toBottom(p,cs.slice(0,1),why);}"
+          }
+        },
+        {
+          "id": "C021",
+          "name": "柳生",
+          "lv": 3,
+          "at": 500,
+          "df": 700,
+          "text": "【破れ1】射撃・防御のバトルカード使用時AT+200/DF+200",
+          "grantR": false,
+          "hooks": {
+            "cmod": "(p,card)=>['射撃','防御'].includes(card.tech)?{at:200,df:200}:null"
+          }
+        },
+        {
+          "id": "C022v2",
+          "name": "柳生",
+          "lv": 4,
+          "at": 700,
+          "df": 700,
+          "text": "【破れ2】このカードがダメージエリアに移動した時、2枚引き、手札1枚を山札の一番下へ戻す。さらにスタンバイに1ターン1回、手札最大1枚を山札の一番下へ戻し同数ドロー",
+          "grantR": false,
+          "hooks": {
+            "onDamaged": "async p=>{draw(p,2);log(`${p.name}：${why}で2ドロー`);const cs=await p.ctl.pickCards(p,p.hand,1,'山札の下へ戻すカードを選択（1枚）',false);toBottom(p,cs.slice(0,1),why);}",
+            "standby": {
+              "label": "手札を最大1枚、山札の下と入れ替える（柳生Lv4）",
+              "ok": "p=>p.hand.length>0&&p.deck.length>0",
+              "run": "async p=>{const cs=await p.ctl.pickCards(p,p.hand,n,`入れ替え：山札の下へ戻すカードを選択（最大${n}枚）`,true);if(!cs.length){log(`${p.name}：${why}の入れ替えを使わない`);return;}toBottom(p,cs,why);draw(p,cs.length);log(`${p.name}：${why}で${cs.length}枚入れ替え`);}"
+            }
+          }
+        },
+        {
+          "id": "C023v2",
+          "name": "柳生",
+          "lv": 5,
+          "at": 900,
+          "df": 700,
+          "text": "【合図】スタンバイに1ターン1回、手札最大2枚を山札の一番下へ戻し、同数ドローする",
+          "grantR": false,
+          "hooks": {
+            "standby": {
+              "label": "手札を最大2枚、山札の下と入れ替える（柳生Lv5）",
+              "ok": "p=>p.hand.length>0&&p.deck.length>0",
+              "run": "async p=>{const cs=await p.ctl.pickCards(p,p.hand,n,`入れ替え：山札の下へ戻すカードを選択（最大${n}枚）`,true);if(!cs.length){log(`${p.name}：${why}の入れ替えを使わない`);return;}toBottom(p,cs,why);draw(p,cs.length);log(`${p.name}：${why}で${cs.length}枚入れ替え`);}"
+            }
+          }
+        }
+      ],
+      "effectiveAI": {
+        "name": "標準",
+        "atkReserveHeavy": 0,
+        "atkFailPenalty": 0,
+        "atkLowHand": 0,
+        "atkLowHandPen": 0,
+        "atkLethalMul": 0,
+        "defGuardWin": 0,
+        "hUCover": 0,
+        "handHeavy": 0,
+        "drawDeckAware": false,
+        "holdGuard": 0,
+        "holdHeavyMaxDrop": null,
+        "heavy": null,
+        "routeHeuristicToSolver": false,
+        "c_guardGauge": "do",
+        "w_guardGauge": 0,
+        "n_guardGauge": 2,
+        "c_guardDefend": "do",
+        "w_guardDefend": 0,
+        "n_guardDefend": 4,
+        "c_guardAttack": "cond",
+        "w_guardAttack": 0,
+        "c_noDefense": "do",
+        "w_noDefense": 0,
+        "n_noDefense": 3,
+        "c_attackPass": "do",
+        "w_attackPass": 0,
+        "n_attackPass": 4,
+        "c_heavyAtk": "do",
+        "w_heavyAtk": 3,
+        "c_heavyDef": "avoid",
+        "w_heavyDef": 2,
+        "c_chain": "cond",
+        "w_chain": 0,
+        "c_gauge": "cond",
+        "w_gauge": 0,
+        "c_sup_hiyaku": "cond",
+        "w_sup_hiyaku": 0,
+        "c_sup_umi": "cond",
+        "w_sup_umi": 0,
+        "c_sup_futomaki": "cond",
+        "w_sup_futomaki": 0,
+        "c_sup_megane": "cond",
+        "w_sup_megane": 0,
+        "c_sup_green": "cond",
+        "w_sup_green": 0,
+        "c_sup_milk": "cond",
+        "w_sup_milk": 0,
+        "c_sup_red": "cond",
+        "w_sup_red": 0,
+        "c_sup_bread": "cond",
+        "w_sup_bread": 0,
+        "c_sup_hospital": "cond",
+        "w_sup_hospital": 0,
+        "c_lv3Discard": "cond",
+        "w_lv3Discard": 0,
+        "c_swap": "do",
+        "w_swap": 0.3,
+        "c_standby": "cond",
+        "w_standby": 0,
+        "n_standby": 6,
+        "c_heavySolve": "never",
+        "w_heavySolve": 0,
+        "n_heavySolve": 4,
+        "hAtkMinHand": null,
+        "hDefMinHand": null,
+        "hAtkBudget": null,
+        "hDefBudget": null,
+        "hPick": "min",
+        "gTarget": "none",
+        "w_gTarget": 1,
+        "hUChainStart": 0,
+        "hUChainStartDeck": 0,
+        "hULv2": 0,
+        "hULv3": 0,
+        "hULv4": 0,
+        "hULv5": 0,
+        "deckLowN": 6,
+        "deckLowVal": 200,
+        "hUSupport": 1.2,
+        "hUGreenBase": 0.3,
+        "hUGreenNeed": 0.5,
+        "hUHiden": 1.6,
+        "hUHeavy": 0.5,
+        "hUHeavyFloor": 0.6,
+        "hUDp0": 0.6,
+        "hUDp0Add": 1.2,
+        "effVal": true,
+        "hUDeckGreen": 0.15,
+        "supGreenOff": 0.5,
+        "supRedDmg": 0.9,
+        "supMilkDmg": 0.9,
+        "supMilkHand": 0.3,
+        "supBread": 0.25,
+        "supHospital": 0.5,
+        "swapTh": 0.6,
+        "lv3DrawVal": 0.6
+      }
+    },
+    "斑鳩": {
+      "deckKey": "斑鳩・対抗封じ",
+      "definition": "斑鳩",
+      "levels": [
+        {
+          "id": "C007",
+          "name": "斑鳩",
+          "lv": 1,
+          "at": 400,
+          "df": 400,
+          "text": "（テキストなし）",
+          "grantR": false,
+          "hooks": {}
+        },
+        {
+          "id": "C008",
+          "name": "斑鳩",
+          "lv": 2,
+          "at": 600,
+          "df": 400,
+          "text": "【忍転身】1ドロー",
+          "grantR": false,
+          "hooks": {
+            "onTop": "p=>{draw(p,1);log(`${p.name}：忍転身で1ドロー`)}"
+          }
+        },
+        {
+          "id": "C009",
+          "name": "斑鳩",
+          "lv": 3,
+          "at": 800,
+          "df": 400,
+          "text": "【破れ1】相手が打撃の時DF+200",
+          "grantR": false,
+          "hooks": {
+            "cmodVs": "(p,card,opp)=>opp&&opp.tech==='打撃'?{df:200}:null"
+          }
+        },
+        {
+          "id": "C010",
+          "name": "斑鳩",
+          "lv": 4,
+          "at": 900,
+          "df": 500,
+          "text": "【破れ2】アタックして勝利したとき、相手はバトルで使用したバトルカードを捨て札へ",
+          "grantR": false,
+          "hooks": {
+            "onAtkWin": "async c=>{c.bs.oppDefToDiscard=true;}"
+          }
+        },
+        {
+          "id": "C011",
+          "name": "斑鳩",
+          "lv": 5,
+          "at": 1000,
+          "df": 600,
+          "text": "【合図】アタック時、相手はディフェンスに使ったバトルカードのテキストを使用できない",
+          "grantR": false,
+          "hooks": {
+            "aflags": "p=>({noOppText:true})"
+          }
+        }
+      ],
+      "effectiveAI": {
+        "name": "標準",
+        "atkReserveHeavy": 0,
+        "atkFailPenalty": 0,
+        "atkLowHand": 0,
+        "atkLowHandPen": 0,
+        "atkLethalMul": 0,
+        "defGuardWin": 0,
+        "hUCover": 0,
+        "handHeavy": 0,
+        "drawDeckAware": false,
+        "holdGuard": 0,
+        "holdHeavyMaxDrop": null,
+        "heavy": null,
+        "routeHeuristicToSolver": false,
+        "c_guardGauge": "do",
+        "w_guardGauge": 0,
+        "n_guardGauge": 2,
+        "c_guardDefend": "do",
+        "w_guardDefend": 0,
+        "n_guardDefend": 4,
+        "c_guardAttack": "cond",
+        "w_guardAttack": 0,
+        "c_noDefense": "do",
+        "w_noDefense": 0,
+        "n_noDefense": 3,
+        "c_attackPass": "do",
+        "w_attackPass": 0,
+        "n_attackPass": 4,
+        "c_heavyAtk": "do",
+        "w_heavyAtk": 2,
+        "c_heavyDef": "avoid",
+        "w_heavyDef": 2,
+        "c_chain": "cond",
+        "w_chain": 0,
+        "c_gauge": "cond",
+        "w_gauge": 0,
+        "c_sup_hiyaku": "cond",
+        "w_sup_hiyaku": 0,
+        "c_sup_umi": "cond",
+        "w_sup_umi": 0,
+        "c_sup_futomaki": "cond",
+        "w_sup_futomaki": 0,
+        "c_sup_megane": "cond",
+        "w_sup_megane": 0,
+        "c_sup_green": "cond",
+        "w_sup_green": 0,
+        "c_sup_milk": "cond",
+        "w_sup_milk": 0,
+        "c_sup_red": "cond",
+        "w_sup_red": 0,
+        "c_sup_bread": "cond",
+        "w_sup_bread": 0,
+        "c_sup_hospital": "cond",
+        "w_sup_hospital": 0,
+        "c_lv3Discard": "cond",
+        "w_lv3Discard": 0,
+        "c_swap": "cond",
+        "w_swap": 0,
+        "c_standby": "cond",
+        "w_standby": 0,
+        "n_standby": 6,
+        "c_heavySolve": "never",
+        "w_heavySolve": 0,
+        "n_heavySolve": 4,
+        "hAtkMinHand": null,
+        "hDefMinHand": null,
+        "hAtkBudget": 2,
+        "hDefBudget": null,
+        "hPick": "min",
+        "gTarget": "none",
+        "w_gTarget": 1,
+        "hUChainStart": 0,
+        "hUChainStartDeck": 0,
+        "hULv2": 0,
+        "hULv3": 0,
+        "hULv4": 0,
+        "hULv5": 0,
+        "deckLowN": 6,
+        "deckLowVal": 200,
+        "hUSupport": 0.8,
+        "hUGreenBase": 0.3,
+        "hUGreenNeed": 0.5,
+        "hUHiden": 1.6,
+        "hUHeavy": 0.5,
+        "hUHeavyFloor": 0.6,
+        "hUDp0": 0.6,
+        "hUDp0Add": 1.2,
+        "effVal": false,
+        "hUDeckGreen": 0.15,
+        "supGreenOff": 0.5,
+        "supRedDmg": 0.9,
+        "supMilkDmg": 0.9,
+        "supMilkHand": 0.3,
+        "supBread": 0.25,
+        "supHospital": 0.5,
+        "swapTh": 0.6,
+        "lv3DrawVal": 0.6,
+        "n_sup_green": 2
+      }
+    },
+    "葛城": {
+      "deckKey": "葛城・削り",
+      "definition": "葛城",
+      "levels": [
+        {
+          "id": "C013",
+          "name": "葛城",
+          "lv": 1,
+          "at": 400,
+          "df": 400,
+          "text": "（テキストなし）",
+          "grantR": false,
+          "hooks": {}
+        },
+        {
+          "id": "C014",
+          "name": "葛城",
+          "lv": 2,
+          "at": 500,
+          "df": 500,
+          "text": "【忍転身】1ドロー",
+          "grantR": false,
+          "hooks": {
+            "onTop": "p=>{draw(p,1);log(`${p.name}：忍転身で1ドロー`)}"
+          }
+        },
+        {
+          "id": "C015",
+          "name": "葛城",
+          "lv": 3,
+          "at": 600,
+          "df": 600,
+          "text": "【破れ1】打撃のバトルカード使用時AT+200",
+          "grantR": false,
+          "hooks": {
+            "cmod": "(p,card)=>card.tech==='打撃'?{at:200}:null"
+          }
+        },
+        {
+          "id": "C016",
+          "name": "葛城",
+          "lv": 4,
+          "at": 700,
+          "df": 700,
+          "text": "【破れ2】アタックして勝利したとき、相手は山札の上から1枚を捨て札",
+          "grantR": false,
+          "hooks": {
+            "onAtkWin": "async c=>{mill(c.opp,1,'葛城Lv4');}"
+          }
+        },
+        {
+          "id": "C017",
+          "name": "葛城",
+          "lv": 5,
+          "at": 800,
+          "df": 800,
+          "text": "【合図】アタックして勝利したとき、相手は山札の上から2枚を捨て札",
+          "grantR": false,
+          "hooks": {
+            "onAtkWin": "async c=>{mill(c.opp,2,'葛城Lv5');}"
+          }
+        }
+      ],
+      "effectiveAI": {
+        "name": "標準",
+        "atkReserveHeavy": 0,
+        "atkFailPenalty": 0,
+        "atkLowHand": 0,
+        "atkLowHandPen": 0,
+        "atkLethalMul": 0,
+        "defGuardWin": 0,
+        "hUCover": 0,
+        "handHeavy": 0,
+        "drawDeckAware": false,
+        "holdGuard": 0,
+        "holdHeavyMaxDrop": null,
+        "heavy": null,
+        "routeHeuristicToSolver": false,
+        "c_guardGauge": "never",
+        "w_guardGauge": 0,
+        "n_guardGauge": 2,
+        "c_guardDefend": "do",
+        "w_guardDefend": 800,
+        "n_guardDefend": 4,
+        "c_guardAttack": "cond",
+        "w_guardAttack": 0,
+        "c_noDefense": "do",
+        "w_noDefense": 0,
+        "n_noDefense": 3,
+        "c_attackPass": "do",
+        "w_attackPass": 0,
+        "n_attackPass": 4,
+        "c_heavyAtk": "cond",
+        "w_heavyAtk": 2,
+        "c_heavyDef": "cond",
+        "w_heavyDef": 2,
+        "c_chain": "cond",
+        "w_chain": 0,
+        "c_gauge": "cond",
+        "w_gauge": 0,
+        "c_sup_hiyaku": "cond",
+        "w_sup_hiyaku": 0,
+        "c_sup_umi": "cond",
+        "w_sup_umi": 0,
+        "c_sup_futomaki": "cond",
+        "w_sup_futomaki": 0,
+        "c_sup_megane": "cond",
+        "w_sup_megane": 0,
+        "c_sup_green": "avoid",
+        "w_sup_green": 2,
+        "c_sup_milk": "cond",
+        "w_sup_milk": 0,
+        "c_sup_red": "cond",
+        "w_sup_red": 0,
+        "c_sup_bread": "cond",
+        "w_sup_bread": 0,
+        "c_sup_hospital": "cond",
+        "w_sup_hospital": 0,
+        "c_lv3Discard": "cond",
+        "w_lv3Discard": 0,
+        "c_swap": "cond",
+        "w_swap": 0,
+        "c_standby": "cond",
+        "w_standby": 0,
+        "n_standby": 6,
+        "c_heavySolve": "do",
+        "w_heavySolve": 1,
+        "n_heavySolve": 3,
+        "hAtkMinHand": null,
+        "hDefMinHand": null,
+        "hAtkBudget": 3,
+        "hDefBudget": null,
+        "hPick": "min",
+        "gTarget": "none",
+        "w_gTarget": 1,
+        "hUChainStart": 0,
+        "hUChainStartDeck": 0,
+        "hULv2": 0,
+        "hULv3": 0,
+        "hULv4": 0,
+        "hULv5": 0,
+        "deckLowN": 6,
+        "deckLowVal": 200,
+        "hUSupport": 0.8,
+        "hUGreenBase": 0.3,
+        "hUGreenNeed": 0.5,
+        "hUHiden": 1.6,
+        "hUHeavy": 0.5,
+        "hUHeavyFloor": 0.6,
+        "hUDp0": 0.6,
+        "hUDp0Add": 1.2,
+        "effVal": true,
+        "hUDeckGreen": 0.15,
+        "supGreenOff": 0.5,
+        "supRedDmg": 0.9,
+        "supMilkDmg": 0.9,
+        "supMilkHand": 0.3,
+        "supBread": 0.25,
+        "supHospital": 0.5,
+        "swapTh": 0.6,
+        "lv3DrawVal": 0.6
+      }
+    },
+    "雲雀": {
+      "deckKey": "雲雀・反撃",
+      "definition": "雲雀v2",
+      "levels": [
+        {
+          "id": "C025",
+          "name": "雲雀",
+          "lv": 1,
+          "at": 400,
+          "df": 400,
+          "text": "（テキストなし）",
+          "grantR": false,
+          "hooks": {}
+        },
+        {
+          "id": "C026",
+          "name": "雲雀",
+          "lv": 2,
+          "at": 400,
+          "df": 600,
+          "text": "【忍転身】1ドロー",
+          "grantR": false,
+          "hooks": {
+            "onTop": "p=>{draw(p,1);log(`${p.name}：忍転身で1ドロー`)}"
+          }
+        },
+        {
+          "id": "C027",
+          "name": "雲雀",
+          "lv": 3,
+          "at": 400,
+          "df": 800,
+          "text": "【破れ1】相手が斬撃の時DF+200",
+          "grantR": false,
+          "hooks": {
+            "cmodVs": "(p,card,opp)=>opp&&opp.tech==='斬撃'?{df:200}:null"
+          }
+        },
+        {
+          "id": "C028v2",
+          "name": "雲雀",
+          "lv": 4,
+          "at": 500,
+          "df": 900,
+          "text": "【破れ2】防御属性のバトルカードでディフェンスした時、1枚引く",
+          "grantR": false,
+          "hooks": {
+            "onGuard": "async(p,card)=>{const got=draw(p,1);log(`${p.name}：雲雀Lv4の効果で${got}枚引いた（「${card.name}」でディフェンス）`);}"
+          }
+        },
+        {
+          "id": "C030",
+          "name": "雲雀",
+          "lv": 5,
+          "at": 600,
+          "df": 1000,
+          "text": "【合図】ディフェンスして勝利したとき、相手は山札の上から1枚を捨て札",
+          "grantR": false,
+          "hooks": {
+            "onDefWinChar": "async c=>{mill(c.opp,1,'雲雀Lv5');}"
+          }
+        }
+      ],
+      "effectiveAI": {
+        "name": "反撃",
+        "atkReserveHeavy": 140,
+        "atkFailPenalty": 350,
+        "atkLowHand": 3,
+        "atkLowHandPen": 250,
+        "atkLethalMul": 1,
+        "defGuardWin": 120,
+        "hUCover": 0,
+        "handHeavy": 0.4,
+        "drawDeckAware": true,
+        "holdGuard": 0,
+        "holdHeavyMaxDrop": null,
+        "heavy": {
+          "atkMinHand": 3,
+          "atkBudgetExtra": 0,
+          "defMinHand": 1,
+          "defBudgetExtra": 1
+        },
+        "routeHeuristicToSolver": true,
+        "c_guardGauge": "do",
+        "w_guardGauge": 0,
+        "n_guardGauge": 2,
+        "c_guardDefend": "do",
+        "w_guardDefend": 0,
+        "n_guardDefend": 4,
+        "c_guardAttack": "cond",
+        "w_guardAttack": 0,
+        "c_noDefense": "do",
+        "w_noDefense": 0,
+        "n_noDefense": 3,
+        "c_attackPass": "do",
+        "w_attackPass": 1500,
+        "n_attackPass": 4,
+        "c_heavyAtk": "avoid",
+        "w_heavyAtk": 1,
+        "c_heavyDef": "do",
+        "w_heavyDef": 2,
+        "c_chain": "cond",
+        "w_chain": 0,
+        "c_gauge": "avoid",
+        "w_gauge": 0.3,
+        "c_sup_hiyaku": "cond",
+        "w_sup_hiyaku": 0,
+        "c_sup_umi": "cond",
+        "w_sup_umi": 0,
+        "c_sup_futomaki": "cond",
+        "w_sup_futomaki": 0,
+        "c_sup_megane": "cond",
+        "w_sup_megane": 0,
+        "c_sup_green": "cond",
+        "w_sup_green": 0,
+        "c_sup_milk": "cond",
+        "w_sup_milk": 0,
+        "c_sup_red": "cond",
+        "w_sup_red": 0,
+        "c_sup_bread": "cond",
+        "w_sup_bread": 0,
+        "c_sup_hospital": "do",
+        "w_sup_hospital": 0.3,
+        "c_lv3Discard": "cond",
+        "w_lv3Discard": 0,
+        "c_swap": "cond",
+        "w_swap": 0,
+        "c_standby": "cond",
+        "w_standby": 0,
+        "n_standby": 6,
+        "c_heavySolve": "never",
+        "w_heavySolve": 0,
+        "n_heavySolve": 4,
+        "hAtkMinHand": null,
+        "hDefMinHand": null,
+        "hAtkBudget": null,
+        "hDefBudget": null,
+        "hPick": "min",
+        "gTarget": "none",
+        "w_gTarget": 1,
+        "hUChainStart": 0,
+        "hUChainStartDeck": 0,
+        "hULv2": 0,
+        "hULv3": 0,
+        "hULv4": 0,
+        "hULv5": 0,
+        "deckLowN": 6,
+        "deckLowVal": 200,
+        "hUSupport": 0.8,
+        "hUGreenBase": 0.3,
+        "hUGreenNeed": 0.5,
+        "hUHiden": 1.6,
+        "hUHeavy": 0.5,
+        "hUHeavyFloor": 0.8,
+        "hUDp0": 0.6,
+        "hUDp0Add": 0.9,
+        "effVal": true,
+        "hUDeckGreen": 0.15,
+        "supGreenOff": 0.5,
+        "supRedDmg": 0.9,
+        "supMilkDmg": 0.9,
+        "supMilkHand": 0.3,
+        "supBread": 0.25,
+        "supHospital": 0.5,
+        "swapTh": 0.6,
+        "lv3DrawVal": 0.6,
+        "n_sup_milk": 3
+      }
+    }
+  },
+  "mainDifferences": [
+    {
+      "character": "飛鳥",
+      "level": 3,
+      "fields": [
+        "text"
+      ],
+      "local": {
+        "id": "C003v6",
+        "name": "飛鳥",
+        "lv": 3,
+        "at": 600,
+        "df": 600,
+        "text": "【破れ1】このカードがキャラエリアの一番上になった時、手札を1枚捨ててよい。捨てたら1枚引く。捨てたカードが緑なら2枚引く",
+        "grantR": false,
+        "hooks": {
+          "onTop": "async p=>{if(!p.hand.length){log(`${p.name}：Lv3の効果：手札がない`);return;}const k=await p.ctl.pickCards(p,p.hand,1,'Lv3の効果：捨てるカードを選択（任意。捨てたら1枚、緑なら2枚引く）',true);const x=k[0];if(!x){log(`${p.name}：Lv3の効果：捨てなかった`);return;}rm(p.hand,x);p.discard.push(x);const n=x.type==='battle'&&x.color==='飛'?2:1;const got=draw(p,n);log(`${p.name}：Lv3の効果で「${x.name}」を捨てて${got}枚引いた`);}"
+        }
+      },
+      "main": {
+        "id": "C003v6",
+        "name": "飛鳥",
+        "lv": 3,
+        "at": 600,
+        "df": 600,
+        "text": "【破れ1】このカードがキャラエリアの一番上になった時、手札を1枚捨ててよい。捨てたら1枚引く。捨てたカードが緑なら2枚引く（※リメイク変更）",
+        "grantR": false,
+        "hooks": {
+          "onTop": "async p=>{if(!p.hand.length){log(`${p.name}：Lv3の効果：手札がない`);return;}const k=await p.ctl.pickCards(p,p.hand,1,'Lv3の効果：捨てるカードを選択（任意。捨てたら1枚、緑なら2枚引く）',true);const x=k[0];if(!x){log(`${p.name}：Lv3の効果：捨てなかった`);return;}rm(p.hand,x);p.discard.push(x);const n=x.type==='battle'&&x.color==='飛'?2:1;const got=draw(p,n);log(`${p.name}：Lv3の効果で「${x.name}」を捨てて${got}枚引いた`);}"
+        }
+      }
+    },
+    {
+      "character": "飛鳥",
+      "level": 4,
+      "fields": [
+        "text"
+      ],
+      "local": {
+        "id": "C032v3",
+        "name": "飛鳥",
+        "lv": 4,
+        "at": 700,
+        "df": 700,
+        "text": "【破れ2】自分がアタックに使用するバトルカードに連撃アイコンを付与する",
+        "grantR": true,
+        "hooks": {}
+      },
+      "main": {
+        "id": "C032v3",
+        "name": "飛鳥",
+        "lv": 4,
+        "at": 700,
+        "df": 700,
+        "text": "【破れ2】自分がアタックに使用するバトルカードに連撃アイコンを付与する（※リメイク変更）",
+        "grantR": true,
+        "hooks": {}
+      }
+    },
+    {
+      "character": "飛鳥",
+      "level": 5,
+      "fields": [
+        "text"
+      ],
+      "local": {
+        "id": "C006v3",
+        "name": "飛鳥",
+        "lv": 5,
+        "at": 800,
+        "df": 800,
+        "text": "【合図】自分がアタックに使用するバトルカードに連撃アイコンを付与する。このカードがキャラエリアの一番上になった時、捨て札の緑のバトルカード1枚を手札に戻す",
+        "grantR": true,
+        "hooks": {
+          "onTop": "p=>{const g=p.discard.filter(x=>x.type==='battle'&&x.color==='飛');if(!g.length){log(`${p.name}：Lv5の効果：捨て札に緑がない`);return;}const x=g[g.length-1];p.discard.splice(p.discard.indexOf(x),1);p.hand.push(x);log(`${p.name}：Lv5の効果で「${x.name}」を手札に戻した`);}"
+        }
+      },
+      "main": {
+        "id": "C006v3",
+        "name": "飛鳥",
+        "lv": 5,
+        "at": 800,
+        "df": 800,
+        "text": "【合図】自分がアタックに使用するバトルカードに連撃アイコンを付与する。このカードがキャラエリアの一番上になった時、捨て札の緑のバトルカード1枚を手札に戻す（※リメイク変更）",
+        "grantR": true,
+        "hooks": {
+          "onTop": "p=>{const g=p.discard.filter(x=>x.type==='battle'&&x.color==='飛');if(!g.length){log(`${p.name}：Lv5の効果：捨て札に緑がない`);return;}const x=g[g.length-1];p.discard.splice(p.discard.indexOf(x),1);p.hand.push(x);log(`${p.name}：Lv5の効果で「${x.name}」を手札に戻した`);}"
+        }
+      }
+    },
+    {
+      "character": "柳生",
+      "level": 2,
+      "fields": [
+        "text"
+      ],
+      "local": {
+        "id": "C020v2",
+        "name": "柳生",
+        "lv": 2,
+        "at": 400,
+        "df": 600,
+        "text": "【忍転身】2枚引き、手札1枚を山札の一番下へ戻す",
+        "grantR": false,
+        "hooks": {
+          "onTop": "async p=>{draw(p,2);log(`${p.name}：${why}で2ドロー`);const cs=await p.ctl.pickCards(p,p.hand,1,'山札の下へ戻すカードを選択（1枚）',false);toBottom(p,cs.slice(0,1),why);}"
+        }
+      },
+      "main": {
+        "id": "C020v2",
+        "name": "柳生",
+        "lv": 2,
+        "at": 400,
+        "df": 600,
+        "text": "【忍転身】2枚引き、手札1枚を山札の一番下へ戻す（※リメイク変更）",
+        "grantR": false,
+        "hooks": {
+          "onTop": "async p=>{draw(p,2);log(`${p.name}：${why}で2ドロー`);const cs=await p.ctl.pickCards(p,p.hand,1,'山札の下へ戻すカードを選択（1枚）',false);toBottom(p,cs.slice(0,1),why);}"
+        }
+      }
+    },
+    {
+      "character": "柳生",
+      "level": 3,
+      "fields": [
+        "text"
+      ],
+      "local": {
+        "id": "C021",
+        "name": "柳生",
+        "lv": 3,
+        "at": 500,
+        "df": 700,
+        "text": "【破れ1】射撃・防御のバトルカード使用時AT+200/DF+200",
+        "grantR": false,
+        "hooks": {
+          "cmod": "(p,card)=>['射撃','防御'].includes(card.tech)?{at:200,df:200}:null"
+        }
+      },
+      "main": {
+        "id": "C021",
+        "name": "柳生",
+        "lv": 3,
+        "at": 500,
+        "df": 700,
+        "text": "【破れ1】射撃・防御のバトルカード使用時AT+200/DF+200（※数値は推定）",
+        "grantR": false,
+        "hooks": {
+          "cmod": "(p,card)=>['射撃','防御'].includes(card.tech)?{at:200,df:200}:null"
+        }
+      }
+    },
+    {
+      "character": "柳生",
+      "level": 4,
+      "fields": [
+        "text"
+      ],
+      "local": {
+        "id": "C022v2",
+        "name": "柳生",
+        "lv": 4,
+        "at": 700,
+        "df": 700,
+        "text": "【破れ2】このカードがダメージエリアに移動した時、2枚引き、手札1枚を山札の一番下へ戻す。さらにスタンバイに1ターン1回、手札最大1枚を山札の一番下へ戻し同数ドロー",
+        "grantR": false,
+        "hooks": {
+          "onDamaged": "async p=>{draw(p,2);log(`${p.name}：${why}で2ドロー`);const cs=await p.ctl.pickCards(p,p.hand,1,'山札の下へ戻すカードを選択（1枚）',false);toBottom(p,cs.slice(0,1),why);}",
+          "standby": {
+            "label": "手札を最大1枚、山札の下と入れ替える（柳生Lv4）",
+            "ok": "p=>p.hand.length>0&&p.deck.length>0",
+            "run": "async p=>{const cs=await p.ctl.pickCards(p,p.hand,n,`入れ替え：山札の下へ戻すカードを選択（最大${n}枚）`,true);if(!cs.length){log(`${p.name}：${why}の入れ替えを使わない`);return;}toBottom(p,cs,why);draw(p,cs.length);log(`${p.name}：${why}で${cs.length}枚入れ替え`);}"
+          }
+        }
+      },
+      "main": {
+        "id": "C022v2",
+        "name": "柳生",
+        "lv": 4,
+        "at": 700,
+        "df": 700,
+        "text": "【破れ2】このカードがダメージエリアに移動した時、2枚引き、手札1枚を山札の一番下へ戻す。さらにスタンバイに1ターン1回、手札最大1枚を山札の一番下へ戻し同数ドロー（※リメイク変更）",
+        "grantR": false,
+        "hooks": {
+          "onDamaged": "async p=>{draw(p,2);log(`${p.name}：${why}で2ドロー`);const cs=await p.ctl.pickCards(p,p.hand,1,'山札の下へ戻すカードを選択（1枚）',false);toBottom(p,cs.slice(0,1),why);}",
+          "standby": {
+            "label": "手札を最大1枚、山札の下と入れ替える（柳生Lv4）",
+            "ok": "p=>p.hand.length>0&&p.deck.length>0",
+            "run": "async p=>{const cs=await p.ctl.pickCards(p,p.hand,n,`入れ替え：山札の下へ戻すカードを選択（最大${n}枚）`,true);if(!cs.length){log(`${p.name}：${why}の入れ替えを使わない`);return;}toBottom(p,cs,why);draw(p,cs.length);log(`${p.name}：${why}で${cs.length}枚入れ替え`);}"
+          }
+        }
+      }
+    },
+    {
+      "character": "柳生",
+      "level": 5,
+      "fields": [
+        "text"
+      ],
+      "local": {
+        "id": "C023v2",
+        "name": "柳生",
+        "lv": 5,
+        "at": 900,
+        "df": 700,
+        "text": "【合図】スタンバイに1ターン1回、手札最大2枚を山札の一番下へ戻し、同数ドローする",
+        "grantR": false,
+        "hooks": {
+          "standby": {
+            "label": "手札を最大2枚、山札の下と入れ替える（柳生Lv5）",
+            "ok": "p=>p.hand.length>0&&p.deck.length>0",
+            "run": "async p=>{const cs=await p.ctl.pickCards(p,p.hand,n,`入れ替え：山札の下へ戻すカードを選択（最大${n}枚）`,true);if(!cs.length){log(`${p.name}：${why}の入れ替えを使わない`);return;}toBottom(p,cs,why);draw(p,cs.length);log(`${p.name}：${why}で${cs.length}枚入れ替え`);}"
+          }
+        }
+      },
+      "main": {
+        "id": "C023v2",
+        "name": "柳生",
+        "lv": 5,
+        "at": 900,
+        "df": 700,
+        "text": "【合図】スタンバイに1ターン1回、手札最大2枚を山札の一番下へ戻し、同数ドローする（※リメイク変更：捨て札にしない）",
+        "grantR": false,
+        "hooks": {
+          "standby": {
+            "label": "手札を最大2枚、山札の下と入れ替える（柳生Lv5）",
+            "ok": "p=>p.hand.length>0&&p.deck.length>0",
+            "run": "async p=>{const cs=await p.ctl.pickCards(p,p.hand,n,`入れ替え：山札の下へ戻すカードを選択（最大${n}枚）`,true);if(!cs.length){log(`${p.name}：${why}の入れ替えを使わない`);return;}toBottom(p,cs,why);draw(p,cs.length);log(`${p.name}：${why}で${cs.length}枚入れ替え`);}"
+          }
+        }
+      }
+    },
+    {
+      "character": "斑鳩",
+      "level": 3,
+      "fields": [
+        "text"
+      ],
+      "local": {
+        "id": "C009",
+        "name": "斑鳩",
+        "lv": 3,
+        "at": 800,
+        "df": 400,
+        "text": "【破れ1】相手が打撃の時DF+200",
+        "grantR": false,
+        "hooks": {
+          "cmodVs": "(p,card,opp)=>opp&&opp.tech==='打撃'?{df:200}:null"
+        }
+      },
+      "main": {
+        "id": "C009",
+        "name": "斑鳩",
+        "lv": 3,
+        "at": 800,
+        "df": 400,
+        "text": "【破れ1】相手が打撃の時DF+200（※数値は推定）",
+        "grantR": false,
+        "hooks": {
+          "cmodVs": "(p,card,opp)=>opp&&opp.tech==='打撃'?{df:200}:null"
+        }
+      }
+    },
+    {
+      "character": "斑鳩",
+      "level": 4,
+      "fields": [
+        "text"
+      ],
+      "local": {
+        "id": "C010",
+        "name": "斑鳩",
+        "lv": 4,
+        "at": 900,
+        "df": 500,
+        "text": "【破れ2】アタックして勝利したとき、相手はバトルで使用したバトルカードを捨て札へ",
+        "grantR": false,
+        "hooks": {
+          "onAtkWin": "async c=>{c.bs.oppDefToDiscard=true;}"
+        }
+      },
+      "main": {
+        "id": "C010",
+        "name": "斑鳩",
+        "lv": 4,
+        "at": 900,
+        "df": 500,
+        "text": "【破れ2】アタック側で勝利時、相手はバトルで使用したバトルカードを捨て札へ",
+        "grantR": false,
+        "hooks": {
+          "onAtkWin": "async c=>{c.bs.oppDefToDiscard=true;}"
+        }
+      }
+    },
+    {
+      "character": "斑鳩",
+      "level": 5,
+      "fields": [
+        "text"
+      ],
+      "local": {
+        "id": "C011",
+        "name": "斑鳩",
+        "lv": 5,
+        "at": 1000,
+        "df": 600,
+        "text": "【合図】アタック時、相手はディフェンスに使ったバトルカードのテキストを使用できない",
+        "grantR": false,
+        "hooks": {
+          "aflags": "p=>({noOppText:true})"
+        }
+      },
+      "main": {
+        "id": "C011",
+        "name": "斑鳩",
+        "lv": 5,
+        "at": 1000,
+        "df": 600,
+        "text": "【合図】アタック時、相手は対抗テキストを使用できない",
+        "grantR": false,
+        "hooks": {
+          "aflags": "p=>({noOppText:true})"
+        }
+      }
+    },
+    {
+      "character": "葛城",
+      "level": 3,
+      "fields": [
+        "text"
+      ],
+      "local": {
+        "id": "C015",
+        "name": "葛城",
+        "lv": 3,
+        "at": 600,
+        "df": 600,
+        "text": "【破れ1】打撃のバトルカード使用時AT+200",
+        "grantR": false,
+        "hooks": {
+          "cmod": "(p,card)=>card.tech==='打撃'?{at:200}:null"
+        }
+      },
+      "main": {
+        "id": "C015",
+        "name": "葛城",
+        "lv": 3,
+        "at": 600,
+        "df": 600,
+        "text": "【破れ1】打撃のバトルカード使用時AT+200（※数値は推定）",
+        "grantR": false,
+        "hooks": {
+          "cmod": "(p,card)=>card.tech==='打撃'?{at:200}:null"
+        }
+      }
+    },
+    {
+      "character": "葛城",
+      "level": 4,
+      "fields": [
+        "text"
+      ],
+      "local": {
+        "id": "C016",
+        "name": "葛城",
+        "lv": 4,
+        "at": 700,
+        "df": 700,
+        "text": "【破れ2】アタックして勝利したとき、相手は山札の上から1枚を捨て札",
+        "grantR": false,
+        "hooks": {
+          "onAtkWin": "async c=>{mill(c.opp,1,'葛城Lv4');}"
+        }
+      },
+      "main": {
+        "id": "C016",
+        "name": "葛城",
+        "lv": 4,
+        "at": 700,
+        "df": 700,
+        "text": "【破れ2】アタック側で勝利時、相手は山札の上から1枚を捨て札（※原文未判読。リメイク用に2026-11-02追加）",
+        "grantR": false,
+        "hooks": {
+          "onAtkWin": "async c=>{mill(c.opp,1,'葛城Lv4');}"
+        }
+      }
+    },
+    {
+      "character": "葛城",
+      "level": 5,
+      "fields": [
+        "text"
+      ],
+      "local": {
+        "id": "C017",
+        "name": "葛城",
+        "lv": 5,
+        "at": 800,
+        "df": 800,
+        "text": "【合図】アタックして勝利したとき、相手は山札の上から2枚を捨て札",
+        "grantR": false,
+        "hooks": {
+          "onAtkWin": "async c=>{mill(c.opp,2,'葛城Lv5');}"
+        }
+      },
+      "main": {
+        "id": "C017",
+        "name": "葛城",
+        "lv": 5,
+        "at": 800,
+        "df": 800,
+        "text": "【合図】アタック側で勝利時、相手は山札の上から2枚を捨て札",
+        "grantR": false,
+        "hooks": {
+          "onAtkWin": "async c=>{mill(c.opp,2,'葛城Lv5');}"
+        }
+      }
+    },
+    {
+      "character": "雲雀",
+      "level": 3,
+      "fields": [
+        "text"
+      ],
+      "local": {
+        "id": "C027",
+        "name": "雲雀",
+        "lv": 3,
+        "at": 400,
+        "df": 800,
+        "text": "【破れ1】相手が斬撃の時DF+200",
+        "grantR": false,
+        "hooks": {
+          "cmodVs": "(p,card,opp)=>opp&&opp.tech==='斬撃'?{df:200}:null"
+        }
+      },
+      "main": {
+        "id": "C027",
+        "name": "雲雀",
+        "lv": 3,
+        "at": 400,
+        "df": 800,
+        "text": "【破れ1】相手が斬撃の時DF+200（※数値は推定）",
+        "grantR": false,
+        "hooks": {
+          "cmodVs": "(p,card,opp)=>opp&&opp.tech==='斬撃'?{df:200}:null"
+        }
+      }
+    },
+    {
+      "character": "雲雀",
+      "level": 4,
+      "fields": [
+        "text"
+      ],
+      "local": {
+        "id": "C028v2",
+        "name": "雲雀",
+        "lv": 4,
+        "at": 500,
+        "df": 900,
+        "text": "【破れ2】防御属性のバトルカードでディフェンスした時、1枚引く",
+        "grantR": false,
+        "hooks": {
+          "onGuard": "async(p,card)=>{const got=draw(p,1);log(`${p.name}：雲雀Lv4の効果で${got}枚引いた（「${card.name}」でディフェンス）`);}"
+        }
+      },
+      "main": {
+        "id": "C028v2",
+        "name": "雲雀",
+        "lv": 4,
+        "at": 500,
+        "df": 900,
+        "text": "【破れ2】防御属性のバトルカードでディフェンスした時、1枚引く（※リメイク変更）",
+        "grantR": false,
+        "hooks": {
+          "onGuard": "async(p,card)=>{const got=draw(p,1);log(`${p.name}：雲雀Lv4の効果で${got}枚引いた（「${card.name}」でディフェンス）`);}"
+        }
+      }
+    },
+    {
+      "character": "雲雀",
+      "level": 5,
+      "fields": [
+        "text"
+      ],
+      "local": {
+        "id": "C030",
+        "name": "雲雀",
+        "lv": 5,
+        "at": 600,
+        "df": 1000,
+        "text": "【合図】ディフェンスして勝利したとき、相手は山札の上から1枚を捨て札",
+        "grantR": false,
+        "hooks": {
+          "onDefWinChar": "async c=>{mill(c.opp,1,'雲雀Lv5');}"
+        }
+      },
+      "main": {
+        "id": "C030",
+        "name": "雲雀",
+        "lv": 5,
+        "at": 600,
+        "df": 1000,
+        "text": "【合図】ディフェンス側で勝利時、相手は山札の上から1枚を捨て札",
+        "grantR": false,
+        "hooks": {
+          "onDefWinChar": "async c=>{mill(c.opp,1,'雲雀Lv5');}"
+        }
+      }
+    }
+  ],
+  "cards": {
+    "凪": {
+      "id": "B001",
+      "type": "battle",
+      "color": "閃",
+      "gp": {
+        "yo": 1,
+        "in": 0
+      },
+      "at": 200,
+      "df": 400,
+      "dp": 1,
+      "tech": "斬撃",
+      "icons": [
+        "R"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【強化】「凪」の連撃から使用時AT+200"
+    },
+    "省刃": {
+      "id": "B006",
+      "type": "battle",
+      "color": "閃",
+      "gp": {
+        "yo": 0,
+        "in": 1
+      },
+      "at": 300,
+      "df": 300,
+      "dp": 1,
+      "tech": "斬撃",
+      "icons": [
+        "U"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "（テキストなし）"
+    },
+    "連刃": {
+      "id": "B009",
+      "type": "battle",
+      "color": "閃",
+      "gp": {
+        "yo": 0,
+        "in": 1
+      },
+      "at": 300,
+      "df": 200,
+      "dp": 1,
+      "tech": "斬撃",
+      "icons": [
+        "R"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【強化】陽・陰ゲージがともに3枚以上の時、DF+300"
+    },
+    "飛塵": {
+      "id": "B011",
+      "type": "battle",
+      "color": "閃",
+      "gp": {
+        "yo": 1,
+        "in": 1
+      },
+      "at": 300,
+      "df": 300,
+      "dp": 1,
+      "tech": "斬撃",
+      "icons": [
+        "R"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【閃乱】陽・陰ゲージがともに5枚以上の時、DF+500"
+    },
+    "リミットブレイク": {
+      "id": "B019",
+      "type": "battle",
+      "color": "閃",
+      "gp": {
+        "yo": 3,
+        "in": 3
+      },
+      "at": 1000,
+      "df": 1000,
+      "dp": 1,
+      "tech": "波動",
+      "icons": [],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【使用条件】バトル開始時、自分の山札の上から2枚を捨て札にする。【対抗】相手のバトルカードが秘伝忍法の時DF+400。【制限】ディフェンス時、相手はそのバトルで連撃を使用できない"
+    },
+    "砂風車": {
+      "id": "B020",
+      "type": "battle",
+      "color": "陽",
+      "gp": {
+        "yo": 2,
+        "in": 0
+      },
+      "at": 300,
+      "df": 400,
+      "dp": 1,
+      "tech": "斬撃",
+      "icons": [
+        "R"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【対抗】相手が打撃の時DF+200"
+    },
+    "捌き連刃": {
+      "id": "B025",
+      "type": "battle",
+      "color": "陽",
+      "gp": {
+        "yo": 3,
+        "in": 0
+      },
+      "at": 500,
+      "df": 400,
+      "dp": 1,
+      "tech": "斬撃",
+      "icons": [
+        "R"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【対抗】相手が防御の時AT+200。【陽乱】陽ゲージ5枚以上でAT+200"
+    },
+    "旋空砂": {
+      "id": "B030",
+      "type": "battle",
+      "color": "陽",
+      "gp": {
+        "yo": 5,
+        "in": 0
+      },
+      "at": 600,
+      "df": 400,
+      "dp": 1,
+      "tech": "斬撃",
+      "icons": [
+        "R",
+        "U"
+      ],
+      "only": "飛鳥",
+      "noHeavy": false,
+      "hiden": false,
+      "text": "飛鳥専用。【強化】このバトル中、自分の重撃1枚につきAT+200"
+    },
+    "冥砂": {
+      "id": "B035",
+      "type": "battle",
+      "color": "陰",
+      "gp": {
+        "yo": 0,
+        "in": 2
+      },
+      "at": 400,
+      "df": 400,
+      "dp": 1,
+      "tech": "斬撃",
+      "icons": [
+        "R"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【強化】陰ゲージ3枚以上でDF+200"
+    },
+    "怨砂": {
+      "id": "B040",
+      "type": "battle",
+      "color": "陰",
+      "gp": {
+        "yo": 0,
+        "in": 3
+      },
+      "at": 500,
+      "df": 500,
+      "dp": 1,
+      "tech": "斬撃",
+      "icons": [
+        "U"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【強化】「冥砂」の連撃から使用時AT+200。【陰乱】陰ゲージ5枚以上でDF+300"
+    },
+    "攻断円": {
+      "id": "B041",
+      "type": "battle",
+      "color": "陰",
+      "gp": {
+        "yo": 0,
+        "in": 3
+      },
+      "at": 700,
+      "df": 300,
+      "dp": 1,
+      "tech": "斬撃",
+      "icons": [
+        "U"
+      ],
+      "noHeavy": true,
+      "hiden": false,
+      "text": "【対抗】アタック時、両プレイヤーは重撃を使用できない。【制限】重撃には使用できない"
+    },
+    "志昇陣": {
+      "id": "B045",
+      "type": "battle",
+      "color": "陰",
+      "gp": {
+        "yo": 0,
+        "in": 5
+      },
+      "at": 1000,
+      "df": 200,
+      "dp": 1,
+      "tech": "斬撃",
+      "icons": [
+        "R"
+      ],
+      "only": "飛鳥",
+      "noHeavy": false,
+      "hiden": false,
+      "text": "飛鳥専用。【対抗】相手のバトルカードが陽属性の時DF+400。【陰乱】陰ゲージ7枚以上でDF+500"
+    },
+    "右空": {
+      "id": "B050",
+      "type": "battle",
+      "color": "飛",
+      "gp": {
+        "yo": 0,
+        "in": 0
+      },
+      "at": 1000,
+      "df": 0,
+      "dp": 1,
+      "tech": "斬撃",
+      "icons": [
+        "R"
+      ],
+      "only": "飛鳥",
+      "needs": [
+        "凪",
+        "省刃",
+        "飛塵"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "飛鳥専用・緑。【使用条件（攻撃時）】忍ゲージに「凪」「省刃」「飛塵」がある。【吹飛】アタック時、相手はバトルカードのテキストと重撃を使用できない（緑を除く）。【連撃防御】ディフェンスに出した時、相手が緑なら無条件で防御成功"
+    },
+    "二刀繚斬": {
+      "id": "B055",
+      "type": "battle",
+      "color": "秘",
+      "gp": {
+        "yo": 4,
+        "in": 4
+      },
+      "at": 1400,
+      "df": 1200,
+      "dp": 2,
+      "tech": "召喚",
+      "icons": [],
+      "only": "飛鳥",
+      "noHeavy": false,
+      "hiden": true,
+      "text": "飛鳥専用・秘伝忍法。【使用条件】陽4/陰4、さらに忍ゲージから閃・陽・陰のカードを1枚ずつ捨て札。【強化】忍ゲージの斬撃カード1枚につきAT+100/DF+100。【巻込】アタックして勝利したとき、相手は手札を1枚捨てる"
+    },
+    "散り傘": {
+      "id": "B038",
+      "type": "battle",
+      "color": "陰",
+      "gp": {
+        "yo": 0,
+        "in": 2
+      },
+      "at": 300,
+      "df": 400,
+      "dp": 1,
+      "tech": "打撃",
+      "icons": [
+        "R",
+        "U"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【強化】このバトル中、重撃で重ねた「散り傘」1枚につきAT+100"
+    },
+    "狂い傘": {
+      "id": "B033",
+      "type": "battle",
+      "color": "陽",
+      "gp": {
+        "yo": 5,
+        "in": 0
+      },
+      "at": 600,
+      "df": 400,
+      "dp": 1,
+      "tech": "射撃",
+      "icons": [
+        "U",
+        "R"
+      ],
+      "only": "柳生",
+      "noHeavy": false,
+      "hiden": false,
+      "text": "柳生専用。【対抗】相手のバトルカードが陰属性の時DF+400。【手札強化】アタックして勝利したとき、1ドロー"
+    },
+    "踊り傘": {
+      "id": "B023",
+      "type": "battle",
+      "color": "陽",
+      "gp": {
+        "yo": 2,
+        "in": 0
+      },
+      "at": 200,
+      "df": 200,
+      "dp": 1,
+      "tech": "射撃",
+      "icons": [
+        "R",
+        "U"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【手札強化】アタックして勝利したとき、1ドロー"
+    },
+    "残月": {
+      "id": "B043",
+      "type": "battle",
+      "color": "陰",
+      "gp": {
+        "yo": 0,
+        "in": 3
+      },
+      "at": 600,
+      "df": 400,
+      "dp": 1,
+      "tech": "斬撃",
+      "icons": [
+        "U"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【強化】このバトル中、自分の重撃1枚につきDF+100。【陰乱】陰ゲージ5枚以上でDF+300"
+    },
+    "狭朱": {
+      "id": "B026",
+      "type": "battle",
+      "color": "陽",
+      "gp": {
+        "yo": 3,
+        "in": 0
+      },
+      "at": 400,
+      "df": 300,
+      "dp": 1,
+      "tech": "斬撃",
+      "icons": [
+        "R",
+        "U"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【対抗】ディフェンス時、相手は重撃を使用できない"
+    },
+    "天刃": {
+      "id": "B004",
+      "type": "battle",
+      "color": "閃",
+      "gp": {
+        "yo": 1,
+        "in": 0
+      },
+      "at": 300,
+      "df": 300,
+      "dp": 1,
+      "tech": "斬撃",
+      "icons": [
+        "U"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "（テキストなし）"
+    },
+    "零雹": {
+      "id": "B014",
+      "type": "battle",
+      "color": "閃",
+      "gp": {
+        "yo": 1,
+        "in": 1
+      },
+      "at": 300,
+      "df": 300,
+      "dp": 1,
+      "tech": "波動",
+      "icons": [
+        "R"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【巻込】ディフェンスして勝利したとき、相手が使用したバトルカードを捨て札にする。【閃乱】陽・陰ゲージがともに5枚以上でDF+500"
+    },
+    "諸行の音": {
+      "id": "B053",
+      "type": "battle",
+      "color": "飛",
+      "gp": {
+        "yo": 0,
+        "in": 0
+      },
+      "at": 1000,
+      "df": 0,
+      "dp": 1,
+      "tech": "斬撃",
+      "icons": [
+        "R"
+      ],
+      "only": "柳生",
+      "needs": [
+        "天刃",
+        "連刃",
+        "零雹"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "柳生専用・緑。【使用条件（攻撃時）】忍ゲージに「天刃」「連刃」「零雹」がある。【吹飛】アタック時、相手はバトルカードのテキストと重撃を使用できない（緑を除く）。【連撃防御】ディフェンスに出した時、相手が緑なら無条件で防御成功"
+    },
+    "開華": {
+      "id": "B028",
+      "type": "battle",
+      "color": "陽",
+      "gp": {
+        "yo": 3,
+        "in": 0
+      },
+      "at": 400,
+      "df": 300,
+      "dp": 1,
+      "tech": "斬撃",
+      "icons": [
+        "R",
+        "U"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【強化】このバトル中、重撃で重ねた「開華」1枚につきAT+200。【陽乱】陽ゲージ5枚以上でAT+200"
+    },
+    "返し雨": {
+      "id": "B048",
+      "type": "battle",
+      "color": "陰",
+      "gp": {
+        "yo": 0,
+        "in": 5
+      },
+      "at": 700,
+      "df": 300,
+      "dp": 1,
+      "tech": "斬撃",
+      "icons": [
+        "U",
+        "R"
+      ],
+      "only": "柳生",
+      "noHeavy": false,
+      "hiden": false,
+      "text": "柳生専用。【強化】このバトル中、重撃で重ねた射撃カード1枚につきAT+200。【手札強化】アタックして勝利したとき、1ドロー"
+    },
+    "くぐつダミー": {
+      "id": "B017",
+      "type": "battle",
+      "color": "閃",
+      "gp": {
+        "yo": 1,
+        "in": 1
+      },
+      "at": 0,
+      "df": 500,
+      "dp": 0,
+      "tech": "防御",
+      "icons": [],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【対抗】相手が斬撃または打撃の時DF+200。【対抗】相手のバトルカードのDPが2以上の時、そのDP−1"
+    },
+    "薙ぎ払う足": {
+      "id": "B058",
+      "type": "battle",
+      "color": "秘",
+      "gp": {
+        "yo": 4,
+        "in": 4
+      },
+      "at": 1300,
+      "df": 1300,
+      "dp": 2,
+      "tech": "召喚",
+      "icons": [],
+      "only": "柳生",
+      "noHeavy": false,
+      "hiden": true,
+      "text": "柳生専用・秘伝忍法。【使用条件】陽4/陰4、さらに忍ゲージから閃・陽・陰のカードを1枚ずつ捨て札。【強化】手札が5枚以上の時AT+500/DF+500。【巻込】アタックして勝利したとき、相手は手札を1枚捨てる"
+    },
+    "緑の巻物": {
+      "id": "S001",
+      "type": "support",
+      "color": "閃",
+      "gp": {
+        "yo": 1,
+        "in": 1
+      },
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【使用型】自分のダメージエリアの枚数だけドロー。効果の適用後、すぐに陰ゲージへ",
+      "dest": "in",
+      "expire": "now"
+    },
+    "赤の巻物": {
+      "id": "S002",
+      "type": "support",
+      "color": "閃",
+      "gp": {
+        "yo": 2,
+        "in": 2
+      },
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【使用型】自分のキャラ1枚をダメージエリアへ送り、2ドロー。効果の適用後すぐに陽か陰のゲージへ（選べる）",
+      "dest": "choose",
+      "expire": "now"
+    },
+    "牛乳": {
+      "id": "S003",
+      "type": "support",
+      "color": "陽",
+      "gp": {
+        "yo": 3,
+        "in": 3
+      },
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【使用型】ダメージエリアにある最もレベルの高いキャラカード1枚をキャラエリアの一番上に戻す。すぐに陽ゲージへ",
+      "dest": "yo",
+      "expire": "now"
+    },
+    "朝食のパン": {
+      "id": "S006",
+      "type": "support",
+      "color": "陽",
+      "gp": {
+        "yo": 3,
+        "in": 3
+      },
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【効力持続】このターン、自分のキャラのAT+300。ターン終了時に陽ゲージへ",
+      "dest": "yo",
+      "expire": "endTurn"
+    },
+    "病院の待合室にて": {
+      "id": "S008",
+      "type": "support",
+      "color": "陰",
+      "gp": {
+        "yo": 1,
+        "in": 1
+      },
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【行動制限】次の自分のターン開始時まで、両プレイヤーはバトルを行えない。次の自分のターン開始時、相手は1ドローし、このカードは陰ゲージへ",
+      "dest": "in",
+      "expire": "nextTurnStart"
+    },
+    "烈突": {
+      "id": "B002",
+      "type": "battle",
+      "color": "閃",
+      "gp": {
+        "yo": 1,
+        "in": 0
+      },
+      "at": 300,
+      "df": 300,
+      "dp": 1,
+      "tech": "斬撃",
+      "icons": [],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【閃乱】陽・陰ゲージがともに5枚以上でDF+500"
+    },
+    "はじめのチョップ": {
+      "id": "B005",
+      "type": "battle",
+      "color": "閃",
+      "gp": {
+        "yo": 1,
+        "in": 0
+      },
+      "at": 300,
+      "df": 300,
+      "dp": 1,
+      "tech": "打撃",
+      "icons": [
+        "U"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "（テキストなし）"
+    },
+    "紅閃": {
+      "id": "B007",
+      "type": "battle",
+      "color": "閃",
+      "gp": {
+        "yo": 0,
+        "in": 1
+      },
+      "at": 400,
+      "df": 300,
+      "dp": 1,
+      "tech": "斬撃",
+      "icons": [],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "（テキストなし）"
+    },
+    "ドラゴンダンス": {
+      "id": "B008",
+      "type": "battle",
+      "color": "閃",
+      "gp": {
+        "yo": 0,
+        "in": 1
+      },
+      "at": 200,
+      "df": 200,
+      "dp": 1,
+      "tech": "打撃",
+      "icons": [
+        "R",
+        "U"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "（テキストなし）"
+    },
+    "本能のままに": {
+      "id": "B010",
+      "type": "battle",
+      "color": "閃",
+      "gp": {
+        "yo": 0,
+        "in": 1
+      },
+      "at": 300,
+      "df": 300,
+      "dp": 1,
+      "tech": "打撃",
+      "icons": [],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【巻込】相手がディフェンスにバトルカードを使用しなかった時、相手は自分の忍ゲージから1枚を選んで捨て札"
+    },
+    "欺人脚": {
+      "id": "B012",
+      "type": "battle",
+      "color": "閃",
+      "gp": {
+        "yo": 1,
+        "in": 1
+      },
+      "at": 500,
+      "df": 200,
+      "dp": 1,
+      "tech": "打撃",
+      "icons": [
+        "U",
+        "R"
+      ],
+      "noHeavy": true,
+      "hiden": false,
+      "text": "【制限】重撃には使用できない"
+    },
+    "サマーソルト": {
+      "id": "B013",
+      "type": "battle",
+      "color": "閃",
+      "gp": {
+        "yo": 1,
+        "in": 1
+      },
+      "at": 400,
+      "df": 200,
+      "dp": 1,
+      "tech": "打撃",
+      "icons": [
+        "U",
+        "R"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【巻込】アタックして勝利したとき、相手は山札の上から1枚を捨て札"
+    },
+    "雲雀つっこみ": {
+      "id": "B015",
+      "type": "battle",
+      "color": "閃",
+      "gp": {
+        "yo": 1,
+        "in": 1
+      },
+      "at": 300,
+      "df": 300,
+      "dp": 1,
+      "tech": "打撃",
+      "icons": [
+        "R"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【対抗】相手が斬撃ならDF+200／【閃乱】陽・陰ゲージがともに5枚以上でDF+500"
+    },
+    "クナイ投擲": {
+      "id": "B016",
+      "type": "battle",
+      "color": "閃",
+      "gp": {
+        "yo": 0,
+        "in": 0
+      },
+      "at": 100,
+      "df": 100,
+      "dp": 1,
+      "tech": "射撃",
+      "icons": [],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【対抗】相手が防御属性のバトルカードでディフェンスした時、勝敗に関わらず1ダメージを与える"
+    },
+    "鉄壁のガード": {
+      "id": "B018",
+      "type": "battle",
+      "color": "閃",
+      "gp": {
+        "yo": 2,
+        "in": 2
+      },
+      "at": 0,
+      "df": 1000,
+      "dp": 0,
+      "tech": "防御",
+      "icons": [],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【対抗】相手が波動または射撃ならDF+500"
+    },
+    "アックスシュート": {
+      "id": "B022",
+      "type": "battle",
+      "color": "陽",
+      "gp": {
+        "yo": 2,
+        "in": 0
+      },
+      "at": 400,
+      "df": 300,
+      "dp": 1,
+      "tech": "打撃",
+      "icons": [
+        "R"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【対抗】相手が防御ならAT+200"
+    },
+    "ウサギ蹴り": {
+      "id": "B024",
+      "type": "battle",
+      "color": "陽",
+      "gp": {
+        "yo": 2,
+        "in": 0
+      },
+      "at": 400,
+      "df": 500,
+      "dp": 1,
+      "tech": "打撃",
+      "icons": [
+        "R"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "（テキストなし）"
+    },
+    "ドラゴンバイト": {
+      "id": "B027",
+      "type": "battle",
+      "color": "陽",
+      "gp": {
+        "yo": 3,
+        "in": 0
+      },
+      "at": 500,
+      "df": 400,
+      "dp": 1,
+      "tech": "打撃",
+      "icons": [
+        "R"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【巻込】アタックして勝利したとき、相手は山札の上から1枚を捨て札／【陽乱】陽5枚以上AT+200"
+    },
+    "飛翔燕": {
+      "id": "B031",
+      "type": "battle",
+      "color": "陽",
+      "gp": {
+        "yo": 5,
+        "in": 0
+      },
+      "at": 800,
+      "df": 300,
+      "dp": 1,
+      "tech": "斬撃",
+      "icons": [
+        "R"
+      ],
+      "only": "斑鳩",
+      "noHeavy": false,
+      "hiden": false,
+      "text": "斑鳩専用。【対抗】アタック時、相手はディフェンスに使ったバトルカードのテキストを使用できない／【陽乱】陽7枚以上AT+400"
+    },
+    "スカイハイラッシュ": {
+      "id": "B032",
+      "type": "battle",
+      "color": "陽",
+      "gp": {
+        "yo": 5,
+        "in": 0
+      },
+      "at": 700,
+      "df": 500,
+      "dp": 1,
+      "tech": "打撃",
+      "icons": [
+        "R"
+      ],
+      "only": "葛城",
+      "noHeavy": false,
+      "hiden": false,
+      "text": "葛城専用。【巻込】アタックして勝利したとき、相手は手札1枚を捨てる／【陽乱】陽5枚以上AT+200"
+    },
+    "お尻からドーン": {
+      "id": "B034",
+      "type": "battle",
+      "color": "陽",
+      "gp": {
+        "yo": 5,
+        "in": 0
+      },
+      "at": 500,
+      "df": 400,
+      "dp": 1,
+      "tech": "打撃",
+      "icons": [
+        "R",
+        "U"
+      ],
+      "only": "雲雀",
+      "noHeavy": false,
+      "hiden": false,
+      "text": "雲雀専用。【対抗】アタック時、相手のキャラクターの破れによるDF強化は働かない"
+    },
+    "狭朱・改": {
+      "id": "B036",
+      "type": "battle",
+      "color": "陰",
+      "gp": {
+        "yo": 0,
+        "in": 2
+      },
+      "at": 600,
+      "df": 300,
+      "dp": 1,
+      "tech": "斬撃",
+      "icons": [
+        "R"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "（テキストなし）"
+    },
+    "ドラゴンベアード": {
+      "id": "B037",
+      "type": "battle",
+      "color": "陰",
+      "gp": {
+        "yo": 0,
+        "in": 2
+      },
+      "at": 400,
+      "df": 300,
+      "dp": 1,
+      "tech": "打撃",
+      "icons": [
+        "R",
+        "U"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【巻込】相手がディフェンスでバトルカードを出さなかった時、相手は山札の上から1枚を捨て札"
+    },
+    "ぐるぐるスピーン": {
+      "id": "B039",
+      "type": "battle",
+      "color": "陰",
+      "gp": {
+        "yo": 0,
+        "in": 2
+      },
+      "at": 400,
+      "df": 400,
+      "dp": 1,
+      "tech": "打撃",
+      "icons": [
+        "R"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【対抗】相手がアタックに使用したバトルカードが陽属性ならDF+200"
+    },
+    "ハーフムーン": {
+      "id": "B042",
+      "type": "battle",
+      "color": "陰",
+      "gp": {
+        "yo": 0,
+        "in": 3
+      },
+      "at": 500,
+      "df": 500,
+      "dp": 1,
+      "tech": "打撃",
+      "icons": [
+        "U"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【強化】このバトル中、重撃で重ねた「ハーフムーン」1枚につきAT+200／【陰乱】陰5枚以上DF+300"
+    },
+    "もっかいウサギ蹴り": {
+      "id": "B044",
+      "type": "battle",
+      "color": "陰",
+      "gp": {
+        "yo": 0,
+        "in": 3
+      },
+      "at": 600,
+      "df": 400,
+      "dp": 1,
+      "tech": "打撃",
+      "icons": [
+        "U"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【陰乱】陰5枚以上DF+300"
+    },
+    "磁転昇": {
+      "id": "B046",
+      "type": "battle",
+      "color": "陰",
+      "gp": {
+        "yo": 0,
+        "in": 5
+      },
+      "at": 1000,
+      "df": 200,
+      "dp": 1,
+      "tech": "斬撃",
+      "icons": [
+        "U",
+        "R"
+      ],
+      "only": "斑鳩",
+      "noHeavy": true,
+      "hiden": false,
+      "text": "斑鳩専用。【対抗】相手が防御属性のバトルカードでディフェンスした時AT+300／【制限】重撃には使用できない"
+    },
+    "サマーソルトリバース": {
+      "id": "B047",
+      "type": "battle",
+      "color": "陰",
+      "gp": {
+        "yo": 0,
+        "in": 5
+      },
+      "at": 800,
+      "df": 400,
+      "dp": 1,
+      "tech": "打撃",
+      "icons": [
+        "U",
+        "R"
+      ],
+      "only": "葛城",
+      "noHeavy": false,
+      "hiden": false,
+      "text": "葛城専用。【巻込】アタックして勝利したとき、相手は手札1枚を捨てる"
+    },
+    "ふっとびさまーそると": {
+      "id": "B049",
+      "type": "battle",
+      "color": "陰",
+      "gp": {
+        "yo": 0,
+        "in": 5
+      },
+      "at": 600,
+      "df": 500,
+      "dp": 1,
+      "tech": "打撃",
+      "icons": [
+        "U",
+        "R"
+      ],
+      "only": "雲雀",
+      "noHeavy": false,
+      "hiden": false,
+      "text": "雲雀専用。【強化】自分のダメージエリアが3枚以上ならAT+500／【陰乱】陰7枚以上DF+500"
+    },
+    "神": {
+      "id": "B051",
+      "type": "battle",
+      "color": "飛",
+      "gp": {
+        "yo": 0,
+        "in": 0
+      },
+      "at": 1000,
+      "df": 0,
+      "dp": 1,
+      "tech": "斬撃",
+      "icons": [
+        "R"
+      ],
+      "only": "斑鳩",
+      "needs": [
+        "烈突",
+        "紅閃",
+        "欺人脚"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "斑鳩専用・緑。【使用条件（攻撃時）】忍ゲージに「烈突」「紅閃」「欺人脚」がある。【吹飛】アタック時、相手はバトルカードのテキストと重撃を使用できない（緑を除く）。【連撃防御】ディフェンスに出した時、相手が緑なら無条件で防御成功"
+    },
+    "スカイハイクロウ": {
+      "id": "B052",
+      "type": "battle",
+      "color": "飛",
+      "gp": {
+        "yo": 0,
+        "in": 0
+      },
+      "at": 1000,
+      "df": 0,
+      "dp": 1,
+      "tech": "打撃",
+      "icons": [
+        "R"
+      ],
+      "only": "葛城",
+      "needs": [
+        "ミドルキック",
+        "ドラゴンダンス",
+        "サマーソルト"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "葛城専用・緑。【使用条件（攻撃時）】忍ゲージに「ミドルキック」「ドラゴンダンス」「サマーソルト」がある。【吹飛】アタック時、相手はバトルカードのテキストと重撃を使用できない（緑を除く）。【連撃防御】ディフェンスに出した時、相手が緑なら無条件で防御成功"
+    },
+    "えあウサギ": {
+      "id": "B054",
+      "type": "battle",
+      "color": "飛",
+      "gp": {
+        "yo": 0,
+        "in": 0
+      },
+      "at": 1000,
+      "df": 0,
+      "dp": 1,
+      "tech": "打撃",
+      "icons": [
+        "R"
+      ],
+      "only": "雲雀",
+      "needs": [
+        "はじめのチョップ",
+        "本能のままに",
+        "雲雀つっこみ"
+      ],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "雲雀専用・緑。【使用条件（攻撃時）】忍ゲージに「はじめのチョップ」「本能のままに」「雲雀つっこみ」がある。【吹飛】アタック時、相手はバトルカードのテキストと重撃を使用できない（緑を除く）。【連撃防御】ディフェンスに出した時、相手が緑なら無条件で防御成功"
+    },
+    "ミドルキック": {
+      "id": "B003",
+      "type": "battle",
+      "color": "閃",
+      "gp": {
+        "yo": 0,
+        "in": 0
+      },
+      "at": 300,
+      "df": 300,
+      "dp": 1,
+      "tech": "打撃",
+      "icons": [],
+      "noHeavy": false,
+      "hiden": false,
+      "text": "（テキストなし）"
+    },
+    "飛燕鳳閃・壱式": {
+      "id": "B056",
+      "type": "battle",
+      "color": "秘",
+      "gp": {
+        "yo": 4,
+        "in": 4
+      },
+      "at": 1600,
+      "df": 1000,
+      "dp": 2,
+      "tech": "召喚",
+      "icons": [],
+      "only": "斑鳩",
+      "noHeavy": false,
+      "hiden": true,
+      "text": "斑鳩専用・秘伝忍法。【使用条件】陽4/陰4、さらに忍ゲージから閃・陽・陰のカードを1枚ずつ捨て札。【対抗】相手のバトルカードが秘伝忍法の時DF+1000。【巻込】アタックして勝利したとき、相手は手札を1枚捨てる"
+    },
+    "トルネードシュピンデル": {
+      "id": "B057",
+      "type": "battle",
+      "color": "秘",
+      "gp": {
+        "yo": 4,
+        "in": 4
+      },
+      "at": 1400,
+      "df": 1200,
+      "dp": 2,
+      "tech": "召喚",
+      "icons": [],
+      "only": "葛城",
+      "noHeavy": false,
+      "hiden": true,
+      "text": "葛城専用・秘伝忍法。【使用条件】陽4/陰4、さらに忍ゲージから閃・陽・陰のカードを1枚ずつ捨て札。【強化】忍ゲージの打撃カード1枚につきAT+100/DF+100。【巻込】アタックして勝利したとき、相手は手札を1枚捨てる"
+    },
+    "忍兎でブーン": {
+      "id": "B059",
+      "type": "battle",
+      "color": "秘",
+      "gp": {
+        "yo": 4,
+        "in": 4
+      },
+      "at": 1500,
+      "df": 1100,
+      "dp": 2,
+      "tech": "召喚",
+      "icons": [],
+      "only": "雲雀",
+      "noHeavy": false,
+      "hiden": true,
+      "text": "雲雀専用・秘伝忍法。【使用条件】陽4/陰4、さらに忍ゲージから閃・陽・陰のカードを1枚ずつ捨て札。【強化】手札の斬撃カード1枚を捨ててよい。捨てたらAT+500/DF+500。【巻込】アタックして勝利したとき、相手は手札を1枚捨てる"
+    },
+    "秘薬": {
+      "id": "S004",
+      "type": "support",
+      "color": "陰",
+      "gp": {
+        "yo": 1,
+        "in": 1
+      },
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【使用型】自分の捨て札のバトルカード（緑・秘伝忍法を除く）1枚を陰ゲージへ。すぐに陰ゲージへ",
+      "dest": "in",
+      "expire": "now"
+    },
+    "インテリメガネ": {
+      "id": "S005",
+      "type": "support",
+      "color": "陰",
+      "gp": {
+        "yo": 1,
+        "in": 1
+      },
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【効力持続】このターン、両プレイヤーのバトルカードのテキストはすべて無効になる（使用条件とコストは無効にならない）。ターン終了時に陰ゲージへ",
+      "dest": "in",
+      "expire": "endTurn"
+    },
+    "じっちゃんの太巻き": {
+      "id": "S007",
+      "type": "support",
+      "color": "閃",
+      "gp": {
+        "yo": 2,
+        "in": 2
+      },
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【効力持続】このターン、アタックして勝利するたびに1ドロー。ターン終了時に陽か陰のゲージへ（選べる）",
+      "dest": "choose",
+      "expire": "endTurn"
+    },
+    "海に行こう!": {
+      "id": "S009",
+      "type": "support",
+      "color": "陽",
+      "gp": {
+        "yo": 4,
+        "in": 4
+      },
+      "noHeavy": false,
+      "hiden": false,
+      "text": "【使用型】両プレイヤーは自分の陽か陰ゲージ1本を選び、そこから4枚を選んで山札に戻してシャッフル（3枚以下なら全部）。すぐに陽ゲージへ",
+      "dest": "yo",
+      "expire": "now"
+    }
+  },
+  "currentDecks": {
+    "飛鳥・連撃": [
+      [
+        "サマーソルト",
+        2
+      ],
+      [
+        "ハーフムーン",
+        3
+      ],
+      [
+        "二刀繚斬",
+        1
+      ],
+      [
+        "凪",
+        3
+      ],
+      [
+        "右空",
+        3
+      ],
+      [
+        "怨砂",
+        1
+      ],
+      [
+        "旋空砂",
+        3
+      ],
+      [
+        "残月",
+        3
+      ],
+      [
+        "牛乳",
+        1
+      ],
+      [
+        "狭朱",
+        2
+      ],
+      [
+        "省刃",
+        3
+      ],
+      [
+        "緑の巻物",
+        2
+      ],
+      [
+        "飛塵",
+        3
+      ]
+    ],
+    "柳生・射撃": [
+      [
+        "くぐつダミー",
+        2
+      ],
+      [
+        "天刃",
+        2
+      ],
+      [
+        "攻断円",
+        1
+      ],
+      [
+        "本能のままに",
+        2
+      ],
+      [
+        "残月",
+        2
+      ],
+      [
+        "牛乳",
+        2
+      ],
+      [
+        "狭朱",
+        2
+      ],
+      [
+        "緑の巻物",
+        2
+      ],
+      [
+        "薙ぎ払う足",
+        2
+      ],
+      [
+        "諸行の音",
+        2
+      ],
+      [
+        "踊り傘",
+        2
+      ],
+      [
+        "返し雨",
+        2
+      ],
+      [
+        "連刃",
+        2
+      ],
+      [
+        "鉄壁のガード",
+        2
+      ],
+      [
+        "開華",
+        1
+      ],
+      [
+        "零雹",
+        2
+      ]
+    ],
+    "斑鳩・対抗封じ": [
+      [
+        "くぐつダミー",
+        2
+      ],
+      [
+        "はじめのチョップ",
+        3
+      ],
+      [
+        "もっかいウサギ蹴り",
+        3
+      ],
+      [
+        "サマーソルト",
+        1
+      ],
+      [
+        "ハーフムーン",
+        2
+      ],
+      [
+        "リミットブレイク",
+        1
+      ],
+      [
+        "冥砂",
+        1
+      ],
+      [
+        "攻断円",
+        1
+      ],
+      [
+        "本能のままに",
+        3
+      ],
+      [
+        "残月",
+        3
+      ],
+      [
+        "狭朱",
+        3
+      ],
+      [
+        "省刃",
+        3
+      ],
+      [
+        "紅閃",
+        1
+      ],
+      [
+        "緑の巻物",
+        2
+      ],
+      [
+        "鉄壁のガード",
+        1
+      ]
+    ],
+    "葛城・削り": [
+      [
+        "くぐつダミー",
+        3
+      ],
+      [
+        "はじめのチョップ",
+        2
+      ],
+      [
+        "もっかいウサギ蹴り",
+        3
+      ],
+      [
+        "サマーソルト",
+        3
+      ],
+      [
+        "サマーソルトリバース",
+        1
+      ],
+      [
+        "ドラゴンバイト",
+        3
+      ],
+      [
+        "ドラゴンベアード",
+        1
+      ],
+      [
+        "ハーフムーン",
+        3
+      ],
+      [
+        "怨砂",
+        1
+      ],
+      [
+        "残月",
+        2
+      ],
+      [
+        "狭朱",
+        2
+      ],
+      [
+        "省刃",
+        2
+      ],
+      [
+        "緑の巻物",
+        2
+      ],
+      [
+        "鉄壁のガード",
+        2
+      ]
+    ],
+    "雲雀・反撃": [
+      [
+        "えあウサギ",
+        1
+      ],
+      [
+        "くぐつダミー",
+        3
+      ],
+      [
+        "はじめのチョップ",
+        3
+      ],
+      [
+        "もっかいウサギ蹴り",
+        3
+      ],
+      [
+        "ドラゴンダンス",
+        1
+      ],
+      [
+        "ドラゴンベアード",
+        3
+      ],
+      [
+        "ハーフムーン",
+        3
+      ],
+      [
+        "本能のままに",
+        2
+      ],
+      [
+        "残月",
+        3
+      ],
+      [
+        "牛乳",
+        1
+      ],
+      [
+        "病院の待合室にて",
+        3
+      ],
+      [
+        "砂風車",
+        1
+      ],
+      [
+        "鉄壁のガード",
+        2
+      ],
+      [
+        "雲雀つっこみ",
+        1
+      ]
+    ]
+  },
+  "researchSources": [
+    {
+      "pr": 6,
+      "commit": "cf0e6da3683ef95983388fe8454539ec84f57729",
+      "path": "research/asuka/02_research_report.md",
+      "blob": "7604954d2fe509a87bbcb964839be62a359e442a"
+    },
+    {
+      "pr": 7,
+      "commit": "2596e458ae0d3c304da9a1f2ddf8403490b88258",
+      "path": "research/cycles/cycles15_20261104_01/02_research_report.md",
+      "blob": "90c68fe4cff692b6f0bf0eba311c1117f5cd4236"
+    },
+    {
+      "pr": 8,
+      "commit": "0f74eded2490de38bf16dfc7fcd18b8033b7b764",
+      "path": "research/hibari/cycle4_cause_20261105/02_research_report.md",
+      "blob": "c3ac6c6058b1cea570ce8ad3e77172f63ae0b451"
+    }
+  ],
+  "researchRuntimeOverrides": {
+    "deckSize": 30,
+    "source": "tune_worker.js setupGame options; cycle16 study"
+  }
+}
