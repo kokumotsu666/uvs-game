@@ -1,0 +1,19 @@
+{
+  "tests": 12,
+  "passed": true,
+  "simulation": false,
+  "ikaEmptyConsumes": true,
+  "level1and2Unchanged": true,
+  "asukaUnchanged": true,
+  "statsUnchanged": true,
+  "checked": [
+    "swap return-before-draw",
+    "Yagyu old leave removed",
+    "Ika selector ownership",
+    "Ika once on empty",
+    "Ika Lv5 block every win",
+    "Katsuragi unlimited actual draw",
+    "Hibari no green draw bonus",
+    "Hibari optional unlimited recycle"
+  ]
+}
