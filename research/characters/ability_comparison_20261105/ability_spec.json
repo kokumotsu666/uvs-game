@@ -1,0 +1,307 @@
+{
+  "date": "2026-11-05",
+  "scope": "worker-memory character definitions only; original files unchanged",
+  "stats": "all existing AT/DF/IDs retained; all Lv1/2 and all Asuka retained",
+  "old": {
+    "飛鳥": {
+      "definition": "飛鳥v6",
+      "levels": [
+        {
+          "id": "C001",
+          "name": "飛鳥",
+          "lv": 1,
+          "at": 400,
+          "df": 400,
+          "text": "（テキストなし）",
+          "grantR": false
+        },
+        {
+          "id": "C002",
+          "name": "飛鳥",
+          "lv": 2,
+          "at": 500,
+          "df": 500,
+          "text": "【忍転身】このカードがキャラエリアの一番上になった時、1ドロー",
+          "grantR": false
+        },
+        {
+          "id": "C003v6",
+          "name": "飛鳥",
+          "lv": 3,
+          "at": 600,
+          "df": 600,
+          "text": "【破れ1】このカードがキャラエリアの一番上になった時、手札を1枚捨ててよい。捨てたら1枚引く。捨てたカードが緑なら2枚引く",
+          "grantR": false
+        },
+        {
+          "id": "C032v3",
+          "name": "飛鳥",
+          "lv": 4,
+          "at": 700,
+          "df": 700,
+          "text": "【破れ2】自分がアタックに使用するバトルカードに連撃アイコンを付与する",
+          "grantR": true
+        },
+        {
+          "id": "C006v3",
+          "name": "飛鳥",
+          "lv": 5,
+          "at": 800,
+          "df": 800,
+          "text": "【合図】自分がアタックに使用するバトルカードに連撃アイコンを付与する。このカードがキャラエリアの一番上になった時、捨て札の緑のバトルカード1枚を手札に戻す",
+          "grantR": true
+        }
+      ]
+    },
+    "柳生": {
+      "definition": "柳生v2",
+      "levels": [
+        {
+          "id": "C019",
+          "name": "柳生",
+          "lv": 1,
+          "at": 400,
+          "df": 400,
+          "text": "（テキストなし）",
+          "grantR": false
+        },
+        {
+          "id": "C020v2",
+          "name": "柳生",
+          "lv": 2,
+          "at": 400,
+          "df": 600,
+          "text": "【忍転身】2枚引き、手札1枚を山札の一番下へ戻す",
+          "grantR": false
+        },
+        {
+          "id": "C021",
+          "name": "柳生",
+          "lv": 3,
+          "at": 500,
+          "df": 700,
+          "text": "【破れ1】射撃・防御のバトルカード使用時AT+200/DF+200",
+          "grantR": false
+        },
+        {
+          "id": "C022v2",
+          "name": "柳生",
+          "lv": 4,
+          "at": 700,
+          "df": 700,
+          "text": "【破れ2】このカードがダメージエリアに移動した時、2枚引き、手札1枚を山札の一番下へ戻す。さらにスタンバイに1ターン1回、手札最大1枚を山札の一番下へ戻し同数ドロー",
+          "grantR": false
+        },
+        {
+          "id": "C023v2",
+          "name": "柳生",
+          "lv": 5,
+          "at": 900,
+          "df": 700,
+          "text": "【合図】スタンバイに1ターン1回、手札最大2枚を山札の一番下へ戻し、同数ドローする",
+          "grantR": false
+        }
+      ]
+    },
+    "斑鳩": {
+      "definition": "斑鳩",
+      "levels": [
+        {
+          "id": "C007",
+          "name": "斑鳩",
+          "lv": 1,
+          "at": 400,
+          "df": 400,
+          "text": "（テキストなし）",
+          "grantR": false
+        },
+        {
+          "id": "C008",
+          "name": "斑鳩",
+          "lv": 2,
+          "at": 600,
+          "df": 400,
+          "text": "【忍転身】1ドロー",
+          "grantR": false
+        },
+        {
+          "id": "C009",
+          "name": "斑鳩",
+          "lv": 3,
+          "at": 800,
+          "df": 400,
+          "text": "【破れ1】相手が打撃の時DF+200",
+          "grantR": false
+        },
+        {
+          "id": "C010",
+          "name": "斑鳩",
+          "lv": 4,
+          "at": 900,
+          "df": 500,
+          "text": "【破れ2】アタックして勝利したとき、相手はバトルで使用したバトルカードを捨て札へ",
+          "grantR": false
+        },
+        {
+          "id": "C011",
+          "name": "斑鳩",
+          "lv": 5,
+          "at": 1000,
+          "df": 600,
+          "text": "【合図】アタック時、相手はディフェンスに使ったバトルカードのテキストを使用できない",
+          "grantR": false
+        }
+      ]
+    },
+    "葛城": {
+      "definition": "葛城",
+      "levels": [
+        {
+          "id": "C013",
+          "name": "葛城",
+          "lv": 1,
+          "at": 400,
+          "df": 400,
+          "text": "（テキストなし）",
+          "grantR": false
+        },
+        {
+          "id": "C014",
+          "name": "葛城",
+          "lv": 2,
+          "at": 500,
+          "df": 500,
+          "text": "【忍転身】1ドロー",
+          "grantR": false
+        },
+        {
+          "id": "C015",
+          "name": "葛城",
+          "lv": 3,
+          "at": 600,
+          "df": 600,
+          "text": "【破れ1】打撃のバトルカード使用時AT+200",
+          "grantR": false
+        },
+        {
+          "id": "C016",
+          "name": "葛城",
+          "lv": 4,
+          "at": 700,
+          "df": 700,
+          "text": "【破れ2】アタックして勝利したとき、相手は山札の上から1枚を捨て札",
+          "grantR": false
+        },
+        {
+          "id": "C017",
+          "name": "葛城",
+          "lv": 5,
+          "at": 800,
+          "df": 800,
+          "text": "【合図】アタックして勝利したとき、相手は山札の上から2枚を捨て札",
+          "grantR": false
+        }
+      ]
+    },
+    "雲雀": {
+      "definition": "雲雀v2",
+      "levels": [
+        {
+          "id": "C025",
+          "name": "雲雀",
+          "lv": 1,
+          "at": 400,
+          "df": 400,
+          "text": "（テキストなし）",
+          "grantR": false
+        },
+        {
+          "id": "C026",
+          "name": "雲雀",
+          "lv": 2,
+          "at": 400,
+          "df": 600,
+          "text": "【忍転身】1ドロー",
+          "grantR": false
+        },
+        {
+          "id": "C027",
+          "name": "雲雀",
+          "lv": 3,
+          "at": 400,
+          "df": 800,
+          "text": "【破れ1】相手が斬撃の時DF+200",
+          "grantR": false
+        },
+        {
+          "id": "C028v2",
+          "name": "雲雀",
+          "lv": 4,
+          "at": 500,
+          "df": 900,
+          "text": "【破れ2】防御属性のバトルカードでディフェンスした時、1枚引く",
+          "grantR": false
+        },
+        {
+          "id": "C030",
+          "name": "雲雀",
+          "lv": 5,
+          "at": 600,
+          "df": 1000,
+          "text": "【合図】ディフェンスして勝利したとき、相手は山札の上から1枚を捨て札",
+          "grantR": false
+        }
+      ]
+    }
+  },
+  "new": {
+    "飛鳥": "all levels unchanged",
+    "柳生": {
+      "Lv3": "onTop: optional up to1 hand card to deck bottom, then draw same actual count",
+      "Lv4": "onTop: optional up to2 hand cards to deck bottom, then draw same actual count; no old onDamaged or standby",
+      "Lv5": "own prep standby once per turn, optional up to1 bottom-and-draw; shooting/guard main battle AT+200/DF+200"
+    },
+    "斑鳩": {
+      "Lv3": "onAtkWin once per game turn: consume use even if opposing gauge empty; opponent chooses1 of own gauges to discard",
+      "Lv4": "unchanged: attack win prevents submitted defense card going to gauge",
+      "Lv5": "Lv4 onAtkWin every win plus once per turn gauge destruction chosen by Ikaruga; consume even if empty; old noOppText removed"
+    },
+    "葛城": {
+      "Lv3": "onAtkWin: actor then opponent draw actual up to1 each, no turn cap; old physical AT bonus removed",
+      "Lv4": "unchanged",
+      "Lv5": "unchanged"
+    },
+    "雲雀": {
+      "Lv3": "onTop optional discard1 then draw actual up to1; no green bonus; old anti-slash DF removed",
+      "Lv4": "unchanged",
+      "Lv5": "onDefWinChar optional any discard card1 to own deck bottom; no cap; old opponent mill removed"
+    }
+  },
+  "timing": [
+    "onDamaged of departing card then onTop of newly exposed card inside applyDamage",
+    "lethal applyDamage ends game before card/character win hooks; no terminal bonus draws or recoveries added",
+    "attack card onWin then current attacker character onAtkWin; after damage",
+    "defense card onDefWin then attack card onFail then current defender character onDefWinChar",
+    "character win callbacks occur before submitted battle cards and heavy cards move; new Hibari cannot return a current battle heavy card not yet in discard",
+    "Ikaruga Lv3 selects from existing gauge before current defense card normally moves into gauge; empty still consumes use",
+    "new Yagyu returns before drawing; old Lv2 draws2 then returns1; old Lv4 leaving hook absent",
+    "standby remains existing prep interface once-per-turn flag; no extra action window introduced",
+    "draw helper does not immediately lose on drawing0; normal turn-start draw and damage loss rules unchanged"
+  ],
+  "choicePolicy": {
+    "parameters": "cycle16 effective profiles unchanged in primary phases; no search",
+    "engineConstruction": "existing tune_worker.js me(profile for left character) and field(full profile map), seats balanced; inherited modeling asymmetry retained",
+    "newYagyu": "existing swapCandidates via 入れ替え selection title; old c_swap/c_standby retained",
+    "newHibariLv3": "existing optional Lv3 discard-draw selector via existing title, with no green bonus",
+    "newIkarugaLv3": "defender controller uses existing 本能のままに gauge-loss selector minimizing own current hand utility loss",
+    "newIkarugaLv5": "Ikaruga controller uses public known deck and visible gauges only; maximize loss of pool legal battle options weighted by DP (DP0 weight0.5), stable original-order tie; never reads opposing hidden hand",
+    "newHibariLv5": "optional interface selects1 if available; cardVal plus300 for currently defensible/heavy-usable battle; hospital +10000 only if existing c_sup_hospital=do and w_attackPass>=800; no tuned weights search",
+    "rawSensitivity": "replace only new Lv5 choice with unchanged generic existing picker; ability rules and profiles unchanged",
+    "hospitalOffSensitivity": "temporary c_sup_hospital=never in diagnostic only, same fixed30 including hospital; return selector uses that actual diagnostic profile; not a hospital-free optimized deck",
+    "limitations": [
+      "solver numerical battle buffs/grantR are modeled",
+      "new onAtkWin gauge destruction/shared draw and onDefWinChar recovery are executed but not explicitly given their own future payoff in existing evalBattle",
+      "selection adapter is not a proof of optimal AI; primary effect is ability bundle under a specified fixed-profile policy"
+    ]
+  }
+}

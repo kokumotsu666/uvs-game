@@ -1,0 +1,991 @@
+{
+  "keys": [
+    "飛鳥・連撃",
+    "柳生・射撃",
+    "斑鳩・対抗封じ",
+    "葛城・削り",
+    "雲雀・反撃"
+  ],
+  "pairs": [
+    {
+      "a": 0,
+      "b": 1,
+      "key": "飛鳥・連撃 vs 柳生・射撃"
+    },
+    {
+      "a": 0,
+      "b": 2,
+      "key": "飛鳥・連撃 vs 斑鳩・対抗封じ"
+    },
+    {
+      "a": 0,
+      "b": 3,
+      "key": "飛鳥・連撃 vs 葛城・削り"
+    },
+    {
+      "a": 0,
+      "b": 4,
+      "key": "飛鳥・連撃 vs 雲雀・反撃"
+    },
+    {
+      "a": 1,
+      "b": 2,
+      "key": "柳生・射撃 vs 斑鳩・対抗封じ"
+    },
+    {
+      "a": 1,
+      "b": 3,
+      "key": "柳生・射撃 vs 葛城・削り"
+    },
+    {
+      "a": 1,
+      "b": 4,
+      "key": "柳生・射撃 vs 雲雀・反撃"
+    },
+    {
+      "a": 2,
+      "b": 3,
+      "key": "斑鳩・対抗封じ vs 葛城・削り"
+    },
+    {
+      "a": 2,
+      "b": 4,
+      "key": "斑鳩・対抗封じ vs 雲雀・反撃"
+    },
+    {
+      "a": 3,
+      "b": 4,
+      "key": "葛城・削り vs 雲雀・反撃"
+    }
+  ],
+  "profiles": {
+    "飛鳥・連撃": {
+      "name": "標準",
+      "atkReserveHeavy": 0,
+      "atkFailPenalty": 0,
+      "atkLowHand": 0,
+      "atkLowHandPen": 0,
+      "atkLethalMul": 0,
+      "defGuardWin": 0,
+      "hUCover": 0,
+      "handHeavy": 0,
+      "drawDeckAware": false,
+      "holdGuard": 0,
+      "holdHeavyMaxDrop": null,
+      "heavy": null,
+      "routeHeuristicToSolver": false,
+      "c_guardGauge": "do",
+      "w_guardGauge": 0,
+      "n_guardGauge": 2,
+      "c_guardDefend": "cond",
+      "w_guardDefend": 1500,
+      "n_guardDefend": 4,
+      "c_guardAttack": "cond",
+      "w_guardAttack": 0,
+      "c_noDefense": "do",
+      "w_noDefense": 0,
+      "n_noDefense": 3,
+      "c_attackPass": "do",
+      "w_attackPass": 0,
+      "n_attackPass": 4,
+      "c_heavyAtk": "do",
+      "w_heavyAtk": 3,
+      "c_heavyDef": "avoid",
+      "w_heavyDef": 1,
+      "c_chain": "cond",
+      "w_chain": 0,
+      "c_gauge": "cond",
+      "w_gauge": 0,
+      "c_sup_hiyaku": "cond",
+      "w_sup_hiyaku": 0,
+      "c_sup_umi": "cond",
+      "w_sup_umi": 0,
+      "c_sup_futomaki": "cond",
+      "w_sup_futomaki": 0,
+      "c_sup_megane": "cond",
+      "w_sup_megane": 0,
+      "c_sup_green": "cond",
+      "w_sup_green": 0,
+      "c_sup_milk": "cond",
+      "w_sup_milk": 0,
+      "c_sup_red": "cond",
+      "w_sup_red": 0,
+      "c_sup_bread": "cond",
+      "w_sup_bread": 0,
+      "c_sup_hospital": "cond",
+      "w_sup_hospital": 0,
+      "c_lv3Discard": "cond",
+      "w_lv3Discard": 0,
+      "c_swap": "cond",
+      "w_swap": 0,
+      "c_standby": "cond",
+      "w_standby": 0,
+      "n_standby": 6,
+      "c_heavySolve": "do",
+      "w_heavySolve": 2,
+      "n_heavySolve": 4,
+      "hAtkMinHand": null,
+      "hDefMinHand": null,
+      "hAtkBudget": null,
+      "hDefBudget": null,
+      "hPick": "min",
+      "gTarget": "weighted",
+      "w_gTarget": 1,
+      "hUChainStart": 0,
+      "hUChainStartDeck": 0,
+      "hULv2": 0,
+      "hULv3": 0,
+      "hULv4": 0,
+      "hULv5": 0,
+      "deckLowN": 6,
+      "deckLowVal": 200,
+      "hUSupport": 1.6,
+      "hUGreenBase": 0.3,
+      "hUGreenNeed": 0.5,
+      "hUHiden": 1.6,
+      "hUHeavy": 0.5,
+      "hUHeavyFloor": 0.6,
+      "hUDp0": 0.6,
+      "hUDp0Add": 1.2,
+      "effVal": true,
+      "hUDeckGreen": 0.15,
+      "supGreenOff": 0.5,
+      "supRedDmg": 0.9,
+      "supMilkDmg": 0.9,
+      "supMilkHand": 0.3,
+      "supBread": 0.25,
+      "supHospital": 0.5,
+      "swapTh": 0.6,
+      "lv3DrawVal": 0.6,
+      "n_sup_green": 3
+    },
+    "柳生・射撃": {
+      "name": "標準",
+      "atkReserveHeavy": 0,
+      "atkFailPenalty": 0,
+      "atkLowHand": 0,
+      "atkLowHandPen": 0,
+      "atkLethalMul": 0,
+      "defGuardWin": 0,
+      "hUCover": 0,
+      "handHeavy": 0,
+      "drawDeckAware": false,
+      "holdGuard": 0,
+      "holdHeavyMaxDrop": null,
+      "heavy": null,
+      "routeHeuristicToSolver": false,
+      "c_guardGauge": "do",
+      "w_guardGauge": 0,
+      "n_guardGauge": 2,
+      "c_guardDefend": "do",
+      "w_guardDefend": 0,
+      "n_guardDefend": 4,
+      "c_guardAttack": "cond",
+      "w_guardAttack": 0,
+      "c_noDefense": "do",
+      "w_noDefense": 0,
+      "n_noDefense": 3,
+      "c_attackPass": "do",
+      "w_attackPass": 0,
+      "n_attackPass": 4,
+      "c_heavyAtk": "do",
+      "w_heavyAtk": 3,
+      "c_heavyDef": "avoid",
+      "w_heavyDef": 2,
+      "c_chain": "cond",
+      "w_chain": 0,
+      "c_gauge": "cond",
+      "w_gauge": 0,
+      "c_sup_hiyaku": "cond",
+      "w_sup_hiyaku": 0,
+      "c_sup_umi": "cond",
+      "w_sup_umi": 0,
+      "c_sup_futomaki": "cond",
+      "w_sup_futomaki": 0,
+      "c_sup_megane": "cond",
+      "w_sup_megane": 0,
+      "c_sup_green": "cond",
+      "w_sup_green": 0,
+      "c_sup_milk": "cond",
+      "w_sup_milk": 0,
+      "c_sup_red": "cond",
+      "w_sup_red": 0,
+      "c_sup_bread": "cond",
+      "w_sup_bread": 0,
+      "c_sup_hospital": "cond",
+      "w_sup_hospital": 0,
+      "c_lv3Discard": "cond",
+      "w_lv3Discard": 0,
+      "c_swap": "do",
+      "w_swap": 0.3,
+      "c_standby": "cond",
+      "w_standby": 0,
+      "n_standby": 6,
+      "c_heavySolve": "never",
+      "w_heavySolve": 0,
+      "n_heavySolve": 4,
+      "hAtkMinHand": null,
+      "hDefMinHand": null,
+      "hAtkBudget": null,
+      "hDefBudget": null,
+      "hPick": "min",
+      "gTarget": "none",
+      "w_gTarget": 1,
+      "hUChainStart": 0,
+      "hUChainStartDeck": 0,
+      "hULv2": 0,
+      "hULv3": 0,
+      "hULv4": 0,
+      "hULv5": 0,
+      "deckLowN": 6,
+      "deckLowVal": 200,
+      "hUSupport": 1.2,
+      "hUGreenBase": 0.3,
+      "hUGreenNeed": 0.5,
+      "hUHiden": 1.6,
+      "hUHeavy": 0.5,
+      "hUHeavyFloor": 0.6,
+      "hUDp0": 0.6,
+      "hUDp0Add": 1.2,
+      "effVal": true,
+      "hUDeckGreen": 0.15,
+      "supGreenOff": 0.5,
+      "supRedDmg": 0.9,
+      "supMilkDmg": 0.9,
+      "supMilkHand": 0.3,
+      "supBread": 0.25,
+      "supHospital": 0.5,
+      "swapTh": 0.6,
+      "lv3DrawVal": 0.6
+    },
+    "斑鳩・対抗封じ": {
+      "name": "標準",
+      "atkReserveHeavy": 0,
+      "atkFailPenalty": 0,
+      "atkLowHand": 0,
+      "atkLowHandPen": 0,
+      "atkLethalMul": 0,
+      "defGuardWin": 0,
+      "hUCover": 0,
+      "handHeavy": 0,
+      "drawDeckAware": false,
+      "holdGuard": 0,
+      "holdHeavyMaxDrop": null,
+      "heavy": null,
+      "routeHeuristicToSolver": false,
+      "c_guardGauge": "do",
+      "w_guardGauge": 0,
+      "n_guardGauge": 2,
+      "c_guardDefend": "do",
+      "w_guardDefend": 0,
+      "n_guardDefend": 4,
+      "c_guardAttack": "cond",
+      "w_guardAttack": 0,
+      "c_noDefense": "do",
+      "w_noDefense": 0,
+      "n_noDefense": 3,
+      "c_attackPass": "do",
+      "w_attackPass": 0,
+      "n_attackPass": 4,
+      "c_heavyAtk": "do",
+      "w_heavyAtk": 2,
+      "c_heavyDef": "avoid",
+      "w_heavyDef": 2,
+      "c_chain": "cond",
+      "w_chain": 0,
+      "c_gauge": "cond",
+      "w_gauge": 0,
+      "c_sup_hiyaku": "cond",
+      "w_sup_hiyaku": 0,
+      "c_sup_umi": "cond",
+      "w_sup_umi": 0,
+      "c_sup_futomaki": "cond",
+      "w_sup_futomaki": 0,
+      "c_sup_megane": "cond",
+      "w_sup_megane": 0,
+      "c_sup_green": "cond",
+      "w_sup_green": 0,
+      "c_sup_milk": "cond",
+      "w_sup_milk": 0,
+      "c_sup_red": "cond",
+      "w_sup_red": 0,
+      "c_sup_bread": "cond",
+      "w_sup_bread": 0,
+      "c_sup_hospital": "cond",
+      "w_sup_hospital": 0,
+      "c_lv3Discard": "cond",
+      "w_lv3Discard": 0,
+      "c_swap": "cond",
+      "w_swap": 0,
+      "c_standby": "cond",
+      "w_standby": 0,
+      "n_standby": 6,
+      "c_heavySolve": "never",
+      "w_heavySolve": 0,
+      "n_heavySolve": 4,
+      "hAtkMinHand": null,
+      "hDefMinHand": null,
+      "hAtkBudget": 2,
+      "hDefBudget": null,
+      "hPick": "min",
+      "gTarget": "none",
+      "w_gTarget": 1,
+      "hUChainStart": 0,
+      "hUChainStartDeck": 0,
+      "hULv2": 0,
+      "hULv3": 0,
+      "hULv4": 0,
+      "hULv5": 0,
+      "deckLowN": 6,
+      "deckLowVal": 200,
+      "hUSupport": 0.8,
+      "hUGreenBase": 0.3,
+      "hUGreenNeed": 0.5,
+      "hUHiden": 1.6,
+      "hUHeavy": 0.5,
+      "hUHeavyFloor": 0.6,
+      "hUDp0": 0.6,
+      "hUDp0Add": 1.2,
+      "effVal": false,
+      "hUDeckGreen": 0.15,
+      "supGreenOff": 0.5,
+      "supRedDmg": 0.9,
+      "supMilkDmg": 0.9,
+      "supMilkHand": 0.3,
+      "supBread": 0.25,
+      "supHospital": 0.5,
+      "swapTh": 0.6,
+      "lv3DrawVal": 0.6,
+      "n_sup_green": 2
+    },
+    "葛城・削り": {
+      "name": "標準",
+      "atkReserveHeavy": 0,
+      "atkFailPenalty": 0,
+      "atkLowHand": 0,
+      "atkLowHandPen": 0,
+      "atkLethalMul": 0,
+      "defGuardWin": 0,
+      "hUCover": 0,
+      "handHeavy": 0,
+      "drawDeckAware": false,
+      "holdGuard": 0,
+      "holdHeavyMaxDrop": null,
+      "heavy": null,
+      "routeHeuristicToSolver": false,
+      "c_guardGauge": "never",
+      "w_guardGauge": 0,
+      "n_guardGauge": 2,
+      "c_guardDefend": "do",
+      "w_guardDefend": 800,
+      "n_guardDefend": 4,
+      "c_guardAttack": "cond",
+      "w_guardAttack": 0,
+      "c_noDefense": "do",
+      "w_noDefense": 0,
+      "n_noDefense": 3,
+      "c_attackPass": "do",
+      "w_attackPass": 0,
+      "n_attackPass": 4,
+      "c_heavyAtk": "cond",
+      "w_heavyAtk": 2,
+      "c_heavyDef": "cond",
+      "w_heavyDef": 2,
+      "c_chain": "cond",
+      "w_chain": 0,
+      "c_gauge": "cond",
+      "w_gauge": 0,
+      "c_sup_hiyaku": "cond",
+      "w_sup_hiyaku": 0,
+      "c_sup_umi": "cond",
+      "w_sup_umi": 0,
+      "c_sup_futomaki": "cond",
+      "w_sup_futomaki": 0,
+      "c_sup_megane": "cond",
+      "w_sup_megane": 0,
+      "c_sup_green": "avoid",
+      "w_sup_green": 2,
+      "c_sup_milk": "cond",
+      "w_sup_milk": 0,
+      "c_sup_red": "cond",
+      "w_sup_red": 0,
+      "c_sup_bread": "cond",
+      "w_sup_bread": 0,
+      "c_sup_hospital": "cond",
+      "w_sup_hospital": 0,
+      "c_lv3Discard": "cond",
+      "w_lv3Discard": 0,
+      "c_swap": "cond",
+      "w_swap": 0,
+      "c_standby": "cond",
+      "w_standby": 0,
+      "n_standby": 6,
+      "c_heavySolve": "do",
+      "w_heavySolve": 1,
+      "n_heavySolve": 3,
+      "hAtkMinHand": null,
+      "hDefMinHand": null,
+      "hAtkBudget": 3,
+      "hDefBudget": null,
+      "hPick": "min",
+      "gTarget": "none",
+      "w_gTarget": 1,
+      "hUChainStart": 0,
+      "hUChainStartDeck": 0,
+      "hULv2": 0,
+      "hULv3": 0,
+      "hULv4": 0,
+      "hULv5": 0,
+      "deckLowN": 6,
+      "deckLowVal": 200,
+      "hUSupport": 0.8,
+      "hUGreenBase": 0.3,
+      "hUGreenNeed": 0.5,
+      "hUHiden": 1.6,
+      "hUHeavy": 0.5,
+      "hUHeavyFloor": 0.6,
+      "hUDp0": 0.6,
+      "hUDp0Add": 1.2,
+      "effVal": true,
+      "hUDeckGreen": 0.15,
+      "supGreenOff": 0.5,
+      "supRedDmg": 0.9,
+      "supMilkDmg": 0.9,
+      "supMilkHand": 0.3,
+      "supBread": 0.25,
+      "supHospital": 0.5,
+      "swapTh": 0.6,
+      "lv3DrawVal": 0.6
+    },
+    "雲雀・反撃": {
+      "name": "反撃",
+      "atkReserveHeavy": 140,
+      "atkFailPenalty": 350,
+      "atkLowHand": 3,
+      "atkLowHandPen": 250,
+      "atkLethalMul": 1,
+      "defGuardWin": 120,
+      "hUCover": 0,
+      "handHeavy": 0.4,
+      "drawDeckAware": true,
+      "holdGuard": 0,
+      "holdHeavyMaxDrop": null,
+      "heavy": {
+        "atkMinHand": 3,
+        "atkBudgetExtra": 0,
+        "defMinHand": 1,
+        "defBudgetExtra": 1
+      },
+      "routeHeuristicToSolver": true,
+      "c_guardGauge": "do",
+      "w_guardGauge": 0,
+      "n_guardGauge": 2,
+      "c_guardDefend": "do",
+      "w_guardDefend": 0,
+      "n_guardDefend": 4,
+      "c_guardAttack": "cond",
+      "w_guardAttack": 0,
+      "c_noDefense": "do",
+      "w_noDefense": 0,
+      "n_noDefense": 3,
+      "c_attackPass": "do",
+      "w_attackPass": 1500,
+      "n_attackPass": 4,
+      "c_heavyAtk": "avoid",
+      "w_heavyAtk": 1,
+      "c_heavyDef": "do",
+      "w_heavyDef": 2,
+      "c_chain": "cond",
+      "w_chain": 0,
+      "c_gauge": "avoid",
+      "w_gauge": 0.3,
+      "c_sup_hiyaku": "cond",
+      "w_sup_hiyaku": 0,
+      "c_sup_umi": "cond",
+      "w_sup_umi": 0,
+      "c_sup_futomaki": "cond",
+      "w_sup_futomaki": 0,
+      "c_sup_megane": "cond",
+      "w_sup_megane": 0,
+      "c_sup_green": "cond",
+      "w_sup_green": 0,
+      "c_sup_milk": "cond",
+      "w_sup_milk": 0,
+      "c_sup_red": "cond",
+      "w_sup_red": 0,
+      "c_sup_bread": "cond",
+      "w_sup_bread": 0,
+      "c_sup_hospital": "do",
+      "w_sup_hospital": 0.3,
+      "c_lv3Discard": "cond",
+      "w_lv3Discard": 0,
+      "c_swap": "cond",
+      "w_swap": 0,
+      "c_standby": "cond",
+      "w_standby": 0,
+      "n_standby": 6,
+      "c_heavySolve": "never",
+      "w_heavySolve": 0,
+      "n_heavySolve": 4,
+      "hAtkMinHand": null,
+      "hDefMinHand": null,
+      "hAtkBudget": null,
+      "hDefBudget": null,
+      "hPick": "min",
+      "gTarget": "none",
+      "w_gTarget": 1,
+      "hUChainStart": 0,
+      "hUChainStartDeck": 0,
+      "hULv2": 0,
+      "hULv3": 0,
+      "hULv4": 0,
+      "hULv5": 0,
+      "deckLowN": 6,
+      "deckLowVal": 200,
+      "hUSupport": 0.8,
+      "hUGreenBase": 0.3,
+      "hUGreenNeed": 0.5,
+      "hUHiden": 1.6,
+      "hUHeavy": 0.5,
+      "hUHeavyFloor": 0.8,
+      "hUDp0": 0.6,
+      "hUDp0Add": 0.9,
+      "effVal": true,
+      "hUDeckGreen": 0.15,
+      "supGreenOff": 0.5,
+      "supRedDmg": 0.9,
+      "supMilkDmg": 0.9,
+      "supMilkHand": 0.3,
+      "supBread": 0.25,
+      "supHospital": 0.5,
+      "swapTh": 0.6,
+      "lv3DrawVal": 0.6,
+      "n_sup_milk": 3
+    }
+  },
+  "decks": [
+    {
+      "key": "飛鳥・連撃",
+      "char": "飛鳥",
+      "list": [
+        [
+          "サマーソルト",
+          2
+        ],
+        [
+          "ハーフムーン",
+          3
+        ],
+        [
+          "二刀繚斬",
+          1
+        ],
+        [
+          "凪",
+          3
+        ],
+        [
+          "右空",
+          3
+        ],
+        [
+          "怨砂",
+          1
+        ],
+        [
+          "旋空砂",
+          3
+        ],
+        [
+          "残月",
+          3
+        ],
+        [
+          "牛乳",
+          1
+        ],
+        [
+          "狭朱",
+          2
+        ],
+        [
+          "省刃",
+          3
+        ],
+        [
+          "緑の巻物",
+          2
+        ],
+        [
+          "飛塵",
+          3
+        ]
+      ]
+    },
+    {
+      "key": "柳生・射撃",
+      "char": "柳生",
+      "list": [
+        [
+          "くぐつダミー",
+          2
+        ],
+        [
+          "天刃",
+          2
+        ],
+        [
+          "攻断円",
+          1
+        ],
+        [
+          "本能のままに",
+          2
+        ],
+        [
+          "残月",
+          2
+        ],
+        [
+          "牛乳",
+          2
+        ],
+        [
+          "狭朱",
+          2
+        ],
+        [
+          "緑の巻物",
+          2
+        ],
+        [
+          "薙ぎ払う足",
+          2
+        ],
+        [
+          "諸行の音",
+          2
+        ],
+        [
+          "踊り傘",
+          2
+        ],
+        [
+          "返し雨",
+          2
+        ],
+        [
+          "連刃",
+          2
+        ],
+        [
+          "鉄壁のガード",
+          2
+        ],
+        [
+          "開華",
+          1
+        ],
+        [
+          "零雹",
+          2
+        ]
+      ]
+    },
+    {
+      "key": "斑鳩・対抗封じ",
+      "char": "斑鳩",
+      "list": [
+        [
+          "くぐつダミー",
+          2
+        ],
+        [
+          "はじめのチョップ",
+          3
+        ],
+        [
+          "もっかいウサギ蹴り",
+          3
+        ],
+        [
+          "サマーソルト",
+          1
+        ],
+        [
+          "ハーフムーン",
+          2
+        ],
+        [
+          "リミットブレイク",
+          1
+        ],
+        [
+          "冥砂",
+          1
+        ],
+        [
+          "攻断円",
+          1
+        ],
+        [
+          "本能のままに",
+          3
+        ],
+        [
+          "残月",
+          3
+        ],
+        [
+          "狭朱",
+          3
+        ],
+        [
+          "省刃",
+          3
+        ],
+        [
+          "紅閃",
+          1
+        ],
+        [
+          "緑の巻物",
+          2
+        ],
+        [
+          "鉄壁のガード",
+          1
+        ]
+      ]
+    },
+    {
+      "key": "葛城・削り",
+      "char": "葛城",
+      "list": [
+        [
+          "くぐつダミー",
+          3
+        ],
+        [
+          "はじめのチョップ",
+          2
+        ],
+        [
+          "もっかいウサギ蹴り",
+          3
+        ],
+        [
+          "サマーソルト",
+          3
+        ],
+        [
+          "サマーソルトリバース",
+          1
+        ],
+        [
+          "ドラゴンバイト",
+          3
+        ],
+        [
+          "ドラゴンベアード",
+          1
+        ],
+        [
+          "ハーフムーン",
+          3
+        ],
+        [
+          "怨砂",
+          1
+        ],
+        [
+          "残月",
+          2
+        ],
+        [
+          "狭朱",
+          2
+        ],
+        [
+          "省刃",
+          2
+        ],
+        [
+          "緑の巻物",
+          2
+        ],
+        [
+          "鉄壁のガード",
+          2
+        ]
+      ]
+    },
+    {
+      "key": "雲雀・反撃",
+      "char": "雲雀",
+      "list": [
+        [
+          "えあウサギ",
+          1
+        ],
+        [
+          "くぐつダミー",
+          3
+        ],
+        [
+          "はじめのチョップ",
+          3
+        ],
+        [
+          "もっかいウサギ蹴り",
+          3
+        ],
+        [
+          "ドラゴンダンス",
+          1
+        ],
+        [
+          "ドラゴンベアード",
+          3
+        ],
+        [
+          "ハーフムーン",
+          3
+        ],
+        [
+          "本能のままに",
+          2
+        ],
+        [
+          "残月",
+          3
+        ],
+        [
+          "牛乳",
+          1
+        ],
+        [
+          "病院の待合室にて",
+          3
+        ],
+        [
+          "砂風車",
+          1
+        ],
+        [
+          "鉄壁のガード",
+          2
+        ],
+        [
+          "雲雀つっこみ",
+          1
+        ]
+      ]
+    }
+  ],
+  "coreSHA256": {
+    "engine.js": "59df47a87013bdff08f2e41ebfb45eb378daa4dac0dad47bbd50f6839f501c9b",
+    "solver.js": "42b2cbf2df229a660979f0e5d3568bb2a845b106820b0ed750c73c0f844ceabb",
+    "cards_extra.js": "89b114eda2b2d5cf5c4568737508a2a12ea9fee666a23efe865b0862bff53010",
+    "decks_fixed.js": "c6b995411c96998f3a664238b20f5fd617d319f11490186b99373b3f1d984361",
+    "index.html": "db193b0eef3f7d6eec78a4f2e7d73b615754b4cc7f2252fbde3d011d53f8931f",
+    "tune_worker.js": "19a0f933fcff0dbe187fb7e7d062b3a0f34e39eaee798088106af792f60a6a50"
+  },
+  "stateSHA256": "949e67393d0eb31ee98db7deecc55854d00236a5ce412933b576aa8ef8bf88a8",
+  "environments": {
+    "OLD": [],
+    "Y": [
+      "柳生"
+    ],
+    "I": [
+      "斑鳩"
+    ],
+    "K": [
+      "葛城"
+    ],
+    "H": [
+      "雲雀"
+    ],
+    "NEW": [
+      "柳生",
+      "斑鳩",
+      "葛城",
+      "雲雀"
+    ],
+    "minusY": [
+      "斑鳩",
+      "葛城",
+      "雲雀"
+    ],
+    "minusI": [
+      "柳生",
+      "葛城",
+      "雲雀"
+    ],
+    "minusK": [
+      "柳生",
+      "斑鳩",
+      "雲雀"
+    ],
+    "minusH": [
+      "柳生",
+      "斑鳩",
+      "葛城"
+    ]
+  },
+  "seeds": {
+    "screen": 230000000,
+    "final": 1130000000,
+    "confirm": 1730000000
+  },
+  "seedFormula": "series + pairIndex*100003 + seedIndex*7; 4 games = seats2 x first2",
+  "workers": 15,
+  "ikaOnceOnEmpty": true,
+  "selectionPolicy": "public-role adapter for newly introduced choices; existing AI parameters fixed",
+  "createdUTC": "2026-11-05T02:15:24.175Z",
+  "design": {
+    "screen": {
+      "seedsPerPair": 16,
+      "mainEnvironments": 6,
+      "games": 3840
+    },
+    "final": {
+      "seedsPerPair": 250,
+      "primaryGames": 60000,
+      "hybridGames": 16000,
+      "total": 76000
+    },
+    "confirm": {
+      "seedsPerPair": 250,
+      "total": 52000
+    },
+    "selectionDiagnostics": "planned separately after screening; no parameter search",
+    "caches": "fresh worker for each job, <=15 active; no cross-environment or cross-deck cache reuse"
+  },
+  "notes": [
+    "斑鳩の回数はゲージ空でも最初の勝利で消費する（ユーザー指定）",
+    "キャラ数値・Lv1/2・飛鳥・カード・デッキ・AIパラメータを固定",
+    "新規選択用の限定処理をAIの能力評価の最適性と混同しない"
+  ],
+  "supplementaryPlan": {
+    "registeredUTC": "2026-11-05T02:32:16.857Z",
+    "sensitivity": {
+      "games": 6400,
+      "independentOfPrimaryInference": true,
+      "conditions": [
+        "NEW rawI selector vs role",
+        "NEW rawH selector vs role",
+        "OLD hospitalOff",
+        "H hospitalOff"
+      ],
+      "seedSeries": "first100 confirm seeds; paired with matching primary records",
+      "purpose": "limited selection-policy sensitivity and Hibari ability-bundle x hospital-use-policy diagnostic; no automatic optimization"
+    },
+    "probe": {
+      "games": 4864,
+      "seeds": "first16 final seeds; same games replayed, not new independent samples",
+      "purpose": "level-separated gauge effects, chain effects, recovered-hospital reuses, old Katsuragi Lv3 local AT threshold counts",
+      "requiredCheck": "all outcomes and full-log digests match original final records"
+    }
+  }
+}

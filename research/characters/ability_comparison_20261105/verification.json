@@ -1,0 +1,82 @@
+{
+  "date": "2026-11-05",
+  "phaseCounts": {
+    "screen": 3840,
+    "final": 76000,
+    "confirm": 52000,
+    "sensitivity": 6400,
+    "probe": 4864
+  },
+  "primaryGames": 128000,
+  "totalExecutedGames": 144449,
+  "totalSimulationSeconds": 1474.607,
+  "independentStats": {
+    "comparisons": 118,
+    "characterAverageRatesChecked": 68,
+    "maxAbsoluteDifference": 1.1102230246251565e-16
+  },
+  "implementationTests": 12,
+  "source": {
+    "protectedFiles": 438,
+    "changed": [],
+    "cycle": 16,
+    "stateSHA256": "949e67393d0eb31ee98db7deecc55854d00236a5ce412933b576aa8ef8bf88a8",
+    "coreSHA256": {
+      "engine.js": "59df47a87013bdff08f2e41ebfb45eb378daa4dac0dad47bbd50f6839f501c9b",
+      "solver.js": "42b2cbf2df229a660979f0e5d3568bb2a845b106820b0ed750c73c0f844ceabb",
+      "cards_extra.js": "89b114eda2b2d5cf5c4568737508a2a12ea9fee666a23efe865b0862bff53010",
+      "decks_fixed.js": "c6b995411c96998f3a664238b20f5fd617d319f11490186b99373b3f1d984361",
+      "index.html": "db193b0eef3f7d6eec78a4f2e7d73b615754b4cc7f2252fbde3d011d53f8931f",
+      "tune_worker.js": "19a0f933fcff0dbe187fb7e7d062b3a0f34e39eaee798088106af792f60a6a50"
+    }
+  },
+  "cache": {
+    "policy": "fresh worker for every job",
+    "maxWorkers": 15,
+    "reuseGuardRejected": true,
+    "secondJobGames": 0
+  },
+  "replay": {
+    "finalAndConfirm": {
+      "replay": 512,
+      "observationOff": 512,
+      "unmodified": 40
+    },
+    "screen": 280,
+    "supplementary": 4864
+  },
+  "controls": {
+    "unchangedSingleEnvironmentGames": 25536
+  },
+  "measurementNotes": [
+    "Yagyu unchanged Lv2 swap cards/actions in new environments reconstructed from actual returned count (max1 per event); Lv3-5 counters complete",
+    "Asuka Lv2 internal draw not covered by exported draw wrapper; published as null, not zero. Lv3-5 requested scope measured",
+    "Supplementary launch initially hit existing-output guard due phase naming; zero games executed, no data overwritten; corrected before run"
+  ],
+  "unresolvedErrors": [],
+  "privacyCheck": "passed",
+  "researchCodeSHA256": {
+    "abilities.cjs": "68f4c8cfcbc009b7918a3617d9750ea88f1728a8fd8f6c5965ecbd7231e0aa6e",
+    "choices.cjs": "ff61a40380f589f18fd38119eef58e903a6b2ada302530ab2bd1f09b93be8a1b",
+    "worker.cjs": "68fcce24f8a75dff2acfc4ea8cebbc7dc273ea0841a25595cab4f1ea474b9d3e",
+    "diagnostic_worker.cjs": "d5816539b78ee5a4008f91b97be23b625c8aefb61aac46fc4eb0070a6781ffa7",
+    "probe_worker.cjs": "29c12d4e33dea485668bceb5e410df5428cfcc55cdfed37b3a3d606f42b0281c",
+    "run.cjs": "ef5e7c0db41c38fc0bb69194444946089b444dd1823a2900ed9850cfa1f8e49d",
+    "unit.cjs": "28a5c1109c9bf2b6e4dc08656a1e3a7587894e31baa9c613b79408864bd76950",
+    "stats.cjs": "d2b30e06af4173142edcc21a922ef5beefba2a7f5b91f3ca4199bac36447db39",
+    "uncertainty_check.cjs": "1bd8572b1bb916b36fe7842dd80cddf0b3f1bf63530fab03026ee9a3450ebbb4"
+  },
+  "publicFiles": 20,
+  "artifactChecks": {
+    "jsonParsed": true,
+    "markdownRelativeLinksValid": true,
+    "reportPlaceholders": 0
+  },
+  "independentIntervals": {
+    "primary": 118,
+    "secondary": 20,
+    "maxAbsoluteDifference": 0,
+    "zeroVarianceMain": 14,
+    "zeroVarianceSecondary": 2
+  }
+}
