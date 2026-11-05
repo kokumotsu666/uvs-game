@@ -1,0 +1,23 @@
+{
+  "study": "キャラ能力からの勝ち筋調査",
+  "mode": "static inspection only",
+  "simulationsRun": 0,
+  "automatedTuningRun": 0,
+  "adoptions": 0,
+  "newCardsImplemented": 0,
+  "cycleBefore": 16,
+  "cycleAfter": 16,
+  "protectedFilesChecked": 438,
+  "changed": [],
+  "characters": 5,
+  "levels": 25,
+  "strategies": 15,
+  "legal30Witnesses": 15,
+  "cardPool": 66,
+  "mainCharacterImplementationDifferences": 0,
+  "mainCharacterTextDifferences": 16,
+  "mainHTMLGitBlob": "0db8e41d5d4a90c8059c6a51c2c135c4d7298f98",
+  "researchReportsBlobMatched": 3,
+  "privacyCheck": "passed",
+  "errors": []
+}
