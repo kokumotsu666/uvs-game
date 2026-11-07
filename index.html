@@ -1710,6 +1710,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=Solver; else root.
    - 記録は人間・CPUの区別なく全判断を含む。再生は記録を使い切ったら
      元のコントローラ（人間／CPU）に引き継ぐ（＝ログからの再開）
    ========================================================= */
+const UI_VER='演出v2.1';
 (function(root){
 const LOG_VERSION='v1.9'; // 緑の巻物案1・最終デッキ／AI
 
@@ -1771,6 +1772,7 @@ function header(meta,P,CONFIG){
   const cm=meta.cards||P.map(cardMap);
   return [
     `#UVS ${LOG_VERSION} replay`,
+    `#ui: ${UI_VER}`,
     `#legend: token "<p><op><arg>" p=0/1(P1/P2) op: P=準備(g<uid>y|i ゲージ置き, s<uid> サポート, l スタンバイ能力, n やめる, b バトルへ/終了) G=閃のゲージ(y/i) A=攻撃uid(-=なし) D=防御uid(-=なし) H=重撃uid(-=パス) C=連撃(R/-) K=選択uid.uid(-=なし)`,
     `#rules: 緑の巻物=案1(ダメージ2枚ごと1ドロー・陰ゲージ) v2 連撃統合・緑無条件防御・秘伝ハンデス1 deckSize=${CONFIG.deckSize} tie=${CONFIG.tieWinner} noDefenseAutoHit=${CONFIG.noDefenseAutoHit} heavy.ignoreGP=${CONFIG.heavy.ignoreGP} greenDefense=${CONFIG.greenDefense} blowHeavy=${CONFIG.blowHeavy} win=${CONFIG.winDamage}dmg|drawPhaseLO(damageArea,tie=LOsideLose)`,
     `seed=${meta.seed} d0=${meta.decks[0]} d1=${meta.decks[1]} first=${meta.first} c0=${meta.ctl[0]} c1=${meta.ctl[1]}`,
@@ -2097,7 +2099,7 @@ function showGameOver(){const o=G.over;if(!o)return;const w=P[1-o.loser];openOv(
 
 /* ---------- 開始画面 ---------- */
 function startScreen(){
-  $('#app').innerHTML=`<header><h1>UVS Engine — 固定デッキ5種（${Replay.LOG_VERSION}・再現ログ・汎用AI）</h1></header>
+  $('#app').innerHTML=`<header><h1>UVS Engine — 固定デッキ5種（${Replay.LOG_VERSION}・再現ログ・汎用AI）</h1><small class="small" data-ui-version>${UI_VER}</small></header>
   <div class="board"><h3 style="margin:6px 0">Unlimited VS 再現エンジン（試作）</h3>
    <p class="small">リメイク向けルールv2で、固定デッキ5種（飛鳥・連撃／柳生・射撃／斑鳩・対抗封じ／葛城・削り／雲雀・反撃、各30枚＋キャラ5枚）を対戦させます。1台の端末で交代して遊ぶか、CPUと対戦できます。</p>
    <h4>モード</h4>
@@ -2231,7 +2233,7 @@ function nvRender(){
   const ph=pickHint(pickKey());const ptxt=pr&&pr.pi===me.idx?(ph?`<b class="pk">${ph}</b>`:`${pr.spec.title}`):(G.over?'ゲーム終了':(P[G.cur]&&P[G.cur].ai?'CPU思考中…':(G.log.length?G.log[G.log.length-1].s:'')));
   app.innerHTML=`
   <div class="nv-bar">${G.mode!=='watch'?`<button id="btnundo" ${canUndo()&&undoTarget('step')>=0?'':'disabled'}>1手戻す</button><button id="btnturn" ${canUndo()&&undoTarget('turn')>=0?'':'disabled'}>ターン最初へ</button>`:''}<button id="btnlog">ログ</button><button id="btnrule">ルール</button><button id="btnreset">最初から</button><span class="sp"></span><span id="autostat">${autoStat}</span><span>${Replay.LOG_VERSION}</span></div>
-  <div class="nv-opbar"><span><span class="nv-turn ${mine?'mine':'theirs'}">T${G.turn} ${who}・${PH[G.phase]||''}</span>　${op.name}${op.ai?'（CPU）':''}</span><span class="nv-backs">手札 ${op.hand.slice(0,8).map(()=>'<i></i>').join('')}<b>${op.hand.length}</b></span></div>
+  <div class="nv-opbar"><span><span class="nv-turn ${mine?'mine':'theirs'}">T${G.turn} ${who}・${PH[G.phase]||''}</span>　${op.name}${op.ai?'（CPU）':''}</span><small class="small" data-ui-version style="white-space:nowrap">${UI_VER}</small><span class="nv-backs">手札 ${op.hand.slice(0,8).map(()=>'<i></i>').join('')}<b>${op.hand.length}</b></span></div>
   <div class="nv-row">${nvPower(op,'相手のパワー',false)}${nvInfo(op,true)}${nvGval(op,'相手',true)}</div>
   <div class="nv-mid"><div class="nv-gs">${nvGauge(me,'yo')}${nvGauge(me,'in')}</div>
    <div class="nv-center">${nvChar(op,true,false)}<span class="nv-vs">VS</span>${nvChar(me,false,lit,pickKey()==='ch')}${nvBattle()}${nvChoice(pr,me)}</div>
