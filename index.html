@@ -1895,15 +1895,6 @@ const Human={
   async heavy(p,elig,ctx){const need=ctx.isAtk?ctx.df-ctx.at:ctx.at-ctx.df+100;const st=need<=0?'現在このまま勝ち':`あと+${need}で${ctx.isAtk?'成功':'防げる'}（同値は攻撃側の勝ち）`;const dp=ctx.dp===0?'このアタックはDP0（通ってもダメージなし）':`このアタックのDPは${ctx.dp}`;return await pickCard(p,elig,`重撃（${ctx.isAtk?'アタック側':'ディフェンス側'}）：AT${ctx.at} vs DF${ctx.df}。${st}。${dp}`,true,'パス');},
   async chain(p,avail){const b=[{value:'R',label:'【連撃】緑カードで追加バトル'},{value:null,label:'宣言しない（カードはゲージへ）'}];const r=await uiPrompt(p.idx,{title:'連撃を宣言しますか？（宣言するとこのカードは捨て札）',buttons:b});return r.value;},
   async pickCards(p,cards,n,title,allowLess){
-    if(/^秘伝「.+」のコスト：捨てる.+属性のカードを選択$/.test(title)){
-      return pickGaugeCards(p,p,cards,n,title,'秘伝忍法・コスト選択');
-    }
-    if(title==='本能のままに：研究斑鳩Lv3で捨てるゲージ'){
-      return pickGaugeCards(p,p,cards,n,title,'斑鳩Lv3・忍ゲージ破壊');
-    }
-    if(title==='研究斑鳩Lv5：相手ゲージを破壊'){
-      return pickGaugeCards(p,P[1-p.idx],cards,n,title,'斑鳩Lv5・忍ゲージ破壊');
-    }
     const sel=[];
     while(sel.length<n){
       const rest=cards.filter(c=>!sel.includes(c));if(!rest.length)break;
@@ -2295,6 +2286,19 @@ async function pickGaugeCards(p,owner,cards,n,title,heading){
   const {cards:chosen}=await uiPrompt(p.idx,{title,gaugePick:{owner,cards,n,heading}});
   return chosen;
 }
+const pickCardsDefault=Human.pickCards;
+Human.pickCards=async function(p,cards,n,title,allowLess){
+    if(/^秘伝「.+」のコスト：捨てる.+属性のカードを選択$/.test(title)){
+      return pickGaugeCards(p,p,cards,n,title,'秘伝忍法・コスト選択');
+    }
+    if(title==='本能のままに：研究斑鳩Lv3で捨てるゲージ'){
+      return pickGaugeCards(p,p,cards,n,title,'斑鳩Lv3・忍ゲージ破壊');
+    }
+    if(title==='研究斑鳩Lv5：相手ゲージを破壊'){
+      return pickGaugeCards(p,P[1-p.idx],cards,n,title,'斑鳩Lv5・忍ゲージ破壊');
+    }
+    return pickCardsDefault.call(this,p,cards,n,title,allowLess);
+};
 let gaugePickView=null;
 function syncGaugePickView(prompt){
   if(gaugePickView?.prompt===prompt)return;
