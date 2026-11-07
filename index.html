@@ -152,6 +152,13 @@ header button:disabled{opacity:.35}
 .card.big .tx{margin-top:4px;padding-top:4px;border-top:1px solid #3e4454;font-size:10.5px;line-height:1.35;color:#c9cfdb;display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
 .card.big .tx:empty{display:none}
 .card.big .ic{min-height:0}
+
+#cardpeek{position:fixed;inset:0;z-index:24;pointer-events:none;display:flex;align-items:center;justify-content:center;padding:14px 14px 130px}
+#cardpeek .cardpeek-panel{pointer-events:auto;width:min(310px,100%);max-height:calc(100dvh - 185px);overflow:auto;background:#1e2129;border:1px solid #78829b;border-radius:14px;padding:14px;box-shadow:0 12px 60px #000c}
+#cardpeek .card{width:100%;min-height:0;font-size:14px;cursor:default;padding:12px}
+#cardpeek .card .nm{font-size:18px;white-space:normal;padding-right:24px}
+#cardpeek .card .tx{display:block;font-size:14px;line-height:1.65;white-space:normal}
+#cardpeek .cardpeek-hint{font-size:11px;color:var(--dim);margin:10px 0 0}
 </style>
 <style>
 /* v1.8 新UI（2026-11-06）：モック https://claude.ai/artifact/2916UR435Sqh5DB9wBAGLw の配置 */
@@ -2192,6 +2199,19 @@ function nvHand(p,show){
   const pass=(mine&&pr.spec.cards)?(pr.spec.buttons||[]).map((b,i)=>`<div class="nv-pass ${b.primary?'primary':''} ${pickKey()==='b'+i?'picked':''}" data-bi="${i}" role="button">${b.label}</div>`).join(''):'';
   return `<div class="nv-hand" id="nvhand">${cards||'<span class="small" style="margin:auto 0">手札なし</span>'}${pass}</div>`;}
 // 2026-11-06：誤操作対策。選べる札・「出さない」札・キャラ能力は、1回目のタップで持ち上げ、同じものをもう一度タップで決定
+
+let cardPeek=null,cardPeekPrompt=null;
+function closeCardPeek(){if(cardPeek)cardPeek.remove();cardPeek=null;cardPeekPrompt=null;}
+function showCardPeek(c){
+  if(!c)return;closeCardPeek();cardPeekPrompt=G.prompt;
+  cardPeek=document.createElement('div');cardPeek.id='cardpeek';
+  cardPeek.innerHTML='<section class="cardpeek-panel" role="dialog" aria-label="カード詳細">'+cardHTML(c,{text:true})+'<p class="cardpeek-hint">外側をタップで閉じる・同じ手札カードをもう一度タップで決定</p></section>';
+  document.body.appendChild(cardPeek);
+}
+document.addEventListener('click',e=>{
+  if(cardPeek&&!cardPeek.querySelector('.cardpeek-panel').contains(e.target))closeCardPeek();
+},true);
+
 function pickKey(){const pr=G.prompt;if(!pr||UI.pickFor!==pr)return null;return UI.pick||null;}
 function setPick(k){UI.pickFor=G.prompt;UI.pick=k;render();}
 function pickHint(k){const pr=G.prompt;if(!k||!pr)return '';
@@ -2201,6 +2221,7 @@ function pickHint(k){const pr=G.prompt;if(!k||!pr)return '';
   if(k.startsWith('b')){const b=pr.spec.buttons[+k.slice(1)];return b?`もう一度タップで決定：${b.label}`:'';}
   if(k==='ch')return `もう一度タップで決定：${pr.spec.charLabel||'キャラ能力'}`;return '';}
 function nvRender(){
+  if(cardPeek&&(cardPeekPrompt!==G.prompt||G.over))closeCardPeek();
   if(!P.length)return;
   const app=$('#app');app.classList.add('nv');
   const v=bottomIdx();const me=P[v],op=P[1-v];const showMe=!me.ai||G.spectate;
@@ -2220,7 +2241,7 @@ function nvRender(){
   ${nvHand(me,showMe)}`;
   animatePowers();
   app.querySelectorAll('[data-bi]').forEach(b=>b.onclick=e=>{e.stopPropagation();const p2=G.prompt;if(!p2)return;const k='b'+b.dataset.bi;if(b.classList.contains('nv-pass')&&pickKey()!==k){setPick(k);return;}const sp=p2.spec.buttons[+b.dataset.bi];UI.pick=null;resolvePrompt({value:sp.value});});
-  app.querySelectorAll('[data-uid]').forEach(el=>el.onclick=e=>{e.stopPropagation();const uid=+el.dataset.uid;const p2=G.prompt;if(p2&&p2.spec.cards&&p2.spec.cards.includes(uid)&&el.classList.contains('sel')){const k='c'+uid;if(pickKey()!==k){setPick(k);return;}UI.pick=null;resolvePrompt({card:findCard(uid)});return;}showDetail(findCard(uid));});
+  app.querySelectorAll('[data-uid]').forEach(el=>el.onclick=e=>{e.stopPropagation();const uid=+el.dataset.uid;const p2=G.prompt;if(p2&&p2.spec.cards&&p2.spec.cards.includes(uid)&&el.classList.contains('sel')){const k='c'+uid;if(pickKey()!==k){setPick(k);showCardPeek(findCard(uid));return;}closeCardPeek();UI.pick=null;resolvePrompt({card:findCard(uid)});return;}showCardPeek(findCard(uid));});
   app.querySelectorAll('[data-charv]').forEach(el=>el.onclick=()=>{const p2=G.prompt;if(!(p2&&p2.spec.charValue))return;if(pickKey()!=='ch'){setPick('ch');return;}UI.pick=null;resolvePrompt({value:p2.spec.charValue});});
   app.querySelectorAll('[data-zone]').forEach(el=>el.onclick=e=>{e.stopPropagation();showZone(P[+el.dataset.p],el.dataset.zone);});
   app.querySelectorAll('[data-pw]').forEach(el=>el.onclick=()=>showPowerDetail(P[+el.dataset.pw]));
