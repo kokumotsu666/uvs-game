@@ -167,11 +167,12 @@ header button:disabled{opacity:.35}
 .hiden-cost h2,.hiden-cost h3{margin:0 0 6px}
 .hiden-cost footer button{width:100%;min-height:44px}
 .hiden-cost-scroll{min-height:0;overflow:auto;overscroll-behavior:contain;padding:12px 14px}
-.hiden-cost-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin:0 0 14px}
+.hiden-cost-grid{display:grid;grid-template-columns:repeat(2,minmax(0,184px));gap:8px;margin:0 0 14px}
 .hiden-cost-entry{display:grid;grid-template-columns:minmax(0,1fr) 44px;align-items:start;gap:4px}
 .hiden-cost-card{position:relative;text-align:left;padding:0;min-width:0}
-.hiden-cost-card .card{width:100%;min-height:82px}
-.hiden-cost-card .nm{white-space:normal;overflow-wrap:anywhere;padding-right:12px}
+.hiden-cost-card .card{width:100%;height:104px;min-height:0}
+.hiden-cost-card .nm{min-height:2.4em;white-space:normal;overflow-wrap:anywhere;padding-right:12px}
+.hiden-cost-card .st{white-space:normal}
 .hiden-cost-card[aria-pressed="true"]{outline:3px solid var(--acc);outline-offset:1px}
 .hiden-cost-card[aria-pressed="true"]::after{content:"✓";position:absolute;right:4px;top:4px;border-radius:50%;background:var(--acc);color:var(--bg);padding:0 4px}
 .hiden-cost-info{min-height:44px;padding:0}
