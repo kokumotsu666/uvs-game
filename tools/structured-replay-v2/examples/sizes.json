@@ -1,0 +1,15 @@
+{
+  "seed": 433775412,
+  "operations": 74,
+  "events": 293,
+  "v1": 368759,
+  "v2": 79464,
+  "diagnostics": 4695,
+  "losslessArchive": true,
+  "archiveNormalLines": 175,
+  "archivedHtmlCases": 60,
+  "archivedHtmlDifferences": 0,
+  "legacyAndCompactEnd": true,
+  "compactPartialOps": 22,
+  "observationModesMatch": true
+}
