@@ -1,0 +1,2330 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>UVS Engine — 飛鳥 vs 柳生</title>
+<style>
+:root{--bg:#14161c;--panel:#1e2129;--panel2:#262a35;--line:#3a3f4d;--fg:#e8e9ee;--dim:#9aa0b0;
+ --yo:#d9534f;--in:#3b7dd8;--sen:#d8a62a;--hi:#4caf50;--hiden:#9b59b6;--acc:#f0c15c}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;font-size:14px;line-height:1.45}
+#app{max-width:640px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+header{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+header h1{font-size:15px;margin:0;flex:1}
+header button{font-size:12px}
+button{background:var(--panel2);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:14px;cursor:pointer}
+button.primary{background:#3a5bbf;border-color:#4a6bd0}
+button:disabled{opacity:.4}
+.board{padding:8px 10px;border-bottom:1px solid var(--line);background:var(--panel)}
+.board.me{background:#1a1d26}
+.row{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center}
+.name{font-weight:700}
+.stat{color:var(--dim);font-size:12px}
+.stat b{color:var(--fg);font-size:13px}
+.chip{display:inline-block;padding:2px 7px;border-radius:999px;font-size:12px;border:1px solid var(--line);background:var(--panel2);cursor:pointer}
+.chip.yo{border-color:var(--yo)}.chip.in{border-color:var(--in)}
+.chip.dmg{border-color:#c0392b}
+.chip.chain{border-color:#4caf50}.chip.chain.on{background:#1f3a24}.chip.chain.ban{border-color:#e53935;background:#3a1f1f;color:#ff8a80}
+.banmsg{margin-top:4px;padding:3px 8px;border-radius:6px;font-size:12px;background:#3a1f1f;border:1px solid #e53935;color:#ff8a80}
+.needs{display:flex;flex-wrap:wrap;gap:4px 6px;margin-top:2px}.needs span{padding:2px 8px;border-radius:6px;font-size:12px;border:1px solid var(--line)}
+.needs .lit{color:#fff;border-color:#4caf50;background:#2e5e35;font-weight:700}.needs .off{opacity:.35}
+.arena{flex:1;padding:8px 10px;display:flex;flex-direction:column;gap:6px}
+.battle{display:flex;gap:8px;justify-content:space-between;align-items:flex-start;min-height:60px}
+.side{flex:1;background:var(--panel2);border-radius:10px;padding:6px;min-height:60px}
+.side h4{margin:0 0 4px;font-size:12px;color:var(--dim)}
+.side .tot{font-size:18px;font-weight:700}
+.hand{display:flex;gap:6px;overflow-x:auto;padding:6px 0 4px;-webkit-overflow-scrolling:touch}
+.card{flex:0 0 auto;width:92px;min-height:88px;border-radius:8px;border:2px solid var(--line);background:#2c3040;padding:5px 6px;font-size:11px;position:relative;cursor:pointer}
+.card.small{width:78px;min-height:64px;font-size:10px}
+.card .nm{font-weight:700;font-size:12px;line-height:1.2;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card .st{font-size:12px}
+.card .gp{color:var(--dim)}
+.card .ic{color:var(--acc);letter-spacing:1px;font-weight:700}
+.card .ty{position:absolute;top:3px;right:5px;font-size:9px;color:var(--dim)}
+.card.c閃{border-color:var(--sen)}.card.c陽{border-color:var(--yo)}.card.c陰{border-color:var(--in)}.card.c飛{border-color:var(--hi)}.card.c秘{border-color:var(--hiden)}
+.card.sel{box-shadow:0 0 0 3px #fff inset;background:#3a4258}
+.card.dis{opacity:.35}
+.card.dimu{opacity:.5;filter:saturate(.4)}
+.card.back{background:repeating-linear-gradient(45deg,#333 0 6px,#444 6px 12px);border-color:#555}
+#actions{padding:10px 10px calc(10px + 44px + env(safe-area-inset-bottom,0px));background:var(--panel);border-top:1px solid var(--line);position:sticky;bottom:0;z-index:5}
+#actions .title{font-weight:700;margin-bottom:6px}
+#actions .btns{display:flex;flex-wrap:wrap;gap:6px}
+.log{font-size:12px;color:var(--dim);max-height:120px;overflow:auto;background:var(--panel2);border-radius:8px;padding:6px 8px;white-space:pre-wrap}
+.log .hl{color:var(--fg)}
+#overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;z-index:20;overflow:auto;padding:16px}
+#overlay.on{display:flex;align-items:center;justify-content:center}
+.ov{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;max-width:560px;width:100%;max-height:92vh;overflow:auto}
+.ov h2{margin:0 0 10px;font-size:17px}
+.ov label{display:block;margin:6px 0}
+.ov .btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.detail{font-size:13px}
+.detail dt{color:var(--dim);font-size:11px;margin-top:6px}
+.sup{display:inline-block;font-size:11px;padding:2px 6px;border-radius:6px;border:1px dashed var(--line);margin-right:4px}
+.small{font-size:12px;color:var(--dim)}
+table{border-collapse:collapse;font-size:12px;width:100%}
+td,th{border-bottom:1px solid var(--line);padding:3px 4px;text-align:left;vertical-align:top}
+
+/* v1.5 UI readability patch: portrait dimensions preserved */
+.char-panel{display:flex;align-items:center;gap:8px;margin-top:5px;min-width:0}
+.char-identity{flex:1;min-width:0;display:flex;align-items:center;gap:6px}
+.char-identity .chip{font-weight:700;white-space:nowrap}
+.char-numbers{display:flex;gap:5px;flex-shrink:0}
+.power{min-width:72px;padding:3px 7px;border-radius:8px;background:#292f3b;border:1px solid #4a5262;text-align:center;font-variant-numeric:tabular-nums}
+.power.atk{border-color:#b45d59}.power.def{border-color:#5584bb}
+.power.atk .power-label{color:#ff7777}.power.def .power-label{color:#75b7ff}
+.power .power-label{display:block;font-size:10px;font-weight:700;letter-spacing:.06em;color:#d4d9e5}
+.power .power-num{display:block;font-size:18px;line-height:1.18;font-weight:800;color:#fff}
+/* 一の位から回転する桁別オドメーター */
+.power .power-num{display:flex;justify-content:center;align-items:center;white-space:nowrap;overflow:hidden}
+.power .od-digit{position:relative;display:inline-block;width:.62em;height:1.18em;overflow:hidden;vertical-align:top}
+.power .od-strip{display:flex;flex-direction:column;align-items:center;will-change:transform}
+.power .od-cell{display:block;height:1.18em;line-height:1.18em;text-align:center}
+.power .power-delta{font-size:10px;color:#ffcb82;min-height:12px}
+.power.changed{animation:power-pulse .38s ease-out}
+@keyframes power-pulse{0%{transform:scale(1.1);filter:brightness(1.6)}100%{transform:scale(1);filter:brightness(1)}}
+.hand{scroll-snap-type:x proximity;scroll-padding:8px;gap:8px;padding:9px 2px 10px}
+.hand .card{scroll-snap-align:start}
+.card{width:104px;min-height:103px;padding:8px 6px 6px;border-radius:9px}
+.card .nm{font-size:13px;white-space:normal;overflow:visible;overflow-wrap:anywhere;min-height:28px;padding-right:10px}
+.card .st{font-size:13px;font-weight:800;white-space:nowrap}
+.card .gp{font-size:11px;line-height:1.35}
+.card .ic{font-size:12px}
+.card.sel{box-shadow:0 0 0 2px #fff inset,0 0 12px #779bff;background:#3a4258}
+.card.small{width:80px;min-height:70px;padding:5px;font-size:10px}
+.card.small .nm{font-size:11px;min-height:0}
+#actions .hand{max-height:140px}
+.battle .tot{font-variant-numeric:tabular-nums}
+@media(max-width:375px){.power{min-width:64px;padding:3px 4px}.power .power-num{font-size:16px}.char-panel{gap:4px}.card{width:98px}}
+@media(prefers-reduced-motion:reduce){.power.changed{animation:none}}
+/* v1.6 UI: デュエルリンクス風。相手は上で小さく、自分は下。ATK/DEFの横にそのバトルの札。ターン・フェイズ演出 */
+header{padding:4px 8px;gap:5px;flex-wrap:wrap}
+header h1{font-size:12px;flex:none;white-space:nowrap}
+header button{font-size:11px;padding:4px 7px}
+header button:disabled{opacity:.35}
+#autostat{font-size:10px;flex-basis:100%;text-align:right;margin-top:-2px}
+#autostat:empty{display:none}
+.board{transition:box-shadow .3s,border-color .3s;border-left:4px solid transparent}
+.board.turn.mine{border-left-color:#4a7dff;box-shadow:inset 0 0 18px rgba(74,125,255,.18)}
+.board.turn.theirs{border-left-color:#e05252;box-shadow:inset 0 0 18px rgba(224,82,82,.18)}
+.board.op{padding:5px 8px}
+.board.op .row{gap:4px 9px}
+.minihand{display:inline-flex;align-items:center;gap:0;margin-left:2px}
+.minihand i{display:inline-block;width:11px;height:16px;border-radius:2px;border:1px solid #666;background:repeating-linear-gradient(45deg,#3a3a3a 0 3px,#4a4a4a 3px 6px);margin-left:-4px}
+.minihand i:first-child{margin-left:0}
+.minihand b{margin-left:4px;font-size:13px}
+.char-panel{align-items:flex-start}
+.bslot{display:flex;align-items:flex-start;gap:0;min-height:0}
+.bslot .card.small{width:74px;min-height:62px;padding:4px 5px}
+.bslot .card.small .nm{font-size:10.5px}
+.bslot .card.small .gp{display:none}
+.bslot .card.small .st{font-size:10.5px;letter-spacing:-.03em;white-space:nowrap}
+.bslot .card.small .ty{font-size:8px}
+.bslot .card.small .nm{padding-right:8px}
+.bslot .hv{margin-left:-34px;transform:translateY(8px)}
+.bslot .wait{font-size:11px;color:var(--dim);border:1px dashed var(--line);border-radius:8px;width:70px;min-height:62px;display:flex;align-items:center;justify-content:center;text-align:center}
+.power{cursor:pointer}
+.mid{padding:4px 8px;display:flex;flex-direction:column;gap:3px;background:var(--bg)}
+.phasebar{display:flex;gap:4px;justify-content:center;align-items:center}
+.phasebar span{font-size:11px;padding:2px 9px;border-radius:999px;border:1px solid var(--line);color:var(--dim)}
+.phasebar .who{border:none;font-weight:700;padding:2px 4px}
+.phasebar.mine .on{background:#3a5bbf;border-color:#6d8cff;color:#fff;font-weight:700}
+.phasebar.theirs .on{background:#a33a3a;border-color:#ff7b7b;color:#fff;font-weight:700}
+.phasebar.mine .who{color:#8fb0ff}.phasebar.theirs .who{color:#ff9a9a}
+.result{text-align:center;font-weight:800;font-size:15px}
+.mid .log{max-height:38px;font-size:11px;padding:3px 8px;cursor:pointer}
+#banner{position:fixed;left:0;right:0;top:38%;z-index:30;pointer-events:none;display:none;text-align:center}
+#banner.on{display:block}
+#banner .band{margin:0 auto;padding:14px 0;font-size:24px;font-weight:900;letter-spacing:.08em;color:#fff;animation:band-in var(--bd,900ms) ease-out forwards}
+#banner .band small{display:block;font-size:12px;font-weight:600;letter-spacing:0;opacity:.85}
+#banner.mine .band{background:linear-gradient(90deg,transparent,rgba(58,91,191,.95) 15%,rgba(58,91,191,.95) 85%,transparent)}
+#banner.theirs .band{background:linear-gradient(90deg,transparent,rgba(170,50,50,.95) 15%,rgba(170,50,50,.95) 85%,transparent)}
+#banner.phase .band{font-size:18px;padding:8px 0}
+@keyframes band-in{0%{transform:translateX(60%);opacity:0}18%{transform:translateX(0);opacity:1}78%{transform:translateX(0);opacity:1}100%{transform:translateX(-60%);opacity:0}}
+@media(prefers-reduced-motion:reduce){#banner .band{animation:none}}
+/* テキストで強化された数値：通常は細字、強化分を含む値だけ太字＋色 */
+.card .st{font-weight:500}
+.card .st b.up{font-weight:900;color:#ffd36b}
+/* 連撃条件の印（準備フェイズ） */
+.card .needb{display:inline-block;align-self:flex-start;margin:0 0 3px;padding:0 6px;border-radius:5px;font-size:10px;font-weight:800;color:#fff;background:#2e7d32;border:1px solid #66bb6a}
+/* 手札：縦長にしてテキストも表示 */
+.board.me .hand .card.big{width:124px;min-height:168px;display:flex;flex-direction:column}
+.card.big .tx{margin-top:4px;padding-top:4px;border-top:1px solid #3e4454;font-size:10.5px;line-height:1.35;color:#c9cfdb;display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.card.big .tx:empty{display:none}
+.card.big .ic{min-height:0}
+</style>
+<style>
+/* v1.8 新UI（2026-11-06）：モック https://claude.ai/artifact/2916UR435Sqh5DB9wBAGLw の配置 */
+#app.nv{height:100vh;height:100dvh;min-height:0;max-width:520px;padding:4px 8px 8px;gap:5px;overflow:hidden}
+.nv-bar{display:flex;align-items:center;gap:4px;flex-wrap:wrap;font-size:11px;color:var(--dim)}
+.nv-bar button{padding:3px 8px;font-size:11px;min-height:28px}
+.nv-bar .sp{flex:1}
+.nv-opbar{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--dim);min-height:22px}
+.nv-turn{font-weight:700;color:var(--fg)}
+.nv-turn.mine{color:#9cc2ff}.nv-turn.theirs{color:#ff9f8a}
+.nv-backs{display:flex;gap:2px;align-items:center}.nv-backs i{display:block;width:10px;height:15px;border-radius:2px;background:#3a4150;border:1px solid #586074}
+.nv-backs b{font-size:15px;color:var(--fg);margin-left:4px}
+.nv-row{display:flex;align-items:center;gap:6px}
+.nv-power{display:flex;flex-direction:column;gap:0;cursor:pointer;padding:2px 6px;border-radius:8px;border:2px solid transparent;min-width:92px}
+.nv-power.right{align-items:flex-end}
+.nv-power .who{font-size:10px;color:var(--dim)}
+.nv-power .power{display:flex;align-items:baseline;gap:5px;background:none;border:0;padding:0;margin:0}
+.nv-power .power-label{font-size:12px;font-weight:800;letter-spacing:.06em}
+.nv-power .power.atk .power-label{color:#ff8a5b}.nv-power .power.def .power-label{color:#6fa8ff}
+.nv-power .power-num{font-size:28px;font-weight:800;line-height:1}
+.nv-power .power-delta{font-size:11px;color:var(--acc);min-width:0}
+.nv-power.hl.atk{border-color:#ff8a5b}.nv-power.hl.def{border-color:#6fa8ff}
+.nv-gval{display:flex;flex-direction:column;cursor:pointer}
+.nv-gval.right{align-items:flex-end}
+.nv-gval .who{font-size:10px;color:var(--dim)}
+.nv-gval .v{display:flex;gap:8px;font-size:17px;font-weight:800}
+.nv-gval .y{color:#f07a55}.nv-gval .n{color:#6a9cf0}
+.nv-info{flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;background:var(--panel);padding:4px 6px;display:flex;flex-direction:column;gap:2px;font-size:10px;color:var(--dim)}
+.nv-info .nums{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+.nv-info b{color:var(--fg);font-size:12px}
+.nv-info .z{cursor:pointer}
+.nv-info .gr{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nv-info .gr .lit{color:#4cd07d;font-weight:700}.nv-info .gr .off{color:#7d8496}
+.nv-info .gr.ban{color:#ff8a80}
+.nv-mid{flex:1;min-height:0;display:flex;gap:6px}
+.nv-gs{display:flex;gap:3px}
+.nv-g{width:38px;display:flex;flex-direction:column;gap:2px;cursor:pointer}
+.nv-g .h{font-size:10px;font-weight:700;text-align:center}
+.nv-g.yo .h{color:#f07a55}.nv-g.in .h{color:#6a9cf0}
+.nv-g .col{flex:1;min-height:0;border-radius:6px;padding:2px;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;overflow:hidden}
+.nv-g.yo .col{border:1px solid #d9534f66;background:#d9534f14}.nv-g.in .col{border:1px solid #3b7dd866;background:#3b7dd814}
+.nv-g .stub{flex:0 0 auto;height:18px;border-radius:3px;background:var(--panel);font-size:8.5px;line-height:18px;color:var(--dim);padding-left:3px;white-space:nowrap;overflow:hidden;border-left:4px solid var(--sen)}
+.nv-g .stub.c陽{border-left-color:var(--yo)}.nv-g .stub.c陰{border-left-color:var(--in)}.nv-g .stub.cx{border-left-color:#777}
+.nv-center{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:4px;position:relative}
+.nv-char{width:100%;max-width:150px;flex:1 1 0;min-height:64px;max-height:160px;border-radius:10px;background:#252a35;border:1px solid var(--line);padding:6px 7px;display:flex;flex-direction:column;gap:3px;overflow:hidden;cursor:pointer}
+.nv-char.flip{transform:rotate(180deg)}
+.nv-char .t{display:flex;justify-content:space-between;align-items:baseline}
+.nv-char .t b{font-size:14px}.nv-char .t span{font-size:11px;color:var(--acc);font-weight:700}
+.nv-char .s{font-size:12px;font-weight:700}
+.nv-char .x{font-size:9.5px;color:var(--dim);line-height:1.3;overflow:hidden}
+.nv-char .sup{font-size:9px;color:var(--acc)}
+.nv-char.lit{box-shadow:0 0 0 2px var(--acc),0 0 16px #f0c15c88}
+.nv-vs{font-size:10px;letter-spacing:.2em;color:var(--dim)}
+.nv-battle{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;background:#0d0f14e8;border:1px solid var(--line);border-radius:10px;padding:6px;display:flex;flex-direction:column;align-items:center;gap:4px;width:max-content;max-width:100%}
+.nv-battle .cs{display:flex;gap:6px;align-items:flex-start}
+.nv-battle .side{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9px;color:var(--dim)}
+.nv-battle .card{width:66px;min-height:62px}
+.nv-battle .wait{width:66px;min-height:62px;border:1px dashed var(--line);border-radius:8px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:10px}
+.nv-battle .res{font-size:13px;font-weight:800}
+.nv-choice{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:4;background:#0d0f14f2;border:1px solid var(--acc);border-radius:12px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:8px;width:max-content;max-width:96%}
+.nv-choice .q{font-size:12px;text-align:center}
+.nv-choice .bs{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.nv-choice button{min-height:44px;padding:6px 12px}
+.nv-choice .cards{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-height:40vh;overflow:auto}
+.nv-prompt{font-size:11px;min-height:28px;line-height:1.3;color:var(--fg);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer}
+.nv-prompt.idle{color:var(--dim)}
+.nv-hand{display:flex;gap:5px;overflow-x:auto;padding:6px 2px 2px;min-height:100px;scrollbar-width:none}
+.nv-hand>:first-child{margin-left:auto}
+.nv-hand .card{width:74px;min-height:94px;padding:6px 5px 5px;font-size:10px}
+.nv-hand .card .nm{font-size:11.5px;min-height:0}
+.nv-hand .card .tx{display:none}
+.nv-hand .card .gp{font-size:9.5px}
+.nv-hand .card.sel{transform:translateY(-4px)}
+.nv-pass{flex:0 0 auto;width:74px;min-height:94px;border-radius:9px;border:2px dashed var(--acc);background:#2b2a22;color:var(--acc);font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center;text-align:center;padding:6px;cursor:pointer}
+.nv-pass.primary{background:#3a3520}
+.nv-banmsg{font-size:10px;color:#ff8a80}
+.nv-bar{flex-wrap:nowrap;overflow:hidden}
+.nv-bar button{padding:2px 6px;white-space:nowrap}
+#autostat{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.nv-hand .card .st{font-size:11px;letter-spacing:-.02em}
+.nv-hand .card .st b{font-size:11px}
+.nv-hand .card.picked{transform:translateY(-14px);box-shadow:0 0 0 3px #fff,0 0 18px #fff8}
+.nv-pass.picked{transform:translateY(-14px);background:#5a4d1f;border-style:solid}
+.nv-char.picked{box-shadow:0 0 0 3px #fff,0 0 20px #f0c15c}
+.nv-prompt .pk{color:var(--acc)}
+.nv-hand{padding-top:16px}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:25}
+#fx .fx-center{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:6px;background:#0b0c10d9;border:1px solid var(--acc);border-radius:12px;padding:8px 10px;box-shadow:0 10px 30px #000a}
+#fx .fx-label{font-size:12px;font-weight:800;color:var(--acc);letter-spacing:.08em}
+#fx .fx-row{display:flex;gap:8px}
+#fx .fx-row .card{width:112px;min-height:120px}
+#fx .fx-row .card .tx{display:block;font-size:9.5px;color:var(--dim);line-height:1.3;margin-top:3px}
+#fx .fx-none{width:112px;min-height:120px;border:1px dashed var(--line);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--dim)}
+#fx .fx-fly{position:absolute;transform:translate(-50%,-50%)}
+#fx .fx-fly .card{width:74px;min-height:90px}
+#fx .fx-ability{max-width:280px}
+#fx .fx-abtext{font-size:12px;line-height:1.4;text-align:center}
+#fx .fx-pop{position:absolute;transform:translate(-50%,0);font-size:13px;font-weight:800;padding:2px 8px;border-radius:10px;background:#000c;white-space:nowrap}
+#fx .fx-pop.eff{color:var(--acc)}#fx .fx-pop.dmg{color:#ff8a80}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="overlay"></div>
+<div id="banner"></div>
+<script>
+'use strict';
+/* =========================================================
+   UVS Engine (Unlimited VS 再現・汎用エンジン試作)
+   閃乱カグラ版ルール + 本チャットでの決定事項
+   ========================================================= */
+const CONFIG = {
+  ruleVersion:'1.8',       // ルール・カードの版（2026-11-06 v1.8：緑5枚を前提2種・AT+700に、欺人脚の重撃アイコン削除、凪・怨砂の発動しない文を削除）。版の違うログ・状態は混ぜない
+  deckSize:40, startHand:4, drawPerTurn:2, firstTurnDraw:1, firstTurnBattle:false,
+  winDamage:5, tieWinner:'attacker', noDefenseAutoHit:true,
+  greenDefense:'free',   // 緑の防御: 'free'=条件なしで出せ相手が緑なら無条件成功 / 'needs'=攻撃時と同じ前提条件が必要（満たせば無条件成功） / 'none'=緑は防御に出せない
+  blowHeavy:true,        // 吹飛が相手の重撃も封じるか（falseならテキスト無効のみ）
+  heavy:{ firstNeedsIcon:false, ignoreGP:true, maxCards:99, endMode:'bothPass' },
+};
+let UID=0;
+const yo=p=>p.gYo.length, inn=p=>p.gIn.length, gaugeAll=p=>[...p.gYo,...p.gIn];
+const sleep=ms=>ms>0?new Promise(r=>setTimeout(r,ms)):Promise.resolve();
+
+/* ---------- カード定義 ---------- */
+const CARDS={};
+function B(name,id,color,gy,gi,at,df,tech,icons,o={}){const ic=[...new Set(icons.split('').map(x=>(x==='C'||x==='A')?'R':x))];CARDS[name]=Object.assign({type:'battle',name,id,color,gp:{yo:gy,in:gi},at,df,dp:1,tech,icons:ic},o);}
+function S(name,id,color,gy,gi,o){CARDS[name]=Object.assign({type:'support',name,id,color,gp:{yo:gy,in:gi}},o);}
+const D1=p=>{draw(p,1);};
+// --- 飛鳥デッキのバトルカード ---
+B('凪','B001','閃',1,0,200,400,'斬撃','C',{text:'（テキストなし）'}); // v1.8：「凪」の連撃から使用時AT+200 を削除（連撃の追加バトルは緑だけなので発動しなかった）
+B('省刃','B006','閃',0,1,300,300,'斬撃','U',{text:'（テキストなし）'});
+B('連刃','B009','閃',0,1,300,200,'斬撃','C',{text:'【強化】陽・陰ゲージがともに3枚以上の時、DF+300',mod:c=>yo(c.me)>=3&&inn(c.me)>=3?{df:300}:null});
+B('飛塵','B011','閃',1,1,300,300,'斬撃','A',{text:'【閃乱】陽・陰ゲージがともに5枚以上の時、DF+500',mod:c=>yo(c.me)>=5&&inn(c.me)>=5?{df:500}:null});
+B('リミットブレイク','B019','閃',3,3,1000,1000,'波動','',{text:'【使用条件】バトル開始時、自分の山札の上から2枚を捨て札にする。【対抗】相手のバトルカードが秘伝忍法の時DF+400。【制限】ディフェンス時、相手はそのバトルで連撃を使用できない',costMill:2,revealCost:true,onReveal:c=>{mill(c.me,2,'リミットブレイク');},mod:c=>c.oppCard&&c.oppCard.color==='秘'?{df:400}:null,flags:c=>!c.isAtk?{noOppRenzen:true}:null});
+B('砂風車','B020','陽',2,0,300,400,'斬撃','CA',{text:'【対抗】相手が打撃の時DF+200',mod:c=>c.oppCard&&c.oppCard.tech==='打撃'?{df:200}:null});
+B('捌き連刃','B025','陽',3,0,500,400,'斬撃','CA',{text:'【対抗】相手が防御の時AT+200。【陽乱】陽ゲージ5枚以上でAT+200',mod:c=>({at:(c.oppCard&&c.oppCard.tech==='防御'?200:0)+(yo(c.me)>=5?200:0)})});
+B('旋空砂','B030','陽',5,0,600,400,'斬撃','CUA',{only:'飛鳥',text:'飛鳥専用。【強化】このバトル中、自分の重撃1枚につきAT+200',mod:c=>({at:200*c.heavy.length})});
+B('冥砂','B035','陰',0,2,400,400,'斬撃','C',{text:'【強化】陰ゲージ3枚以上でDF+200',mod:c=>inn(c.me)>=3?{df:200}:null});
+B('怨砂','B040','陰',0,3,500,500,'斬撃','U',{text:'【陰乱】陰ゲージ5枚以上でDF+300',mod:c=>inn(c.me)>=5?{df:300}:null}); // v1.8：「冥砂」の連撃からAT+200 を削除（発動しなかった）
+B('攻断円','B041','陰',0,3,700,300,'斬撃','U',{noHeavy:true,text:'【対抗】アタック時、両プレイヤーは重撃を使用できない。【制限】重撃には使用できない',flags:c=>c.isAtk?{noHeavyBoth:true}:null});
+B('志昇陣','B045','陰',0,5,1000,200,'斬撃','A',{only:'飛鳥',text:'飛鳥専用。【対抗】相手のバトルカードが陽属性の時DF+400。【陰乱】陰ゲージ7枚以上でDF+500',mod:c=>({df:(c.oppCard&&c.oppCard.color==='陽'?400:0)+(inn(c.me)>=7?500:0)})});
+B('右空','B050','飛',0,0,700,0,'斬撃','A',{only:'飛鳥',needs:['凪','飛塵'],text:'飛鳥専用・緑。【使用条件（攻撃時）】忍ゲージに「凪」「飛塵」がある。【吹飛】アタック時、相手はバトルカードのテキストと重撃を使用できない（緑を除く）。【連撃防御】ディフェンスに出した時、相手が緑なら無条件で防御成功',flags:c=>c.isAtk?{noOppText:true,noOppHeavy:true}:null});
+B('二刀繚斬','B055','秘',4,4,1400,1200,'召喚','',{dp:2,only:'飛鳥',hiden:true,text:'飛鳥専用・秘伝忍法。【使用条件】陽4/陰4、さらに忍ゲージから閃・陽・陰のカードを1枚ずつ捨て札。【強化】忍ゲージの斬撃カード1枚につきAT+100/DF+100。【巻込】アタックして勝利したとき、相手は手札を1枚捨てる',mod:c=>{const n=gaugeAll(c.me).filter(x=>x.tech==='斬撃').length;return{at:100*n,df:100*n}},onWin:c=>oppDiscard(c,1)});
+// --- 柳生デッキのバトルカード ---
+B('散り傘','B038','陰',0,2,300,400,'打撃','CU',{text:'【強化】このバトル中、重撃で重ねた「散り傘」1枚につきAT+100',mod:c=>({at:100*c.heavy.filter(x=>x.name==='散り傘').length})});
+B('狂い傘','B033','陽',5,0,600,400,'射撃','UA',{only:'柳生',text:'柳生専用。【対抗】相手のバトルカードが陰属性の時DF+400。【手札強化】アタックして勝利したとき、1ドロー',mod:c=>c.oppCard&&c.oppCard.color==='陰'?{df:400}:null,onWin:c=>{draw(c.me,1);log(`${c.me.name}：狂い傘で1ドロー`)}});
+B('踊り傘','B023','陽',2,0,200,200,'射撃','CUA',{text:'【手札強化】アタックして勝利したとき、1ドロー',onWin:c=>{draw(c.me,1);log(`${c.me.name}：踊り傘で1ドロー`)}});
+B('残月','B043','陰',0,3,600,400,'斬撃','U',{text:'【強化】このバトル中、自分の重撃1枚につきDF+100。【陰乱】陰ゲージ5枚以上でDF+300',mod:c=>({df:100*c.heavy.length+(inn(c.me)>=5?300:0)})});
+B('狭朱','B026','陽',3,0,400,300,'斬撃','CUA',{text:'【対抗】ディフェンス時、相手は重撃を使用できない',flags:c=>!c.isAtk?{noOppHeavy:true}:null});
+B('天刃','B004','閃',1,0,300,300,'斬撃','U',{text:'（テキストなし）'});
+B('零雹','B014','閃',1,1,300,300,'波動','A',{text:'【巻込】ディフェンスして勝利したとき、相手が使用したバトルカードを捨て札にする。【閃乱】陽・陰ゲージがともに5枚以上でDF+500',mod:c=>yo(c.me)>=5&&inn(c.me)>=5?{df:500}:null,onDefWin:c=>{c.bs.oppCardToDiscard=true;log(`零雹：相手のバトルカードは捨て札になる`)}});
+B('諸行の音','B053','飛',0,0,700,0,'斬撃','A',{only:'柳生',needs:['連刃','零雹'],text:'柳生専用・緑。【使用条件（攻撃時）】忍ゲージに「連刃」「零雹」がある。【吹飛】アタック時、相手はバトルカードのテキストと重撃を使用できない（緑を除く）。【連撃防御】ディフェンスに出した時、相手が緑なら無条件で防御成功',flags:c=>c.isAtk?{noOppText:true,noOppHeavy:true}:null});
+B('開華','B028','陽',3,0,400,300,'斬撃','CUA',{text:'【強化】このバトル中、重撃で重ねた「開華」1枚につきAT+200。【陽乱】陽ゲージ5枚以上でAT+200',mod:c=>({at:200*c.heavy.filter(x=>x.name==='開華').length+(yo(c.me)>=5?200:0)})});
+B('返し雨','B048','陰',0,5,700,300,'斬撃','UA',{only:'柳生',text:'柳生専用。【強化】このバトル中、重撃で重ねた射撃カード1枚につきAT+200。【手札強化】アタックして勝利したとき、1ドロー',mod:c=>({at:200*c.heavy.filter(x=>x.tech==='射撃').length}),onWin:c=>{draw(c.me,1);log(`${c.me.name}：返し雨で1ドロー`)}});
+B('くぐつダミー','B017','閃',1,1,0,500,'防御','',{dp:0,text:'【対抗】相手が斬撃または打撃の時DF+200。【対抗】相手のバトルカードのDPが2以上の時、そのDP−1',mod:c=>c.oppCard&&['斬撃','打撃'].includes(c.oppCard.tech)?{df:200}:null,dpMod:c=>(!c.isAtk&&c.oppCard&&c.oppCard.dp>=2)?-1:0});
+B('薙ぎ払う足','B058','秘',4,4,1300,1300,'召喚','',{dp:2,only:'柳生',hiden:true,text:'柳生専用・秘伝忍法。【使用条件】陽4/陰4、さらに忍ゲージから閃・陽・陰のカードを1枚ずつ捨て札。【強化】手札が5枚以上の時AT+500/DF+500。【巻込】アタックして勝利したとき、相手は手札を1枚捨てる',mod:c=>c.me.hand.length>=5?{at:500,df:500}:null,onWin:c=>oppDiscard(c,1)});
+// --- サポート ---
+S('緑の巻物','S001','閃',1,1,{scrollMode:1,text:'【使用型】自分のダメージエリアの枚数2枚ごとに1枚ドロー。効果の適用後、すぐに陰ゲージへ',use:async c=>{const n=Math.floor(c.me.damage.length/2);draw(c.me,n);log(`${c.me.name}：緑の巻物で${n}ドロー`)},dest:'in',expire:'now'});
+S('赤の巻物','S002','閃',2,2,{text:'【使用型】自分のキャラ1枚をダメージエリアへ送り、2ドロー。効果の適用後すぐに陽か陰のゲージへ（選べる）',canUse:p=>p.charDeck.length>=2,use:async c=>{await applyDamage(c.me,1,'赤の巻物');draw(c.me,2);log(`${c.me.name}：赤の巻物で2ドロー`)},dest:'choose',expire:'now'});
+S('牛乳','S003','陽',3,3,{text:'【使用型】ダメージエリアにある最もレベルの高いキャラカード1枚をキャラエリアの一番上に戻す。すぐに陽ゲージへ',canUse:p=>p.damage.some(x=>x.type==='char'),use:async c=>{const cs=c.me.damage.filter(x=>x.type==='char').sort((a,b)=>b.lv-a.lv);const ch=cs[0];c.me.damage.splice(c.me.damage.indexOf(ch),1);c.me.charDeck.unshift(ch);log(`${c.me.name}：牛乳で${ch.name}Lv${ch.lv}が戻った（ダメージ${c.me.damage.length}）`);if(ch.onTop)await ch.onTop(c.me);},dest:'yo',expire:'now'});
+S('朝食のパン','S006','陽',3,3,{text:'【効力持続】このターン、自分のキャラのAT+300。ターン終了時に陽ゲージへ',use:async c=>{c.me.turnMod.at+=300;log(`${c.me.name}：朝食のパン（このターンAT+300）`)},dest:'yo',expire:'endTurn'});
+S('病院の待合室にて','S008','陰',1,1,{text:'【行動制限】次の自分のターン開始時まで、両プレイヤーはバトルを行えない。次の自分のターン開始時、相手は1ドローし、このカードは陰ゲージへ',use:async c=>{G.noBattle={by:c.me.idx};log(`${c.me.name}：病院の待合室にて（次の自分のターンまでバトル禁止）`)},dest:'in',expire:'nextTurnStart'});
+
+const CHARS={
+ 飛鳥:[
+  {id:'C001',name:'飛鳥',lv:1,at:400,df:400,text:'（テキストなし）'},
+  {id:'C002',name:'飛鳥',lv:2,at:500,df:500,text:'【忍転身】このカードがキャラエリアの一番上になった時、1ドロー',onTop:p=>{draw(p,1);log(`${p.name}：忍転身で1ドロー`)}},
+  {id:'C003',name:'飛鳥',lv:3,at:600,df:600,text:'【破れ1】斬撃のバトルカード使用時、そのカードにAT+200',cmod:(p,card)=>card.tech==='斬撃'?{at:200}:null},
+  {id:'C032',name:'飛鳥',lv:4,at:700,df:700,text:'【破れ2】アタックして勝利したとき、捨て札のバトルカード1枚を忍ゲージへ移動できる',onAtkWin:async c=>{const lv=c.me.charDeck[0].lv;const cs=c.me.discard.filter(x=>x.type==='battle');if(!cs.length){log(`${c.me.name}：Lv${lv}の効果：捨て札にバトルカードがない`);return;}const k=await c.me.ctl.pickCards(c.me,cs,1,`Lv${lv}の効果：忍ゲージへ移すカードを選択（0枚でも可）`,true);if(!k.length){log(`${c.me.name}：Lv${lv}の効果：移さなかった`);return;}const x=k[0];c.me.discard.splice(c.me.discard.indexOf(x),1);const g=(x.color==='陽')?'yo':(x.color==='陰')?'in':await c.me.ctl.chooseGauge(c.me,x);(g==='yo'?c.me.gYo:c.me.gIn).push(x);log(`${c.me.name}：Lv${lv}の効果で「${x.name}」を${g==='yo'?'陽':'陰'}ゲージへ`)}},
+  {id:'C006',name:'飛鳥',lv:5,at:800,df:800,text:'【合図】アタックして勝利したとき、1ターンに1回、使用したバトルカードに連撃を付与する',onAtkWin:async c=>{if(c.me.flags.l5)return;c.me.flags.l5=true;c.bs.grantC=true;log(`${c.me.name}：Lv5の効果で「${c.bs.atk.card.name}」に連撃を付与`)}},
+ ],
+ 柳生:[
+  {id:'C019',name:'柳生',lv:1,at:400,df:400,text:'（テキストなし）'},
+  {id:'C020',name:'柳生',lv:2,at:400,df:600,text:'【忍転身】このカードがキャラエリアの一番上になった時、1ドロー',onTop:p=>{draw(p,1);log(`${p.name}：忍転身で1ドロー`)}},
+  {id:'C021',name:'柳生',lv:3,at:500,df:700,text:'【破れ1】射撃・防御のバトルカード使用時AT+200/DF+200',cmod:(p,card)=>['射撃','防御'].includes(card.tech)?{at:200,df:200}:null},
+  {id:'C022',name:'柳生',lv:4,at:700,df:700,text:'【破れ2】このカードがダメージエリアに移動した時、1ドロー',onDamaged:p=>{draw(p,1);log(`${p.name}：破れ2で1ドロー`)}},
+  {id:'C023',name:'柳生',lv:5,at:900,df:700,text:'【合図】スタンバイに1ターン1回、手札を最大2枚捨て、同じ枚数ドローする',standby:{label:'手札を最大2枚捨てて同数ドロー（柳生Lv5）',ok:p=>p.hand.length>0,run:async p=>{const cs=await p.ctl.pickCards(p,p.hand,2,'捨てるカードを選択（最大2枚）',true);for(const x of cs){rm(p.hand,x);p.discard.push(x)}draw(p,cs.length);log(`${p.name}：Lv5の効果で${cs.length}枚捨てて${cs.length}ドロー`)}}},
+ ]};
+const DECKS={
+ 飛鳥:{char:'飛鳥',list:[['凪',3],['省刃',3],['連刃',2],['飛塵',3],['リミットブレイク',2],['砂風車',3],['捌き連刃',2],['旋空砂',3],['冥砂',2],['怨砂',2],['攻断円',2],['志昇陣',1],['右空',3],['二刀繚斬',2],['緑の巻物',2],['赤の巻物',1],['牛乳',3],['朝食のパン',1]],
+   list30:[['凪',2],['省刃',2],['連刃',2],['飛塵',2],['リミットブレイク',2],['砂風車',2],['捌き連刃',2],['旋空砂',2],['冥砂',2],['怨砂',2],['攻断円',1],['志昇陣',1],['右空',2],['二刀繚斬',2],['緑の巻物',1],['赤の巻物',1],['牛乳',2]]},
+ 柳生:{char:'柳生',list:[['散り傘',3],['狂い傘',1],['踊り傘',2],['残月',3],['狭朱',2],['天刃',3],['連刃',3],['零雹',3],['諸行の音',2],['開華',3],['返し雨',2],['くぐつダミー',2],['リミットブレイク',3],['病院の待合室にて',1],['赤の巻物',1],['緑の巻物',3],['薙ぎ払う足',3]],
+   list30:[['散り傘',2],['狂い傘',1],['踊り傘',2],['残月',2],['狭朱',2],['天刃',2],['連刃',2],['零雹',2],['諸行の音',2],['開華',2],['返し雨',2],['くぐつダミー',2],['リミットブレイク',2],['赤の巻物',1],['緑の巻物',2],['薙ぎ払う足',2]]},
+};
+
+/* ---------- ゲーム状態 ---------- */
+let G={}, P=[];
+function hook(name,...a){if(G.hooks&&G.hooks[name])return G.hooks[name](...a);}
+class GameOver extends Error{}
+function log(s,hl){G.log.push({s,hl:!!hl});}
+function inst(t){const o=Object.create(t);o.uid=++UID;return o;}
+function rm(arr,x){const i=arr.indexOf(x);if(i>=0)arr.splice(i,1);}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(RNG()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a;}
+function draw(p,n){let k=0;for(let i=0;i<n;i++){if(!p.deck.length)break;p.hand.push(p.deck.shift());k++;}return k;}
+function toBottom(p,cards,why){for(const x of cards){rm(p.hand,x);p.deck.push(x);}if(cards.length)log(`${p.name}：${why}で手札${cards.length}枚を山札の一番下へ`);}
+function mill(p,n,why){for(let i=0;i<n;i++){if(!p.deck.length)break;p.discard.push(p.deck.shift());}log(`${p.name}：${why}で山札の上から${n}枚を捨て札`);}
+function charAT(p){return p.charDeck[0].at+p.turnMod.at}
+function charDF(p){return p.charDeck[0].df+p.turnMod.df}
+function gpOK(p,c){return yo(p)>=c.gp.yo&&inn(p)>=c.gp.in}
+function hidenOK(p){return gaugeAll(p).some(x=>x.color==='閃')&&p.gYo.some(x=>x.color==='陽')&&p.gIn.some(x=>x.color==='陰')}
+function baseUsable(p,c){if(c.type!=='battle')return false;if(c.only&&c.only!==p.charName)return false;if(!gpOK(p,c))return false;if(c.needs&&!c.needs.every(n=>gaugeAll(p).some(x=>x.name===n)))return false;if(c.hiden&&!hidenOK(p))return false;return true}
+function canAttack(p,c,mode){if(c.defOnly)return false;if(mode==='R'){if(c.color!=='飛')return false}else{if(c.color==='飛')return false}return baseUsable(p,c)}
+function canDefend(p,c){if(c.type!=='battle')return false;if(c.color==='飛'){if(CONFIG.greenDefense==='none')return false;if(CONFIG.greenDefense==='needs')return baseUsable(p,c);return !c.only||c.only===p.charName;} return baseUsable(p,c)}
+function heavyOK(p,c){if(c.type!=='battle'||!c.icons.includes('U')||c.noHeavy)return false;if(c.only&&c.only!==p.charName)return false;if(!CONFIG.heavy.ignoreGP&&!gpOK(p,c))return false;return true}
+function lose(p,why){G.over={loser:p.idx,why};log(`★ ${p.name}の敗北（${why}）。${P[1-p.idx].name}の勝利！`,true);throw new GameOver();}
+function resolveLO(p){
+  const opponent=P[1-p.idx];
+  const dealtByP=opponent.damage.length;
+  const dealtByOpponent=p.damage.length;
+  const loser=dealtByP>dealtByOpponent?opponent:p;
+  lose(loser,`LO：${p.name}のドローフェイズ開始時に山札0枚（与ダメージ ${p.name}=${dealtByP}／${opponent.name}=${dealtByOpponent}。同点ならLO側敗北）`);
+}
+function cardVal(c){return (c.at||0)+(c.df||0)+150*((c.icons||[]).length)+(c.type==='support'?500:0)}
+
+async function applyDamage(p,n,src){
+  for(let i=0;i<n;i++){
+    if(p.charDeck.length>=2){
+      const c=p.charDeck.shift();p.damage.push(c);
+      const top=p.charDeck[0];
+      log(`${p.name}：${src}で1ダメージ → ${c.name}Lv${c.lv}がダメージエリアへ。現在Lv${top.lv}（${top.at}/${top.df}）ダメージ${p.damage.length}/${CONFIG.winDamage}`);
+      if(c.onDamaged)await c.onDamaged(p);
+      if(top.onTop)await top.onTop(p);
+    }else{
+      // 最後のキャラは山札のカードへ置き換えない。5ダメージ目はここで決着する。
+      p.damage.push({type:'finalDamage',name:'決着ダメージ',id:'FINAL_DAMAGE'});
+      log(`${p.name}：${src}で5ダメージ目。山札は使用しない（ダメージ${p.damage.length}/${CONFIG.winDamage}）`);
+      lose(p,`${CONFIG.winDamage}ダメージ`);
+    }
+    if(p.damage.length>=CONFIG.winDamage)lose(p,`${CONFIG.winDamage}ダメージ`);
+  }
+}
+async function oppDiscard(c,n){const v=c.opp;const k=Math.min(n,v.hand.length);if(!k)return;const cs=await v.ctl.pickCards(v,v.hand,k,`巻込：手札を${k}枚捨ててください`,false);for(const x of cs){rm(v.hand,x);v.discard.push(x)}log(`${v.name}：手札を${k}枚捨てた`);}
+async function toGaugeByColor(p,c,why){
+  if(c.color==='陽'){p.gYo.push(c);log(`${p.name}：「${c.name}」→陽ゲージ（${yo(p)}）`);}
+  else if(c.color==='陰'){p.gIn.push(c);log(`${p.name}：「${c.name}」→陰ゲージ（${inn(p)}）`);}
+  else if(c.color==='閃'){const g=await p.ctl.chooseGauge(p,c);(g==='yo'?p.gYo:p.gIn).push(c);log(`${p.name}：「${c.name}」→${g==='yo'?'陽':'陰'}ゲージ（陽${yo(p)}/陰${inn(p)}）`);}
+  else {p.discard.push(c);log(`${p.name}：「${c.name}」→捨て札`);}
+}
+async function payHiden(p,card){
+  const paid=[];
+  for(const [col,pool,label] of [['閃',gaugeAll(p),'閃'],['陽',p.gYo,'陽'],['陰',p.gIn,'陰']]){
+    const cands=pool.filter(x=>x.color===col&&!paid.includes(x));
+    let x;
+    if(p.ai){x=[...cands].sort((a,b)=>cardVal(a)-cardVal(b))[0];}
+    else{const k=await p.ctl.pickCards(p,cands,1,`秘伝「${card.name}」のコスト：捨てる${label}属性のカードを選択`,false);x=k[0]||cands[0];}
+    paid.push(x);rm(p.gYo,x);rm(p.gIn,x);p.discard.push(x);
+  }
+  log(`${p.name}：秘伝忍法のコストで忍ゲージから「${paid.map(x=>x.name).join('」「')}」を捨て札（陽${yo(p)}/陰${inn(p)}）`);
+}
+async function removeSupport(p,s){rm(p.supports,s);const c=s.card;if(s.dest==='discard'){p.discard.push(c);log(`${p.name}：「${c.name}」→捨て札`);return;}if(s.dest==='choose'){const g=await p.ctl.chooseGauge(p,c);(g==='yo'?p.gYo:p.gIn).push(c);log(`${p.name}：「${c.name}」→${g==='yo'?'陽':'陰'}ゲージ`);}else{(s.dest==='yo'?p.gYo:p.gIn).push(c);log(`${p.name}：「${c.name}」→${s.dest==='yo'?'陽':'陰'}ゲージ`);}}
+
+/* ---------- ターン進行 ---------- */
+async function runGame(){
+  try{
+    let cur=G.first;
+    while(true){await turn(cur);cur=1-cur;}
+  }catch(e){if(!(e instanceof GameOver)){console.error(e);log('エラー: '+e.message,true);}}
+  G.prompt=null;hook('render');hook('gameOver');
+}
+async function turn(pi){
+  const p=P[pi],o=P[1-pi];G.turn++;G.cur=pi;p.flags={};G.bs=null;
+  log(`━━ ターン${G.turn}：${p.name}（${p.charName} Lv${p.charDeck[0].lv}）━━`,true);
+  G.phase='draw';if(!p.deck.length)resolveLO(p);await hook('turnStart',{turn:G.turn,p:pi}); // 表示用（ターン開始の演出）。ルール・乱数には関与しない
+  if(G.noBattle&&G.noBattle.by===pi){G.noBattle=null;const s=p.supports.find(x=>x.expire==='nextTurnStart');if(s)await removeSupport(p,s);draw(o,1);log(`${o.name}：病院の待合室にての効果で1ドロー`);}
+  
+  const n=(G.turn===1)?CONFIG.firstTurnDraw:CONFIG.drawPerTurn;const k=draw(p,n);log(`${p.name}：${k}ドロー（手札${p.hand.length}）`);
+  G.phase='prep';await hook('phase','prep');
+  await prep(pi);
+  if(!(G.turn===1&&!CONFIG.firstTurnBattle)){G.phase='battle';await hook('phase','battle');await battlePhase(pi);}
+  G.phase='end';await hook('phase','end');
+  for(const s of [...p.supports])if(s.expire==='endTurn')await removeSupport(p,s);
+  p.turnMod={at:0,df:0};G.noTextTurn=false;G.noChainTurn=false;
+  log(`${p.name}：ターン終了`);
+  await hook('turnEnd',{turn:G.turn,p:pi});
+}
+function battleAllowed(pi){return !(G.turn===1&&!CONFIG.firstTurnBattle)&&!G.noBattle}
+async function prep(pi){
+  const p=P[pi];
+  while(true){
+    G.phase='prep';
+    const gaugeable=p.hand.filter(c=>c.type==='battle'&&['閃','陽','陰'].includes(c.color));
+    const sups=p.hand.filter(c=>c.type==='support'&&gpOK(p,c)&&(!c.canUse||c.canUse(p)));
+    const opts=[];
+    if(!p.flags.gauge&&gaugeable.length)opts.push({value:'gauge',label:'バトルカードをゲージに置く'});
+    if(!p.flags.support&&sups.length)opts.push({value:'support',label:'サポートカードを使う'});
+    const cur=p.charDeck[0];
+    if(cur.standby&&!p.flags.lv5&&cur.standby.ok(p))opts.push({value:'lv5',label:cur.standby.label});
+    opts.push({value:'go',label:battleAllowed(pi)?'バトルへ進む':'ターン終了',primary:true});
+    const r=await p.ctl.prepAction(p,opts,{gaugeable,sups});
+    if(r.type==='gauge'){rm(p.hand,r.card);(r.gauge==='yo'?p.gYo:p.gIn).push(r.card);p.flags.gauge=true;log(`${p.name}：「${r.card.name}」を${r.gauge==='yo'?'陽':'陰'}ゲージに置いた（陽${yo(p)}/陰${inn(p)}）`);}
+    else if(r.type==='support'){rm(p.hand,r.card);p.flags.support=true;log(`${p.name}：サポート「${r.card.name}」を使用`);const s={card:r.card,dest:r.card.dest,expire:r.card.expire};p.supports.push(s);await r.card.use({me:p,opp:P[1-pi]});if(s.expire==='now')await removeSupport(p,s);}
+    else if(r.type==='lv5'){p.flags.lv5=true;await cur.standby.run(p);}
+    else if(r.type==='none'){continue;}
+    else break;
+    hook('render');
+  }
+}
+async function battlePhase(pi){
+  if(G.noBattle){log('病院の待合室にての効果でバトルは行えない');return;}
+  let mode=null,from=null;
+  while(true){
+    const r=await battle(pi,mode,from);
+    if(r.ended)break;
+    if(r.chain){mode=r.chain;from=r.card;continue;}
+    break;
+  }
+  G.bs=null;
+}
+function charMod(p,card,oppCard){const ch=p.charDeck[0];const r={at:0,df:0};const a=ch.cmod?ch.cmod(p,card):null;const b=ch.cmodVs?ch.cmodVs(p,card,oppCard):null;for(const m of [a,b])if(m){r.at+=m.at||0;r.df+=m.df||0;}return (r.at||r.df)?r:null;}
+function computeTotals(bs){
+  const A=bs.atk,D=bs.def;
+  const flags={};
+  const ctxA={me:A.p,opp:D.p,card:A.card,isAtk:true,oppCard:D.card,heavy:A.heavy,oppHeavy:D.heavy,chainFrom:bs.chainFrom,bs};
+  const ctxD=D.card?{me:D.p,opp:A.p,card:D.card,isAtk:false,oppCard:A.card,heavy:D.heavy,oppHeavy:A.heavy,chainFrom:null,bs}:null;
+  if(A.card.flags&&!G.noTextTurn)Object.assign(flags,A.card.flags(ctxA)||{}); // インテリメガネ：このターンはバトルカードのテキストをすべて無効
+  if(A.card.color==='飛'&&!CONFIG.blowHeavy)delete flags.noOppHeavy;
+  if(A.p.charDeck[0].aflags)Object.assign(flags,A.p.charDeck[0].aflags(A.p)||{});
+  if(G.noTextTurn){A.null=true;flags.noOppText=true;}
+  D.null=!!G.noTextTurn||(!!flags.noOppText&&!(D.card&&D.card.color==='飛'));
+  if(ctxD&&!D.null&&D.card.flags)Object.assign(flags,Object.fromEntries(Object.entries(D.card.flags(ctxD)||{}).map(([k,v])=>[k==='noOppHeavy'?'noAtkHeavy':k==='noOppRenzen'?'noAtkRenzen':k,v])));
+  bs.flags=flags;
+  const sum=(arr,k)=>arr.reduce((s,x)=>s+(x[k]||0),0);
+  const lite=!!bs.lite; // ソルバーの読みの中では表示用の内訳を作らない（計算は同じ）
+  let at=charAT(A.p)+A.card.at+sum(A.heavy,'at');let atDetail=lite?null:[`キャラ${charAT(A.p)}`,`${A.card.name}+${A.card.at}`];
+  if(!lite&&A.heavy.length)atDetail.push(`重撃+${sum(A.heavy,'at')}`);
+  const mA=(!A.null&&A.card.mod)?A.card.mod(ctxA):null;if(mA&&mA.at){at+=mA.at;if(!lite)atDetail.push(`効果+${mA.at}`);}
+  const cA=!flags.noAtkCharText?charMod(A.p,A.card,D.card):null;if(cA&&cA.at){at+=cA.at;if(!lite)atDetail.push(`破れ+${cA.at}`);}
+  let df,dfDetail=null,mD=null,cD=null;
+  if(D.card){
+    df=charDF(D.p)+D.card.df+sum(D.heavy,'df');if(!lite)dfDetail=[`キャラ${charDF(D.p)}`,`${D.card.name}+${D.card.df}`];
+    if(!lite&&D.heavy.length)dfDetail.push(`重撃+${sum(D.heavy,'df')}`);
+    mD=(!D.null&&D.card.mod)?D.card.mod(ctxD):null;if(mD&&mD.df){df+=mD.df;if(!lite)dfDetail.push(`効果+${mD.df}`);}
+    cD=!flags.noOppCharText?charMod(D.p,D.card,A.card):null;if(cD&&cD.df){df+=cD.df;if(!lite)dfDetail.push(`破れ+${cD.df}`);}
+  }else{df=charDF(D.p);if(!lite)dfDetail=[`キャラ${charDF(D.p)}`];}
+  let dp=A.card.dp;const dpD=(D.card&&!D.null&&D.card.dpMod)?D.card.dpMod(ctxD):0;dp=Math.max(0,dp+dpD);
+  bs.at=at;bs.df=df;bs.dp=dp;
+  if(lite)return bs;
+  bs.atDetail=atDetail;bs.dfDetail=dfDetail;bs.ctxA=ctxA;bs.ctxD=ctxD;
+  bs.boost={atk:{at:((mA&&mA.at)||0)+((cA&&cA.at)||0)},def:{df:((mD&&mD.df)||0)+((cD&&cD.df)||0)}}; // 表示用：テキストで強化された分
+  return bs;
+}
+async function battle(pi,mode,from){
+  const p=P[pi],o=P[1-pi];
+  const usable=p.hand.filter(c=>canAttack(p,c,mode));
+  G.phase='battle';G.bs=null;
+  if(mode&&!usable.length){log(`${p.name}：連撃の追加バトルに出せる緑カードがない`);return{ended:true};}
+  if(!usable.length){log(`${p.name}：アタックに使えるカードがない`);hook('stat',{t:'noatk',p:pi,turn:G.turn,hand:p.hand.length});return{ended:true};}
+  const atkCard=await p.ctl.attack(p,usable,mode);
+  hook('stat',{t:'atk',p:pi,turn:G.turn,mode,options:usable.filter(c=>c.dp>0).length,hand:p.hand.length,chosen:!!atkCard});
+  if(!atkCard){log(`${p.name}：バトルを行わない`);return{ended:true};}
+  rm(p.hand,atkCard);
+  const bs={atk:{p,card:atkCard,heavy:[]},def:{p:o,card:null,heavy:[]},chainFrom:from,mode,stage:'def'};G.bs=bs;
+  log(`${p.name}：${mode?'【連撃】追加バトル ':''}アタック宣言（カードを裏向きで提出）`);
+  hook('render');
+  const dUsable=o.hand.filter(c=>canDefend(o,c));
+  const reach=dUsable.filter(c=>c.color==='飛'||charDF(o)+c.df>=charAT(p)+atkCard.at).length;
+  hook('stat',{t:'def',p:1-pi,turn:G.turn,mode,options:dUsable.length,reach,hand:o.hand.length,atkAT:charAT(p)+atkCard.at});
+  const defCard=dUsable.length?await o.ctl.defend(o,dUsable,{attacker:p,mode}):null;
+  if(defCard){rm(o.hand,defCard);bs.def.card=defCard;}
+  bs.stage='reveal';
+  log(`公開：${p.name}「${atkCard.name}」(+${atkCard.at}/+${atkCard.df}) vs ${o.name}${defCard?`「${defCard.name}」(+${defCard.df}DF)`:'：ディフェンスなし'}`,true);
+  if(defCard&&o.charDeck[0].onGuard&&defCard.tech==='防御')await o.charDeck[0].onGuard(o,defCard);
+  // コスト
+  for(const [pp,c] of [[p,atkCard],[o,defCard]]){
+    if(!c)continue;
+    if(c.hiden)await payHiden(pp,c);
+    if(c.onReveal&&(c.revealCost||!G.noTextTurn))await c.onReveal({me:pp,opp:pp===p?o:p,bs});
+  }
+  let success;
+  if(defCard&&defCard.color==='飛'&&atkCard.color==='飛'&&!G.noTextTurn){
+    computeTotals(bs);success=false;bs.stage='result';
+    log(`【連撃防御】${o.name}は緑「${defCard.name}」で受けた → 相手が緑なので無条件で防御成功`,true);
+  }else if(!defCard&&CONFIG.noDefenseAutoHit){
+    computeTotals(bs);success=true;bs.stage='result';
+    log(`ディフェンスなし → アタック成功（確定ヒット）`);
+  }else{
+    computeTotals(bs);
+    // 重撃
+    bs.stage='heavy';
+    let who=0,passes=0,count=0;
+    const blocked=i=>{const f=bs.flags;if(f.noHeavyBoth)return true;if(i===1&&(f.noOppHeavy))return true;if(i===0&&f.noAtkHeavy)return true;return false};
+    while(passes<2&&count<CONFIG.heavy.maxCards){
+      const side=who===0?bs.atk:bs.def;const pl=side.p;
+      const elig=blocked(who)?[]:pl.hand.filter(c=>heavyOK(pl,c));
+      let add=null;
+      if(!elig.length&&!side.noHeavyLogged){side.noHeavyLogged=true;log(`${pl.name}：重撃に使えるカードなし${blocked(who)?'（効果で禁止）':''}`);}
+      if(elig.length){bs.heavyTurn=who;hook('render');add=await pl.ctl.heavy(pl,elig,{at:bs.at,df:bs.df,dp:bs.dp,isAtk:who===0});}
+      if(add){rm(pl.hand,add);side.heavy.push(add);count++;passes=0;computeTotals(bs);log(`${pl.name}：重撃「${add.name}」(+${add.at}/+${add.df}) → AT${bs.at} vs DF${bs.df}`);}
+      else{passes++;if(elig.length)log(`${pl.name}：パス`);}
+      who=1-who;
+    }
+    bs.heavyTurn=null;
+    success=CONFIG.tieWinner==='attacker'?bs.at>=bs.df:bs.at>bs.df;
+    bs.stage='result';
+    log(`判定：AT${bs.at}（${bs.atDetail.join('＋')}） vs DF${bs.df}（${bs.dfDetail.join('＋')}） → ${success?'アタック成功':'アタック失敗'}`,true);
+  }
+  bs.success=success;hook('render');
+  hook('stat',{t:'res',p:pi,turn:G.turn,mode,success,def:!!defCard,aHeavy:bs.atk.heavy.length,dHeavy:bs.def.heavy.length,at:bs.at,df:bs.df,dp:bs.dp});
+  if(success){
+    await applyDamage(o,bs.dp,`「${atkCard.name}」DP${bs.dp}`);
+    if(atkCard.onWin&&!bs.atk.null)await atkCard.onWin(Object.assign({},bs.ctxA));
+    const ch=p.charDeck[0];if(ch.onAtkWin)await ch.onAtkWin({me:p,opp:o,bs});
+  }else{
+    if(defCard&&!bs.def.null&&defCard.onDefWin)await defCard.onDefWin(Object.assign({},bs.ctxD));
+    if(atkCard.onFail&&!bs.atk.null)await atkCard.onFail(Object.assign({},bs.ctxA));
+    if(defCard&&o.charDeck[0].onDefWinChar)await o.charDeck[0].onDefWinChar({me:o,opp:p,bs});
+  }
+  if(success&&p.turnMod.winDraw){draw(p,1);log(`${p.name}：じっちゃんの太巻きで1ドロー`);}
+  await showResult(bs);
+  // 連閃・飛翔
+  let chain=null;
+  if(success){
+    const icons=[];if(atkCard.icons.includes('R')||bs.grantC||p.charDeck[0].grantR)icons.push('R');
+    const avail=icons.filter(ic=>{if(bs.flags.noAtkRenzen||G.noChainTurn)return false;return p.hand.some(c=>canAttack(p,c,ic));});
+    if(bs.flags.noAtkRenzen&&icons.length)log('リミットブレイクの効果で連撃は宣言できない');
+    if(G.noChainTurn&&icons.length&&!bs.flags.noAtkRenzen&&p.hand.some(c=>canAttack(p,c,'R')))log(`${p.name}：【連撃不可】${G.noChainBy||'相手の効果'}により、このターンは連撃を宣言できない`,true);
+    if(avail.length)chain=await p.ctl.chain(p,avail);
+    if(chain)log(`${p.name}：【連撃】を宣言（「${atkCard.name}」は捨て札）`,true);
+  }
+  // カード移動
+  if(chain||bs.oppCardToDiscard){p.discard.push(atkCard);if(bs.oppCardToDiscard)log(`${p.name}：「${atkCard.name}」→捨て札（零雹）`);}
+  else await toGaugeByColor(p,atkCard);
+  for(const h of bs.atk.heavy){p.discard.push(h);}if(bs.atk.heavy.length)log(`${p.name}：重撃カード${bs.atk.heavy.length}枚→捨て札`);
+  if(defCard){if(bs.oppDefToDiscard){o.discard.push(defCard);log(`${o.name}：「${defCard.name}」→捨て札（斑鳩Lv4）`);}else await toGaugeByColor(o,defCard);}
+  for(const h of bs.def.heavy){o.discard.push(h);}if(bs.def.heavy.length)log(`${o.name}：重撃カード${bs.def.heavy.length}枚→捨て札`);
+  G.bs=null;
+  return{success,chain,card:atkCard};
+}
+async function showResult(bs){
+  hook('render');
+  if(G.hooks&&G.hooks.showResult)await G.hooks.showResult(bs);
+  else if(G.delay)await sleep(G.delay*2);
+}
+
+/* ---------- コントローラ：CPU ---------- */
+// 重撃の判断（純粋関数。実戦とシミュレーションで共用）
+/* CPUの資源評価プロファイル（全キャラ共通の仕組み。キャラ別は係数だけ）
+   既定値＝旧来の判断。雲雀・反撃の値は PR #1 の専用AIを汎用の項目だけで表したもの（固定の種1,000試合で判断が完全一致） */
+const CPU_PROFILE_DEFAULT=Object.freeze({name:'標準',
+  atkReserveHeavy:0,                     // 決着しない攻撃で、攻撃札・重撃に使った重撃札1枚あたりの減点
+  atkFailPenalty:0,                      // 攻撃が失敗したときの追加の減点
+  atkLowHand:0,atkLowHandPen:0,          // 攻撃後の手札がこの枚数未満なら減点
+  atkLethalMul:0,                        // 決着時の追加加点（W.lethalの倍率）
+  defGuardWin:0,                         // 防御成功で次の手番の資源が残る加点
+  hUCover:0,                             // 手札効用：次の相手の攻撃を守れる割合×手札1枚分×この値
+  handHeavy:0,                           // 手札効用：重撃札への上乗せ（手札1枚分の倍率）
+  drawDeckAware:false,                   // 緑の巻物のドローを、手札の枚数と山札の残りで評価する（山札切れの見通し）
+  holdGuard:0,                           // 条件付き温存：決着しない攻撃で、次の相手の攻撃を守れる割合が下がった分×この値を減点
+  holdHeavyMaxDrop:null,                 // 条件付き温存：決着しない攻撃側の重撃で、守れる割合をこれ以上下げる札は出さない
+  heavy:null,                            // 重撃の方針 {atkMinHand,atkBudgetExtra,defMinHand,defBudgetExtra}
+  routeHeuristicToSolver:false,          // 経験則AIを選んでいてもソルバーで判断する
+  // ---- 選択ごとの4段階（c_）＋強さ（w_）＋条件の値（n_）。'do'=する／'cond'=条件付きでする／'avoid'=積極的にしない／'never'=しない ----
+  // w_ の単位：バトルの判断（防御札のディフェンス・被弾・見送り）は評価点（1ダメージ=1000）、それ以外は手札1枚分の倍率。既定値＝今までの動き
+  c_guardGauge:'do',w_guardGauge:0,n_guardGauge:2,       // 防御札をゲージに置く。条件：手札に防御札がn枚以上
+  c_guardDefend:'cond',w_guardDefend:1500,n_guardDefend:4, // 防御札でディフェンス。条件：自分のLvがn以上（満たさない時はwだけ減点）。しない＝決着がかかる時だけ使う
+  c_guardAttack:'cond',w_guardAttack:0,                  // 防御札でアタック。条件：ほかに出せる札がない時
+  c_noDefense:'do',w_noDefense:0,n_noDefense:3,          // ディフェンスしない（被弾を受ける）。条件：自分のLvがn以下で、決着しない被弾
+  c_attackPass:'do',w_attackPass:0,n_attackPass:4,       // アタックを見送る。条件：相手の手札がn枚以上
+  c_heavyAtk:'cond',w_heavyAtk:2,                        // 重撃（アタック側）。する＝枚数の上限を+w・残す手札-1、条件付き＝逆転できる時だけ、しない傾向＝決着する時だけ
+  c_heavyDef:'cond',w_heavyDef:2,                        // 重撃（ディフェンス側）。同上
+  c_chain:'cond',w_chain:0,                              // 連撃の宣言。条件＝期待値がゲージに置く価値を上回る時
+  c_gauge:'cond',w_gauge:0,                              // 毎ターンのゲージ置き。する＝損でも1枚置く、条件＝手札の価値が上がる時、しない傾向＝w以上上がる時
+  c_sup_hiyaku:'cond',w_sup_hiyaku:0,c_sup_umi:'cond',w_sup_umi:0,c_sup_futomaki:'cond',w_sup_futomaki:0,c_sup_megane:'cond',w_sup_megane:0, // 秘薬・海に行こう!・じっちゃんの太巻き・インテリメガネ（2026-11-04 追加。メガネは評価なし＝条件付きでは使わない）
+  c_sup_green:'cond',w_sup_green:0,c_sup_milk:'cond',w_sup_milk:0,c_sup_red:'cond',w_sup_red:0,c_sup_bread:'cond',w_sup_bread:0,c_sup_hospital:'cond',w_sup_hospital:0, // サポート（緑の巻物・牛乳・赤の巻物・朝食のパン・病院の待合室にて）。する＝使えるなら使う
+  c_lv3Discard:'cond',w_lv3Discard:0,                    // 飛鳥Lv3の捨てて引く（任意）。条件＝引く価値が上回る時
+  c_swap:'cond',w_swap:0,                                // 入れ替え・山札の下へ（任意の時）。する＝多めに、しない傾向＝少なめに
+  c_standby:'cond',w_standby:0,n_standby:6,              // Lv5のスタンバイ能力。しない傾向＝手札がn枚以上の時だけ
+  c_heavySolve:'never',w_heavySolve:0,n_heavySolve:4,    // 重撃を先読みで解く（案B）。しない＝経験則（案A）だけ、する＝常にB、条件付き＝どちらかのダメージがn以上の時B、しない傾向＝決着がかかる時だけB
+  hAtkMinHand:null,hDefMinHand:null,hAtkBudget:null,hDefBudget:null, // 案Aの数字：残す手札・枚数の上限の上乗せ（攻撃／防御）。null＝既定
+  hPick:'min',                           // 案Aの札の選び方。min＝足りる中で最小、max＝最強の札
+  // ---- 2026-11-04 追加（既定＝旧来の挙動） ----
+  gTarget:'none',w_gTarget:1,            // ゲージ目標。none＝考えない、max＝デッキの最大GP（陽・陰）に近づく、weighted＝使えるようになる札の割合。w＝手札1枚分の倍率
+  hUChainStart:0,hUChainStartDeck:0,     // 連撃の起点（Rアイコンの札）を手札に残す価値。手札に緑がある時／山札にだけ緑がある時（手札1枚分の倍率）
+  hULv2:0,hULv3:0,hULv4:0,hULv5:0,       // そのLvになる被弾の価値（手札1枚分の倍率。正＝そのLvに上がりたい）。ダメージを受ける側のキャラの設定を使う
+  // ---- 2026-11-05 追加：新LO（ドローフェイズ開始時の山札0枚→ダメージエリア枚数で比較）の評価。既定＝無効（旧来の挙動） ----
+  c_loEval:'none',                       // none＝使わない、do＝各判断にLO予測の変化量を足す（山札1枚の固定価値は使わない）
+  w_loEval:0.5,                          // LO予測の重み（決着1回分＝lethal の倍率）
+  n_loHorizon:6,                         // 何手番先までのLOを評価するか（半手番＝片方の1ターン単位）。遠いほど重みが下がり、これを超えると0
+  w_loPass:0,                            // アタック見送りの行に足す値（手札1枚分の倍率×LOの見込み。正＝LOで勝てる見込みの時ほど見送る）
+  w_loTrend:0,                           // LO予測で、これまでの打点差をLOまでの手番数に比例して外挿する強さ（0＝今の打点差のまま）
+  w_onWinMill:0.8,                       // 削り札（サマーソルト等）の勝利時効果の価値（手札1枚分の倍率。従来は0.8固定）。LO評価ありならLOが近いほど薄まる
+  // サポートの n_sup_*：条件付きの時、自分のダメージがn以上でだけ使う（未設定＝制限なし）
+  // ---- 以下はもともと埋め込み定数だった判断の係数（既定値＝旧来の値） ----
+  deckLowN:6,deckLowVal:200,             // 山札がこの枚数以下なら山札1枚の価値を上乗せ
+  hUSupport:0.8,                         // 手札効用：サポート（GPまでの距離で割る）
+  hUGreenBase:0.3,hUGreenNeed:0.5,       // 手札効用：緑（基本＋前提札のそろい具合）
+  hUHiden:1.6,                           // 手札効用：秘伝
+  hUHeavy:0.5,hUHeavyFloor:0.6,          // 手札効用：重撃札の上乗せ、GP不足でも残る割合
+  hUDp0:0.6,                             // 手札効用：DP0の札の割引
+  hUDp0Add:1.2,                          // 手札効用：DP0の札（守り専用の札）への上乗せ（手札1枚分の倍率）。2026-11-04 探索で0→1.2
+  effVal:true,                           // 手札効用：テキストによる強化（陽乱・陰乱・破れなど、今のゲージで満たす分）を札の値に含める
+  hUDeckGreen:0.15,                      // 手札効用：山札の緑の前提札がゲージにそろう価値
+  hUGreenDef:0.5,                        // 手札効用：相手のデッキに緑が残っている時、手札の緑（1枚目だけ）を守り札として持つ価値（手札1枚分の倍率×相手の残りの緑の多さ min(1,枚数/2)）。2026-11-06 v12
+  supGreenOff:0.5,                       // 緑の巻物：ダメージ枚数×手札価値から引く分
+  supRedDmg:0.9,supMilkDmg:0.9,supMilkHand:0.3,supBread:0.25,supHospital:0.5,
+  swapTh:0.6,                            // 入れ替え：手札価値のこの割合未満しか貢献しない札を戻す
+  lv3DrawVal:0.6});                      // 飛鳥Lv3：1枚引く価値（手札価値の倍率）
+const CPU_PROFILE_COUNTER=Object.freeze(Object.assign({},CPU_PROFILE_DEFAULT,{name:'反撃',
+  atkReserveHeavy:140,atkFailPenalty:350,atkLowHand:3,atkLowHandPen:250,atkLethalMul:1,
+  defGuardWin:120,hUDp0Add:0.9,handHeavy:0.4,drawDeckAware:true,c_guardDefend:'do',w_guardDefend:0, // 雲雀は防御札で受けて反撃するデッキなので温存しない（温存すると-14点）
+  heavy:{atkMinHand:3,atkBudgetExtra:0,defMinHand:1,defBudgetExtra:1},
+  routeHeuristicToSolver:true}));
+const CPU_PROFILES={'雲雀・反撃':CPU_PROFILE_COUNTER,'雲雀・LO':CPU_PROFILE_COUNTER};
+// 防御札（守り専用の札）＝DP0のバトルカード
+function isGuard(c){return !!c&&c.type==='battle'&&c.dp===0;}
+function cpuProfile(p){return (p&&CPU_PROFILES[p.deckKey])||CPU_PROFILE_DEFAULT;}
+function isCounterDeck(p){return cpuProfile(p)===CPU_PROFILE_COUNTER;}
+// Optional draw value only: mandatory card effects and draw counts stay unchanged.
+function counterDrawValue(p,n){
+  if(p.deck.length<=n+4)return -1000;
+  const handAfter=p.hand.length-1;
+  const gain=handAfter>=7?35:handAfter>=5?90:220;
+  return n*(gain-(p.deck.length<=10?160:25))-110;
+}
+// 条件付き温存：次の相手の攻撃に対する手札の「守れる割合」。
+// 相手の攻撃候補は公開情報（相手の山札＋手札の中身の区別なし）から取り、各候補のATを1枚以上の手札で受けられるかを数える
+function threatList(o){return o.deck.concat(o.hand).filter(c=>c.type!=='support'&&c.dp>0&&c.color!=='秘').map(c=>({at:charAT(o)+c.at,green:c.color==='飛'}));}
+function coverage(pl,hand,threats){
+  if(!threats.length)return 1;
+  const g=hand.filter(c=>c.type!=='support'&&c.color!=='秘');
+  const hasGreen=g.some(c=>c.color==='飛');const best=g.filter(c=>c.color!=='飛').reduce((m,c)=>Math.max(m,charDF(pl)+c.df),-1e9);
+  let k=0;for(const t of threats)if((t.green&&hasGreen)||best>=t.at)k++;return k/threats.length;
+}
+// 手札の札が今のゲージ（＋これから置く分 ey/ei）でテキストにより強化される分。アタック時AT・ディフェンス時DF。
+// 相手の札や重撃しだいの強化は含めない（バトルで公開されるまで分からない）。表示と思考の両方で使う
+const GHOST={name:'',color:'閃',type:'battle',icons:[],at:0,df:0};
+function cardBoost(p,c,ey=0,ei=0){
+  if(!c||c.type!=='battle')return null;let me=p;
+  if(ey||ei){me=Object.create(p);me.gYo=p.gYo.concat(Array(ey).fill(GHOST));me.gIn=p.gIn.concat(Array(ei).fill(GHOST));}
+  const opp=P[1-p.idx];let at=0,df=0;
+  const ctx=isAtk=>({me,opp,card:c,isAtk,oppCard:null,heavy:[],oppHeavy:[],chainFrom:null,bs:{}});
+  try{const r=c.mod?c.mod(ctx(true)):null;at+=(r&&r.at)||0;}catch(e){}
+  try{const r=c.mod?c.mod(ctx(false)):null;df+=(r&&r.df)||0;}catch(e){}
+  try{const m=charMod(me,c,null);if(m){at+=m.at||0;df+=m.df||0;}}catch(e){}
+  return (at||df)?{at,df}:null;
+}
+function heavyPolicy(p,o,elig,ctx,committed,hp){
+  if(ctx.isAtk?!(ctx.at<ctx.df):!(ctx.df<=ctx.at))return null; // 負けていない側は出さない（下の判定と同じ。先に見て無駄な計算を省く）
+  if(ctx.dp<=0)return null;
+  const prof=(hp&&hp.profile)||(hp&&hp.counterDisabled?CPU_PROFILE_DEFAULT:cpuProfile(p));
+  if(prof.heavy){const H=prof.heavy;
+    hp=Object.assign({},hp,{minHand:ctx.isAtk?H.atkMinHand:H.defMinHand,budgetExtra:ctx.isAtk?H.atkBudgetExtra:H.defBudgetExtra});
+  }
+  if(prof.holdHeavyMaxDrop!=null&&ctx.isAtk&&o.damage.length+ctx.dp<CONFIG.winDamage){
+    // 条件付き温存：決着しない攻撃では、次の相手の攻撃を守れる割合を大きく下げる重撃札は出さない
+    const thr=threatList(o),base=coverage(p,p.hand,thr);
+    elig=elig.filter(c=>base-coverage(p,p.hand.filter(x=>x!==c),thr)<=prof.holdHeavyMaxDrop);
+    if(!elig.length)return null;
+  }
+  hp=hp||{minHand:2,budgetExtra:1};
+  { // 重撃の数字（案A）。未設定(null)なら上の既定のまま
+    const mh=ctx.isAtk?prof.hAtkMinHand:prof.hDefMinHand,be=ctx.isAtk?prof.hAtkBudget:prof.hDefBudget;
+    if(mh!=null||be!=null)hp=Object.assign({},hp,mh!=null?{minHand:mh}:{},be!=null?{budgetExtra:be}:{});
+  }
+  const losing=ctx.isAtk?ctx.at<ctx.df:ctx.df<=ctx.at;
+  if(!losing)return null;
+  if(ctx.dp<=0)return null;                       // ダメージのないバトルには投資しない
+  const lethal=ctx.isAtk?(o.damage.length+ctx.dp>=CONFIG.winDamage):(p.damage.length+ctx.dp>=CONFIG.winDamage);
+  { // 選択：重撃（する／条件付き／しない傾向／しない）
+    const m=ctx.isAtk?prof.c_heavyAtk:prof.c_heavyDef,w=(ctx.isAtk?prof.w_heavyAtk:prof.w_heavyDef)||0;
+    if(m==='never')return null;
+    if(m==='avoid'&&!lethal)return null;
+    if(m==='do')hp=Object.assign({},hp,{budgetExtra:hp.budgetExtra+w,minHand:Math.max(0,hp.minHand-1)});
+  }
+  const budget=lethal?99:ctx.dp+hp.budgetExtra;    // このバトルに使う重撃の枚数上限
+  const minHand=lethal?0:hp.minHand;              // 残しておく手札
+  if(committed>=budget||p.hand.length-1<minHand)return null;
+  const key=ctx.isAtk?'at':'df';
+  const gap=ctx.isAtk?ctx.df-ctx.at:ctx.at-ctx.df+100;
+  const sorted=[...elig].sort((a,b)=>a[key]-b[key]);
+  const enough=prof.hPick==='max'?(sorted[sorted.length-1][key]>=gap?sorted[sorted.length-1]:null):sorted.find(c=>c[key]>=gap); // 足りる中で最小の札（hPick=max なら最強の札）
+  if(enough)return enough;
+  const best=sorted[sorted.length-1];
+  const rest=p.hand.filter(c=>c!==best&&heavyOK(p,c)).sort((a,b)=>b[key]-a[key]).slice(0,budget-committed-1);
+  const potential=best[key]+rest.reduce((s,c)=>s+c[key],0);
+  if(potential>=gap&&p.hand.length-1-rest.length>=minHand)return best;
+  return null;
+}
+const AI={
+  async prepAction(p,opts,ctx){
+    await sleep(G.delay);
+    const has=v=>opts.some(o=>o.value===v);
+    if(has('support')){
+      const o=P[1-p.idx];
+      const pick=ctx.sups.find(c=>c.name.startsWith('牛乳')&&p.damage.length>=2)||ctx.sups.find(c=>c.name==='緑の巻物'&&p.damage.length>=2)||ctx.sups.find(c=>c.name==='朝食のパン'&&p.hand.some(c2=>canAttack(p,c2,null)))||ctx.sups.find(c=>c.name==='病院の待合室にて'&&p.damage.length>=3&&p.hand.length<=3)||ctx.sups.find(c=>c.name==='赤の巻物'&&p.damage.length<=1)||ctx.sups.find(c=>c.name==='緑の巻物'&&p.damage.length>=1);
+      if(pick)return{type:'support',card:pick};
+    }
+    if(has('gauge')){
+      // 方針：使える技は置かずに攻撃に使う。ゲージに置くのは今使えない札だけ
+      const needs=new Set();for(const c of [...p.hand,...p.deck])if(c.needs)c.needs.forEach(n=>needs.add(n));
+      const have=new Set(gaugeAll(p).map(x=>x.name));
+      const usableAtk=p.hand.filter(c=>c.type==='battle'&&baseUsable(p,c)&&c.color!=='飛'&&c.dp>0);
+      const dist=c=>Math.max(0,c.gp.yo-yo(p))+Math.max(0,c.gp.in-inn(p));   // 使用条件までの距離
+      let pool=ctx.gaugeable.filter(c=>!(baseUsable(p,c)&&c.dp>0));
+      // 例外：序盤で攻撃できる札がまったく無いときは、最も軽い札を置いてゲージを作る
+      if(!pool.length&&!usableAtk.length)pool=ctx.gaugeable;
+      if(!pool.length)return has('lv5')?{type:'lv5'}:{type:'go'};
+      const score=c=>{
+        let s=cardVal(c)-200*Math.min(dist(c),4);                // 条件から遠い札ほど置きやすい
+        if(c.dp===0)s-=300;
+        if(needs.has(c.name)&&!have.has(c.name)){const dup=p.hand.filter(x=>x.name===c.name).length;s-=(dup>=2||usableAtk.length>=3)?1500:300;}
+        if(c.color==='秘'||c.color==='飛')s+=5000;
+        return s;};
+      const c=[...pool].sort((a,b)=>score(a)-score(b))[0];
+      const g=c.color==='陽'?'yo':c.color==='陰'?'in':await this.chooseGauge(p,c);
+      return{type:'gauge',card:c,gauge:g};
+    }
+    if(has('lv5')&&p.hand.length>=5&&p.hand.some(c=>!baseUsable(p,c)&&c.type==='battle'&&(c.gp.yo-yo(p)+c.gp.in-inn(p))>=3))return{type:'lv5'};
+    return{type:'go'};
+  },
+  async chooseGauge(p,card){
+    // 手札のカードが要求するゲージを優先、同じなら少ない方
+    let wy=0,wi=0;for(const c of p.hand){if(c.gp){wy+=Math.max(0,c.gp.yo-yo(p));wi+=Math.max(0,c.gp.in-inn(p));}}
+    if(wy!==wi)return wy>wi?'yo':'in';return yo(p)<=inn(p)?'yo':'in';
+  },
+  // 相手が防御に出せる見込みのDF（キャラ＋防御札＋重撃の余力）
+  oppBlock(p,o){const h=o.hand.length;return charDF(o)+(h>0?400:0)+Math.min(Math.max(h-1,0),2)*300;},
+  estAT(p,c){let m=0;try{const r=c.mod?c.mod({me:p,opp:P[1-p.idx],card:c,isAtk:true,oppCard:null,heavy:[],oppHeavy:[],chainFrom:null,bs:{}}):null;m=(r&&r.at)||0;}catch(e){}const cm=p.charDeck[0].cmod?p.charDeck[0].cmod(p,c):null;return charAT(p)+c.at+m+((cm&&cm.at)||0);},
+  async attack(p,usable,mode){
+    await sleep(G.delay);
+    const o=P[1-p.idx];
+    const block=this.oppBlock(p,o);
+    let cand=usable.filter(c=>c.dp>0&&c.tech!=='防御');   // 防御札（DP0）では原則攻撃しない
+    // 例外：序盤でゲージが育っておらず、ほかに攻撃札がない時はゲージ作りとして使う
+    if(!cand.length&&!mode&&yo(p)+inn(p)<4)cand=usable.filter(c=>c.tech==='防御'||c.dp===0);
+    if(!cand.length)return null;
+    const hid=cand.filter(c=>c.color==='秘');
+    const normal=cand.filter(c=>c.color!=='秘');
+    // 秘伝：相手の手札が尽きているか、重撃込みでも届く見込みがある時だけ
+    if(hid.length){const h=hid[0];const at=this.estAT(p,h);if(o.hand.length<=1||at>=block+300)return h;}
+    const score=c=>this.estAT(p,c)+(c.icons.includes('C')?150:0)+(c.icons.includes('A')&&p.hand.some(x=>x.color==='飛')?250:0);
+    const list=(normal.length?normal:cand).sort((a,b)=>score(b)-score(a));
+    return list[0];
+  },
+  async defend(p,usable,info){
+    await sleep(G.delay);
+    const o=info.attacker;const threat=charAT(o)+500;
+    const green=usable.filter(c=>c.color==='飛');
+    if(info.mode==='R'){ // 連撃：緑（+1000・吹飛）が来る。緑で受ければ無条件成功、なければ素のDFで届く札だけ
+      if(green.length)return green[0];
+      const need=charAT(o)+1000;
+      const cands=usable.filter(c=>c.color!=='飛'&&charDF(p)+c.df>=need).sort((a,b)=>a.df-b.df);
+      return cands[0]||null;
+    }
+    const normal=usable.filter(c=>c.color!=='飛');   // 通常バトルで緑を出しても意味がない
+    if(!normal.length)return null;
+    const best=[...normal].sort((a,b)=>(b.df)-(a.df))[0];
+    const myDF=charDF(p)+best.df;
+    const heavyDF=p.hand.filter(c=>c!==best&&heavyOK(p,c)).reduce((s,c)=>s+c.df,0);
+    if(myDF>=threat-100)return best;
+    if(p.hand.length>=4&&myDF+heavyDF>=threat)return best;
+    if(p.damage.length>=3&&p.hand.length>=3)return best;
+    return null;
+  },
+  async heavy(p,elig,ctx){
+    await sleep(G.delay);
+    const bs=G.bs;const side=ctx.isAtk?bs.atk:bs.def;
+    return heavyPolicy(p,P[1-p.idx],elig,ctx,side.heavy.length,this.hp);
+  },
+  async chain(p,avail){
+    await sleep(G.delay);
+    const o=P[1-p.idx];
+    const block=charDF(o)+(o.hand.length>0?400:0);
+    const ok=ic=>{const cs=p.hand.filter(c=>canAttack(p,c,ic)&&c.dp>0);if(!cs.length)return false;const best=Math.max(...cs.map(c=>this.estAT(p,c)));if(o.hand.length===0)return true;return best>=charDF(o)+(this.chainMargin??400);};
+    if(avail.includes('R')&&ok('R'))return 'R';
+    return null;
+  },
+  async pickCards(p,cards,n,title,allowLess){
+    await sleep(G.delay);
+    if(title.startsWith('秘薬')){const c=[...cards].sort((a,b)=>cardVal(b)-cardVal(a))[0];return c?[c]:[];}
+    if(title.startsWith('破れ2')){const c=[...cards].sort((a,b)=>cardVal(a)-cardVal(b))[0];return c?[c]:[];}
+    if(title.startsWith('入れ替え')||title.startsWith('山札の下へ')){const bad=cards.filter(c=>!baseUsable(p,c)&&c.type==='battle'&&(c.gp.yo-yo(p)+c.gp.in-inn(p))>=3);const pick=bad.slice(0,n);if(pick.length||allowLess)return pick;return [...cards].sort((a,b)=>cardVal(a)-cardVal(b)).slice(0,n);}
+    if(title.startsWith('捨てるカード')){const bad=cards.filter(c=>!baseUsable(p,c)&&c.type==='battle'&&(c.gp.yo-yo(p)+c.gp.in-inn(p))>=3);return bad.slice(0,n);}
+    return [...cards].sort((a,b)=>cardVal(a)-cardVal(b)).slice(0,n);
+  },
+};
+
+
+/* ---------- ゲーム生成 ---------- */
+function setupGame(opts){
+  // opts: {decks:[key,key], ctls:[ctl,ctl], ai:[bool,bool], first:'random'|0|1, delay, deckSize, hooks, mode, spectate, rng}
+  UID=0;
+  if(opts.rng)RNG=opts.rng;
+  if(opts.deckSize)CONFIG.deckSize=opts.deckSize;
+  G={mode:opts.mode||'sim',turn:0,cur:0,log:[],prompt:null,bs:null,noBattle:null,over:null,viewer:0,delay:opts.delay||0,spectate:!!opts.spectate,hooks:opts.hooks||null};
+  P=[0,1].map(i=>{const dk=opts.decks[i];const p={idx:i,name:`P${i+1}`,deckKey:dk,charName:DECKS[dk].char,ai:!!opts.ai[i],turnMod:{at:0,df:0},flags:{},supports:[],hand:[],discard:[],damage:[],gYo:[],gIn:[]};
+    p.ctl=opts.ctls[i];p.charDeck=CHARS[dk].map(c=>{const o=inst(c);o.type='char';return o;});
+    const lst=(CONFIG.deckSize===30&&DECKS[dk].list30)?DECKS[dk].list30:DECKS[dk].list;
+    p.deck=shuffle(lst.flatMap(([n,k])=>Array.from({length:k},()=>inst(CARDS[n]))));
+    draw(p,CONFIG.startHand);return p;});
+  G.first=(opts.first==='random'||opts.first==null)?Math.floor(RNG()*2):+opts.first;
+  const who=opts.ctlLabels?`、操作: P1=${opts.ctlLabels[0]}／P2=${opts.ctlLabels[1]}`:'';log(`ゲーム開始（ルールv2：連撃・緑防御・秘伝1ハンデス）：P1=${opts.decks[0]}デッキ、P2=${opts.decks[1]}デッキ（山札${P[0].deck.length+CONFIG.startHand}枚）。先攻は${P[G.first].name}${who}`,true);
+  return {G,P};
+}
+let RNG=Math.random;
+if(typeof module!=='undefined'&&module.exports){module.exports={heavyPolicy,isGuard,cardBoost,threatList,coverage,cpuProfile,CPU_PROFILE_DEFAULT,CPU_PROFILE_COUNTER,CPU_PROFILES,inst,draw,mill,toBottom,log,rm,applyDamage,CONFIG,CARDS,CHARS,DECKS,AI,setupGame,runGame,get G(){return G},get P(){return P},yo,inn,gaugeAll,charAT,charDF,gpOK,baseUsable,canAttack,canDefend,heavyOK,computeTotals,cardVal,setRng:r=>{RNG=r},get RNG(){return RNG}};}
+
+// Node用の互換（GitHub版では index.html 内の同じスコープで共有される関数を、Node の solver.js から参照できるようにする。挙動は変えない）
+if(typeof globalThis!=='undefined'&&typeof module!=='undefined'&&module.exports){globalThis.isCounterDeck=isCounterDeck;globalThis.counterDrawValue=counterDrawValue;}
+
+</script>
+<script>
+// Vol.1 の追加カード定義（飛鳥・柳生デッキに入っていないもの）。※推定 と書いたものは原文未判読
+(function(){const __f=function(E){
+const {CARDS,CHARS,yo,inn,gaugeAll,draw,mill,log,rm,toBottom}=E;
+const B=(name,id,color,gy,gi,at,df,tech,icons,o={})=>{const ic=[...new Set(icons.split('').filter(Boolean).map(x=>(x==='C'||x==='A')?'R':x))];CARDS[name]=Object.assign({type:'battle',name,id,color,gp:{yo:gy,in:gi},at,df,dp:1,tech,icons:ic},o);};
+const S=(name,id,color,gy,gi,o)=>{CARDS[name]=Object.assign({type:'support',name,id,color,gp:{yo:gy,in:gi}},o);};
+const sen=c=>yo(c.me)>=5&&inn(c.me)>=5?{df:500}:null;
+const oppMill=n=>c=>{mill(c.opp,n,'効果');};
+const oppDiscardHand=n=>async c=>{const v=c.opp;const k=Math.min(n,v.hand.length);if(!k)return;const cs=await v.ctl.pickCards(v,v.hand,k,`巻込：手札を${k}枚捨ててください`,false);for(const x of cs){rm(v.hand,x);v.discard.push(x)}log(`${v.name}：手札を${k}枚捨てた`);};
+B('烈突','B002','閃',1,0,300,300,'斬撃','',{text:'【閃乱】陽・陰ゲージがともに5枚以上でDF+500',mod:sen});
+B('はじめのチョップ','B005','閃',1,0,300,300,'打撃','U',{text:'（テキストなし）'});
+B('紅閃','B007','閃',0,1,400,300,'斬撃','',{text:'（テキストなし）'});
+B('ドラゴンダンス','B008','閃',0,1,200,200,'打撃','CU',{text:'（テキストなし）'});
+B('本能のままに','B010','閃',0,1,300,300,'打撃','',{text:'【巻込】相手がディフェンスにバトルカードを使用しなかった時、相手は自分の忍ゲージから1枚を選んで捨て札',onWin:async c=>{if(c.oppCard)return;const o=c.opp;const g=gaugeAll(o);if(!g.length)return;const k=await o.ctl.pickCards(o,g,1,'本能のままに：忍ゲージから捨て札にするカードを選択',false);const x=(k&&k[0])||g[g.length-1];const z=o.gYo.includes(x)?o.gYo:o.gIn;z.splice(z.indexOf(x),1);o.discard.push(x);log(`${o.name}：本能のままにで「${x.name}」をゲージから捨て札（陽${yo(o)}/陰${inn(o)}）`);}});
+B('欺人脚','B012','閃',1,1,500,200,'打撃','A',{noHeavy:true,text:'【制限】重撃には使用できない'});
+B('サマーソルト','B013','閃',1,1,400,200,'打撃','UA',{text:'【巻込】アタックして勝利したとき、相手は山札の上から1枚を捨て札',onWin:oppMill(1)});
+B('雲雀つっこみ','B015','閃',1,1,300,300,'打撃','A',{text:'【対抗】相手が斬撃ならDF+200／【閃乱】陽・陰ゲージがともに5枚以上でDF+500',mod:c=>({df:(c.oppCard&&c.oppCard.tech==='斬撃'?200:0)+(yo(c.me)>=5&&inn(c.me)>=5?500:0)})});
+B('クナイ投擲','B016','閃',0,0,100,100,'射撃','',{text:'【対抗】相手が防御属性のバトルカードでディフェンスした時、勝敗に関わらず1ダメージを与える',onFail:async c=>{if(c.oppCard&&c.oppCard.tech==='防御'){log('クナイ投擲：勝敗に関わらず1ダメージ');await E.applyDamage(c.opp,1,'クナイ投擲');}}});
+B('鉄壁のガード','B018','閃',2,2,0,1000,'防御','',{dp:0,text:'【対抗】相手が波動または射撃ならDF+500',mod:c=>c.oppCard&&['波動','射撃'].includes(c.oppCard.tech)?{df:500}:null});
+B('アックスシュート','B022','陽',2,0,400,300,'打撃','CA',{text:'【対抗】相手が防御ならAT+200',mod:c=>c.oppCard&&c.oppCard.tech==='防御'?{at:200}:null});
+B('ウサギ蹴り','B024','陽',2,0,400,500,'打撃','C',{text:'（テキストなし）'});
+B('ドラゴンバイト','B027','陽',3,0,500,400,'打撃','CA',{text:'【巻込】アタックして勝利したとき、相手は山札の上から1枚を捨て札／【陽乱】陽5枚以上AT+200',onWin:oppMill(1),mod:c=>yo(c.me)>=5?{at:200}:null});
+B('飛翔燕','B031','陽',5,0,800,300,'斬撃','A',{only:'斑鳩',text:'斑鳩専用。【対抗】アタック時、相手はディフェンスに使ったバトルカードのテキストを使用できない／【陽乱】陽7枚以上AT+400',flags:c=>c.isAtk?{noOppText:true}:null,mod:c=>yo(c.me)>=7?{at:400}:null});
+B('スカイハイラッシュ','B032','陽',5,0,700,500,'打撃','A',{only:'葛城',text:'葛城専用。【巻込】アタックして勝利したとき、相手は手札1枚を捨てる／【陽乱】陽5枚以上AT+200',onWin:oppDiscardHand(1),mod:c=>yo(c.me)>=5?{at:200}:null});
+B('お尻からドーン','B034','陽',5,0,500,400,'打撃','CUA',{only:'雲雀',text:'雲雀専用。【対抗】アタック時、相手のキャラクターの破れによるDF強化は働かない',flags:c=>c.isAtk?{noOppCharText:true}:null});
+B('狭朱・改','B036','陰',0,2,600,300,'斬撃','C',{text:'（テキストなし）'});
+B('ドラゴンベアード','B037','陰',0,2,400,300,'打撃','CU',{text:'【巻込】相手がディフェンスでバトルカードを出さなかった時、相手は山札の上から1枚を捨て札',onWin:c=>{if(!c.oppCard)mill(c.opp,1,'ドラゴンベアード');}});
+B('ぐるぐるスピーン','B039','陰',0,2,400,400,'打撃','C',{text:'【対抗】相手がアタックに使用したバトルカードが陽属性ならDF+200',mod:c=>!c.isAtk&&c.oppCard&&c.oppCard.color==='陽'?{df:200}:null});
+B('ハーフムーン','B042','陰',0,3,500,500,'打撃','U',{text:'【強化】このバトル中、重撃で重ねた「ハーフムーン」1枚につきAT+200／【陰乱】陰5枚以上DF+300',mod:c=>({at:200*c.heavy.filter(x=>x.name==='ハーフムーン').length,df:inn(c.me)>=5?300:0})});
+B('もっかいウサギ蹴り','B044','陰',0,3,600,400,'打撃','U',{text:'【陰乱】陰5枚以上DF+300',mod:c=>inn(c.me)>=5?{df:300}:null});
+B('磁転昇','B046','陰',0,5,1000,200,'斬撃','UA',{only:'斑鳩',noHeavy:true,text:'斑鳩専用。【対抗】相手が防御属性のバトルカードでディフェンスした時AT+300／【制限】重撃には使用できない',mod:c=>c.oppCard&&c.oppCard.tech==='防御'?{at:300}:null});
+B('サマーソルトリバース','B047','陰',0,5,800,400,'打撃','UA',{only:'葛城',text:'葛城専用。【巻込】アタックして勝利したとき、相手は手札1枚を捨てる',onWin:oppDiscardHand(1)});
+B('ふっとびさまーそると','B049','陰',0,5,600,500,'打撃','UA',{only:'雲雀',text:'雲雀専用。【強化】自分のダメージエリアが3枚以上ならAT+500／【陰乱】陰7枚以上DF+500',mod:c=>({at:c.me.damage.length>=3?500:0,df:inn(c.me)>=7?500:0})});
+const fuki=c=>c.isAtk?{noOppText:true,noOppHeavy:true}:null;
+B('神','B051','飛',0,0,700,0,'斬撃','A',{only:'斑鳩',needs:['欺人脚','紅閃'],flags:fuki,text:'斑鳩専用・緑。【使用条件（攻撃時）】忍ゲージに「欺人脚」「紅閃」がある。【吹飛】アタック時、相手はバトルカードのテキストと重撃を使用できない（緑を除く）。【連撃防御】ディフェンスに出した時、相手が緑なら無条件で防御成功'});
+B('スカイハイクロウ','B052','飛',0,0,700,0,'打撃','A',{only:'葛城',needs:['ドラゴンダンス','サマーソルト'],flags:fuki,text:'葛城専用・緑。【使用条件（攻撃時）】忍ゲージに「ドラゴンダンス」「サマーソルト」がある。【吹飛】アタック時、相手はバトルカードのテキストと重撃を使用できない（緑を除く）。【連撃防御】ディフェンスに出した時、相手が緑なら無条件で防御成功'});
+B('えあウサギ','B054','飛',0,0,700,0,'打撃','A',{only:'雲雀',needs:['雲雀つっこみ','はじめのチョップ'],flags:fuki,text:'雲雀専用・緑。【使用条件（攻撃時）】忍ゲージに「雲雀つっこみ」「はじめのチョップ」がある。【吹飛】アタック時、相手はバトルカードのテキストと重撃を使用できない（緑を除く）。【連撃防御】ディフェンスに出した時、相手が緑なら無条件で防御成功'});
+B('ミドルキック','B003','閃',0,0,300,300,'打撃','',{text:'（テキストなし）'});
+const hidenBase={dp:2,hiden:true,onWin:oppDiscardHand(1)};
+B('飛燕鳳閃・壱式','B056','秘',4,4,1600,1000,'召喚','',Object.assign({only:'斑鳩',text:'斑鳩専用・秘伝忍法。【使用条件】陽4/陰4、さらに忍ゲージから閃・陽・陰のカードを1枚ずつ捨て札。【対抗】相手のバトルカードが秘伝忍法の時DF+1000。【巻込】アタックして勝利したとき、相手は手札を1枚捨てる',mod:c=>c.oppCard&&c.oppCard.color==='秘'?{df:1000}:null},hidenBase));
+B('トルネードシュピンデル','B057','秘',4,4,1400,1200,'召喚','',Object.assign({only:'葛城',text:'葛城専用・秘伝忍法。【使用条件】陽4/陰4、さらに忍ゲージから閃・陽・陰のカードを1枚ずつ捨て札。【強化】忍ゲージの打撃カード1枚につきAT+100/DF+100。【巻込】アタックして勝利したとき、相手は手札を1枚捨てる',mod:c=>{const n=gaugeAll(c.me).filter(x=>x.tech==='打撃').length;return{at:100*n,df:100*n}}},hidenBase));
+B('忍兎でブーン','B059','秘',4,4,1500,1100,'召喚','',Object.assign({only:'雲雀',text:'雲雀専用・秘伝忍法。【使用条件】陽4/陰4、さらに忍ゲージから閃・陽・陰のカードを1枚ずつ捨て札。【強化】手札の斬撃カード1枚を捨ててよい。捨てたらAT+500/DF+500。【巻込】アタックして勝利したとき、相手は手札を1枚捨てる',
+ mod:c=>{const k='ninto'+c.me.idx;if(c.bs&&k in c.bs)return c.bs[k]?{at:500,df:500}:null;return c.me.hand.some(x=>x.tech==='斬撃')?{at:500,df:500}:null;}, // 実戦は登場時に捨てたかで決まる。読み（バトル状態なし）は手札に斬撃があれば捨てる前提
+ onReveal:async c=>{const k='ninto'+c.me.idx;if(c.bs)c.bs[k]=false;const cs=c.me.hand.filter(x=>x.tech==='斬撃');if(!cs.length)return;const r=await c.me.ctl.pickCards(c.me,cs,1,'忍兎でブーン：捨てる斬撃カードを選択（任意。捨てたらAT+500/DF+500）',true);const x=r&&r[0];if(!x){log(`${c.me.name}：忍兎でブーンの強化を使わない`);return;}rm(c.me.hand,x);c.me.discard.push(x);if(c.bs)c.bs[k]=true;log(`${c.me.name}：忍兎でブーンで「${x.name}」を捨ててAT+500/DF+500`);}},hidenBase));
+// サポート
+S('秘薬','S004','陰',1,1,{text:'【使用型】自分の捨て札のバトルカード（緑・秘伝忍法を除く）1枚を陰ゲージへ。すぐに陰ゲージへ',canUse:p=>p.discard.some(x=>x.type==='battle'&&x.color!=='飛'&&x.color!=='秘'),use:async c=>{const cs=c.me.discard.filter(x=>x.type==='battle'&&x.color!=='飛'&&x.color!=='秘');const k=await c.me.ctl.pickCards(c.me,cs,1,'秘薬：陰ゲージへ置くカードを選択',false);const x=(k&&k[0])||cs[0];rm(c.me.discard,x);c.me.gIn.push(x);log(`${c.me.name}：秘薬で「${x.name}」を陰ゲージへ`);},dest:'in',expire:'now'});
+S('インテリメガネ','S005','陰',1,1,{text:'【効力持続】このターン、両プレイヤーのバトルカードのテキストはすべて無効になる（使用条件とコストは無効にならない）。ターン終了時に陰ゲージへ',use:async c=>{E.G.noTextTurn=true;},dest:'in',expire:'endTurn'});
+S('じっちゃんの太巻き','S007','閃',2,2,{text:'【効力持続】このターン、アタックして勝利するたびに1ドロー。ターン終了時に陽か陰のゲージへ（選べる）',use:async c=>{c.me.turnMod.winDraw=true;},dest:'choose',expire:'endTurn'});
+S('海に行こう!','S009','陽',4,4,{text:'【使用型】両プレイヤーは自分の陽か陰ゲージ1本を選び、そこから4枚を選んで山札に戻してシャッフル（3枚以下なら全部）。すぐに陽ゲージへ',use:async c=>{for(const p of [c.me,c.opp]){if(!p.gYo.length&&!p.gIn.length)continue;
+  let g;if(!p.gYo.length)g=p.gIn;else if(!p.gIn.length)g=p.gYo;else{const k=await p.ctl.pickCards(p,[...p.gYo,...p.gIn],1,'海に行こう!：山札に戻すゲージを選択（選んだカードのゲージ）',false);const x=k&&k[0];g=x&&p.gIn.includes(x)?p.gIn:p.gYo;}
+  let back;if(g.length<=4)back=g.splice(0,g.length);else{const k=await p.ctl.pickCards(p,g.slice(),4,'海に行こう!：山札に戻すカードを選択（4枚）',false);back=(k&&k.length===4)?k:g.slice(g.length-4);for(const x of back)g.splice(g.indexOf(x),1);}
+  const n=back.length;p.deck.push(...back);for(let i=p.deck.length-1;i>0;i--){const j=Math.floor(E.RNG()*(i+1));[p.deck[i],p.deck[j]]=[p.deck[j],p.deck[i]];}log(`${p.name}：海に行こう!でゲージから${n}枚を山札へ`);}},dest:'yo',expire:'now'});
+// v1.7 正本キャラ定義。能力を直接定義し、旧版名は同じ配列への互換別名とする。
+const emit=()=>{};
+const draw2bottom1=why=>async p=>{draw(p,2);log(`${p.name}：${why}で2ドロー`);const cs=await p.ctl.pickCards(p,p.hand,1,'山札の下へ戻すカードを選択（1枚）',false);toBottom(p,cs.slice(0,1),why);};
+const swapV17=(n,why)=>async p=>{emit('swapOpportunity',{p,lv:p.charDeck[0].lv,entry:p.charDeck[0].lv!==5});if(!p.hand.length)return;const cs=await p.ctl.pickCards(p,p.hand,n,'入れ替え：'+why+'（最大'+n+'枚）',true);const selected=cs.slice(0,n);E.toBottom(p,selected,why);const got=E.draw(p,selected.length);E.log(p.name+'：'+why+'で'+selected.length+'枚戻し'+got+'枚引いた');emit('newSwap',{p,returned:selected.length,drawn:got});};
+const destroyV17=lv=>async c=>{const {me,opp}=c;emit('gaugeWinOpportunity',{p:me,lv});if(me._researchGaugeTurn===E.G.turn){emit('gaugeOnceSkip',{p:me});return;}me._researchGaugeTurn=E.G.turn;const pool=E.gaugeAll(opp);if(!pool.length){emit('gaugeEmptySkip',{p:me});return;}const chooser=lv===3?opp:me,title=lv===3?'本能のままに：研究斑鳩Lv3で捨てるゲージ':'研究斑鳩Lv5：相手ゲージを破壊';const pick=await chooser.ctl.pickCards(chooser,pool,1,title,false),x=pick[0];if(!pool.includes(x))throw Error('Invalid gauge selection');const before={gYo:opp.gYo.slice(),gIn:opp.gIn.slice()};E.rm(opp.gYo,x);E.rm(opp.gIn,x);opp.discard.push(x);E.log(me.name+'：新斑鳩Lv'+lv+'が'+opp.name+'の「'+x.name+'」をゲージから捨て札（選択者'+chooser.name+'）');emit('gaugeDestroyed',{p:me,opp,card:x,before,chooser:chooser.idx,lv});};
+const destroy5V17=destroyV17(5);
+CHARS["飛鳥"]=[{"id":"C001","name":"飛鳥","lv":1,"at":400,"df":400,"text":"能力なし。"},
+{"id":"C002","name":"飛鳥","lv":2,"at":500,"df":500,"text":"登場時、1枚引く。","onTop":p=>{draw(p,1);log(`${p.name}：忍転身で1ドロー`)}},
+{"id":"C003v6","name":"飛鳥","lv":3,"at":600,"df":600,"text":"登場時、手札を1枚捨ててよい。捨てた場合1枚引き、捨てたカードが緑のバトルカードなら代わりに2枚引く。","onTop":async p=>{if(!p.hand.length){log(`${p.name}：Lv3の効果：手札がない`);return;}const k=await p.ctl.pickCards(p,p.hand,1,'Lv3の効果：捨てるカードを選択（任意。捨てたら1枚、緑なら2枚引く）',true);const x=k[0];if(!x){log(`${p.name}：Lv3の効果：捨てなかった`);return;}rm(p.hand,x);p.discard.push(x);const n=x.type==='battle'&&x.color==='飛'?2:1;const got=draw(p,n);log(`${p.name}：Lv3の効果で「${x.name}」を捨てて${got}枚引いた`);}},
+{"id":"C032v3","name":"飛鳥","lv":4,"at":700,"df":700,"text":"自分がアタックに使用するバトルカードに連撃を付与する。","grantR":true},
+{"id":"C006v3","name":"飛鳥","lv":5,"at":800,"df":800,"text":"自分がアタックに使用するバトルカードに連撃を付与する。登場時、捨て札の最後にある緑のバトルカード1枚を手札に戻す。","grantR":true,"onTop":p=>{const g=p.discard.filter(x=>x.type==='battle'&&x.color==='飛');if(!g.length){log(`${p.name}：Lv5の効果：捨て札に緑がない`);return;}const x=g[g.length-1];p.discard.splice(p.discard.indexOf(x),1);p.hand.push(x);log(`${p.name}：Lv5の効果で「${x.name}」を手札に戻した`);}}];
+CHARS["柳生"]=[{"id":"C019","name":"柳生","lv":1,"at":400,"df":400,"text":"能力なし。"},
+{"id":"C020v2","name":"柳生","lv":2,"at":400,"df":600,"text":"登場時、2枚引き、手札1枚を選んで山札の一番下に戻す。","onTop":draw2bottom1('忍転身')},
+{"id":"C021","name":"柳生","lv":3,"at":500,"df":700,"text":"登場時、手札を最大1枚選んで山札の一番下に戻し、同数引く。","onTop":swapV17(1,'新柳生Lv3')},
+{"id":"C022v2","name":"柳生","lv":4,"at":700,"df":700,"text":"登場時、手札を最大2枚選んで山札の一番下に戻し、同数引く。","onTop":swapV17(2,'新柳生Lv4')},
+{"id":"C023v2","name":"柳生","lv":5,"at":900,"df":700,"text":"自分のスタンバイに1ターン1回、手札を最大1枚選んで山札の一番下に戻し、同数引く。射撃・防御のバトルカード使用時、AT+200／DF+200。","cmod":(p,c)=>['射撃','防御'].includes(c.tech)?{at:200,df:200}:null,"standby":{"label":"手札を最大1枚、山札の下と入れ替える（新柳生Lv5）","ok":p=>p.hand.length>0,"run":swapV17(1,'新柳生Lv5')}}];
+CHARS["斑鳩"]=[{"id":"C007","name":"斑鳩","lv":1,"at":400,"df":400,"text":"能力なし。"},
+{"id":"C008","name":"斑鳩","lv":2,"at":600,"df":400,"text":"登場時、1枚引く。","onTop":p=>{draw(p,1);log(`${p.name}：忍転身で1ドロー`)}},
+{"id":"C009","name":"斑鳩","lv":3,"at":800,"df":400,"text":"1ターンに1回、自分がアタック側でバトルに勝利した時、相手は自身の忍ゲージからカード1枚を選び、捨て札にする。相手の忍ゲージが空でも、この勝利でそのターンの使用済みとなる。","onAtkWin":destroyV17(3)},
+{"id":"C010","name":"斑鳩","lv":4,"at":900,"df":500,"text":"自分がアタック側でバトルに勝利した時、相手が防御に使用したバトルカードを忍ゲージに置かず、捨て札にする。","onAtkWin":async c=>{c.bs.oppDefToDiscard=true;}},
+{"id":"C011","name":"斑鳩","lv":5,"at":1000,"df":600,"text":"自分がアタック側でバトルに勝利した時、相手が防御に使用したバトルカードを忍ゲージに置かず、捨て札にする。加えて1ターンに1回、相手の忍ゲージから自分がカード1枚を選び、捨て札にする。相手の忍ゲージが空でも、この勝利でそのターンの使用済みとなる。","onAtkWin":async c=>{c.bs.oppDefToDiscard=true;await destroy5V17(c);}}];
+CHARS["葛城"]=[{"id":"C013","name":"葛城","lv":1,"at":400,"df":400,"text":"能力なし。"},
+{"id":"C014","name":"葛城","lv":2,"at":500,"df":500,"text":"登場時、1枚引く。","onTop":p=>{draw(p,1);log(`${p.name}：忍転身で1ドロー`)}},
+{"id":"C015","name":"葛城","lv":3,"at":600,"df":600,"text":"自分がアタック側でバトルに勝利するたび、両プレイヤーがそれぞれ1枚引く。回数制限なし。","onAtkWin":async c=>{const a=E.draw(c.me,1),b=E.draw(c.opp,1);E.log(c.me.name+'：新葛城Lv3で自分'+a+'枚、相手'+b+'枚ドロー');emit('sharedDraw',{p:c.me,opp:c.opp,self:a,opponent:b});}},
+{"id":"C016","name":"葛城","lv":4,"at":700,"df":700,"text":"自分がアタック側でバトルに勝利するたび、相手の山札の上から1枚を捨て札にする。","onAtkWin":async c=>{mill(c.opp,1,'葛城Lv4');}},
+{"id":"C017","name":"葛城","lv":5,"at":800,"df":800,"text":"自分がアタック側でバトルに勝利するたび、相手の山札の上から2枚を捨て札にする。","onAtkWin":async c=>{mill(c.opp,2,'葛城Lv5');}}];
+CHARS["雲雀"]=[{"id":"C025","name":"雲雀","lv":1,"at":400,"df":400,"text":"能力なし。"},
+{"id":"C026","name":"雲雀","lv":2,"at":400,"df":600,"text":"登場時、1枚引く。","onTop":p=>{draw(p,1);log(`${p.name}：忍転身で1ドロー`)}},
+{"id":"C027","name":"雲雀","lv":3,"at":400,"df":800,"text":"登場時、手札1枚を捨ててよい。捨てた場合、1枚引く。","onTop":async p=>{emit('discardDrawOpportunity',{p});if(!p.hand.length)return;const cs=await p.ctl.pickCards(p,p.hand,1,'Lv3の効果：捨てるカードを選択（任意。捨てたら1枚引く）',true);const x=cs[0];if(!x)return;if(!p.hand.includes(x))throw Error('Invalid discard');E.rm(p.hand,x);p.discard.push(x);const got=E.draw(p,1);E.log(p.name+'：新雲雀Lv3で「'+x.name+'」を捨て'+got+'ドロー');emit('discardDraw',{p,drawn:got,card:x});}},
+{"id":"C028v2","name":"雲雀","lv":4,"at":500,"df":900,"text":"防御属性のバトルカードでディフェンスするたび、1枚引く。","onGuard":async(p,card)=>{const got=draw(p,1);log(`${p.name}：雲雀Lv4の効果で${got}枚引いた（「${card.name}」でディフェンス）`);}},
+{"id":"C030","name":"雲雀","lv":5,"at":600,"df":1000,"text":"自分がディフェンス側でバトルに勝利するたび、自分の捨て札からカード1枚を選び、自分の山札の一番下に戻してよい。回数制限なし。","onDefWinChar":async c=>{emit('returnOpportunity',{p:c.me,available:c.me.discard.length});if(!c.me.discard.length)return;const cs=await c.me.ctl.pickCards(c.me,c.me.discard,1,'研究雲雀Lv5：捨て札を山札の下へ戻す（任意）',true);const x=cs[0];if(!x)return;if(!c.me.discard.includes(x))throw Error('Invalid recovery');E.rm(c.me.discard,x);c.me.deck.push(x);E.log(c.me.name+'：新雲雀Lv5で「'+x.name+'」を山札の下へ');emit('returned',{p:c.me,card:x});}}];
+CHARS["柳生v2"]=CHARS["柳生"];
+CHARS["飛鳥v2"]=CHARS["飛鳥"];
+CHARS["飛鳥v3"]=CHARS["飛鳥"];
+CHARS["飛鳥v4"]=CHARS["飛鳥"];
+CHARS["飛鳥v5"]=CHARS["飛鳥"];
+CHARS["飛鳥v6"]=CHARS["飛鳥"];
+CHARS["雲雀v2"]=CHARS["雲雀"];
+CHARS["飛鳥・連撃"]=CHARS["飛鳥"];
+CHARS["柳生・射撃"]=CHARS["柳生"];
+CHARS["斑鳩・対抗封じ"]=CHARS["斑鳩"];
+CHARS["葛城・削り"]=CHARS["葛城"];
+CHARS["雲雀・反撃"]=CHARS["雲雀"];
+CHARS["雲雀・LO"]=CHARS["雲雀"];
+
+};
+if(typeof module!=='undefined'&&module.exports)module.exports=__f;else window.UVS_CARDS_EXTRA=__f;})();
+
+
+</script>
+<script>
+// 固定デッキ5種（2026-11-02 確定版 v1.2: 飛鳥を連撃型v3に、柳生をv2キャラに）。エンジンに登録し、明文化ドキュメントもここから生成する
+(function(){const __f=function(E){
+  const {DECKS,CHARS,CARDS}=E;
+  const FIXED={
+    '飛鳥・連撃':{char:'飛鳥',chars:'飛鳥v6',list:[['凪',3],['省刃',3],['飛塵',3],['右空',3],['冥砂',3],['砂風車',1],['ハーフムーン',2],['捌き連刃',2],['旋空砂',2],['怨砂',2],['狭朱',2],['緑の巻物',2],['牛乳',2]],
+      note:'連撃型。右空3＋前提札各3で連撃の条件を揃え、Lv3登場時の手札入れ替え（任意。緑を捨てたら2枚引く）、Lv4/Lv5の連撃付与、Lv5登場時の緑回収でつなぐ。2026-11-02 仮確定（砂風車1・ハーフムーン2の中間案、Lv3はv6）'},
+    '柳生・射撃':{char:'柳生',chars:'柳生v2',list:[['散り傘',2],['狂い傘',1],['踊り傘',2],['残月',2],['狭朱',2],['天刃',2],['連刃',2],['零雹',2],['諸行の音',2],['開華',2],['返し雨',2],['くぐつダミー',2],['リミットブレイク',2],['赤の巻物',1],['緑の巻物',2],['薙ぎ払う足',2]],
+      note:'5chレシピの30枚版。キャラは継戦型v2（Lv2/Lv4は2枚引き1枚を山札の下へ、Lv4は毎ターン最大1枚・Lv5は最大2枚を山札の下と入れ替え、捨て札にしない）。2026-11-02 仮確定'},
+    '斑鳩・対抗封じ':{char:'斑鳩',list:[['天刃',3],['省刃',3],['はじめのチョップ',3],['残月',3],['ハーフムーン',3],['もっかいウサギ蹴り',3],['怨砂',3],['リミットブレイク',2],['鉄壁のガード',2],['くぐつダミー',2],['牛乳',2],['緑の巻物',1]],
+      note:'重撃札を厚くし、Lv5のアタックで相手のディフェンス札のテキスト（鉄壁・くぐつのDF強化など）を封じる。対雲雀LO 52%（v1.2計測）'},
+    '葛城・削り':{char:'葛城',list:[['サマーソルト',3],['ドラゴンベアード',3],['ドラゴンバイト',3],['はじめのチョップ',3],['省刃',3],['もっかいウサギ蹴り',3],['ハーフムーン',3],['残月',2],['鉄壁のガード',2],['くぐつダミー',2],['牛乳',2],['緑の巻物',1]],
+      note:'勝利時に相手の山札を削る札とLv4/Lv5で山札切れを狙う。Lv4の削りはリメイク追加。対雲雀LO 65%（v1.2計測）'},
+    '雲雀・反撃':{char:'雲雀',chars:'雲雀v2',list:[['緑の巻物',3],['鉄壁のガード',3],['くぐつダミー',3],['はじめのチョップ',3],['本能のままに',2],['雲雀つっこみ',2],['えあウサギ',2],['ドラゴンベアード',3],['もっかいウサギ蹴り',3],['ハーフムーン',3],['牛乳',2],['病院の待合室にて',1]],
+      note:'高DFキャラ＋防御札＋緑の巻物で守る。Lv4は防御属性のカード（鉄壁・くぐつ）でディフェンスするたび1枚引き、守りきった手札で反撃する（2026-11-02 試験採用、旧Lv4の連撃封じから変更）'},
+  };
+  for(const [k,v] of Object.entries(FIXED)){
+    const n=v.list.reduce((a,x)=>a+x[1],0);if(n!==30)throw new Error(k+' は'+n+'枚');
+    for(const [nm,c] of v.list){if(!CARDS[nm])throw new Error(k+': 未知のカード '+nm);if(c>3)throw new Error(k+': '+nm+'が4枚以上');if(CARDS[nm].only&&CARDS[nm].only!==v.char)throw new Error(k+': '+nm+'は'+v.char+'専用ではない');}
+    DECKS[k]={char:v.char,list:v.list,list30:v.list,note:v.note};CHARS[k]=CHARS[v.chars||v.char];
+  }
+  if(typeof module!=='undefined'&&module.exports&&DECKS['雲雀・反撃']){DECKS['雲雀・LO']=DECKS['雲雀・反撃'];CHARS['雲雀・LO']=CHARS['雲雀・反撃'];} // Node用: 旧デッキ名のログを読む（ブラウザ版はindex.html側で同じ別名を登録）
+  return FIXED;
+};
+if(typeof module!=='undefined'&&module.exports)module.exports=__f;else window.UVS_DECKS_FIXED=__f;})();
+
+
+</script>
+<script>
+
+// solver.js がブラウザから engine の内部状態（G・P・RNG）を参照できるようにする
+window.UVS_ENGINE={CONFIG,CARDS,DECKS,AI,heavyPolicy,isGuard,cardBoost,cpuProfile,CPU_PROFILE_DEFAULT,CPU_PROFILE_COUNTER,CPU_PROFILES,threatList,coverage,yo,inn,gaugeAll,charAT,charDF,canAttack,canDefend,heavyOK,computeTotals,cardVal,baseUsable,get G(){return G},get P(){return P},get RNG(){return RNG}};
+
+</script>
+<script>
+'use strict';
+/* =========================================================
+   Solver: バトル層の混合戦略（情報集合サンプリング + 後悔最小化）
+   - 攻撃札／防御札の選択を、相手の手札をサンプリングした利得表の
+     近似ナッシュ均衡（regret matching）から確率的に選ぶ
+   - 重撃の出し合いは heavyPolicy（規則）で両者をロールアウト
+   - それ以外（ゲージ置き・サポート・連撃宣言など）はターン層（TurnLayer）の評価
+   - 2026-11-05 から経験則AI（engine.js の AI）とは独立。共通の部品は下に複製して汎用AIの一部とした
+   ========================================================= */
+(function(root){
+const E = (typeof module!=='undefined'&&module.exports) ? require('./engine.js') : (root.UVS_ENGINE||root);
+// 2026-11-05：経験則AI（engine.js の AI・heavyPolicy など）から独立。使うのはエンジンのルール処理と、AI設定（cpuProfile）の置き場だけ
+const {CONFIG,cpuProfile,CPU_PROFILE_DEFAULT,yo,inn,gaugeAll,charAT,charDF,canAttack,canDefend,heavyOK,computeTotals,baseUsable}=E;
+
+const W = {            // 評価の重み（段階3で自己対戦により調整する）
+  dmg:1000,            // 1ダメージ
+  lethal:6000,         // 決着
+  hand:220,            // 手札1枚
+  gauge:60,            // ゲージ1枚（閾値未満のときは価値が上がる）
+  gaugeNeed:120,       // 手札の技の条件に足りないゲージ1枚
+  deck:25,             // 山札1枚（山札が少ないと価値が上がる）
+  chain:0.6,           // 連撃の見込み（ダメージ価値に掛ける）
+};
+const S = { samples:24, iters:120, temperature:1.0 };
+
+function rng(){return E.RNG?E.RNG():Math.random();}
+function pick(arr){return arr[Math.floor(rng()*arr.length)];}
+function shuffled(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a;}
+
+// 相手の手札を情報集合からサンプリング（相手の山札＋手札の中身は区別できない）
+// ---------- デッキ非公開の推定（2026-11-06、実験用。c_hidDeck='do' の時だけ） ----------
+// 相手の実際のデッキの代わりに「そのキャラの標準デッキ」（Solver.hiddenModel[デッキ名]、30枚リスト）を想定し、そこから公開済みの札（捨て札・ゲージ・ダメージ・サポート置き場・場の札）を引いた残りを、相手の山札＋手札の候補とする
+// 公開済みの札が想定にない時は単に差し引かない。候補が足りない時は想定のリストから補う。札は毎回別の物として作る（同じ物の使い回しはしない）
+function hidOn(o){return P_().c_hidDeck==='do'&&Solver.hiddenModel&&Solver.hiddenModel[o.deckKey];}
+function hiddenPool(o,need){const L=Solver.hiddenModel[o.deckKey];const cnt=new Map(L.map(([n,k])=>[n,k]));
+  const seen=[...o.discard,...o.gYo,...o.gIn,...o.damage,...(o.supports||[]).map(x=>x.card||x)];const b=E.G.bs;
+  if(b&&b.stage!=='def')for(const side of [b.atk,b.def])if(side&&side.p===o){if(side.card)seen.push(side.card);seen.push(...(side.heavy||[]));} // 防御の判断中（stage='def'）は攻撃札が裏向きなので公開済みに数えない
+  for(const c of seen)if(c&&cnt.has(c.name)&&cnt.get(c.name)>0)cnt.set(c.name,cnt.get(c.name)-1);
+  const out=[];for(const [n,k] of cnt)for(let i=0;i<k;i++)if(E.CARDS[n])out.push(Object.create(E.CARDS[n]));
+  let j=0;const names=L.map(x=>x[0]).filter(n=>E.CARDS[n]);while(out.length<need&&names.length){out.push(Object.create(E.CARDS[names[j%names.length]]));j++;}
+  return out;}
+function sampleHand(o,hidden){
+  // hidden: 裏向きで提出済みの相手の攻撃札。防御側からは未知なので、提出前の手札として推定に含める
+  if(hidOn(o)){const n=o.hand.length+(hidden?1:0);return shuffled(hiddenPool(o,o.deck.length+n)).slice(0,n);}
+  const pool=hidden?o.deck.concat(o.hand,[hidden]):o.deck.concat(o.hand);
+  return shuffled(pool).slice(0,o.hand.length+(hidden?1:0));
+}
+// 判断に使う資源評価プロファイル。ソルバーごとの上書き（実験用）を優先する
+function profOf(p){return (cur&&cur.profiles&&cur.profiles[p.deckKey])||cpuProfile(p);}
+let curP=null; // 判断している側のプロファイル（判断の入口で設定）
+function P_(){return curP||CPU_PROFILE_DEFAULT;}
+function enter(inst,p){cur=inst;curP=profOf(p);}
+const {cardBoost}=E; // 札のテキストによる強化の計算（エンジンの表示と共通の処理。AIの判断ではない）
+
+/* ---------- 汎用AIの部品（2026-11-05 に経験則AIから複製して独立。以後は汎用AIの一部として直す） ----------
+   複製元：engine.js の isGuard / cardVal / counterDrawValue / threatList / coverage / heavyPolicy / AI.pickCards の残りの分岐。
+   複製の時点で中身は同一（inv.js とサイクル16設定の対局でログが全件一致）。経験則AIの側は凍結し、こちらだけを開発する */
+function isGuard(c){return !!c&&c.type==='battle'&&c.dp===0;}
+function cardVal(c){return (c.at||0)+(c.df||0)+150*((c.icons||[]).length)+(c.type==='support'?500:0)}
+// 任意ドローの価値（手札の増分−山札の残りによる減点）
+function counterDrawValue(p,n){
+  if(p.deck.length<=n+4)return -1000;
+  const handAfter=p.hand.length-1;
+  const gain=handAfter>=7?35:handAfter>=5?90:220;
+  return n*(gain-(p.deck.length<=10?160:25))-110;
+}
+// 相手の攻撃候補（公開情報：相手の山札＋手札の中身の区別なし）と、手札で受けられる割合
+function threatList(o){return (hidOn(o)?hiddenPool(o,o.deck.length+o.hand.length):o.deck.concat(o.hand)).filter(c=>c.type!=='support'&&c.dp>0&&c.color!=='秘').map(c=>({at:charAT(o)+c.at,green:c.color==='飛'}));}
+function coverage(pl,hand,threats){
+  if(!threats.length)return 1;
+  const g=hand.filter(c=>c.type!=='support'&&c.color!=='秘');
+  const hasGreen=g.some(c=>c.color==='飛');const best=g.filter(c=>c.color!=='飛').reduce((m,c)=>Math.max(m,charDF(pl)+c.df),-1e9);
+  let k=0;for(const t of threats)if((t.green&&hasGreen)||best>=t.at)k++;return k/threats.length;
+}
+// 重撃を重ねるかの規則（負けている側だけが、足りる札を予算の範囲で出す）
+function heavyPolicy(p,o,elig,ctx,committed,hp){
+  if(ctx.isAtk?!(ctx.at<ctx.df):!(ctx.df<=ctx.at))return null;
+  if(ctx.dp<=0)return null;
+  const prof=(hp&&hp.profile)||(hp&&hp.counterDisabled?CPU_PROFILE_DEFAULT:cpuProfile(p));
+  if(prof.heavy){const H=prof.heavy;
+    hp=Object.assign({},hp,{minHand:ctx.isAtk?H.atkMinHand:H.defMinHand,budgetExtra:ctx.isAtk?H.atkBudgetExtra:H.defBudgetExtra});
+  }
+  if(prof.holdHeavyMaxDrop!=null&&ctx.isAtk&&o.damage.length+ctx.dp<CONFIG.winDamage){
+    const thr=threatList(o),base=coverage(p,p.hand,thr);
+    elig=elig.filter(c=>base-coverage(p,p.hand.filter(x=>x!==c),thr)<=prof.holdHeavyMaxDrop);
+    if(!elig.length)return null;
+  }
+  hp=hp||{minHand:2,budgetExtra:1};
+  {const mh=ctx.isAtk?prof.hAtkMinHand:prof.hDefMinHand,be=ctx.isAtk?prof.hAtkBudget:prof.hDefBudget;
+    if(mh!=null||be!=null)hp=Object.assign({},hp,mh!=null?{minHand:mh}:{},be!=null?{budgetExtra:be}:{});}
+  const losing=ctx.isAtk?ctx.at<ctx.df:ctx.df<=ctx.at;
+  if(!losing)return null;
+  if(ctx.dp<=0)return null;
+  const lethal=ctx.isAtk?(o.damage.length+ctx.dp>=CONFIG.winDamage):(p.damage.length+ctx.dp>=CONFIG.winDamage);
+  {const m=ctx.isAtk?prof.c_heavyAtk:prof.c_heavyDef,w=(ctx.isAtk?prof.w_heavyAtk:prof.w_heavyDef)||0;
+    if(m==='never')return null;
+    if(m==='avoid'&&!lethal)return null;
+    if(m==='do')hp=Object.assign({},hp,{budgetExtra:hp.budgetExtra+w,minHand:Math.max(0,hp.minHand-1)});}
+  const budget=lethal?99:ctx.dp+hp.budgetExtra;
+  const minHand=lethal?0:hp.minHand;
+  if(committed>=budget||p.hand.length-1<minHand)return null;
+  const key=ctx.isAtk?'at':'df';
+  const gap=ctx.isAtk?ctx.df-ctx.at:ctx.at-ctx.df+100;
+  const sorted=[...elig].sort((a,b)=>a[key]-b[key]);
+  const enough=prof.hPick==='max'?(sorted[sorted.length-1][key]>=gap?sorted[sorted.length-1]:null):sorted.find(c=>c[key]>=gap);
+  if(enough)return enough;
+  const best=sorted[sorted.length-1];
+  const rest=p.hand.filter(c=>c!==best&&heavyOK(p,c)).sort((a,b)=>b[key]-a[key]).slice(0,budget-committed-1);
+  const potential=best[key]+rest.reduce((s,c)=>s+c[key],0);
+  if(potential>=gap&&p.hand.length-1-rest.length>=minHand)return best;
+  return null;
+}
+// 札の選択で、汎用AIに専用の判断がない場合（複製元：AI.pickCards の残りの分岐）
+async function pickCardsFallback(p,cards,n,title,allowLess){
+  if(E.G.delay>0)await new Promise(r=>setTimeout(r,E.G.delay));else await Promise.resolve(); // アプリの演出待ち（複製元と同じ）
+  if(title.startsWith('秘薬')){const c=[...cards].sort((a,b)=>cardVal(b)-cardVal(a))[0];return c?[c]:[];}
+  if(title.startsWith('破れ2')){const c=[...cards].sort((a,b)=>cardVal(a)-cardVal(b))[0];return c?[c]:[];}
+  if(title.startsWith('入れ替え')||title.startsWith('山札の下へ')){const bad=cards.filter(c=>!baseUsable(p,c)&&c.type==='battle'&&(c.gp.yo-yo(p)+c.gp.in-inn(p))>=3);const pick=bad.slice(0,n);if(pick.length||allowLess)return pick;return [...cards].sort((a,b)=>cardVal(a)-cardVal(b)).slice(0,n);}
+  if(title.startsWith('捨てるカード')){const bad=cards.filter(c=>!baseUsable(p,c)&&c.type==='battle'&&(c.gp.yo-yo(p)+c.gp.in-inn(p))>=3);return bad.slice(0,n);}
+  return [...cards].sort((a,b)=>cardVal(a)-cardVal(b)).slice(0,n);
+}
+// 選択の設定を読む
+function CH(k){const Q=P_();return {m:Q['c_'+k],w:Q['w_'+k]||0,n:Q['n_'+k]};}
+function vplayer(p,hand){const v=Object.create(p);v.hand=hand;return v;}
+
+function dmgValue(target,dp){
+  if(dp<=0)return 0;
+  const lethal=target.damage.length+dp>=CONFIG.winDamage;
+  return useW().dmg*dp+(lethal?useW().lethal:0)-lvGain(target,dp);
+}
+// 被弾でLvが上がる価値（受ける側のキャラの設定）。既定はすべて0
+function lvGain(t,dp){const Q=profOf(t);if(!(Q.hULv2||Q.hULv3||Q.hULv4||Q.hULv5))return 0;let g=0;
+  for(let i=0;i<dp;i++){if(t.charDeck.length-i<2)break;const c=t.charDeck[i+1];g+=Q['hULv'+c.lv]||0;}return g*useW().hand;}
+// ゲージ目標：デッキ（30枚の構成）のGP条件。デッキごとに一度だけ数える
+const GP_REQ=new Map();
+function gpReq(p){let r=GP_REQ.get(p.deckKey);if(r)return r;const d=E.DECKS[p.deckKey];const list=[];let my=0,mi=0;
+  if(d)for(const [nm,k] of (d.list30||d.list)){const c=E.CARDS[nm];if(!c||!c.gp||c.type!=='battle')continue;for(let i=0;i<k;i++)list.push(c.gp);my=Math.max(my,c.gp.yo);mi=Math.max(mi,c.gp.in);}
+  r={list,my,mi};GP_REQ.set(p.deckKey,r);return r;}
+function gaugeTargetVal(p,y,i,mode){const r=gpReq(p);
+  if(mode==='max')return (r.my+r.mi)?(Math.min(y,r.my)+Math.min(i,r.mi))/(r.my+r.mi):0;
+  if(mode==='weighted'){if(!r.list.length)return 0;let n=0;for(const g of r.list)if(y>=g.yo&&i>=g.in)n++;return n/r.list.length;}
+  return 0;}
+function gaugeValue(p,card){ // この札がゲージに入る価値
+  const need=p.hand.some(c=>c.gp&&((card.color!=='陰'&&c.gp.yo>yo(p))||(card.color!=='陽'&&c.gp.in>inn(p))));
+  return need?useW().gaugeNeed:useW().gauge;
+}
+function deckValue(p){const v=useW().deck+(p.deck.length<=P_().deckLowN?P_().deckLowVal:0);return loOn()?v*(1-loNear(p)):v;} // LO評価ありの時は、LOが近いほど薄める（近い分はLO予測で数える）
+
+/* ---------- 新LOの評価（2026-11-05、c_loEval='do' の時だけ使う） ----------
+   読むのは公開情報だけ：双方の山札の枚数、双方のダメージエリアの枚数、今どちらのターンか。
+   ・LOの時期：自分のドローフェイズ開始時に山札0枚でLO。通常ドローは1ターン2枚とみなす。
+     各プレイヤーの次のドローフェイズ開始までの半手番数 next（今が自分のターンなら2、相手のターンなら1）。
+     T = next + 2*ceil(山札/2)。T の小さい側が先にLOする（next の偶奇が違うので同時はない）。
+   ・勝敗：ダメージエリアの少ない側が勝ち。同点はLOした側の負け。
+     e = (相手のダメージ − 自分のダメージ) にLOする側の補正（自分がLO側なら −0.5、相手なら +0.5）。e>0 なら自分の勝ち。
+     v = clamp(e/2, −1, 1)（±0.5→±0.25、±1.5→±0.75、±2.5以上→±1。差が大きいほど確実）
+   ・近さ：g = max(0, 1 − Tmin/(H+1))（H = n_loHorizon）。遠いLOほど軽く、H を超えると0。
+   ・価値 = w_loEval × lethal × g × v（自分から見た値。相手から見ると符号が逆）。
+   各判断では、その判断の結果の局面の価値 − 今の局面の価値 を足す。5ダメージ決着がかかる時は足さない（決着の評価が優先）。 */
+// クナイ投擲など「防御属性で受けられたら勝敗に関わらずnダメージ」の、攻撃が失敗した時の確定ダメージの価値（攻撃側から見た値）。
+// 実装（onFail）は攻撃失敗時だけ。インテリメガネのターンはバトルカードのテキストが無効なので0
+function guardHitValue(D,atkCard,defCard){if(!defCard||defCard.tech!=='防御'||E.G.noTextTurn)return 0;const n=loFx(atkCard).guardHitDmg;return n?dmgValue(D,n):0;}
+function loOn(){return P_().c_loEval==='do';}
+// 今の局面でLOがどれだけ近いか（0＝評価の範囲外〜1＝直前）。既存の山札まわりの評価を薄める割合に使う
+function loNear(p){const s=loSnap(p);const Q=P_();const H=Q.n_loHorizon==null?6:Q.n_loHorizon;const tm=(s.myTurn?2:1)+2*Math.ceil(Math.max(0,s.md)/2),to=(s.myTurn?1:2)+2*Math.ceil(Math.max(0,s.od)/2);return Math.max(0,1-Math.min(tm,to)/(H+1));}
+// 任意ドローの手札の増分だけ（counterDrawValue から山札の残りの項を除いたもの）
+function loDrawHandGain(p,n){const h=p.hand.length-1;const gain=h>=7?35:h>=5?90:220;return n*gain-110;}
+function loSnap(p){const o=E.P[1-p.idx];return{md:p.deck.length,od:o.deck.length,mg:p.damage.length,og:o.damage.length,myTurn:E.G.cur===p.idx};}
+function loValue(s){const Q=P_();const H=Q.n_loHorizon==null?6:Q.n_loHorizon;
+  const tm=(s.myTurn?2:1)+2*Math.ceil(Math.max(0,s.md)/2),to=(s.myTurn?1:2)+2*Math.ceil(Math.max(0,s.od)/2);
+  const meLO=tm<to,t=Math.min(tm,to);const g=Math.max(0,1-t/(H+1));if(!g)return 0;
+  let e=(s.og-s.mg)+(meLO?-0.5:0.5);
+  if(Q.w_loTrend&&E.G.turn>0)e+=Q.w_loTrend*(s.og-s.mg)*t/E.G.turn; // 打点の速度の外挿：これまでの打点差が、LOまでの手番数に比例して広がると見る（公開情報：経過ターン）
+  const v=Math.max(-1,Math.min(1,e/2));
+  return (Q.w_loEval||0)*useW().lethal*g*v;}
+// 局面 s の自分側・相手側を入れ替える（評価の視点を変える）
+function loFlip(s){return{md:s.od,od:s.md,mg:s.og,og:s.mg,myTurn:!s.myTurn};}
+// カード・キャラのテキストから、山札の枚数が変わる効果を読む（カードのデータは変えない。表は単体テストで固定）
+const LO_FX=new Map();
+function loFx(c){if(!c)return null;const key=c.id+'|'+c.name;let f=LO_FX.get(key);if(f)return f;const t=c.text||'';let m;f={};
+  if((m=t.match(/アタックして勝利したとき、相手は山札の上から(\d)枚を捨て札/)))f.winMill=+m[1];
+  if((m=t.match(/相手がディフェンスでバトルカードを出さなかった時、相手は山札の上から(\d)枚を捨て札/)))f.noDefMill=+m[1];
+  if((m=t.match(/アタックして勝利したとき、(\d)ドロー/)))f.winDraw=+m[1];
+  if((m=t.match(/相手が防御属性のバトルカードでディフェンスした時、勝敗に関わらず(\d)ダメージ/)))f.guardHitDmg=+m[1]; // クナイ投擲（実装は攻撃失敗時の onFail）
+  if((m=t.match(/アタック側でバトルに勝利するたび、相手の山札の上から(\d)枚/)))f.charWinMill=+m[1];
+  if((m=t.match(/アタック側でバトルに勝利するたび、両プレイヤーがそれぞれ(\d)枚引く/)))f.charBothDraw=+m[1];
+  if((m=t.match(/防御属性のバトルカードでディフェンスするたび、(\d)枚引く/)))f.guardDraw=+m[1];
+  if(/ディフェンス側でバトルに勝利するたび、自分の捨て札から.*山札の一番下に戻/.test(t))f.defWinReturn=1;
+  if(/^登場時/.test(t)&&!/同数引く/.test(t)&&!/てよい/.test(t)){const d=t.match(/(\d)枚引/),b=t.match(/手札(\d)枚[^。]*山札の一番下に戻/);if(d){f.topDrawN=+d[1];f.topBackN=b?+b[1]:0;f.topDraw=f.topDrawN-f.topBackN;}} // topDraw は山札が足りる時の実質の減り（表示・テスト用）。予測は loTopDraw で枚数を見て計算
+  LO_FX.set(key,f);return f;}
+// 被弾 n 回で新しく一番上になるキャラの「登場時」の必須ドローによる山札の減り
+// 被弾 n 回で新しく一番上になるキャラの「登場時」の必須ドローによる山札の減り（負なら増え）。deck＝その時点の山札枚数（既定は今の枚数）。
+// ドローは山札が足りる分だけ（engine の draw と同じ）。戻す枚数はそのまま（柳生Lv2：山札0なら引けず1枚戻るので +1）
+function loTopDraw(t,n,deck,hand){if(deck==null)deck=t.deck.length;if(hand==null)hand=t.hand.length;let d=deck,h=hand;for(let i=1;i<=n&&i<t.charDeck.length;i++){const f=loFx(t.charDeck[i]);if(f.topDrawN){const k=Math.min(f.topDrawN,Math.max(0,d));d-=k;h+=k;const b=Math.min(f.topBackN||0,h);d+=b;h-=b;}}return deck-d;} // 戻すのは手札にある分だけ（手札も山札も空なら戻らない）
+// n 枚引く時の実際の減り（山札が足りる分だけ）
+function loDrawN(deck,n){return Math.min(n,Math.max(0,deck));}
+// 1バトルの結果による LO 価値の変化（攻撃側 A から見た値）。success/dp は重撃込みの結果
+function loBattleDelta(A,D,atkCard,defCard,success,dp,paid){ // paid: 重撃の先読み中。バトル開始時の山札コストと防御時のドローは解決済み
+  if(success&&D.damage.length+dp>=CONFIG.winDamage)return 0; // 5ダメージ決着が優先
+  const s0=loSnap(A);const s={...s0};const txt=!E.G.noTextTurn; // インテリメガネのターンはバトルカードのテキストが無効（コストは残る）
+  let costMilled=0;if(!paid){s.md-=loDrawN(s.md,atkCard.costMill||0);if(defCard){costMilled=loDrawN(s.od,defCard.costMill||0);s.od-=costMilled;}} // 山札が足りない時は削れる分だけ。paid（重撃の先読み中）の時はコストで捨てた札はすでに捨て札にある
+  const fa=txt?loFx(atkCard):{},fA=loFx(A.charDeck[0]),fD=loFx(D.charDeck[0]);
+  if(!paid&&defCard&&defCard.tech==='防御'&&fD.guardDraw)s.od-=fD.guardDraw; // 雲雀Lv4の防御ドローは防御札を出した時点で解決済み（重撃の先読み中は数えない）
+  let alt=null;
+  if(success){s.og+=dp;s.od-=loTopDraw(D,dp,s.od);
+    s.od-=Math.min(s.od,(fa.winMill||0)+(!defCard?(fa.noDefMill||0):0)+(fA.charWinMill||0));
+    s.md-=loDrawN(s.md,(fa.winDraw||0)+(A.turnMod&&A.turnMod.winDraw?1:0)+(fA.charBothDraw||0));s.od-=loDrawN(s.od,fA.charBothDraw||0);
+  }else{
+    if(defCard&&defCard.tech==='防御'&&fa.guardHitDmg){const n=fa.guardHitDmg;if(D.damage.length+n>=CONFIG.winDamage)return 0; // 5ダメージ決着が優先
+      s.og+=n;s.od-=loTopDraw(D,n,s.od);} // クナイ投擲：防御属性で受けられて攻撃が失敗しても確定ダメージ
+    if(defCard&&fD.defWinReturn&&(D.discard.length+costMilled)>0){ // 捨て札はコストで捨てた分も含む。戻すかは防御側の判断を写す：防御側がLO評価ありなら有利な方、なしなら常に戻す（pickCardsFallback の既定）
+      const dOn=(profOf(D).c_loEval==='do');if(dOn)alt={...s,od:s.od+1};else s.od+=1;}
+  }
+  s.md=Math.max(0,s.md);s.od=Math.max(0,s.od);
+  let after=loValue(s);if(alt){const va=loValue(alt);if(va<after)after=va;} // alt＝防御側が戻した場合。防御側に有利（攻撃側に不利）な方
+  return after-loValue(s0);}
+// 自分の局面だけが変わる効果（サポート・任意ドローなど）の LO 価値の変化
+function loSelfDelta(p,dDeck,dDmg,dOppDeck){const s0=loSnap(p);const s={...s0,md:Math.max(0,s0.md+dDeck),mg:Math.max(0,s0.mg+(dDmg||0)),od:Math.max(0,s0.od+(dOppDeck||0))};return loValue(s)-loValue(s0);}
+
+// 1バトルをロールアウトして、攻撃側から見た利得を返す（状態は変更しない）
+function evalBattle(A,D,atkCard,defCard,mode,decider=null){
+  // decider: 判断している側の席。その側のプロファイルが標準以外なら、ロールアウトでは両者が各自のプロファイルで重撃を出す（PR #1 と同じ扱い）
+  const dprof=decider===null?CPU_PROFILE_DEFAULT:profOf(decider===A.idx?A:D);const modelProf=dprof!==CPU_PROFILE_DEFAULT;
+  // A,D は仮想プレイヤー（hand差し替え済み）。atkCard は A.hand の要素、defCard は D.hand の要素か null
+  const aHand=A.hand.filter(c=>c!==atkCard), dHand=defCard?D.hand.filter(c=>c!==defCard):D.hand.slice();
+  const a=vplayer(A,aHand), d=vplayer(D,dHand);
+  let pay=0;
+  // コスト
+  { // コスト（攻撃札→防御札の順）
+    const c=atkCard;if(c.hiden)pay+=-1*3*useW().gauge;if(c.costMill)pay+=-1*c.costMill*deckValue(a);if(c.costHand)pay+=-1*c.costHand*useW().hand;
+    const e=defCard;if(e){if(e.hiden)pay+=1*3*useW().gauge;if(e.costMill)pay+=1*e.costMill*deckValue(d);if(e.costHand)pay+=1*e.costHand*useW().hand;}
+  }
+  let success,dp=atkCard.dp,aHeavy=[],dHeavy=[];
+  if(defCard&&defCard.color==='飛'&&atkCard.color==='飛'&&!E.G.noTextTurn){success=false;}
+  else if(!defCard){success=true;}
+  else{
+    const bs={atk:{p:a,card:atkCard,heavy:aHeavy},def:{p:d,card:defCard,heavy:dHeavy},chainFrom:null,mode,lite:true};
+    computeTotals(bs);
+    const hpBase=useHP();const hpA=Object.assign({},hpBase,{profile:modelProf?profOf(a):CPU_PROFILE_DEFAULT}),hpD=Object.assign({},hpBase,{profile:modelProf?profOf(d):CPU_PROFILE_DEFAULT});
+    let who=0,passes=0,count=0;const hctx={at:0,df:0,dp:0,isAtk:true}; // heavyPolicy に渡す局面（使い回す）
+    const blocked=i=>{const f=bs.flags;if(f.noHeavyBoth)return true;if(i===1&&f.noOppHeavy)return true;if(i===0&&f.noAtkHeavy)return true;return false};
+    while(passes<2&&count<CONFIG.heavy.maxCards){
+      const side=who===0?bs.atk:bs.def;const pl=side.p;const opp=who===0?d:a;
+      const losingSide=who===0?bs.at<bs.df:bs.df<=bs.at; // heavyPolicy は負けている側しか出さないので、それ以外は候補を作らない
+      const elig=(!losingSide||bs.dp<=0||blocked(who))?[]:pl.hand.filter(c=>heavyOK(pl,c));
+      let add=null;if(elig.length){hctx.at=bs.at;hctx.df=bs.df;hctx.dp=bs.dp;hctx.isAtk=who===0;add=heavyPolicy(pl,opp,elig,hctx,side.heavy.length,who===0?hpA:hpD);}
+      if(add){pl.hand=pl.hand.filter(c=>c!==add);side.heavy.push(add);count++;passes=0;computeTotals(bs);}
+      else passes++;
+      who=1-who;
+    }
+    success=CONFIG.tieWinner==='attacker'?bs.at>=bs.df:bs.at>bs.df;dp=bs.dp;
+  }
+  // カードの収支
+  pay-=useW().hand;                                          // 攻撃札は手札から出る
+  pay-=aHeavy.length*useW().hand;
+  pay+=dHeavy.length*useW().hand;
+  if(defCard){pay+=useW().hand;if(defCard.color!=='飛'&&defCard.color!=='秘')pay-=gaugeValue(D,defCard);}
+  if(success){
+    pay+=dmgValue(D,dp);
+    if(atkCard.onWin){ if(atkCard.hiden)pay+=useW().hand; // 1ハンデス
+      else{const fx=loFx(atkCard);const isMill=!!(fx.winMill||fx.noDefMill);const w=isMill?P_().w_onWinMill:0.8; // 削り札の勝利時効果の価値（手札1枚分の倍率、既定0.8＝従来）。LO評価ありならLOが近いほど薄め、近い分はLO予測で数える
+        pay+=useW().hand*w*(isMill&&loOn()?(1-loNear(A)):1);}}
+    // 連撃の見込み
+    const chainable=atkCard.icons.includes('R')||A.charDeck[0].grantR||(A.charDeck[0].id==='C006'&&!A.flags.l5);
+    if(chainable&&a.hand.some(c=>canAttack(a,c,'R'))){
+      const defGreen=d.hand.some(c=>c.color==='飛'&&canDefend(d,c));
+      pay+= defGreen? -useW().hand*0.3 : useW().chain*dmgValue(D,1);
+    }else if(atkCard.color!=='飛'&&atkCard.color!=='秘'){pay+=gaugeValue(A,atkCard);}
+  }else{
+    if(atkCard.color!=='飛'&&atkCard.color!=='秘')pay+=gaugeValue(A,atkCard);
+    if(defCard&&defCard.onDefWin)pay-=gaugeValue(A,atkCard)+useW().hand*0.3; // 零雹
+    pay+=guardHitValue(D,atkCard,defCard); // クナイ投擲：防御属性で受けられて失敗しても確定ダメージ（2026-11-05、常に評価）
+  }
+  if(dprof.holdGuard&&decider===A.idx&&!(success&&D.damage.length+dp>=CONFIG.winDamage)){
+    // この攻撃（重撃込み）で、次の相手の攻撃を守れる割合がどれだけ下がるか
+    const thr=threatList(D);
+    pay-=dprof.holdGuard*(coverage(A,A.hand,thr)-coverage(A,aHand.filter(c=>!aHeavy.includes(c)),thr));
+  }
+  if(modelProf&&decider===A.idx){const P_=dprof;
+    const lethal=success&&D.damage.length+dp>=CONFIG.winDamage;
+    if(!lethal){
+      // 決着しない攻撃に防御札・重撃札を使うと、次の手番の資源が減る
+      const reserve=c=>c.icons.includes('U')?P_.atkReserveHeavy:0;
+      pay-=reserve(atkCard)+aHeavy.reduce((n,c)=>n+reserve(c),0);
+      if(!success)pay-=P_.atkFailPenalty;
+      if(A.hand.length-aHeavy.length-1<P_.atkLowHand)pay-=P_.atkLowHandPen;
+    }else pay+=useW().lethal*P_.atkLethalMul;
+  }
+  if(decider===D.idx&&isGuard(defCard)){ // 選択：防御札でディフェンス
+    const m=dprof.c_guardDefend,w=dprof.w_guardDefend||0;
+    if(m==='cond'){if(D.charDeck[0].lv<dprof.n_guardDefend)pay+=w;} // 条件（Lv）を満たさない時は減点（既定：Lv3以下は温存）
+    else if(m==='avoid')pay+=w;else if(m==='do')pay-=w;
+  }
+  if(decider===D.idx&&defCard&&!success){
+    // カードの効果による判断（どのプロファイルでも）：防御属性でディフェンスした時のドロー（雲雀Lv4）を山札・手札の残りに応じて評価
+    if(D.charDeck[0].onGuard&&defCard.tech==='防御'){const full=Math.max(-250,counterDrawValue(d,1));pay-=loOn()?(loDrawHandGain(d,1)*loNear(d)+full*(1-loNear(d))):full;} // 雲雀Lv4：LO評価ありなら、LOが近いほど山札の項をLO予測に任せる
+    if(modelProf)pay-=dprof.defGuardWin; // 防御成功で次の手番の資源が残る
+  }
+  if(loOn())pay+=loBattleDelta(A,D,atkCard,defCard,success,dp); // 新LO：このバトルによる山札・ダメージの変化（攻撃側から見た値）
+  return pay;
+}
+
+// 利得表から混合戦略（後悔最小化）
+function solveMatrix(M){ // M[i][j] 行プレイヤーの利得。列プレイヤーはその負
+  const n=M.length,m=M[0].length;
+  const rR=new Array(n).fill(0),rC=new Array(m).fill(0),sR=new Array(n).fill(0),sC=new Array(m).fill(0);
+  const strat=(r)=>{const pos=r.map(x=>Math.max(0,x));const s=pos.reduce((a,b)=>a+b,0);return s>0?pos.map(x=>x/s):r.map(()=>1/r.length);};
+  for(let t=0;t<useS().iters;t++){
+    const pr=strat(rR),pc=strat(rC);
+    for(let i=0;i<n;i++)sR[i]+=pr[i];for(let j=0;j<m;j++)sC[j]+=pc[j];
+    const uR=M.map(row=>row.reduce((a,v,j)=>a+v*pc[j],0));
+    const uC=new Array(m).fill(0);for(let j=0;j<m;j++)for(let i=0;i<n;i++)uC[j]+=-M[i][j]*pr[i];
+    const vR=uR.reduce((a,v,i)=>a+v*pr[i],0),vC=uC.reduce((a,v,j)=>a+v*pc[j],0);
+    for(let i=0;i<n;i++)rR[i]+=uR[i]-vR;for(let j=0;j<m;j++)rC[j]+=uC[j]-vC;
+  }
+  const norm=a=>{const s=a.reduce((x,y)=>x+y,0);return a.map(x=>x/s);};
+  return {row:norm(sR),col:norm(sC)};
+}
+function sampleFrom(items,probs){let r=rng();for(let i=0;i<items.length;i++){r-=probs[i];if(r<=0)return items[i];}return items[items.length-1];}
+
+// 攻撃側の判断：行＝自分の攻撃札（＋攻撃しない）、列＝相手の防御札（名前）＋なし
+function solveAttack(p,o,usable,mode){
+  const decider=p.idx;
+  const rows=usable.slice();const allowNone=!mode;
+  const colNames=new Map();  // name -> index
+  const samples=[];
+  for(let s=0;s<useS().samples;s++){
+    const oh=sampleHand(o);const d=vplayer(o,oh);
+    const defs=oh.filter(c=>canDefend(d,c));
+    const names=[...new Set(defs.map(c=>c.name))];
+    for(const nm of names)if(!colNames.has(nm))colNames.set(nm,colNames.size);
+    samples.push({d,defs,names});
+  }
+  const cols=[...colNames.keys()];cols.push('__none');
+  const M=rows.map(()=>new Array(cols.length).fill(0));
+  const cnt=rows.map(()=>new Array(cols.length).fill(0));
+  for(const smp of samples){
+    const a=vplayer(p,p.hand);
+    rows.forEach((atk,i)=>{
+      const vNone=evalBattle(a,smp.d,atk,null,mode,decider);
+      cols.forEach((nm,j)=>{
+        let v;
+        if(nm==='__none')v=vNone;
+        else{const dc=smp.defs.find(c=>c.name===nm);v=dc?evalBattle(a,smp.d,atk,dc,mode,decider):vNone;}
+        M[i][j]+=v;cnt[i][j]++;
+      });
+    });
+  }
+  for(let i=0;i<rows.length;i++)for(let j=0;j<cols.length;j++)M[i][j]/=cnt[i][j]||1;
+  if(allowNone){ // 選択：アタックを見送る
+    const c=CH('attackPass');const ok=c.m!=='never'&&!(c.m==='cond'&&o.hand.length<c.n);
+    if(ok){let pv=c.m==='do'?c.w:c.m==='avoid'?-c.w:0;if(loOn()&&P_().w_loPass){const L=loValue(loSnap(p));const lw=(P_().w_loEval||0)*useW().lethal;if(lw)pv+=P_().w_loPass*useW().hand*L/lw;} // 新LO：LOで勝てる見込み（−1〜1）に応じて見送りを足す
+      M.push(new Array(cols.length).fill(pv));rows.push(null);}
+  }
+  const sol=solveMatrix(M);
+  const rowValues=M.map(r=>r.reduce((x,v,j)=>x+v*sol.col[j],0));
+  const value=sol.row.reduce((a,pr,i)=>a+pr*rowValues[i],0);
+  return {choice:sampleFrom(rows,sol.row),probs:sol.row,rows,value,rowValues,cols};
+}
+// 防御側の判断：行＝自分の防御札（＋なし）、列＝相手の攻撃札（名前）
+function solveDefend(p,o,usable,mode){
+  const decider=p.idx;
+  const rows=usable.slice();rows.push(null);
+  const colNames=new Map();const samples=[];
+  const bs=E.G&&E.G.bs;
+  const hidden=(cur&&cur.sampleFix&&bs&&bs.stage==='def'&&bs.atk.p.idx===o.idx)?bs.atk.card:null;
+  for(let s=0;s<useS().samples;s++){
+    const oh=sampleHand(o,hidden);const a=vplayer(o,oh);
+    const atks=oh.filter(c=>canAttack(a,c,mode)&&c.dp>0);
+    const names=[...new Set(atks.map(c=>c.name))];
+    for(const nm of names)if(!colNames.has(nm))colNames.set(nm,colNames.size);
+    samples.push({a,atks});
+  }
+  const cols=[...colNames.keys()];
+  if(!cols.length)return {choice:null,probs:null,rows};
+  const M=rows.map(()=>new Array(cols.length).fill(0));const cnt=rows.map(()=>new Array(cols.length).fill(0));
+  for(const smp of samples){
+    const d=vplayer(p,p.hand);
+    cols.forEach((nm,j)=>{
+      const ac=smp.atks.find(c=>c.name===nm);if(!ac)return;
+      rows.forEach((def,i)=>{M[i][j]+=-evalBattle(smp.a,d,ac,def,mode,decider);cnt[i][j]++;});
+    });
+  }
+  for(let i=0;i<rows.length;i++)for(let j=0;j<cols.length;j++){if(cnt[i][j])M[i][j]/=cnt[i][j];else M[i][j]=M[rows.length-1][j]||0;}
+  { // 選択：ディフェンスしない（被弾を受ける）。最後の行が「出さない」
+    const c=CH('noDefense');const last=rows.length-1;const anyLethal=p.damage.length+1>=CONFIG.winDamage;
+    const drop=rows.length>1&&(c.m==='never'||(c.m==='cond'&&!(p.charDeck[0].lv<=c.n&&!anyLethal)));
+    if(drop){rows.pop();M.pop();}
+    else if(c.m==='do'&&c.w)M[last]=M[last].map(v=>v+c.w);else if(c.m==='avoid'&&c.w)M[last]=M[last].map(v=>v-c.w);
+  }
+  const sol=solveMatrix(M);
+  const rowValues=M.map(r=>r.reduce((x,v,j)=>x+v*sol.col[j],0));
+  return {choice:sampleFrom(rows,sol.row),probs:sol.row,rows,rowValues,cols};
+}
+
+
+// ---------- ターン層：手札の使いやすさを評価する関数 ----------
+function distGP(p,c,extraYo,extraIn){return Math.max(0,c.gp.yo-(yo(p)+extraYo))+Math.max(0,c.gp.in-(inn(p)+extraIn));}
+function handUtility(p,hand,extraYo,extraIn,extraNames){
+  // extraYo/extraIn: これから置く札によるゲージ増分、extraNames: ゲージに加わる名前
+  const W_=useW();let u=0;
+  const gaugeNames=new Set(gaugeAll(p).map(x=>x.name));for(const n of extraNames)gaugeNames.add(n);
+  const Q0=P_();let chainV=0;
+  // v12（2026-11-06）：緑の守り札としての価値。相手の山札＋手札にある緑の枚数（デッキリストは公開情報）から、相手の緑の連撃を無条件で止められる価値を見積もる
+  let gDefV=0;if(Q0.hUGreenDef){const o=E.P[1-p.idx];if(o){const og=o.deck.concat(o.hand).filter(x=>x.color==='飛'&&(!x.only||x.only===o.charName)).length;gDefV=Q0.hUGreenDef*Math.min(1,og/2);}}
+  let gDefUsed=false;
+  if(Q0.hUChainStart||Q0.hUChainStartDeck){const okG=x=>x.color==='飛'&&(!x.only||x.only===p.charName);chainV=hand.some(okG)?Q0.hUChainStart:p.deck.some(okG)?Q0.hUChainStartDeck:0;}
+  for(const c of hand){
+    const Q=P_();
+    if(c.type==='support'){const d=distGP(p,c,extraYo,extraIn);u+=W_.hand*Q.hUSupport/(1+d);continue;}
+    if(c.color==='飛'){const have=c.needs.filter(n=>gaugeNames.has(n)).length;u+=W_.hand*(Q.hUGreenBase+Q.hUGreenNeed*have/c.needs.length);if(gDefV&&!gDefUsed&&(!c.only||c.only===p.charName)){u+=W_.hand*gDefV;gDefUsed=true;}continue;}
+    if(c.color==='秘'){const d=distGP(p,c,extraYo,extraIn);u+=W_.hand*Q.hUHiden/(1+d);continue;}
+    const d=distGP(p,c,extraYo,extraIn);
+    const bst=Q.effVal?cardBoost(p,c,extraYo,extraIn):null; // テキストで強化された分（これから置く札でゲージが増える分も含む）
+    let v=(cardVal(c)+(bst?bst.at+bst.df:0))/600*W_.hand; // 素の価値（基準600で手札1枚分）
+    if(c.icons.includes('U'))v+=W_.hand*Q.hUHeavy; // 重撃札はGP無視で使えるので常に価値あり
+    if(c.dp===0){v*=Q.hUDp0;v+=W_.hand*Q.hUDp0Add;}
+    if(Q.handHeavy&&c.icons.includes('U'))v+=W_.hand*Q.handHeavy;
+    if(chainV&&c.icons.includes('R'))v+=W_.hand*chainV; // 連撃の起点を残す価値
+    u+= c.icons.includes('U') ? v*(Q.hUHeavyFloor+(1-Q.hUHeavyFloor)/(1+d)) : v/(1+d);
+  }
+  if(P_().hUCover){const o=E.P[1-p.idx];if(o)u+=W_.hand*P_().hUCover*coverage(p,hand,threatList(o));}
+  // 山札にある緑の前提札が揃う価値（将来の連撃）
+  for(const c of p.deck)if(c.color==='飛'&&(!c.only||c.only===p.charName)){const have=c.needs.filter(n=>gaugeNames.has(n)).length;u+=W_.hand*P_().hUDeckGreen*have;}
+  if(Q0.gTarget&&Q0.gTarget!=='none'&&Q0.w_gTarget)u+=W_.hand*Q0.w_gTarget*gaugeTargetVal(p,yo(p)+extraYo,inn(p)+extraIn,Q0.gTarget); // ゲージ目標
+  return u;
+}
+function supportValue(p,o,c){ // 新LO：c_loEval='do' の時、サポートによる山札・ダメージの変化をLO予測で足す（使えない時の −1 はそのまま）
+  if(!loOn())return supportValueBase(p,o,c);const n=c.name;
+  const v=(n.startsWith('緑の巻物')&&profOf(p).drawDeckAware)?(scrollN(p)*useW().hand-useW().hand*P_().supGreenOff):supportValueBase(p,o,c); // 山札を意識した緑の評価は、山札の項をLO予測に任せる
+  if(n.startsWith('病院の待合室')){ // バトルのない1巡で時間を稼ぐ。LOで勝てる見込みの時だけ使う（見込みの半分を守れる価値とみなす近似）。元の「ダメージ3以上・手札3以下」の条件は使わない
+    const lw=(P_().w_loEval||0)*useW().lethal;const L=lw?loValue(loSnap(p))/lw:0;if(L<=0)return -1;
+    return useW().dmg*P_().supHospital+lw*L*0.5-useW().hand+loSelfDelta(p,0,0,-1);}
+  if(v===-1)return v;
+  if(n.startsWith('緑の巻物'))return v+loSelfDelta(p,-Math.min(scrollN(p),p.deck.length),0);
+  if(n.startsWith('赤の巻物')){const d0=p.deck.length,td=loTopDraw(p,1,d0);return v+loSelfDelta(p,-(td+loDrawN(d0-td,2)),1);} // 被弾（登場時の処理）→2ドローの順（engine と同じ）
+  if(n.startsWith('牛乳')){ // ダメージ−1。戻るキャラ（ダメージエリアの最高Lv）の「登場時」の必須ドローも数える
+    const ch=p.damage.filter(x=>x.type==='char').sort((a,b)=>b.lv-a.lv)[0];const f=ch?loFx(ch):{};let dd=0;if(f.topDrawN){const d=p.deck.length;dd=Math.min(f.topDrawN,d)-(f.topBackN||0);}return v+loSelfDelta(p,-dd,-1);}
+  if(n.startsWith('海に行こう'))return v+loSelfDelta(p,Math.min(4,Math.max(p.gYo.length,p.gIn.length)),0,Math.min(4,Math.max(o.gYo.length,o.gIn.length)));
+  return v;}
+// 2026-11-06：緑の巻物で引ける枚数（UVS_SCROLL=1 の時はダメージ2枚ごとに1枚）
+function scrollN(p){const c=E.CARDS['緑の巻物'];return c&&c.scrollMode===1?Math.floor(p.damage.length/2):p.damage.length;}
+function supportValueBase(p,o,c){
+  const W_=useW();const n=c.name;
+  if(profOf(p).drawDeckAware&&n.startsWith('緑の巻物'))return counterDrawValue(p,scrollN(p));
+  const Q=P_();
+  if(n.startsWith('緑の巻物'))return scrollN(p)*W_.hand-W_.hand*Q.supGreenOff;
+  if(n.startsWith('赤の巻物'))return (p.charDeck.length>=2&&p.damage.length<=2)?2*W_.hand-dmgValue(p,1)*Q.supRedDmg:-1;
+  if(n.startsWith('牛乳'))return p.damage.some(x=>x.type==='char')?dmgValue(p,1)*Q.supMilkDmg-W_.hand*Q.supMilkHand:-1;
+  if(n.startsWith('朝食のパン'))return p.hand.some(x=>canAttack(p,x,null)&&x.dp>0)?W_.dmg*Q.supBread:-1;
+  if(n.startsWith('秘薬')){ // 捨て札の1枚を陰ゲージへ（秘薬自身も陰ゲージへ）。使った後の手札の使いやすさの増分
+    const cs=p.discard.filter(x=>x.type==='battle'&&x.color!=='飛'&&x.color!=='秘');if(!cs.length)return -1;
+    const before=handUtility(p,p.hand,0,0,[]);const rest=p.hand.filter(x=>x!==c);let best=-Infinity;
+    for(const x of cs){const v=Object.create(p);v.gIn=p.gIn.concat([x,c]);best=Math.max(best,handUtility(v,rest,0,0,[]));}return best-before;}
+  if(n.startsWith('海に行こう')){ // 相手のゲージを最大4枚減らす価値 − 自分のゲージを4枚戻す損（海自身は陽ゲージへ）
+    const oMax=Math.max(o.gYo.length,o.gIn.length);if(!oMax)return -1;const oLoss=W_.gaugeNeed*Math.min(4,oMax);
+    const before=handUtility(p,p.hand,0,0,[]);const rest=p.hand.filter(x=>x!==c);
+    let after=-Infinity;for(const yoSide of [true,false]){const arr=yoSide?p.gYo:p.gIn;if(!arr.length&&(yoSide?p.gIn.length:p.gYo.length))continue;const keep=[...arr].sort((a,b)=>cardVal(b)-cardVal(a)).slice(0,Math.max(0,arr.length-4));
+      const v=Object.create(p);v.gYo=(yoSide?keep:p.gYo).concat([c]);v.gIn=yoSide?p.gIn:keep;after=Math.max(after,handUtility(v,rest,0,0,[]));}
+    return oLoss+after-before;}
+  if(n.startsWith('じっちゃんの太巻き'))return p.hand.some(x=>x!==c&&canAttack(p,x,null)&&x.dp>0)?W_.hand*0.6:-1; // このターンのアタック勝利で1ドロー
+  if(n.startsWith('インテリメガネ')){ // ①ゲージ加速（使うとターン終了時に陰ゲージへ）②このターンのバトルカードのテキストを無効にした時のアタックの勝ち目の差。両方の和
+    const before=handUtility(p,p.hand,0,0,[]);const rest=p.hand.filter(x=>x!==c);const accel=handUtility(p,rest,0,1,[c.name])-before;
+    const usable=rest.filter(x=>canAttack(p,x,null));let battle=0;
+    if(usable.length&&!E.G.noBattle){const save=E.G.noTextTurn;const vp=vplayer(p,rest);
+      const a=solveAttack(vp,o,usable,null);E.G.noTextTurn=true;const b=solveAttack(vp,o,usable,null);E.G.noTextTurn=save;
+      if(a&&b&&a.value!=null&&b.value!=null)battle=b.value-a.value;}
+    return accel+battle;}
+  if(n.startsWith('病院の待合室'))return (p.damage.length>=3&&p.hand.length<=3)?W_.dmg*Q.supHospital-W_.hand:-1;
+  return 0;
+}
+// 入れ替え候補: 手札から外しても手札効用がほとんど落ちない札（死に札）を、落ち幅の小さい順に返す
+function swapCandidates(p,hand,maxN,required){
+  const W_=useW();const base=handUtility(p,hand,0,0,[]);
+  const scored=hand.map(c=>({c,loss:base-handUtility(p,hand.filter(x=>x!==c),0,0,[])})).sort((a,b)=>a.loss-b.loss);
+  // 閾値: 手札1枚の価値の35%未満しか貢献していない札だけを戻す（必須指名なら最小損失の1枚）
+  let th=W_.hand*(cur&&cur.swapTh!=null?cur.swapTh:P_().swapTh);
+  const cw=CH('swap'); // 選択：入れ替え（任意の時）
+  if(!required){if(cw.m==='never')return [];if(cw.m==='do')th=W_.hand*(2+cw.w);else if(cw.m==='avoid')th=th*0.5;}
+  let out=scored.filter(x=>x.loss<th).slice(0,maxN).map(x=>x.c);
+  if(!out.length&&required)out=scored.slice(0,Math.min(maxN,1)).map(x=>x.c);
+  return out;
+}
+const TurnLayer={
+  async prepAction(p,opts,ctx){
+    enter(this,p);const o=E.P[1-p.idx];
+    const has=v=>opts.some(x=>x.value===v);
+    // 1) サポート
+    if(has('support')){
+      let best=null,bv=0;for(const c of ctx.sups){let v=supportValue(p,o,c);
+        const k=c.name.startsWith('秘薬')?'sup_hiyaku':c.name.startsWith('海に行こう')?'sup_umi':c.name.startsWith('じっちゃん')?'sup_futomaki':c.name.startsWith('インテリメガネ')?'sup_megane':c.name.startsWith('緑の巻物')?'sup_green':c.name.startsWith('牛乳')?'sup_milk':c.name.startsWith('赤の巻物')?'sup_red':c.name.startsWith('朝食のパン')?'sup_bread':c.name.startsWith('病院')?'sup_hospital':null;
+        if(k){const ch=CH(k);if(ch.m==='never')continue;if(ch.m==='cond'&&ch.n!=null&&p.damage.length<ch.n)continue; // 条件付き＋n：ダメージn以上の時だけ
+         if(ch.m==='avoid')v-=ch.w*useW().hand;else if(ch.m==='do')v=Math.max(v,1)+ch.w*useW().hand;} // 選択：サポートごと
+        if(v>bv){bv=v;best=c;}}
+      if(best)return{type:'support',card:best};
+    }
+    // 2) ゲージ置き：置いた後の手札の使いやすさで選ぶ
+    const cg=CH('gauge');
+    if(has('gauge')&&cg.m!=='never'){ // 選択：毎ターンのゲージ置き
+      const base=handUtility(p,p.hand,0,0,[]);
+      let best=null,bg=null,bv=cg.m==='do'?-Infinity:cg.m==='avoid'?cg.w*useW().hand:0;
+      const gG=CH('guardGauge');const nGuard=p.hand.filter(isGuard).length;
+      for(const c of ctx.gaugeable){
+        if(isGuard(c)&&(gG.m==='never'||(gG.m==='cond'&&nGuard<gG.n)))continue; // 選択：防御札をゲージに置く
+        const rest=p.hand.filter(x=>x!==c);
+        const gs=c.color==='陽'?['yo']:c.color==='陰'?['in']:['yo','in'];
+        for(const g of gs){
+          let v=handUtility(p,rest,g==='yo'?1:0,g==='in'?1:0,[c.name])-base;   // 置いた札は手札から消えるのでその損も含む
+          if(isGuard(c)){if(gG.m==='avoid')v-=gG.w*useW().hand;else if(gG.m==='do')v+=gG.w*useW().hand;}
+          if(v>bv){bv=v;best=c;bg=g;}
+        }
+      }
+      if(best)return{type:'gauge',card:best,gauge:bg};
+    }
+    const cs=CH('standby');
+    if(has('lv5')&&cs.m!=='never'&&!(cs.m==='avoid'&&p.hand.length<cs.n)){ // 選択：Lv5のスタンバイ能力
+      if(cs.m==='do')return{type:'lv5'};
+      const sb=p.charDeck[0].standby;const lbl=(sb&&sb.label)||'';
+      if(/入れ替え/.test(lbl)){const m=+(lbl.match(/最大(\d)枚/)||[])[1]||1;if(swapCandidates(p,p.hand,m,false).length)return{type:'lv5'};}
+      else if(p.hand.length>=5&&p.hand.some(c=>c.type==='battle'&&!E.baseUsable(p,c)&&distGP(p,c,0,0)>=3))return{type:'lv5'};
+    }
+    return{type:'go'};
+  },
+  async pickCards(p,cards,n,title,allowLess){
+    if(/^Lv3の効果：捨てる/.test(title)){ // 飛鳥v4: 手札効用の落ちが最小の札。緑は追加の1ドロー分だけ損失を軽く見る
+      enter(this,p);const W_=useW();const base=handUtility(p,cards,0,0,[]);
+      const o=E.P[1-p.idx];const greens=cards.filter(x=>x.type==='battle'&&x.color==='飛').length;
+      // 手札効用はサポートと緑の価値を含まないので、別に足す（サポート＝使ったときの価値、緑＝連撃の決め手。2枚目以降は軽く）
+      const extra=c=>c.type==='support'?Math.max(supportValue(p,o,c),W_.hand):(c.type==='battle'&&c.color==='飛')?(greens>=2?W_.hand*0.5:W_.hand*2):0;
+      const bonus=c=>(c.type==='battle'&&c.color==='飛'&&/緑なら/.test(title))?W_.hand:0;
+      const sc=cards.map(c=>({c,loss:base-handUtility(p,cards.filter(x=>x!==c),0,0,[])+extra(c)-bonus(c)})).sort((a,b)=>a.loss-b.loss);
+      if(allowLess){ // 任意: 引く枚数の価値（1枚=手札価値の6割）から、捨てる札の損失と山札の消費を引いて正なら捨てる
+        const best=sc[0];if(!best)return[];const draws=bonus(best.c)>0?2:1;const left=p.deck.length;
+        // 新LO：山札の消費はLO予測の変化で数える
+        // 山札の消費：LOが近いほどLO予測で数える
+        const full=draws*(W_.deck+(left-draws<=10?200:0));const deckCost=loOn()?(full*(1-loNear(p))-loSelfDelta(p,-Math.min(draws,left),0)):full;const gain=draws*W_.hand*P_().lv3DrawVal-(best.loss+bonus(best.c))-deckCost;
+        const c3=CH('lv3Discard');if(c3.m==='never')return [];if(c3.m==='do')return [best.c]; // 選択：飛鳥Lv3の捨てて引く
+        return gain>(c3.m==='avoid'?c3.w*W_.hand:0)?[best.c]:[];}
+      return sc.slice(0,n).map(x=>x.c);}
+    enter(this,p);
+    if(title.startsWith('秘薬')){ // 陰ゲージに置いた後の手札の使いやすさが最も高い札
+      let best=null,bv=-Infinity;for(const c of cards){const v=Object.create(p);v.gIn=p.gIn.concat([c]);const u=handUtility(v,p.hand,0,0,[]);if(u>bv){bv=u;best=c;}}return best?[best]:[];}
+    if(title.startsWith('海に行こう!')){ // 戻した後の手札の使いやすさが最も高くなるように、1枚ずつ貪欲に選ぶ（ゲージ選択は、そのゲージから4枚戻した結果で比べる）
+      const after=(yoArr,inArr)=>{const v=Object.create(p);v.gYo=yoArr;v.gIn=inArr;return handUtility(v,p.hand,0,0,[]);};
+      const greedy=(isYo,k)=>{let y=p.gYo.slice(),i=p.gIn.slice();const out=[];for(let t=0;t<k;t++){const arr=isYo?y:i;let bc=null,bu=-Infinity;for(const c of arr){const y2=isYo?y.filter(x=>x!==c):y,i2=isYo?i:i.filter(x=>x!==c);const u=after(y2,i2);if(u>bu){bu=u;bc=c;}}if(!bc)break;out.push(bc);if(isYo)y=y.filter(x=>x!==bc);else i=i.filter(x=>x!==bc);}return {out,u:after(y,i)};};
+      if(n===1&&cards.length===p.gYo.length+p.gIn.length){const a=greedy(true,Math.min(4,p.gYo.length)),b=greedy(false,Math.min(4,p.gIn.length));return [a.u>=b.u?p.gYo[0]:p.gIn[0]];}
+      const isYo=cards.every(c=>p.gYo.includes(c));return greedy(isYo,n).out;}
+    if(title.startsWith('本能のままに')){ // ゲージから1枚捨てる：捨てた後の手札の使いやすさが最も高い札
+      let best=null,bv=-Infinity;for(const c of cards){const v=Object.create(p);v.gYo=p.gYo.filter(x=>x!==c);v.gIn=p.gIn.filter(x=>x!==c);const u=handUtility(v,p.hand,0,0,[]);if(u>bv){bv=u;best=c;}}
+      return best?[best]:[];}
+    if(loOn()&&/捨て札を山札の下へ戻す/.test(title)&&allowLess){ // 新LO：雲雀Lv5。山札が1枚増えることがLOで有利な時だけ戻す（戻す札は素の価値が最も高い札）
+      if(loSelfDelta(p,1,0)>0)return [[...cards].sort((a,b)=>cardVal(b)-cardVal(a))[0]];return [];}
+    if(title.startsWith('入れ替え')||title.startsWith('山札の下へ'))return swapCandidates(p,cards,n,!allowLess);
+    if(title.startsWith('捨てるカード'))return swapCandidates(p,cards,n,!allowLess);
+    return pickCardsFallback(p,cards,n,title,allowLess);
+  },
+  async chooseGauge(p,card){
+    enter(this,p);const rest=p.hand.filter(x=>x!==card);
+    const a=handUtility(p,rest,1,0,[card.name]),b=handUtility(p,rest,0,1,[card.name]);
+    return a>=b?'yo':'in';
+  },
+  async chain(p,avail){
+    enter(this,p);const o=E.P[1-p.idx];
+    const usable=p.hand.filter(c=>canAttack(p,c,'R')&&c.dp>0);
+    if(!usable.length)return null;
+    const r=solveAttack(p,o,usable,'R');
+    const bs=E.G.bs;const card=bs.atk.card;
+    const keep=(card.color==='飛'||card.color==='秘')?0:gaugeValue(p,card);   // 宣言しない場合の価値（ゲージへ）
+    if(this.trace)this.trace.push({kind:'chain',turn:E.G.turn,p:p.idx,value:Math.round(r.value),keep});
+    const cc=CH('chain');if(cc.m==='never')return null;if(cc.m==='do')return 'R'; // 選択：連撃の宣言
+    return r.value>keep+(cc.m==='avoid'?cc.w*useW().hand:0)?'R':null;
+  },
+};
+
+// アタックの候補。選択：防御札でアタック（条件付き＝ほかに出せる札がない時だけ）
+// ---------- 重撃の先読み（案B） ----------
+// 使う場面（選択：c_heavySolve）。する＝常に、条件付き＝どちらかのダメージがn以上、しない傾向＝決着がかかる時だけ
+function useHeavySolve(p,o,ctx){const c=CH('heavySolve');if(!c.m||c.m==='never')return false;if(c.m==='do')return true;
+  const dmgTo=ctx.isAtk?o:p;const lethal=dmgTo.damage.length+ctx.dp>=CONFIG.winDamage;
+  if(c.m==='avoid')return lethal;return lethal||Math.max(p.damage.length,o.damage.length)>=(c.n||0);}
+// 候補（出さない＋各札）ごとに、相手の手札を推定して残りの出し合いを経験則でロールアウトし、自分から見た価値の平均で選ぶ
+function solveHeavy(p,o,elig,ctx,bs,hp0){const W_=useW();const isAtk=ctx.isAtk;const meIdx=isAtk?0:1;
+  const cands=[null,...elig];const val=new Array(cands.length).fill(0);const S_=useS().samples;
+  const hpMe=Object.assign({},hp0||useHP(),{profile:profOf(p)}),hpOp=Object.assign({},hp0||useHP(),{profile:profOf(o)});
+  const blocked=(f,i)=>{if(f.noHeavyBoth)return true;if(i===1&&f.noOppHeavy)return true;if(i===0&&f.noAtkHeavy)return true;return false};
+  const hctx={at:0,df:0,dp:0,isAtk:true};
+  for(let s=0;s<S_;s++){const oh=sampleHand(o);
+    for(let k=0;k<cands.length;k++){
+      const me=vplayer(p,p.hand.slice()),op=vplayer(o,oh.slice());const pa=isAtk?me:op,pd=isAtk?op:me;
+      const vb=Object.assign({},bs,{atk:Object.assign({},bs.atk,{p:pa,heavy:bs.atk.heavy.slice()}),def:Object.assign({},bs.def,{p:pd,heavy:bs.def.heavy.slice()}),lite:true});
+      let added=[0,0];let count=vb.atk.heavy.length+vb.def.heavy.length;
+      const c0=cands[k];if(c0){me.hand=me.hand.filter(x=>x!==c0);(isAtk?vb.atk:vb.def).heavy.push(c0);added[meIdx]++;count++;}
+      computeTotals(vb);
+      let who=1-meIdx,passes=c0?0:1;
+      while(passes<2&&count<CONFIG.heavy.maxCards){const side=who===0?vb.atk:vb.def;const pl=side.p;const opp=who===0?vb.def.p:vb.atk.p;
+        const losing=who===0?vb.at<vb.df:vb.df<=vb.at;
+        const el=(!losing||vb.dp<=0||blocked(vb.flags,who))?[]:pl.hand.filter(c=>heavyOK(pl,c));
+        let add=null;if(el.length){hctx.at=vb.at;hctx.df=vb.df;hctx.dp=vb.dp;hctx.isAtk=who===0;add=heavyPolicy(pl,opp,el,hctx,side.heavy.length,who===meIdx?hpMe:hpOp);}
+        if(add){pl.hand=pl.hand.filter(c=>c!==add);side.heavy.push(add);added[who]++;count++;passes=0;computeTotals(vb);}else passes++;
+        who=1-who;}
+      const success=CONFIG.tieWinner==='attacker'?vb.at>=vb.df:vb.at>vb.df;
+      let v=(added[1-meIdx]-added[meIdx])*W_.hand;
+      if(success){const dv=dmgValue(isAtk?o:p,vb.dp);v+=isAtk?dv:-dv;}
+      else{const gv=guardHitValue(vb.def.p,vb.atk.card,vb.def.card);v+=isAtk?gv:-gv;} // クナイ投擲の失敗時の確定ダメージ
+      if(loOn()){const ld=loBattleDelta(vb.atk.p,vb.def.p,vb.atk.card,vb.def.card,success,vb.dp,true);v+=isAtk?ld:-ld;}
+      val[k]+=v;}}
+  let bi=0;for(let k=1;k<cands.length;k++)if(val[k]>val[bi])bi=k;
+  return cands[bi];}
+
+function attackList(p,usable,mode){
+  const c=CH('guardAttack');
+  const cand=usable.filter(x=>x.dp>0&&!(x.tech==='防御'));
+  let list=cand.length?cand:(!mode&&yo(p)+inn(p)<4?usable:[]);
+  if(c.m==='never')list=list.filter(x=>!isGuard(x));
+  else if(c.m==='avoid'){const ng=list.filter(x=>!isGuard(x));if(ng.length)list=ng;}
+  else if(c.m==='do'&&!mode)list=[...new Set(list.concat(usable.filter(isGuard)))];
+  return list;
+}
+function makeSolver(params){
+  if(params&&params.turnLayer===false)throw Error('turnLayer:false（経験則AIのターン層を使う）は廃止しました');
+  const inst=Object.assign({},SolverProto,TurnLayer);
+  inst.W=Object.assign({},W,params&&params.W||{});
+  inst.S=Object.assign({},S,params&&params.S||{});
+  inst.hp=Object.assign({minHand:2,budgetExtra:1},params&&params.hp||{});
+  inst.chainMargin=(params&&params.chainMargin)??400;
+  inst.sampleFix=!(params&&params.sampleFix===false); // 既定で有効（アプリと同じ）。旧方式で測るときだけ {sampleFix:false}
+  inst.profiles=(params&&params.profiles)||null; // {デッキ名: プロファイル} 実験用の上書き
+  inst.trace=null;
+  return inst;
+}
+let cur=null; // 現在判断中のソルバー（評価重みの参照用）
+function useW(){return cur?cur.W:W;}
+function useS(){return cur?cur.S:S;}
+function useHP(){return cur?cur.hp:{minHand:2,budgetExtra:1};}
+const SolverProto={
+  name:'solver',
+  async heavy(p,elig,ctx){enter(this,p);const bs=E.G.bs;const side=ctx.isAtk?bs.atk:bs.def;const o=E.P[1-p.idx];
+    if(useHeavySolve(p,o,ctx))return solveHeavy(p,o,elig,ctx,bs,this.hp);
+    return heavyPolicy(p,o,elig,ctx,side.heavy.length,Object.assign({},this.hp,{profile:profOf(p)}));},
+  async attack(p,usable,mode){
+    enter(this,p);
+    const o=E.P[1-p.idx];
+    const list=attackList(p,usable,mode);
+    if(!list.length)return null;
+    const r=solveAttack(p,o,list,mode);
+    if(this.trace)this.trace.push({kind:'atk',turn:E.G.turn,p:p.idx,rows:r.rows.map(c=>c?c.name:'攻撃しない'),probs:r.probs.map(x=>+x.toFixed(2)),value:Math.round(r.value)});
+    return r.choice;
+  },
+  async defend(p,usable,info){
+    enter(this,p);
+    const o=info.attacker;
+    if(CH('guardDefend').m==='never'&&p.damage.length+1<CONFIG.winDamage){const u=usable.filter(c=>!isGuard(c));usable=u;if(!usable.length)return null;} // 選択：防御札でディフェンスしない（決着がかかる時は例外）
+    const r=solveDefend(p,o,usable,info.mode||null);
+    if(this.trace&&r.probs)this.trace.push({kind:'def',turn:E.G.turn,p:p.idx,rows:r.rows.map(c=>c?c.name:'出さない'),probs:r.probs.map(x=>+x.toFixed(2))});
+    return r.choice;
+  },
+};
+/* 判断の評価（比較ツール用）: 局面と選択肢を受け取り、選択肢ごとの価値を返す
+   kind: 'solved' = 利得表から算出（単位は評価点、1ダメージ=1000）
+         'util'   = 手札効用の差分（ゲージ置き・閃の行き先・サポート）
+         'heur'   = 経験則（重撃・カード選択）。推奨だけ返し価値は出さない */
+async function assess(method,p,a,ctl){
+  cur=ctl||Solver;curP=profOf(p);const o=E.P[1-p.idx];const nm=c=>c?c.name:'（なし）';
+  if(method==='attack'){const [usable,mode]=a;const list=attackList(p,usable,mode);
+    if(!list.length)return{kind:'solved',options:[{key:'-',label:'攻撃しない',v:0}]};
+    const r=solveAttack(p,o,list,mode);return{kind:'solved',options:r.rows.map((c,i)=>({key:c?String(c.uid):'-',label:nm(c)+(c?'':''),v:r.rowValues[i],pr:r.probs[i]}))};}
+  if(method==='defend'){const [usable,info]=a;const r=solveDefend(p,info.attacker,usable,info.mode||null);
+    if(!r.probs)return{kind:'solved',options:r.rows.map(c=>({key:c?String(c.uid):'-',label:c?nm(c):'出さない',v:0}))};
+    return{kind:'solved',options:r.rows.map((c,i)=>({key:c?String(c.uid):'-',label:c?nm(c):'出さない',v:r.rowValues[i],pr:r.probs[i]}))};}
+  if(method==='chain'){const usable=p.hand.filter(c=>canAttack(p,c,'R')&&c.dp>0);const bs=E.G.bs;const card=bs.atk.card;const keep=(card.color==='飛'||card.color==='秘')?0:gaugeValue(p,card);
+    if(!usable.length)return{kind:'solved',options:[{key:'-',label:'宣言しない',v:keep}]};
+    const r=solveAttack(p,o,usable,'R');return{kind:'solved',options:[{key:'R',label:'連撃を宣言',v:r.value},{key:'-',label:'宣言しない（ゲージへ）',v:keep}]};}
+  if(method==='prepAction'){const [opts,ctx]=a;const has=v=>opts.some(x=>x.value===v);const out=[{key:'b',label:'バトルへ／終了',v:0}];
+    if(has('support'))for(const c of ctx.sups)out.push({key:'s'+c.uid,label:'サポート:'+c.name,v:supportValue(p,o,c)});
+    if(has('gauge')){const base=handUtility(p,p.hand,0,0,[]);for(const c of ctx.gaugeable){const rest=p.hand.filter(x=>x!==c);const gs=c.color==='陽'?['yo']:c.color==='陰'?['in']:['yo','in'];for(const g of gs)out.push({key:`g${c.uid}${g==='yo'?'y':'i'}`,label:`置く:${c.name}→${g==='yo'?'陽':'陰'}`,v:handUtility(p,rest,g==='yo'?1:0,g==='in'?1:0,[c.name])-base});}}
+    if(has('lv5')){const r=await TurnLayer.prepAction.call(cur,p,opts.filter(x=>x.value==='lv5'||x.value==='go'),ctx);out.push({key:'l',label:'スタンバイ能力',v:r.type==='lv5'?1:-1,heur:true});}
+    return{kind:'util',options:out};}
+  if(method==='chooseGauge'){const [card]=a;const rest=p.hand.filter(x=>x!==card);return{kind:'util',options:[{key:'y',label:'陽',v:handUtility(p,rest,1,0,[card.name])},{key:'i',label:'陰',v:handUtility(p,rest,0,1,[card.name])}]};}
+  if(method==='heavy'){const [elig,ctx]=a;const bs=E.G.bs;const side=ctx.isAtk?bs.atk:bs.def;const c=heavyPolicy(p,o,elig,ctx,side.heavy.length,useHP());return{kind:'heur',options:[{key:c?String(c.uid):'-',label:c?nm(c):'パス',v:0,rec:true}]};}
+  if(method==='pickCards'){const [cards,n,title,allowLess]=a;const r=await TurnLayer.pickCards.call(cur,p,cards,n,title,allowLess);return{kind:'heur',options:[{key:r.length?r.map(c=>c.uid).join('.'):'-',label:r.length?r.map(nm).join('+'):'（なし）',v:0,rec:true}]};}
+  return{kind:'heur',options:[]};
+}
+const Solver=makeSolver();Solver.assess=assess;
+// 2026-11-05：経験則AIの雲雀を汎用AIに任せる「橋渡し」（routeHeuristicToSolver）は、ユーザーの判断で削除。solver.js は経験則AIを一切書き換えない
+Solver.makeSolver=makeSolver;Solver.evalBattle=evalBattle;
+// 2026-11-07：デッキごとのゲージ条件の保存（GP_REQ）を消す。同じデッキ名で中身を差し替える時（デッキ調整のワーカー）に呼ぶ。消さないと最初のデッキの条件を使い続ける
+Solver.resetDeckCache=()=>{GP_REQ.clear();};
+// 単体テスト用（新LO）。withProfile で判断側のプロファイルを一時的に設定して呼ぶ
+Solver.loTest={hiddenPool,guardHitValue,loNear,loValue,loSnap,loFlip,loBattleDelta,loSelfDelta,loFx,loTopDraw,supportValue,supportValueBase,evalBattle,withProfile(prof,fn,inst){const s=curP,c=cur;curP=prof;cur=inst||null;try{return fn();}finally{curP=s;cur=c;}}};Solver.solveMatrix=solveMatrix;Solver.defaults={W,S};
+
+if(typeof module!=='undefined'&&module.exports)module.exports=Solver; else root.Solver=Solver;
+})(typeof window!=='undefined'?window:globalThis);
+
+
+</script>
+<script>
+
+'use strict';
+/* =========================================================
+   replay.js: 再現ログ（乱数の種＋全操作）の記録・再生
+   - 乱数: mulberry32(seed)
+   - 操作: コントローラの各判断を1トークンで記録 "<p><op><arg>"
+       p  = プレイヤー番号 0/1
+       op = P 準備フェイズ (g<uid>y|i=ゲージ置き, s<uid>=サポート, l=スタンバイ能力, n=やめる, b=バトルへ/終了)
+            G 閃カードのゲージ選択 (y/i)
+            A 攻撃札 <uid> / - (攻撃しない)
+            D 防御札 <uid> / - (防御しない)
+            H 重撃札 <uid> / - (パス)
+            C 連撃宣言 R / -
+            K カード選択 <uid>.<uid>… / - (選ばない)
+   - 記録は人間・CPUの区別なく全判断を含む。再生は記録を使い切ったら
+     元のコントローラ（人間／CPU）に引き継ぐ（＝ログからの再開）
+   ========================================================= */
+(function(root){
+const LOG_VERSION='v1.9'; // 緑の巻物案1・最終デッキ／AI
+
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}}
+
+const ser={
+  prepAction:r=>r.type==='gauge'?`g${r.card.uid}${r.gauge==='yo'?'y':'i'}`:r.type==='support'?`s${r.card.uid}`:r.type==='lv5'?'l':r.type==='none'?'n':'b',
+  chooseGauge:v=>v==='yo'?'y':'i',
+  attack:c=>c?String(c.uid):'-',
+  defend:c=>c?String(c.uid):'-',
+  heavy:c=>c?String(c.uid):'-',
+  chain:v=>v?'R':'-',
+  pickCards:cs=>cs.length?cs.map(c=>c.uid).join('.'):'-',
+};
+const CODE={prepAction:'P',chooseGauge:'G',attack:'A',defend:'D',heavy:'H',chain:'C',pickCards:'K'};
+const METHODS=Object.keys(CODE);
+
+// 記録用ラッパー: inner の判断をそのまま返しつつ rec.ops に積む
+function makeRecorder(inner,rec,pi){
+  const w=Object.create(inner);let depth=0; // 入れ子の呼び出し（prepAction 内の chooseGauge 等）は記録しない。結果は外側の判断に含まれる
+  for(const m of METHODS){
+    w[m]=async function(p,...a){depth++;let v;try{v=await inner[m].call(this,p,...a);}finally{depth--;}if(depth===0){rec.ops.push(`${pi}${CODE[m]}${ser[m](v)}`);if(rec.onOp)rec.onOp(m,v);}return v;};
+  }
+  w.name=(inner.name||'ctl')+'+rec';
+  return w;
+}
+
+// 再生用ラッパー: ops を順に消費し、尽きたら inner に委譲
+// consume=true（CPUの席）: 記録済みの判断でも inner に同じ問いを投げて結果は捨てる。
+//   CPUは判断にゲームの乱数を使うので、こうすると再生後の乱数の進み方が元の試合と一致し、
+//   再開・「戻る」の後もCPUが同じ局面で同じ手を返す。inner の答えが記録と違えば state.mismatch を数える
+function makeReplayer(inner,state,pi,onLive,consume){
+  const w=Object.create(inner);
+  const shadow=async(m,args,tok)=>{if(!consume)return;const v=await inner[m].call(inner,...args);if(tok!=null&&ser[m](v)!==tok){state.mismatch=(state.mismatch||0)+1;}};
+  const take=(m)=>{
+    if(state.i>=state.ops.length){if(!state.live){state.live=true;if(onLive)onLive();}return null;}
+    const t=state.ops[state.i];
+    if(+t[0]!==pi||t[1]!==CODE[m])throw new Error(`ログ不整合: ${state.i}番目のトークン「${t}」は P${pi} の ${m} ではない`);
+    state.i++;return t.slice(2);
+  };
+  const find=(cands,uid,what)=>{const c=cands.find(x=>String(x.uid)===uid);if(!c)throw new Error(`ログ不整合: ${what} に uid=${uid} の候補がない`);return c;};
+  w.prepAction=async function(p,opts,ctx){const a=take('prepAction');if(a==null)return inner.prepAction.call(this,p,opts,ctx);await shadow('prepAction',[p,opts,ctx],a);
+    if(a[0]==='g'){const m=a.match(/^g(\d+)([yi])$/);return{type:'gauge',card:find(ctx.gaugeable,m[1],'ゲージ置き'),gauge:m[2]==='y'?'yo':'in'};}
+    if(a[0]==='s')return{type:'support',card:find(ctx.sups,a.slice(1),'サポート')};
+    if(a==='l')return{type:'lv5'};if(a==='n')return{type:'none'};return{type:'go'};};
+  w.chooseGauge=async function(p,card){const a=take('chooseGauge');if(a==null)return inner.chooseGauge.call(this,p,card);await shadow('chooseGauge',[p,card],a);return a==='y'?'yo':'in';};
+  for(const m of ['attack','defend','heavy']){
+    w[m]=async function(p,cands,...rest){const a=take(m);if(a==null)return inner[m].call(this,p,cands,...rest);await shadow(m,[p,cands,...rest],a);return a==='-'?null:find(cands,a,m);};
+  }
+  w.chain=async function(p,avail){const a=take('chain');if(a==null)return inner.chain.call(this,p,avail);await shadow('chain',[p,avail],a);return a==='R'?'R':null;};
+  w.pickCards=async function(p,cards,n,title,allowLess){const a=take('pickCards');if(a==null)return inner.pickCards.call(this,p,cards,n,title,allowLess);await shadow('pickCards',[p,cards,n,title,allowLess],a);if(a==='-')return[];return a.split('.').map(u=>find(cards,u,title));};
+  w.name=(inner.name||'ctl')+'+replay';
+  return w;
+}
+
+// ログ本文の生成／解析
+function cardMap(p){return [...p.charDeck,...p.hand,...p.deck,...p.discard,...p.damage,...p.gYo,...p.gIn,...p.supports.map(s=>s.card)].sort((a,b)=>a.uid-b.uid).map(c=>`${c.uid}=${c.type==='char'?c.name+'Lv'+c.lv:c.name}`).join(',');}
+function header(meta,P,CONFIG){
+  const cm=meta.cards||P.map(cardMap);
+  return [
+    `#UVS ${LOG_VERSION} replay`,
+    `#legend: token "<p><op><arg>" p=0/1(P1/P2) op: P=準備(g<uid>y|i ゲージ置き, s<uid> サポート, l スタンバイ能力, n やめる, b バトルへ/終了) G=閃のゲージ(y/i) A=攻撃uid(-=なし) D=防御uid(-=なし) H=重撃uid(-=パス) C=連撃(R/-) K=選択uid.uid(-=なし)`,
+    `#rules: 緑の巻物=案1(ダメージ2枚ごと1ドロー・陰ゲージ) v2 連撃統合・緑無条件防御・秘伝ハンデス1 deckSize=${CONFIG.deckSize} tie=${CONFIG.tieWinner} noDefenseAutoHit=${CONFIG.noDefenseAutoHit} heavy.ignoreGP=${CONFIG.heavy.ignoreGP} greenDefense=${CONFIG.greenDefense} blowHeavy=${CONFIG.blowHeavy} win=${CONFIG.winDamage}dmg|drawPhaseLO(damageArea,tie=LOsideLose)`,
+    `seed=${meta.seed} d0=${meta.decks[0]} d1=${meta.decks[1]} first=${meta.first} c0=${meta.ctl[0]} c1=${meta.ctl[1]}`,
+    ...(meta.undo?[`#undo: ${meta.undo}（テストプレイ中に「戻る」を使った回数。ops は戻した後の手順）`]:[]),
+    `#rngFirst: ${meta.rngFirst||'fixed'}`,
+    `cards0: ${cm[0]}`,
+    `cards1: ${cm[1]}`,
+  ].join('\n');
+}
+function build(meta,P,CONFIG,ops){return header(meta,P,CONFIG)+'\nops: '+ops.join(' ');}
+function parse(text){
+  const m=text.match(/^#UVS (v[\d.]+) replay/m);if(!m)throw new Error('再現ログが見つかりません（#UVS … replay の行がない）');
+  if(m[1]!==LOG_VERSION)throw new Error(`版が違います（ログ ${m[1]}、このアプリ ${LOG_VERSION}）。版の違うログは読み込みません`);
+  const h=text.match(/^seed=(\d+) d0=(.+?) d1=(.+?) first=([01]) c0=(\S+) c1=(\S+)$/m);if(!h)throw new Error('ヘッダ行（seed=…）が読めません');
+  const o=text.match(/^ops:\s*(.*)$/m);
+  return{rngFirst:(text.match(/^#rngFirst: (random|fixed)$/m)||[])[1]||'fixed',seed:+h[1],decks:[h[2],h[3]],first:+h[4],ctl:[h[5],h[6]],ops:o&&o[1].trim()?o[1].trim().split(/\s+/):[]};
+}
+
+const Replay={LOG_VERSION,mulberry32,makeRecorder,makeReplayer,build,parse,CODE,cardMap};
+if(typeof module!=='undefined'&&module.exports)module.exports=Replay;else root.Replay=Replay;
+})(typeof window!=='undefined'?window:globalThis);
+
+
+</script>
+<script>
+
+window.UVS_CARDS_EXTRA({CARDS,CHARS,yo,inn,gaugeAll,draw,mill,log,rm,toBottom,applyDamage,cardVal,get G(){return G},get P(){return P},get RNG(){return RNG}});
+const FIXED=window.UVS_DECKS_FIXED({DECKS,CHARS,CARDS});
+const FINAL_DECKS={"飛鳥・連撃":{"char":"飛鳥","list":[["はじめのチョップ",1],["リミットブレイク",3],["二刀繚斬",1],["凪",3],["右空",3],["天刃",1],["志昇陣",1],["怨砂",1],["攻断円",1],["残月",3],["牛乳",1],["狭朱",1],["省刃",2],["砂風車",1],["緑の巻物",3],["踊り傘",1],["飛塵",3]],"count":30},"柳生・射撃":{"char":"柳生","list":[["くぐつダミー",3],["クナイ投擲",1],["ドラゴンダンス",2],["ドラゴンバイト",1],["ハーフムーン",2],["牛乳",3],["狂い傘",2],["狭朱・改",2],["砂風車",1],["緑の巻物",2],["薙ぎ払う足",2],["諸行の音",3],["踊り傘",1],["返し雨",2],["鉄壁のガード",3]],"count":30},"斑鳩・対抗封じ":{"char":"斑鳩","list":[["はじめのチョップ",2],["もっかいウサギ蹴り",3],["クナイ投擲",1],["攻断円",1],["本能のままに",3],["欺人脚",3],["狭朱",2],["省刃",3],["磁転昇",2],["神",3],["紅閃",2],["緑の巻物",2],["踊り傘",1],["鉄壁のガード",2]],"count":30},"葛城・削り":{"char":"葛城","list":[["くぐつダミー",3],["もっかいウサギ蹴り",3],["サマーソルト",3],["サマーソルトリバース",2],["スカイハイクロウ",3],["ドラゴンダンス",2],["ハーフムーン",3],["天刃",3],["残月",1],["狭朱",1],["緑の巻物",3],["踊り傘",2],["鉄壁のガード",1]],"count":30},"雲雀・反撃":{"char":"雲雀","list":[["お尻からドーン",1],["くぐつダミー",3],["はじめのチョップ",2],["ふっとびさまーそると",1],["もっかいウサギ蹴り",2],["ウサギ蹴り",1],["クナイ投擲",1],["ドラゴンバイト",2],["ドラゴンベアード",3],["ハーフムーン",3],["忍兎でブーン",3],["牛乳",2],["緑の巻物",2],["鉄壁のガード",3],["零雹",1]],"count":30}};
+const FINAL_PROFILES={"飛鳥・連撃":{"name":"標準","atkReserveHeavy":0,"atkFailPenalty":0,"atkLowHand":0,"atkLowHandPen":0,"atkLethalMul":0,"defGuardWin":0,"hUCover":0,"handHeavy":0,"drawDeckAware":false,"holdGuard":0,"holdHeavyMaxDrop":null,"heavy":null,"routeHeuristicToSolver":false,"c_guardGauge":"do","w_guardGauge":0,"n_guardGauge":2,"c_guardDefend":"cond","w_guardDefend":1500,"n_guardDefend":4,"c_guardAttack":"cond","w_guardAttack":0,"c_noDefense":"do","w_noDefense":0,"n_noDefense":3,"c_attackPass":"do","w_attackPass":0,"n_attackPass":4,"c_heavyAtk":"do","w_heavyAtk":3,"c_heavyDef":"avoid","w_heavyDef":1,"c_chain":"cond","w_chain":0,"c_gauge":"cond","w_gauge":0,"c_sup_hiyaku":"cond","w_sup_hiyaku":0,"c_sup_umi":"cond","w_sup_umi":0,"c_sup_futomaki":"cond","w_sup_futomaki":0,"c_sup_megane":"cond","w_sup_megane":0,"c_sup_green":"avoid","w_sup_green":0.3,"c_sup_milk":"cond","w_sup_milk":0,"c_sup_red":"cond","w_sup_red":0,"c_sup_bread":"cond","w_sup_bread":0,"c_sup_hospital":"cond","w_sup_hospital":0,"c_lv3Discard":"cond","w_lv3Discard":0,"c_swap":"cond","w_swap":0,"c_standby":"cond","w_standby":0,"n_standby":6,"c_heavySolve":"do","w_heavySolve":2,"n_heavySolve":4,"hAtkMinHand":null,"hDefMinHand":null,"hAtkBudget":null,"hDefBudget":null,"hPick":"min","gTarget":"weighted","w_gTarget":1,"hUChainStart":0,"hUChainStartDeck":0,"hULv2":0,"hULv3":0,"hULv4":0,"hULv5":0,"c_loEval":"none","w_loEval":0.5,"n_loHorizon":6,"w_loPass":0,"w_loTrend":0,"w_onWinMill":0.8,"deckLowN":6,"deckLowVal":200,"hUSupport":1.6,"hUGreenBase":0.3,"hUGreenNeed":0.3,"hUHiden":1.6,"hUHeavy":0.2,"hUHeavyFloor":0.6,"hUDp0":0.6,"hUDp0Add":1.2,"effVal":true,"hUDeckGreen":0.15,"hUGreenDef":0.5,"supGreenOff":0.5,"supRedDmg":0.9,"supMilkDmg":0.9,"supMilkHand":0.3,"supBread":0.25,"supHospital":0.5,"swapTh":0.6,"lv3DrawVal":0.6,"n_sup_green":3},"柳生・射撃":{"name":"標準","atkReserveHeavy":0,"atkFailPenalty":0,"atkLowHand":0,"atkLowHandPen":0,"atkLethalMul":0,"defGuardWin":0,"hUCover":0,"handHeavy":0,"drawDeckAware":false,"holdGuard":0,"holdHeavyMaxDrop":null,"heavy":null,"routeHeuristicToSolver":false,"c_guardGauge":"cond","w_guardGauge":0,"n_guardGauge":3,"c_guardDefend":"do","w_guardDefend":1500,"n_guardDefend":4,"c_guardAttack":"cond","w_guardAttack":0,"c_noDefense":"do","w_noDefense":0,"n_noDefense":3,"c_attackPass":"do","w_attackPass":0,"n_attackPass":4,"c_heavyAtk":"do","w_heavyAtk":1,"c_heavyDef":"avoid","w_heavyDef":2,"c_chain":"cond","w_chain":0,"c_gauge":"cond","w_gauge":0,"c_sup_hiyaku":"cond","w_sup_hiyaku":0,"c_sup_umi":"cond","w_sup_umi":0,"c_sup_futomaki":"cond","w_sup_futomaki":0,"c_sup_megane":"cond","w_sup_megane":0,"c_sup_green":"cond","w_sup_green":0,"c_sup_milk":"cond","w_sup_milk":0,"c_sup_red":"cond","w_sup_red":0,"c_sup_bread":"cond","w_sup_bread":0,"c_sup_hospital":"cond","w_sup_hospital":0,"c_lv3Discard":"cond","w_lv3Discard":0,"c_swap":"cond","w_swap":0,"c_standby":"cond","w_standby":0,"n_standby":6,"c_heavySolve":"never","w_heavySolve":0,"n_heavySolve":4,"hAtkMinHand":null,"hDefMinHand":null,"hAtkBudget":null,"hDefBudget":null,"hPick":"min","gTarget":"max","w_gTarget":1,"hUChainStart":0,"hUChainStartDeck":0,"hULv2":0,"hULv3":0,"hULv4":0,"hULv5":0,"c_loEval":"none","w_loEval":0.5,"n_loHorizon":6,"w_loPass":0,"w_loTrend":0,"w_onWinMill":0.8,"deckLowN":6,"deckLowVal":200,"hUSupport":1.6,"hUGreenBase":0.3,"hUGreenNeed":0.5,"hUHiden":1.6,"hUHeavy":0.5,"hUHeavyFloor":0.6,"hUDp0":0.6,"hUDp0Add":2.5,"effVal":true,"hUDeckGreen":0.15,"hUGreenDef":0.5,"supGreenOff":0.5,"supRedDmg":0.9,"supMilkDmg":0.9,"supMilkHand":0.3,"supBread":0.25,"supHospital":0.5,"swapTh":0.6,"lv3DrawVal":0.6},"斑鳩・対抗封じ":{"name":"標準","atkReserveHeavy":0,"atkFailPenalty":0,"atkLowHand":0,"atkLowHandPen":0,"atkLethalMul":0,"defGuardWin":0,"hUCover":0,"handHeavy":0,"drawDeckAware":false,"holdGuard":0,"holdHeavyMaxDrop":null,"heavy":null,"routeHeuristicToSolver":false,"c_guardGauge":"do","w_guardGauge":0,"n_guardGauge":2,"c_guardDefend":"do","w_guardDefend":0,"n_guardDefend":4,"c_guardAttack":"cond","w_guardAttack":0,"c_noDefense":"do","w_noDefense":0,"n_noDefense":3,"c_attackPass":"do","w_attackPass":0,"n_attackPass":4,"c_heavyAtk":"do","w_heavyAtk":2,"c_heavyDef":"avoid","w_heavyDef":2,"c_chain":"cond","w_chain":0,"c_gauge":"cond","w_gauge":0,"c_sup_hiyaku":"cond","w_sup_hiyaku":0,"c_sup_umi":"cond","w_sup_umi":0,"c_sup_futomaki":"cond","w_sup_futomaki":0,"c_sup_megane":"cond","w_sup_megane":0,"c_sup_green":"cond","w_sup_green":0,"c_sup_milk":"cond","w_sup_milk":0,"c_sup_red":"cond","w_sup_red":0,"c_sup_bread":"cond","w_sup_bread":0,"c_sup_hospital":"cond","w_sup_hospital":0,"c_lv3Discard":"cond","w_lv3Discard":0,"c_swap":"cond","w_swap":0,"c_standby":"cond","w_standby":0,"n_standby":6,"c_heavySolve":"never","w_heavySolve":0,"n_heavySolve":4,"hAtkMinHand":null,"hDefMinHand":null,"hAtkBudget":2,"hDefBudget":null,"hPick":"min","gTarget":"weighted","w_gTarget":1,"hUChainStart":0,"hUChainStartDeck":0,"hULv2":0,"hULv3":0,"hULv4":0,"hULv5":0,"c_loEval":"none","w_loEval":0.5,"n_loHorizon":6,"w_loPass":0,"w_loTrend":0,"w_onWinMill":0.8,"deckLowN":6,"deckLowVal":200,"hUSupport":0.8,"hUGreenBase":0.3,"hUGreenNeed":0.8,"hUHiden":1.6,"hUHeavy":0.5,"hUHeavyFloor":0.6,"hUDp0":0.6,"hUDp0Add":1.2,"effVal":false,"hUDeckGreen":0.3,"hUGreenDef":0.5,"supGreenOff":0.5,"supRedDmg":0.9,"supMilkDmg":0.9,"supMilkHand":0.3,"supBread":0.25,"supHospital":0.5,"swapTh":0.6,"lv3DrawVal":0.6,"n_sup_green":2},"葛城・削り":{"name":"標準","atkReserveHeavy":0,"atkFailPenalty":0,"atkLowHand":0,"atkLowHandPen":0,"atkLethalMul":0,"defGuardWin":0,"hUCover":0,"handHeavy":0,"drawDeckAware":false,"holdGuard":0,"holdHeavyMaxDrop":null,"heavy":null,"routeHeuristicToSolver":false,"c_guardGauge":"never","w_guardGauge":0,"n_guardGauge":2,"c_guardDefend":"do","w_guardDefend":800,"n_guardDefend":4,"c_guardAttack":"cond","w_guardAttack":0,"c_noDefense":"do","w_noDefense":0,"n_noDefense":3,"c_attackPass":"do","w_attackPass":0,"n_attackPass":4,"c_heavyAtk":"cond","w_heavyAtk":2,"c_heavyDef":"avoid","w_heavyDef":1,"c_chain":"cond","w_chain":0,"c_gauge":"cond","w_gauge":0,"c_sup_hiyaku":"cond","w_sup_hiyaku":0,"c_sup_umi":"cond","w_sup_umi":0,"c_sup_futomaki":"cond","w_sup_futomaki":0,"c_sup_megane":"cond","w_sup_megane":0,"c_sup_green":"cond","w_sup_green":1,"c_sup_milk":"cond","w_sup_milk":0,"c_sup_red":"cond","w_sup_red":0,"c_sup_bread":"cond","w_sup_bread":0,"c_sup_hospital":"cond","w_sup_hospital":0,"c_lv3Discard":"cond","w_lv3Discard":0,"c_swap":"cond","w_swap":0,"c_standby":"cond","w_standby":0,"n_standby":6,"c_heavySolve":"avoid","w_heavySolve":2,"n_heavySolve":3,"hAtkMinHand":null,"hDefMinHand":null,"hAtkBudget":3,"hDefBudget":null,"hPick":"min","gTarget":"weighted","w_gTarget":1,"hUChainStart":0.6,"hUChainStartDeck":0,"hULv2":0,"hULv3":0,"hULv4":0,"hULv5":0,"c_loEval":"none","w_loEval":0.5,"n_loHorizon":6,"w_loPass":0,"w_loTrend":0,"w_onWinMill":0.8,"deckLowN":6,"deckLowVal":200,"hUSupport":0.8,"hUGreenBase":0.3,"hUGreenNeed":0.8,"hUHiden":1.6,"hUHeavy":0.5,"hUHeavyFloor":0.6,"hUDp0":0.6,"hUDp0Add":1.2,"effVal":true,"hUDeckGreen":0.15,"hUGreenDef":0.5,"supGreenOff":0.5,"supRedDmg":0.9,"supMilkDmg":0.9,"supMilkHand":0.3,"supBread":0.25,"supHospital":0.5,"swapTh":0.6,"lv3DrawVal":0.6,"n_sup_green":2},"雲雀・反撃":{"name":"反撃","atkReserveHeavy":140,"atkFailPenalty":350,"atkLowHand":3,"atkLowHandPen":250,"atkLethalMul":1,"defGuardWin":120,"hUCover":0,"handHeavy":0.4,"drawDeckAware":true,"holdGuard":0,"holdHeavyMaxDrop":null,"heavy":{"atkMinHand":3,"atkBudgetExtra":0,"defMinHand":1,"defBudgetExtra":1},"routeHeuristicToSolver":true,"c_guardGauge":"do","w_guardGauge":0,"n_guardGauge":2,"c_guardDefend":"do","w_guardDefend":0,"n_guardDefend":4,"c_guardAttack":"cond","w_guardAttack":0,"c_noDefense":"cond","w_noDefense":0,"n_noDefense":2,"c_attackPass":"never","w_attackPass":1500,"n_attackPass":4,"c_heavyAtk":"do","w_heavyAtk":2,"c_heavyDef":"do","w_heavyDef":1,"c_chain":"cond","w_chain":0,"c_gauge":"avoid","w_gauge":0.3,"c_sup_hiyaku":"cond","w_sup_hiyaku":0,"c_sup_umi":"cond","w_sup_umi":0,"c_sup_futomaki":"cond","w_sup_futomaki":0,"c_sup_megane":"cond","w_sup_megane":0,"c_sup_green":"do","w_sup_green":1,"c_sup_milk":"cond","w_sup_milk":0,"c_sup_red":"cond","w_sup_red":0,"c_sup_bread":"cond","w_sup_bread":0,"c_sup_hospital":"do","w_sup_hospital":0.3,"c_lv3Discard":"cond","w_lv3Discard":0,"c_swap":"cond","w_swap":0,"c_standby":"cond","w_standby":0,"n_standby":6,"c_heavySolve":"do","w_heavySolve":2,"n_heavySolve":4,"hAtkMinHand":null,"hDefMinHand":null,"hAtkBudget":null,"hDefBudget":null,"hPick":"min","gTarget":"weighted","w_gTarget":1,"hUChainStart":0,"hUChainStartDeck":0,"hULv2":0,"hULv3":0,"hULv4":0,"hULv5":0,"c_loEval":"none","w_loEval":0.5,"n_loHorizon":6,"w_loPass":0,"w_loTrend":0,"w_onWinMill":0.8,"deckLowN":6,"deckLowVal":200,"hUSupport":0.8,"hUGreenBase":0.3,"hUGreenNeed":0.5,"hUHiden":1.6,"hUHeavy":0.5,"hUHeavyFloor":0.8,"hUDp0":0.6,"hUDp0Add":2.5,"effVal":false,"hUDeckGreen":0.15,"hUGreenDef":0.5,"supGreenOff":0.5,"supRedDmg":0.9,"supMilkDmg":0.9,"supMilkHand":0.3,"supBread":0.25,"supHospital":0.5,"swapTh":0.6,"lv3DrawVal":0.6,"n_sup_milk":null}};
+for(const [key,def] of Object.entries(FINAL_DECKS)){const list=def.list;DECKS[key].list=list;DECKS[key].list30=list;FIXED[key].list=list;}
+const DECK_KEYS=Object.keys(FIXED);
+DECKS['雲雀・LO']=DECKS['雲雀・反撃'];
+CHARS['雲雀・LO']=CHARS['雲雀・反撃'];
+/* ---------- コントローラ：人間 ---------- */
+const Human={
+  async prepAction(p,opts,ctx){
+    const r=await uiPrompt(p.idx,{title:'準備フェイズ（スタンバイ／サポート）',buttons:opts});
+    if(r.value==='gauge'){const c=await pickCard(p,ctx.gaugeable,'ゲージに置くカードを選択',true,'やめる');if(!c)return{type:'none'};const g=c.color==='閃'?await this.chooseGauge(p,c):(c.color==='陽'?'yo':'in');return{type:'gauge',card:c,gauge:g};}
+    if(r.value==='support'){const c=await pickCard(p,ctx.sups,'使うサポートカードを選択',true,'やめる');if(!c)return{type:'none'};return{type:'support',card:c};}
+    return{type:r.value};
+  },
+  async chooseGauge(p,card){const r=await uiPrompt(p.idx,{title:`「${card.name}」をどちらのゲージに置きますか`,buttons:[{value:'yo',label:`陽ゲージ（${yo(p)}）`},{value:'in',label:`陰ゲージ（${inn(p)}）`}]});return r.value;},
+  async attack(p,usable,mode){
+    if(mode)return await pickCard(p,usable,'【連撃】追加攻撃に使う緑カードを選択',false);
+    return await pickCard(p,usable,'アタックカードを選択（裏向きで提出）',true,'バトルせずにターン終了');
+  },
+  async defend(p,usable,info){const note=info.mode==='R'?`【連撃】緑カード（+700、こちらの重撃・テキスト不可）が来ます。必要DF${charAT(info.attacker)+700}。緑で受ければ無条件で防御成功。`:'';return await pickCard(p,usable,`${info.attacker.name}のアタック：${note}ディフェンスカードを選択（裏向き）`,true,'ディフェンスしない（確定ヒット）');},
+  async heavy(p,elig,ctx){const need=ctx.isAtk?ctx.df-ctx.at:ctx.at-ctx.df+100;const st=need<=0?'現在このまま勝ち':`あと+${need}で${ctx.isAtk?'成功':'防げる'}（同値は攻撃側の勝ち）`;const dp=ctx.dp===0?'このアタックはDP0（通ってもダメージなし）':`このアタックのDPは${ctx.dp}`;return await pickCard(p,elig,`重撃（${ctx.isAtk?'アタック側':'ディフェンス側'}）：AT${ctx.at} vs DF${ctx.df}。${st}。${dp}`,true,'パス');},
+  async chain(p,avail){const b=[{value:'R',label:'【連撃】緑カードで追加バトル'},{value:null,label:'宣言しない（カードはゲージへ）'}];const r=await uiPrompt(p.idx,{title:'連撃を宣言しますか？（宣言するとこのカードは捨て札）',buttons:b});return r.value;},
+  async pickCards(p,cards,n,title,allowLess){
+    const sel=[];
+    while(sel.length<n){
+      const rest=cards.filter(c=>!sel.includes(c));if(!rest.length)break;
+      const c=await pickCard(p,rest,`${title}（${sel.length}/${n}）`,allowLess||sel.length>0,sel.length?'決定':'0枚で決定');
+      if(!c)break;sel.push(c);
+    }
+    return sel;
+  },
+};
+/* ---------- UI ---------- */
+const $=s=>document.querySelector(s);
+function uiPrompt(pi,spec,needPass=true){
+  return new Promise(res=>{
+    const start=()=>{G.viewer=pi;G.prompt={pi,spec,res};render();};
+    if(G.mode==='hotseat'&&needPass&&G.viewer!==pi){passScreen(pi,start);}else start();
+  });
+}
+function pickCard(p,cards,title,allowNone,noneLabel){
+  return uiPrompt(p.idx,{title,cards:cards.map(c=>c.uid),buttons:allowNone?[{value:null,label:noneLabel||'なし'}]:[]}).then(r=>r.card||null);
+}
+function resolvePrompt(v){const pr=G.prompt;if(!pr)return;G.prompt=null;pr.res(v);}
+function passScreen(pi,cb){
+  const ov=$('#overlay');ov.className='on';
+  ov.innerHTML=`<div class="ov" style="text-align:center"><h2>${P[pi].name}（${P[pi].charName}）の操作です</h2><p class="small">端末を${P[pi].name}に渡してから押してください。相手の手札は見ないようにしましょう。</p><div class="btns" style="justify-content:center"><button class="primary" id="passok">手札を表示する</button></div></div>`;
+  $('#passok').onclick=()=>{ov.className='';ov.innerHTML='';cb();};
+}
+// 手札に出すテキスト（「テキストなし」は空欄にする）
+function cardText(c){const t=(c&&c.text)||'';return /^[（(]?テキストなし[）)]?$/.test(t.trim())?'':t;}
+// 手札の札が、今の状態でテキストにより強化される分（アタックに出したときのAT／ディフェンスに出したときのDF）。
+// 相手の札や重撃しだいの強化は、バトルで公開されるまで分からないので含めない
+// 準備フェイズ（ゲージ置きの判断）で、緑の前提のうちまだゲージにない札に印をつける
+function needMark(p,c){
+  if(!c||c.type!=='battle'||G.cur!==p.idx||G.phase!=='prep')return false;
+  const pr=G.prompt;if(!pr||pr.pi!==p.idx)return false;
+  return chainNeeds(p).includes(c.name)&&!gaugeAll(p).some(x=>x.name===c.name);
+}
+function handBoost(p,c){
+  if(!c||c.type!=='battle')return null;
+  // 重撃として選ぶ場面では、重撃の札は素の値だけが足されるので強化表示を出さない（表示と計算を一致させる）
+  if(G.prompt&&G.prompt.pi===p.idx&&/^重撃/.test(G.prompt.spec.title))return null;
+  return cardBoost(p,c);
+}
+function cardHTML(c,opts={}){
+  if(opts.back)return `<div class="card back ${opts.small?'small':''}"></div>`;
+  const sel=opts.sel?'sel':'';const dis=opts.dis?'dis':(opts.dimu&&!opts.sel?'dimu':'');
+  if(c.type==='support')return `<div class="card c${c.color} ${sel} ${dis} ${opts.small?'small':''} ${opts.text?'big':''}" data-uid="${c.uid}"><span class="ty">SUP</span><div class="nm">${c.name}</div><div class="gp">${c.color} 陽${c.gp.yo}/陰${c.gp.in}</div><div class="small">サポート</div>${opts.text?`<div class="tx">${cardText(c)}</div>`:''}</div>`;
+  if(c.type==='char')return `<div class="card ${sel} ${opts.small?'small':''}" data-uid="${c.uid}"><span class="ty">CHR</span><div class="nm">${c.name} Lv${c.lv}</div><div class="st">${c.at}/${c.df}</div></div>`;
+  const ic=c.icons.map(i=>i==='R'?'連':i==='U'?'重':i).join(' ');
+  const tx=opts.text?`<div class="tx">${cardText(c)}</div>`:'';
+  const eb=opts.boost||{};const nb=opts.need?'<span class="needb">連撃条件</span>':'';const num=(v,b)=>b?`<b class="up">+${v+b}</b>`:`+${v}`;
+  return `<div class="card c${c.color} ${sel} ${dis} ${opts.small?'small':''} ${opts.text?'big':''}" data-uid="${c.uid}"><span class="ty">${c.color}</span><div class="nm">${c.name}</div>${nb}<div class="st">${num(c.at,eb.at)}/${num(c.df,eb.df)}${c.dp!==1?` DP${c.dp}`:''}</div><div class="gp">陽${c.gp.yo}/陰${c.gp.in} ${c.tech}</div><div class="ic">${ic||'&nbsp;'}</div>${tx}</div>`;
+}
+function usableNow(p,c){
+  if(c.type==='support')return gpOK(p,c)&&(!c.canUse||c.canUse(p));
+  if(c.type==='battle'){if(c.color==='飛')return (baseUsable(p,c)&&G.bs&&G.bs.mode==='R'&&G.bs.atk.p===p)||(G.bs&&G.bs.stage==='def'&&G.bs.def.p===p);return baseUsable(p,c);}
+  return true;
+}
+function sortedHand(p){const pr=G.prompt;const selIds=(pr&&pr.pi===p.idx&&pr.spec.cards)?pr.spec.cards:null;const h=p.hand.map((c,i)=>({c,i,u:selIds?(selIds.includes(c.uid)?0:(usableNow(p,c)?1:2)):(usableNow(p,c)?0:1)}));h.sort((a,b)=>a.u-b.u||(needMark(p,b.c)-needMark(p,a.c))||a.i-b.i);return h.map(x=>x.c);}
+function copyText(t,btn,cb){const done=ok=>{if(btn){btn.textContent=ok?'コピーしました':'コピー失敗（長押しで選択してください）';setTimeout(()=>btn.textContent='ログをコピー',2000);}if(cb)cb(ok);};
+  try{navigator.clipboard.writeText(t).then(()=>done(true),()=>fallback());}catch(e){fallback();}
+  function fallback(){try{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();const ok=document.execCommand('copy');document.body.removeChild(ta);done(ok);}catch(e){done(false);}}}
+/* ---------- 再現ログ ---------- */
+const SETTINGS={autoCopy:true,anim:'normal'};
+let REC={ops:[]};
+function replayText(){return Replay.build(G.meta,P,CONFIG,REC.ops);}
+function fullLogText(){return G.log.map(l=>l.s).join('\n')+'\n\n'+replayText();}
+let autoStat='';
+function autoCopy(why){if(!SETTINGS.autoCopy||G.replaying)return;copyText(fullLogText(),null,ok=>{autoStat=`自動コピー${ok?'成功':'失敗'}（${why}）`;const el=$('#autostat');if(el)el.textContent=autoStat;});}
+function findCard(uid){for(const p of P){for(const arr of [p.hand,p.deck,p.discard,p.damage,p.gYo,p.gIn,p.charDeck])for(const c of arr)if(c.uid==uid)return c;for(const s of p.supports)if(s.card.uid==uid)return s.card;}if(G.bs){for(const s of [G.bs.atk,G.bs.def]){if(s.card&&s.card.uid==uid)return s.card;for(const h of s.heavy)if(h.uid==uid)return h;}}return null;}
+const UI={chainOpen:true}; // 連撃条件は最初から開いておく（ボタンで閉じられる）
+const POWER_LAST=new Map();
+function powerBox(p,kind,value){
+ const key=p.idx+':'+kind;const prev=POWER_LAST.get(key);
+ POWER_LAST.set(key,value);
+ const changed=prev!==undefined&&prev!==value;
+ const delta=changed?value-prev:0;
+ return `<div class="power ${kind.toLowerCase()} ${changed?'changed':''}"><span class="power-label">${kind}</span><span class="power-num" data-power="${key}" data-from="${changed?prev:value}" data-to="${value}">${value}</span><span class="power-delta">${delta>0?'+'+delta:delta<0?String(delta):'&nbsp;'}</span></div>`;
+}
+function animatePowers(){
+ const reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ document.querySelectorAll('[data-power]').forEach(el=>{
+   const from=Number(el.dataset.from),to=Number(el.dataset.to);
+   if(from===to||reduced)return;
+   // 右端の一の位から順番に桁を回す。各桁は必ず最終的な数字で止まる。
+   const direction=to>from?1:-1;
+   const a=String(Math.abs(Math.trunc(from))),b=String(Math.abs(Math.trunc(to)));
+   const digits=Math.max(a.length,b.length);
+   const before=a.padStart(digits,'0'),after=b.padStart(digits,'0');
+   el.textContent='';el.setAttribute('aria-label',String(to));
+   for(let i=0;i<digits;i++){
+     const fromDigit=Number(before[i]),toDigit=Number(after[i]);
+     const place=digits-1-i;
+     const windowEl=document.createElement('span');windowEl.className='od-digit';windowEl.setAttribute('aria-hidden','true');
+     const strip=document.createElement('span');strip.className='od-strip';
+     // 0～9を複数周並べて、繰り上がり・繰り下がりを自然に見せる。
+     for(let n=0;n<40;n++){const cell=document.createElement('span');cell.className='od-cell';cell.textContent=String(n%10);strip.appendChild(cell);}
+     windowEl.appendChild(strip);el.appendChild(windowEl);
+     const startIndex=20+fromDigit;
+     let steps=direction>0?(toDigit-fromDigit+10)%10:(fromDigit-toDigit+10)%10;
+     // 上位の桁も変化したときは下位の桁を一周させる。
+     if(steps===0&&place===0)steps=10;
+     const endIndex=startIndex+direction*steps;
+     const height=1.18;
+     strip.style.transform=`translateY(${-startIndex*height}em)`;
+     const delay=place*105; // 一の位を先に、十・百・千の位へ
+     const duration=480+Math.min(steps,10)*32;
+     if(typeof strip.animate==='function'){
+       const anim=strip.animate([
+         {transform:`translateY(${-startIndex*height}em)`},
+         {transform:`translateY(${-endIndex*height}em)`}
+       ],{duration,delay,easing:'cubic-bezier(.19,.75,.2,1)',fill:'forwards'});
+       anim.onfinish=()=>{strip.style.transform=`translateY(${-endIndex*height}em)`;anim.cancel();};
+     }else{
+       strip.style.transition=`transform ${duration}ms ease ${delay}ms`;
+       requestAnimationFrame(()=>{strip.style.transform=`translateY(${-endIndex*height}em)`;});
+     }
+   }
+ });
+}
+function shownPower(p,kind){
+ const bs=G.bs;
+ if(bs&&bs.stage!=='def'){
+   if(kind==='ATK'&&bs.atk.p===p&&Number.isFinite(bs.at))return bs.at;
+   if(kind==='DEF'&&bs.def.p===p&&Number.isFinite(bs.df))return bs.df;
+ }
+ // Selecting an attack before the battle is resolved uses the base stat; no speculative calculation.
+ return kind==='ATK'?charAT(p):charDF(p);
+}
+// 連撃（緑）の条件札: そのデッキに入っている緑の needs を集める（表示専用）
+function chainNeeds(p){const d=DECKS[p.deckKey];const out=[];for(const [n] of (d.list30||d.list)){const t=CARDS[n];if(t&&t.color==='飛'&&t.needs)for(const x of t.needs)if(!out.includes(x))out.push(x);}return out;}
+function chainBanned(p){return !!(G.noChainTurn&&G.cur===p.idx);}
+// 視点: 下（自分側）の席。CPU戦は人間、2人交代は操作中の人、観戦はP1
+function bottomIdx(){return G.viewer!=null?G.viewer:0;}
+// このバトルで p が出している札（ATK/DEFの横に置く）
+function bslotHTML(p){
+  const bs=G.bs;if(!bs)return '';
+  const side=bs.atk.p===p?bs.atk:bs.def.p===p?bs.def:null;if(!side)return '';
+  const isAtk=side===bs.atk;let main='';
+  const bb=(bs.stage!=='def'&&bs.boost)?(isAtk?{at:bs.boost.atk.at}:{df:bs.boost.def.df}):null;
+  if(isAtk)main=cardHTML(side.card,{small:true,back:bs.stage==='def',boost:bb});
+  else main=bs.stage==='def'?'<div class="wait">ディフェンス<br>選択中…</div>':(side.card?cardHTML(side.card,{small:true,boost:bb}):'<div class="wait">ディフェンス<br>なし</div>');
+  return `<div class="bslot">${main}${side.heavy.map(h=>`<div class="hv">${cardHTML(h,{small:true})}</div>`).join('')}</div>`;
+}
+function boardHTML(p,isMe,showHand){
+  const ch=p.charDeck[0];
+  const sups=p.supports.map(s=>`<span class="sup" data-uid="${s.card.uid}">${s.card.name}</span>`).join('');
+  const turn=p.idx===G.cur?`turn ${p.idx===bottomIdx()?'mine':'theirs'}`:'';
+  const power=p.idx===G.cur?powerBox(p,'ATK',shownPower(p,'ATK')):powerBox(p,'DEF',shownPower(p,'DEF'));
+  const handInfo=showHand?`<span class="stat">手札 <b>${p.hand.length}</b></span>`:`<span class="stat">手札</span><span class="minihand">${p.hand.slice(0,10).map(()=>'<i></i>').join('')}<b>${p.hand.length}</b></span>`;
+  const stats=`<span class="chip yo" data-zone="yo" data-p="${p.idx}">陽 ${yo(p)}</span>
+    <span class="chip in" data-zone="in" data-p="${p.idx}">陰 ${inn(p)}</span>
+    ${(isMe&&showHand&&chainNeeds(p).length)?`<span class="chip chain ${UI.chainOpen?'on':''} ${chainBanned(p)?'ban':''}" id="chainbtn">${chainBanned(p)?'連撃不可':'連撃'}</span>`:''}
+    ${handInfo}<span class="stat">山札 <b>${p.deck.length}</b></span>
+    <span class="chip" data-zone="discard" data-p="${p.idx}">捨て札 ${p.discard.length}</span>
+    <span class="stat">キャラ残 <b>${p.charDeck.length}</b></span>${sups}`;
+  const charPanel=`<div class="char-panel"><div class="char-identity" style="flex-direction:column;align-items:flex-start;gap:4px">
+      <div class="row"><span class="name">${p.name}${p.ai?'（CPU）':''}</span><span class="chip dmg" data-zone="damage" data-p="${p.idx}">ダメージ ${p.damage.length}/${CONFIG.winDamage}</span></div>
+      <span class="chip" data-uid="${ch.uid}">${p.charName} Lv${ch.lv}　<small>詳細</small></span>
+      ${(isMe&&showHand&&UI.chainOpen&&chainNeeds(p).length)?`<div class="needs">${chainNeeds(p).map(n=>`<span class="${gaugeAll(p).some(x=>x.name===n)?'lit':'off'}">${n}</span>`).join('')}</div>`:''}</div>
+    ${bslotHTML(p)}<div class="char-numbers" data-pw="${p.idx}">${power}</div></div>`;
+  if(!isMe&&!showHand){ // 相手（手札は枚数だけ小さく）
+    return `<div class="board op ${turn}">${charPanel}<div class="row" style="margin-top:4px">${stats}</div></div>`;
+  }
+  return `<div class="board ${isMe?'me':'op'} ${turn}">
+   ${isMe?'':charPanel}
+   ${isMe?charPanel:''}
+   <div class="row" style="margin-top:4px">${stats}</div>
+   ${(isMe&&showHand&&chainBanned(p))?`<div class="banmsg">このターンは連撃できません（${G.noChainBy||'相手の効果'}）</div>`:''}
+   ${showHand?`<div class="hand">${sortedHand(p).map(c=>{const pr=G.prompt;const selectable=pr&&pr.pi===p.idx&&pr.spec.cards&&pr.spec.cards.includes(c.uid);const dim=pr&&pr.pi===p.idx&&pr.spec.cards&&!selectable;return cardHTML(c,{sel:selectable,dis:dim,dimu:!usableNow(p,c),text:true,boost:handBoost(p,c),need:needMark(p,c)});}).join('')||'<span class="small">手札なし</span>'}</div>`:''}
+  </div>`;
+}
+const PHASES=[['draw','ドロー'],['prep','準備'],['battle','バトル'],['end','終了']];
+function arenaHTML(){
+  const bs=G.bs;const cp=P[G.cur];const mine=G.cur===bottomIdx();
+  const who=cp?(G.mode==='cpu'?(mine?'あなたのターン':'相手のターン'):`${cp.name}のターン`):'';
+  const bar=`<div class="phasebar ${mine?'mine':'theirs'}"><span class="who">T${G.turn} ${who}</span>${PHASES.map(([k,l])=>`<span class="${G.phase===k?'on':''}">${l}</span>`).join('')}</div>`;
+  let res='';
+  if(bs&&bs.stage==='result')res=`<div class="result" style="color:${bs.success?'#ff8a80':'#80d8ff'}">${bs.success?`アタック成功！ DP${bs.dp}`:'アタック失敗'}${bs.chainFrom||bs.mode==='R'?'（連撃）':''}</div>`;
+  else if(G.noBattle&&!bs)res=`<div class="small" style="text-align:center">バトル禁止中（病院の待合室にて）</div>`;
+  const lg=G.log.slice(-2).map(l=>`<div class="${l.hl?'hl':''}">${l.s}</div>`).join('');
+  return `<div class="mid">${bar}${res}<div class="log" id="logtail" title="タップで全ログ">${lg}</div></div>`;
+}
+// ATK/DEFの内訳（表示と計算を一致させる）
+function showPowerDetail(p){
+  const bs=G.bs;let h=`<h2>${p.name}（${p.charName} Lv${p.charDeck[0].lv}）</h2><div class="detail">`;
+  if(bs&&bs.stage!=='def'&&(bs.atk.p===p||bs.def.p===p)&&bs.at!=null){
+    const isA=bs.atk.p===p;h+=`<p><b>${isA?'AT':'DF'} ${isA?bs.at:bs.df}</b> ＝ ${(isA?bs.atDetail:bs.dfDetail).join('＋')}</p><p class="small">相手：${isA?'DF '+bs.df+' ＝ '+bs.dfDetail.join('＋'):'AT '+bs.at+' ＝ '+bs.atDetail.join('＋')}</p><p class="small">同値はアタック側の勝ち。</p>`;
+  }else h+=`<p>キャラの値：AT ${charAT(p)}／DF ${charDF(p)}</p><p class="small">${p.idx===G.cur?'このターンはアタック側なのでATKを表示しています。':'このターンはディフェンス側なのでDEFを表示しています。'}バトル中は札・重撃・効果を足した値になります。</p>`;
+  openOv(h+'</div>');
+}
+// ターン開始・フェイズの帯（演出のみ。ゲームの進行は表示が終わるまで待つ）
+function bannerMs(kind){if(G.replaying||SETTINGS.anim==='off'||!G.delay)return 0;const base=kind==='turn'?900:500;return SETTINGS.anim==='short'?Math.round(base/2):base;}
+async function showBanner(kind,text,sub){
+  const ms=bannerMs(kind);if(!ms)return;const mine=G.cur===bottomIdx();
+  const el=$('#banner');el.className=`on ${mine?'mine':'theirs'} ${kind==='phase'?'phase':''}`;
+  el.innerHTML=`<div class="band" style="--bd:${ms}ms">${text}${sub?`<small>${sub}</small>`:''}</div>`;
+  await sleep(ms);el.className='';el.innerHTML='';
+}
+function actionsHTML(){
+  const pr=G.prompt;
+  if(!pr){return `<div id="actions"><div class="small">${G.over?'ゲーム終了':(P[G.cur]&&P[G.cur].ai?'CPU思考中…':'…')}</div></div>`;}
+  const btns=pr.spec.buttons.map((b,i)=>`<button class="${b.primary?'primary':''}" data-bi="${i}">${b.label}</button>`).join('');
+  let hint='',extra='';
+  if(pr.spec.cards){
+    // 選べるカードを操作バー内に並べる（手札が画面外に隠れても選べるように）
+    const cs=pr.spec.cards.map(findCard).filter(Boolean).sort((a,b)=>needMark(P[pr.pi],b)-needMark(P[pr.pi],a));
+    const outside=cs.filter(c=>!P[pr.pi].hand.includes(c)); // 手札にない札（ゲージの札など）を選ぶ時は常に並べる
+    if(outside.length)extra=`<div class="small">選べるカード（${cs.length}枚）</div><div class="hand">${cs.map(c=>cardHTML(c,{sel:true,boost:handBoost(P[pr.pi],c),need:needMark(P[pr.pi],c)})).join('')}</div>`;
+    else if(cs.length)extra=`<div class="dup" style="display:none"><div class="small">手札が隠れているので、選べるカード（${cs.length}枚）をここにも出しています</div><div class="hand">${cs.map(c=>cardHTML(c,{sel:true,boost:handBoost(P[pr.pi],c),need:needMark(P[pr.pi],c)})).join('')}</div></div>`;
+  }
+  return `<div id="actions"><div class="title">${P[pr.pi].name}：${pr.spec.title}</div>${hint}${extra}<div class="btns">${btns}</div></div>`;
+}
+// 手札が操作バーの下に隠れているときだけ、操作バーに選べる札を出す（狭い画面・バトル中に陣地が伸びた時）
+function fitDup(){const d=document.querySelector('#actions .dup');if(!d)return;const h=document.querySelector('.board.me .hand');const a=$('#actions');
+  const hidden=!h||h.getBoundingClientRect().bottom>a.getBoundingClientRect().top+4||h.getBoundingClientRect().top>window.innerHeight;d.style.display=hidden?'':'none';}
+window.addEventListener('resize',()=>fitDup());window.addEventListener('scroll',()=>fitDup(),{passive:true});
+// ---- 戻る（テストプレイ用）：記録した操作を途中で切って、同じ種から再生し直す ----
+function humanSeats(){return (G.meta&&G.meta.ctl||[]).map((c,i)=>c==='H'?i:-1).filter(i=>i>=0);}
+function canUndo(){const pr=G.prompt;return !!(pr&&P[pr.pi]&&!P[pr.pi].ai&&!G.over&&G.mode!=='watch'&&!G.replaying);}
+function undoTarget(kind){
+  const hs=humanSeats();const ops=REC.ops;
+  if(kind==='step'){for(let j=ops.length-1;j>=0;j--)if(hs.includes(+ops[j][0]))return j;return -1;}
+  const ms=REC.marks.filter(m=>hs.includes(m.p)&&m.i<ops.length);return ms.length?ms[ms.length-1].i:(ops.length?0:-1);
+}
+function doUndo(kind){
+  if(!canUndo())return;const k=undoTarget(kind);if(k<0)return;
+  const m=G.meta;const mode=G.mode;closeOv();
+  G.prompt=null; // 待っていた入力は破棄（古い進行はそのまま止まる）
+  newGame(mode,m.decks[0],m.decks[1],m.first,UI.delay,'solver',{seed:m.seed,decks:m.decks,first:m.first,ctl:m.ctl,ops:REC.ops.slice(0,k)},(m.undo||0)+1);
+}
+function render(){
+  if(!P.length)return;
+  const v=G.viewer;const me=P[v],op=P[1-v];
+  const showMe=!me.ai||G.spectate;const showOp=G.spectate;
+  $('#app').innerHTML=`<header><h1>UVS ${Replay.LOG_VERSION}</h1>${G.mode!=='watch'?`<button id="btnundo" ${canUndo()&&undoTarget('step')>=0?'':'disabled'}>1手戻す</button><button id="btnturn" ${canUndo()&&undoTarget('turn')>=0?'':'disabled'}>ターン最初へ</button>`:''}<button id="btnlog">ログ</button><button id="btnrule">ルール</button><button id="btnreset">最初から</button><span id="autostat" class="small">${autoStat}</span></header>
+   ${boardHTML(op,false,showOp)}${arenaHTML()}${boardHTML(me,true,showMe)}${actionsHTML()}`;
+  const lt=$('#logtail');if(lt)lt.scrollTop=lt.scrollHeight;
+  animatePowers();
+  document.querySelectorAll('#actions button').forEach(b=>b.onclick=()=>{const pr=G.prompt;const sp=pr.spec.buttons[+b.dataset.bi];resolvePrompt({value:sp.value});});
+  document.querySelectorAll('[data-uid]').forEach(el=>el.onclick=()=>{const uid=+el.dataset.uid;const pr=G.prompt;if(pr&&pr.spec.cards&&pr.spec.cards.includes(uid)&&el.classList.contains('sel')){resolvePrompt({card:findCard(uid)});return;}showDetail(findCard(uid));});
+  document.querySelectorAll('[data-zone]').forEach(el=>el.onclick=()=>showZone(P[+el.dataset.p],el.dataset.zone));
+  const cb=$('#chainbtn');if(cb)cb.onclick=()=>{UI.chainOpen=!UI.chainOpen;render();};
+  fitDup();
+  document.querySelectorAll('[data-pw]').forEach(el=>el.onclick=()=>showPowerDetail(P[+el.dataset.pw]));
+  if(lt)lt.onclick=showLog;
+  const bu=$('#btnundo');if(bu)bu.onclick=()=>doUndo('step');const bt=$('#btnturn');if(bt)bt.onclick=()=>doUndo('turn');
+  $('#btnlog').onclick=showLog;$('#btnrule').onclick=showRules;$('#btnreset').onclick=()=>{if(G.prompt)resolvePrompt({value:'__abort'});location.reload();};
+}
+function openOv(html){const ov=$('#overlay');ov.className='on';ov.innerHTML=`<div class="ov">${html}<div class="btns"><button class="primary" id="ovclose">閉じる</button></div></div>`;$('#ovclose').onclick=closeOv;ov.onclick=e=>{if(e.target===ov)closeOv();};}
+function closeOv(){const ov=$('#overlay');ov.className='';ov.innerHTML='';}
+function showDetail(c){if(!c)return;let h=`<h2>${c.name}</h2><dl class="detail">`;
+  if(c.type==='char')h+=`<dt>種類</dt><dd>キャラクター Lv${c.lv}（${c.id}）</dd><dt>AT/DF</dt><dd>${c.at}/${c.df}</dd>`;
+  else if(c.type==='support')h+=`<dt>種類</dt><dd>サポート（${c.id}） 属性:${c.color}</dd><dt>使用条件</dt><dd>陽${c.gp.yo}/陰${c.gp.in}</dd>`;
+  else h+=`<dt>種類</dt><dd>バトル（${c.id}） 属性:${c.color} 技属性:${c.tech}</dd><dt>AT/DF/DP</dt><dd>+${c.at}/+${c.df}/DP${c.dp}</dd><dt>使用条件</dt><dd>陽${c.gp.yo}/陰${c.gp.in}${c.needs?`、忍ゲージに${c.needs.join('・')}`:''}</dd><dt>アイコン</dt><dd>${c.icons.map(i=>i==='R'?'連撃':i==='U'?'重撃':i).join('・')||'なし'}</dd>`;
+  h+=`<dt>テキスト</dt><dd>${c.text||'（なし）'}</dd></dl>`;openOv(h);}
+function showZone(p,z){const arr=z==='yo'?p.gYo:z==='in'?p.gIn:z==='damage'?p.damage:p.discard;const t=z==='yo'?'陽ゲージ':z==='in'?'陰ゲージ':z==='damage'?'ダメージエリア':'捨て札';openOv(`<h2>${p.name}の${t}（${arr.length}）</h2><div class="hand" style="flex-wrap:wrap">${arr.map(c=>cardHTML(c,{small:true})).join('')||'<span class="small">なし</span>'}</div>`);document.querySelectorAll('#overlay [data-uid]').forEach(el=>el.onclick=e=>{e.stopPropagation();showDetail(findCard(+el.dataset.uid));});}
+function showLog(){openOv(`<h2>ログ</h2><div class="btns" style="margin:0 0 8px"><button id="copylog" class="primary">ログをコピー</button></div><div class="log" style="max-height:60vh;user-select:text;-webkit-user-select:text">${G.log.map(l=>`<div class="${l.hl?'hl':''}">${l.s}</div>`).join('')}</div>`);const d=$('#overlay .log');d.scrollTop=d.scrollHeight;$('#copylog').onclick=e=>{e.stopPropagation();copyText(fullLogText(),e.target);};}
+function showRules(){openOv(`<h2>採用ルール v2（閃乱カグラ版＋リメイク決定事項）</h2><div class="detail"><p><b>v1.9</b>：緑の巻物は案1、固定デッキ・AIはv1.9aサイクル12の最終設定。キャラ能力は全員NEW版に統一。登場時・勝利時・スタンバイ能力の詳細はキャラカードを確認してください。牛乳による再登場でも登場時能力が発動します。</p>
+<p><b>勝利</b>：5ダメージを受けたプレイヤーは即敗北。自分のドローフェイズ開始時に山札0枚ならLOとして終了し、相手に与えたダメージ（終了時の相手ダメージエリア枚数）が多い側の勝利。同点はLOした側の敗北。LO判定は病院解除などの開始時効果より先。ドローフェイズ以外の山札0枚ではLOしません。</p>
+<p><b>準備</b>：キャラデッキLv1〜5（5枚）＋固定山札30枚。初期手札4枚、マリガンなし。先攻1ターン目は1ドローでバトルなし。以後毎ターン2ドロー。</p>
+<p><b>ダメージ</b>：Lv1〜4の被弾では先頭のキャラカードがダメージエリアへ移り、次のレベルが登場。最後のキャラで被弾した場合は5ダメージで即敗北。ダメージ処理で山札は消費せず、山札不足による第三の敗北条件はありません。</p>
+<p><b>準備フェイズ</b>：バトルカード1枚をゲージへ（1回）、サポート1枚（1回）、Lv5の合図など。</p>
+<p><b>バトル</b>：攻守が裏向きで同時に出して公開。AT≧DFで攻撃成功（同値は攻撃側）。ディフェンスを出さなければ確定ヒット。</p>
+<p><b>重撃</b>：1枚目は何でもよく、2枚目以降は重撃アイコン必須。GP条件は無視、枚数無制限。攻撃側から交互に追加し、両者が続けてパスで終了。2枚目以降は＋AT/＋DFのみ有効、バトル後は捨て札。</p>
+<p><b>連撃（v2）</b>：連撃アイコンを持つ技で攻撃成功後、手札の緑カードで追加攻撃できる（元のカードは捨て札）。追加攻撃に使えるのは緑のみ。緑にも連撃があれば続けられる。緑の攻撃時使用条件は「忍ゲージに指定カード」。</p>
+<p><b>緑による防御（v2）</b>：緑は条件なしでディフェンスに出せる。相手の攻撃札が緑なら無条件で防御成功（連撃はそこで終了）。吹飛の無効化は緑には効かない。通常の攻撃に対して緑を出してもDF+0。</p>
+<p><b>秘伝忍法（紫）</b>：陽4/陰4に加え、忍ゲージから閃・陽・陰を1枚ずつ捨てる。DP2。勝利時のハンデスは1枚（v2）。</p>
+<p><b>山札</b>：標準30枚（v2）。40枚（原作）も選択可。</p>
+<p><b>カードの移動</b>：陽→陽ゲージ、陰→陰ゲージ、閃→どちらか選択、緑・紫→捨て札。GPは消費されない閾値。</p>
+<p class="small">※テキストに「推定」とあるカードは、原文を判読できず数値や条件を補っています。カードをタップすると詳細を確認できます。</p>
+</div>`);}
+function showGameOver(){const o=G.over;if(!o)return;const w=P[1-o.loser];openOv(`<h2>${w.name}（${w.charName}）の勝利！</h2><p>${P[o.loser].name}の敗北：${o.why}</p><p class="small">ターン${G.turn}。ログボタンから全経過を確認できます。</p>`);}
+
+/* ---------- 開始画面 ---------- */
+function startScreen(){
+  $('#app').innerHTML=`<header><h1>UVS Engine — 固定デッキ5種（${Replay.LOG_VERSION}・再現ログ・汎用AI）</h1></header>
+  <div class="board"><h3 style="margin:6px 0">Unlimited VS 再現エンジン（試作）</h3>
+   <p class="small">リメイク向けルールv2で、固定デッキ5種（飛鳥・連撃／柳生・射撃／斑鳩・対抗封じ／葛城・削り／雲雀・反撃、各30枚＋キャラ5枚）を対戦させます。1台の端末で交代して遊ぶか、CPUと対戦できます。</p>
+   <h4>モード</h4>
+   <label><input type="radio" name="mode" value="cpu" checked> CPU対戦（あなたがプレイヤー1）</label>
+   <label><input type="radio" name="mode" value="hotseat"> 2人対戦（端末を交代）</label>
+   <label><input type="radio" name="mode" value="watch"> CPU同士を観戦</label>
+   <h4>デッキ</h4>
+   <label>プレイヤー1：<select id="d1">${DECK_KEYS.map(k=>`<option value="${k}">${k}</option>`).join('')}</select></label>
+   <label>プレイヤー2：<select id="d2">${DECK_KEYS.map((k,i)=>`<option value="${k}"${i===4?' selected':''}>${k}</option>`).join('')}</select></label>
+   <label>先攻：<select id="first"><option value="random">ランダム</option><option value="0">プレイヤー1</option><option value="1">プレイヤー2</option></select></label>
+   <label>CPUの思考：<select id="cpu"><option value="solver" selected>ソルバー（計測と同じ）</option><option value="ai">経験則AI（旧）</option></select></label>
+   <label>CPUの待ち時間：<select id="delay"><option value="400">短い</option><option value="900" selected>普通</option><option value="1600">長い</option></select></label>
+   <label>ターン・フェイズの演出：<select id="anim"><option value="normal" ${SETTINGS.anim==='normal'?'selected':''}>普通</option><option value="short" ${SETTINGS.anim==='short'?'selected':''}>短い</option><option value="off" ${SETTINGS.anim==='off'?'selected':''}>なし</option></select></label>
+   <label><input type="checkbox" id="autocopy" ${SETTINGS.autoCopy?'checked':''}> ターン終了ごとにログをクリップボードへ自動コピー（テスト版）</label>
+   <div class="btns" style="margin-top:12px"><button class="primary" id="start">ゲーム開始</button><button id="rulesbtn">ルールを見る</button><button id="deckbtn">デッキ内容</button></div>
+   <h4>ログから再開</h4>
+   <textarea id="resume" rows="3" style="width:100%;box-sizing:border-box;font-size:12px" placeholder="コピーしたログ（#UVS … replay 以降を含む全文）を貼り付け"></textarea>
+   <div class="btns"><button id="resumebtn">貼り付けたログから再開</button><span id="resumeerr" class="small"></span></div>
+  </div>`;
+  $('#start').onclick=()=>{const mode=document.querySelector('input[name=mode]:checked').value;SETTINGS.autoCopy=$('#autocopy').checked;SETTINGS.anim=$('#anim').value;CONFIG.deckSize=30;newGame(mode,$('#d1').value,$('#d2').value,$('#first').value,+$('#delay').value,$('#cpu').value);};
+  $('#resumebtn').onclick=()=>{SETTINGS.autoCopy=$('#autocopy').checked;SETTINGS.anim=$('#anim').value;try{const m=Replay.parse($('#resume').value);const mode=m.ctl.every(c=>c!=='H')?'watch':m.ctl.every(c=>c==='H')?'hotseat':'cpu';CONFIG.deckSize=30;newGame(mode,m.decks[0],m.decks[1],m.first,+$('#delay').value,'solver',m);}catch(e){$('#resumeerr').textContent=e.message;}};
+  $('#rulesbtn').onclick=showRules;
+  $('#deckbtn').onclick=()=>{let h='<h2>固定デッキ内容（各30枚＋キャラ5枚）</h2>';for(const k of DECK_KEYS){const d=DECKS[k];h+=`<h3>${k}</h3><p class="small">固定30枚はv1.9aサイクル12の最終構成。キャラ能力は全員NEW。</p><table><tr><th>Lv</th><th>AT/DF</th><th>効果</th></tr>`;for(const c of CHARS[k])h+=`<tr><td>${c.lv}</td><td>${c.at}/${c.df}</td><td class="small">${c.text||'—'}</td></tr>`;h+='</table><table><tr><th>枚</th><th>カード</th><th>色GP</th><th>AT/DF</th><th>ｱｲｺﾝ</th><th>効果</th></tr>';for(const [n,c] of d.list30){const t=CARDS[n];h+=`<tr><td>${c}</td><td>${n}</td><td>${t.color}${t.gp.yo}/${t.gp.in}</td><td>${t.type==='battle'?`+${t.at}/+${t.df}${t.dp!==1?' DP'+t.dp:''}`:'SUP'}</td><td>${t.type==='battle'?t.icons.join(''):'—'}</td><td class="small">${(t.text||'').replace(/【使用条件】.*?。/,'')}</td></tr>`;}h+='</table>';}openOv(h);};
+}
+function newGame(mode,d1,d2,first,delay,cpu='solver',resume=null,undo=0){
+  CONFIG.deckSize=30;
+  const seed=resume?resume.seed:Math.floor(Math.random()*2147483647);
+  const rng=Replay.mulberry32(seed);
+  if(resume&&resume.rngFirst==='random')first='random';
+  const rngFirst=(first==='random'||first==null)?'random':'fixed';
+  if(rngFirst==='fixed')first=+first;
+  // 座席ごとのコントローラ: H=人間, S=ソルバー, A=経験則AI
+  const codes=resume?resume.ctl:[mode==='watch'?(cpu==='solver'?'S':'A'):'H',(mode==='watch'||mode==='cpu')?(cpu==='solver'?'S':'A'):'H'];
+  const base=c=>c==='H'?Human:c==='S'?Solver.makeSolver({sampleFix:true,profiles:FINAL_PROFILES}):AI; // 汎用AI（係数表。雲雀だけ専用の値）＋防御側サンプリング修正
+  const label=c=>c==='H'?'人間':c==='S'?'CPU(ソルバー)':'CPU(経験則AI)';
+  const ai=codes.map(c=>c!=='H');
+  REC={ops:[],marks:[]};UI.delay=delay;
+  const rstate=resume?{ops:resume.ops,i:0,live:false}:null;
+  // CPUの席は再生中もCPUに同じ問いを投げて乱数を進める（再開・戻るの後もCPUが同じ手を返す）
+  const ctls=codes.map((c,i)=>{let ctl=base(c);if(rstate)ctl=Replay.makeReplayer(ctl,rstate,i,()=>{G.replaying=false;G.delay=UI.delay;render();},c!=='H');return Replay.makeRecorder(ctl,REC,i);});
+  setupGame({mode,decks:[d1,d2],ai,ctls,ctlLabels:codes.map(label),first,delay,spectate:mode==='watch',rng,
+    hooks:{render:()=>{if(!G.replaying)render();},
+      turnStart:async({p})=>{REC.marks.push({turn:G.turn,p,i:REC.ops.length});if(G.replaying)return;render();const mine=p===bottomIdx();await showBanner('turn',G.mode==='cpu'?(mine?'あなたのターン':'相手のターン'):`${P[p].name}のターン`,`ターン${G.turn}　${P[p].charName} Lv${P[p].charDeck[0].lv}`);},
+      phase:async ph=>{if(G.replaying)return;render();if(ph==='battle')await showBanner('phase','バトルフェイズ');},gameOver:()=>{G.replaying=false;render();showGameOver();autoCopy('決着');},turnEnd:()=>autoCopy(`T${G.turn}終了`),
+      showResult:async bs=>{if(G.replaying)return;const humans=P.filter(x=>!x.ai);if(!humans.length){await sleep(G.delay*2);return;}const viewer=G.mode==='hotseat'?G.viewer:humans[0].idx;await uiPrompt(viewer,{title:`${bs.success?'アタック成功':'アタック失敗'}：AT${bs.at} vs DF${bs.df}${(bs.success&&G.noChainTurn&&bs.atk.p===P[G.cur])?`　※${G.noChainBy||'相手の効果'}により、このターンは連撃できません`:''}`,buttons:[{value:'ok',label:'次へ',primary:true}]},false);}}});
+  G.meta={seed,decks:[d1,d2],first:G.first,rngFirst,ctl:codes,cards:P.map(Replay.cardMap),undo};
+  G.replaying=!!(rstate&&rstate.ops.length);if(G.replaying)G.delay=0;
+  if(resume)log(undo?`（戻る：操作${resume.ops.length}件まで再生。戻る${undo}回目）`:`（ログから再開：操作${resume.ops.length}件を再生）`,true);
+  if(mode==='hotseat')G.viewer=G.first;
+  render();runGame();
+}
+startScreen();
+
+</script>
+<script>
+
+'use strict';
+// v1.8 新UI（2026-11-06）。描画とHuman（人間の操作）だけを差し替える。エンジン・AI・再現ログの形式は変えない
+(function(){
+const COLC={'陽':'c陽','陰':'c陰','閃':'c閃'};
+const kindOf=p=>p.idx===G.cur?'ATK':'DEF';
+function nvPower(p,who,right){
+  const k=kindOf(p);const hl=(G.turnSwapHL&&G.turnSwapHL>Date.now())?'hl':'';
+  return `<div class="nv-power ${right?'right':''} ${hl} ${k.toLowerCase()}" data-pw="${p.idx}"><span class="who">${who}</span>${powerBox(p,k,shownPower(p,k))}</div>`;
+}
+function nvGval(p,who,right){return `<div class="nv-gval ${right?'right':''}"><span class="who">${who}のゲージ</span><div class="v"><span class="y" data-zone="yo" data-p="${p.idx}">陽 ${yo(p)}</span><span class="n" data-zone="in" data-p="${p.idx}">陰 ${inn(p)}</span></div></div>`;}
+function nvInfo(p,greenTop){
+  const nums=`<div class="nums"><span>山札 <b>${p.deck.length}</b></span><span class="z" data-zone="discard" data-p="${p.idx}">捨札 <b>${p.discard.length}</b></span><span class="z" data-zone="damage" data-p="${p.idx}">ダメ <b>${p.damage.length}</b></span></div>`;
+  const nd=chainNeeds(p);let gr='';
+  if(nd.length){const ban=chainBanned(p);gr=`<div class="gr ${ban?'ban':''}">${ban?'連撃不可 ':'緑 '}${nd.map(n=>{const ok=gaugeAll(p).some(x=>x.name===n);return `<span class="${ok?'lit':'off'}">${n}${ok?'✓':'✗'}</span>`;}).join(' ')}</div>`;}
+  else gr='<div class="gr"><span class="off">緑なし</span></div>';
+  return `<div class="nv-info">${greenTop?gr+nums:nums+gr}</div>`;
+}
+function nvGauge(p,z){const arr=z==='yo'?p.gYo:p.gIn;
+  return `<div class="nv-g ${z}" data-zone="${z}" data-p="${p.idx}"><div class="h">${z==='yo'?'陽':'陰'}</div><div class="col">${arr.map(c=>`<div class="stub ${COLC[c.color]||'cx'}">${c.name}</div>`).join('')}</div></div>`;}
+function nvChar(p,flip,lit,picked){const ch=p.charDeck[0];const sups=p.supports.map(s=>s.card.name).join('・');
+  return `<div class="nv-char ${flip?'flip':''} ${lit?'lit':''} ${picked?'picked':''}" ${lit?'data-charv="1"':`data-uid="${ch.uid}"`}><div class="t"><b>${p.charName}</b><span>Lv${ch.lv}</span></div><div class="s">AT ${charAT(p)}・DF ${charDF(p)}</div><div class="x">${cardText(ch)||''}</div>${sups?`<div class="sup">使用中：${sups}</div>`:''}${lit&&G.prompt.spec.charLabel?`<div class="sup">タップ：${G.prompt.spec.charLabel}</div>`:''}</div>`;}
+function nvBattle(){const bs=G.bs;if(!bs)return '';
+  const side=(s,isAtk)=>{let main;const bb=(bs.stage!=='def'&&bs.boost)?(isAtk?{at:bs.boost.atk.at}:{df:bs.boost.def.df}):null;
+    if(isAtk)main=cardHTML(s.card,{small:true,back:bs.stage==='def',boost:bb});
+    else main=bs.stage==='def'?'<div class="wait">ディフェンス<br>選択中</div>':(s.card?cardHTML(s.card,{small:true,boost:bb}):'<div class="wait">ディフェンス<br>なし</div>');
+    return `<div class="side">${isAtk?'アタック':'ディフェンス'}（${s.p.name}）${main}${s.heavy.length?`<span>重撃 ${s.heavy.length}枚</span>`:''}</div>`;};
+  let res='';if(bs.stage==='result')res=`<div class="res" style="color:${bs.success?'#ff8a80':'#80d8ff'}">${bs.success?`アタック成功 DP${bs.dp}`:'アタック失敗'}${bs.mode==='R'?'（連撃）':''}</div>`;
+  return `<div class="nv-battle"><div class="cs">${side(bs.atk,true)}${side(bs.def,false)}</div>${res}</div>`;}
+function nvChoice(pr,me){ // 札を選ばない問い（ゲージの陽陰、結果の確認など）と、手札にない札を選ぶ問いは中央に出す
+  if(!pr||pr.pi!==me.idx)return '';const sp=pr.spec;
+  const outside=(sp.cards||[]).map(findCard).filter(c=>c&&!me.hand.includes(c));
+  if(sp.cards&&!outside.length)return '';
+  const cs=outside.length?`<div class="cards">${outside.map(c=>cardHTML(c,{sel:true,small:true})).join('')}</div>`:'';
+  const bs=(sp.buttons||[]).map((b,i)=>`<button class="${b.primary||(!sp.cards&&i===0)?'primary':''}" data-bi="${i}">${b.label}</button>`).join('');
+  return `<div class="nv-choice"><div class="q">${sp.title}</div>${cs}<div class="bs">${bs}</div></div>`;}
+function nvHand(p,show){
+  if(!show)return `<div class="nv-hand"><span class="small" style="margin:auto">相手の操作中</span></div>`;
+  const pr=G.prompt;const mine=pr&&pr.pi===p.idx;const sel=mine&&pr.spec.cards?pr.spec.cards:null;
+  // 使える札を右から並べる：選べない・使えない札を左、選べる札を右へ
+  const h=p.hand.map((c,i)=>({c,i,r:sel?(sel.includes(c.uid)?2:(usableNow(p,c)?1:0)):(usableNow(p,c)?1:0)}));
+  h.sort((a,b)=>a.r-b.r||(needMark(p,a.c)-needMark(p,b.c))||a.i-b.i);
+  const pk=pickKey();const cards=h.map(({c})=>{const s=!!(sel&&sel.includes(c.uid));const html=cardHTML(c,{sel:s,dis:!!(sel&&!s),dimu:!usableNow(p,c),text:true,boost:handBoost(p,c),need:needMark(p,c)});return (pk==='c'+c.uid)?html.replace('class="card ','class="card picked '):html;}).join('');
+  const pass=(mine&&pr.spec.cards)?(pr.spec.buttons||[]).map((b,i)=>`<div class="nv-pass ${b.primary?'primary':''} ${pickKey()==='b'+i?'picked':''}" data-bi="${i}" role="button">${b.label}</div>`).join(''):'';
+  return `<div class="nv-hand" id="nvhand">${cards||'<span class="small" style="margin:auto 0">手札なし</span>'}${pass}</div>`;}
+// 2026-11-06：誤操作対策。選べる札・「出さない」札・キャラ能力は、1回目のタップで持ち上げ、同じものをもう一度タップで決定
+function pickKey(){const pr=G.prompt;if(!pr||UI.pickFor!==pr)return null;return UI.pick||null;}
+function setPick(k){UI.pickFor=G.prompt;UI.pick=k;render();}
+function pickHint(k){const pr=G.prompt;if(!k||!pr)return '';
+  if(k.startsWith('c')){const c=findCard(+k.slice(1));if(!c)return '';const prep=G.phase==='prep'&&pr.spec.charValue!==undefined;
+    const act=prep?(c.type==='support'?'を使う':(c.color==='閃'?'をゲージに置く（陽・陰を選ぶ）':`を${c.color}ゲージに置く`)):'を選ぶ';
+    return `もう一度タップで決定：「${c.name}」${act}`;}
+  if(k.startsWith('b')){const b=pr.spec.buttons[+k.slice(1)];return b?`もう一度タップで決定：${b.label}`:'';}
+  if(k==='ch')return `もう一度タップで決定：${pr.spec.charLabel||'キャラ能力'}`;return '';}
+function nvRender(){
+  if(!P.length)return;
+  const app=$('#app');app.classList.add('nv');
+  const v=bottomIdx();const me=P[v],op=P[1-v];const showMe=!me.ai||G.spectate;
+  const mine=G.cur===v;const PH={draw:'ドロー',prep:'準備',battle:'バトル',end:'終了'};
+  const who=G.mode==='cpu'?(mine?'あなたのターン':'相手のターン'):`${P[G.cur]?P[G.cur].name:''}のターン`;
+  const pr=G.prompt;const lit=!!(pr&&pr.pi===me.idx&&pr.spec.charValue);
+  const ph=pickHint(pickKey());const ptxt=pr&&pr.pi===me.idx?(ph?`<b class="pk">${ph}</b>`:`${pr.spec.title}`):(G.over?'ゲーム終了':(P[G.cur]&&P[G.cur].ai?'CPU思考中…':(G.log.length?G.log[G.log.length-1].s:'')));
+  app.innerHTML=`
+  <div class="nv-bar">${G.mode!=='watch'?`<button id="btnundo" ${canUndo()&&undoTarget('step')>=0?'':'disabled'}>1手戻す</button><button id="btnturn" ${canUndo()&&undoTarget('turn')>=0?'':'disabled'}>ターン最初へ</button>`:''}<button id="btnlog">ログ</button><button id="btnrule">ルール</button><button id="btnreset">最初から</button><span class="sp"></span><span id="autostat">${autoStat}</span><span>${Replay.LOG_VERSION}</span></div>
+  <div class="nv-opbar"><span><span class="nv-turn ${mine?'mine':'theirs'}">T${G.turn} ${who}・${PH[G.phase]||''}</span>　${op.name}${op.ai?'（CPU）':''}</span><span class="nv-backs">手札 ${op.hand.slice(0,8).map(()=>'<i></i>').join('')}<b>${op.hand.length}</b></span></div>
+  <div class="nv-row">${nvPower(op,'相手のパワー',false)}${nvInfo(op,true)}${nvGval(op,'相手',true)}</div>
+  <div class="nv-mid"><div class="nv-gs">${nvGauge(me,'yo')}${nvGauge(me,'in')}</div>
+   <div class="nv-center">${nvChar(op,true,false)}<span class="nv-vs">VS</span>${nvChar(me,false,lit,pickKey()==='ch')}${nvBattle()}${nvChoice(pr,me)}</div>
+   <div class="nv-gs">${nvGauge(op,'yo')}${nvGauge(op,'in')}</div></div>
+  <div class="nv-row">${nvGval(me,'自分',false)}${nvInfo(me,false)}${nvPower(me,'自分のパワー',true)}</div>
+  <div class="nv-prompt ${pr&&pr.pi===me.idx?'':'idle'}" id="nvprompt">${ptxt}</div>
+  ${nvHand(me,showMe)}`;
+  animatePowers();
+  app.querySelectorAll('[data-bi]').forEach(b=>b.onclick=e=>{e.stopPropagation();const p2=G.prompt;if(!p2)return;const k='b'+b.dataset.bi;if(b.classList.contains('nv-pass')&&pickKey()!==k){setPick(k);return;}const sp=p2.spec.buttons[+b.dataset.bi];UI.pick=null;resolvePrompt({value:sp.value});});
+  app.querySelectorAll('[data-uid]').forEach(el=>el.onclick=e=>{e.stopPropagation();const uid=+el.dataset.uid;const p2=G.prompt;if(p2&&p2.spec.cards&&p2.spec.cards.includes(uid)&&el.classList.contains('sel')){const k='c'+uid;if(pickKey()!==k){setPick(k);return;}UI.pick=null;resolvePrompt({card:findCard(uid)});return;}showDetail(findCard(uid));});
+  app.querySelectorAll('[data-charv]').forEach(el=>el.onclick=()=>{const p2=G.prompt;if(!(p2&&p2.spec.charValue))return;if(pickKey()!=='ch'){setPick('ch');return;}UI.pick=null;resolvePrompt({value:p2.spec.charValue});});
+  app.querySelectorAll('[data-zone]').forEach(el=>el.onclick=e=>{e.stopPropagation();showZone(P[+el.dataset.p],el.dataset.zone);});
+  app.querySelectorAll('[data-pw]').forEach(el=>el.onclick=()=>showPowerDetail(P[+el.dataset.pw]));
+  const np=$('#nvprompt');if(np)np.onclick=showLog;
+  const hd=$('#nvhand');if(hd)hd.scrollLeft=hd.scrollWidth;
+  const bu=$('#btnundo');if(bu)bu.onclick=()=>doUndo('step');const bt=$('#btnturn');if(bt)bt.onclick=()=>doUndo('turn');
+  $('#btnlog').onclick=showLog;$('#btnrule').onclick=showRules;$('#btnreset').onclick=()=>{if(G.prompt)resolvePrompt({value:'__abort'});location.reload();};
+}
+render=nvRender;
+const _start=startScreen;startScreen=function(){$('#app').classList.remove('nv');return _start.apply(this,arguments);};
+// 攻守交代：ターン開始の帯と一緒に、パワー表示を枠で強調する
+const _banner=showBanner;showBanner=async function(kind,text,sub){if(kind==='turn'&&bannerMs('turn')>0){G.turnSwapHL=Date.now()+1500;render();setTimeout(()=>{if(G.turnSwapHL&&G.turnSwapHL<=Date.now()){G.turnSwapHL=0;render();}},1600);}return _banner.apply(this,arguments);};
+// ---- 人間の操作：すべて手札から ----
+Human.prepAction=async function(p,opts,ctx){
+  const has=v=>opts.find(o=>o.value===v);const go=has('go');const lv=has('lv5');
+  const cards=[...(has('gauge')?ctx.gaugeable:[]),...(has('support')?ctx.sups:[])];
+  const what=[has('gauge')?'ゲージに置く札':'',has('support')?'使うサポート':''].filter(Boolean).join('／');
+  const r=await uiPrompt(p.idx,{title:`準備：${what?what+'をタップ':'置ける札・使える札なし'}${lv?'（キャラ能力も使えます）':''}`,cards:cards.map(c=>c.uid),buttons:[{value:'go',label:go?go.label:'次へ',primary:true}],charValue:lv?'lv5':null,charLabel:lv?lv.label:null});
+  if(r.card){if(r.card.type==='support')return{type:'support',card:r.card};const g=r.card.color==='閃'?await this.chooseGauge(p,r.card):(r.card.color==='陽'?'yo':'in');return{type:'gauge',card:r.card,gauge:g};}
+  if(r.value==='lv5')return{type:'lv5'};
+  return{type:r.value==='__abort'?'__abort':'go'};
+};
+Human.chain=async function(p,avail){
+  const greens=p.hand.filter(c=>c.color==='飛'&&canAttack(p,c,'R'));
+  const r=await uiPrompt(p.idx,{title:'連撃：追加攻撃に使う緑をタップ（宣言するとこの攻撃札は捨て札）',cards:greens.map(c=>c.uid),buttons:[{value:null,label:'連撃しない'}]});
+  if(r.card){UI.preGreen=r.card.uid;return 'R';}UI.preGreen=null;return null;
+};
+const _attack=Human.attack;
+Human.attack=async function(p,usable,mode){
+  if(mode&&UI.preGreen!=null){const c=usable.find(x=>x.uid===UI.preGreen);UI.preGreen=null;if(c)return c;}
+  return _attack.call(this,p,usable,mode);
+};
+})();
+
+
+</script>
+<script>
+
+'use strict';
+// v1.8 新UI 第2段階（2026-11-06）：札の使用・移動とキャラ能力の演出。ゲームの進行（エンジン・乱数・再現ログ）は変えない
+// 仕組み：G.log に積まれる行から演出を作って順に再生する。次の判断（人間・CPUとも）の前に、演出が終わるのを待つ
+(function(){
+const FX={q:[],busy:false,waiters:[]};window.FX=FX;
+const base=()=>{if(!G||G.replaying||SETTINGS.anim==='off')return 0;return SETTINGS.anim==='short'?150:300;}; // 1演出0.3秒（短め設定は半分）
+let layer=null;function L(){if(!layer){layer=document.createElement('div');layer.id='fx';document.body.appendChild(layer);}return layer;}
+const pOf=s=>P.find(p=>s.startsWith(p.name+'：'));
+const rectOf=sel=>{const e=document.querySelector(sel);return e?e.getBoundingClientRect():null;};
+const centerRect=()=>rectOf('#app .nv-center')||{left:innerWidth/2-60,top:innerHeight/2-80,width:120,height:160};
+function zoneRect(p,z){if(!p)return null;
+  if(z==='yo'||z==='in')return rectOf(`#app .nv-g.${z}[data-p="${p.idx}"] .col`);
+  if(z==='hand')return p.idx===bottomIdx()?rectOf('#nvhand'):rectOf('#app .nv-backs');
+  return rectOf(`#app .nv-info [data-zone="${z}"][data-p="${p.idx}"]`);}
+function cardEl(name,big){const t=CARDS[name];const d=document.createElement('div');d.className='fx-card';
+  d.innerHTML=t?cardHTML(t,{text:big}):`<div class="card"><div class="nm">${name}</div></div>`;return d;}
+function place(el,cx,cy){el.style.left=cx+'px';el.style.top=cy+'px';}
+const anim=(el,kf,ms)=>new Promise(r=>{if(!ms||typeof el.animate!=='function'){r();return;}const a=el.animate(kf,{duration:ms,easing:'cubic-bezier(.2,.8,.2,1)',fill:'forwards'});a.onfinish=r;a.oncancel=r;});
+// 演出の種類
+async function showCenter(names,label,ms){ // 中央に札を出す（使用・公開・重撃）
+  const c=centerRect();const box=document.createElement('div');box.className='fx-center';place(box,c.left+c.width/2,c.top+c.height/2);
+  box.innerHTML=(label?`<div class="fx-label">${label}</div>`:'')+'<div class="fx-row"></div>';const row=box.querySelector('.fx-row');
+  for(const n of names){if(n)row.appendChild(cardEl(n,true));else{const w=document.createElement('div');w.className='fx-none';w.textContent='ディフェンスなし';row.appendChild(w);}}
+  L().appendChild(box);await anim(box,[{opacity:0,transform:'translate(-50%,-50%) scale(.6)'},{opacity:1,transform:'translate(-50%,-50%) scale(1)'}],ms*0.4);
+  await new Promise(r=>setTimeout(r,ms*0.6));await anim(box,[{opacity:1},{opacity:0}],ms*0.3);box.remove();}
+async function fly(name,from,to,ms){ // 札が置き場へ動く
+  if(!to)return;const f=from||centerRect();const el=cardEl(name,false);el.classList.add('fx-fly');L().appendChild(el);
+  const fx=f.left+f.width/2,fy=f.top+f.height/2,tx=to.left+to.width/2,ty=to.top+to.height/2;place(el,fx,fy);
+  await anim(el,[{transform:'translate(-50%,-50%) scale(1)',opacity:1},{transform:`translate(calc(-50% + ${tx-fx}px),calc(-50% + ${ty-fy}px)) scale(.35)`,opacity:.3}],ms);el.remove();}
+async function ability(p,text,ms){ // キャラ能力：キャラを中央に出し、効果を添える
+  const c=centerRect();const ch=p.charDeck[0];const box=document.createElement('div');box.className='fx-center fx-ability';place(box,c.left+c.width/2,c.top+c.height/2);
+  box.innerHTML=`<div class="fx-label">${p.charName}${ch?' Lv'+ch.lv:''}</div><div class="fx-abtext">${text}</div>`;L().appendChild(box);
+  await anim(box,[{opacity:0,transform:'translate(-50%,-50%) scale(.7)'},{opacity:1,transform:'translate(-50%,-50%) scale(1)'}],ms*0.3);
+  await new Promise(r=>setTimeout(r,ms*0.7));await anim(box,[{opacity:1},{opacity:0}],ms*0.3);box.remove();}
+async function pop(target,text,cls,ms){ // 数字の横に小さく出す（常在効果・ダメージ）
+  if(!target)return;const el=document.createElement('div');el.className='fx-pop '+(cls||'');el.textContent=text;place(el,target.left+target.width/2,target.top);L().appendChild(el);
+  await anim(el,[{opacity:0,transform:'translate(-50%,0)'},{opacity:1,transform:'translate(-50%,-18px)'},{opacity:0,transform:'translate(-50%,-30px)'}],ms);el.remove();}
+// G.log の行 → 演出
+function fromLog(s){
+  const ms=base();if(!ms||!P.length)return;const p=pOf(s);let m;
+  if((m=s.match(/^公開：(.+?)「(.+?)」.*? vs (.+?)(?:「(.+?)」|：ディフェンスなし)/)))return push(()=>showCenter([m[2],m[4]||null],'オープン',ms*2));
+  if(p&&(m=s.match(/：重撃「(.+?)」/)))return push(()=>showCenter([m[1]],`${p.name}：重撃`,ms));
+  if(p&&(m=s.match(/：サポート「(.+?)」を使用/)))return push(()=>showCenter([m[1]],`${p.name}：サポート`,ms*2));
+  if(p&&(m=s.match(/：「(.+?)」を(陽|陰)ゲージに置いた/))){const z=m[2]==='陽'?'yo':'in';return push(()=>fly(m[1],zoneRect(p,'hand'),zoneRect(p,z),ms));}
+  if(p&&(m=s.match(/：「(.+?)」→(陽|陰)ゲージ/))){const z=m[2]==='陽'?'yo':'in';return push(()=>fly(m[1],null,zoneRect(p,z),ms));}
+  if(p&&(m=s.match(/：「(.+?)」→捨て札/)))return push(()=>fly(m[1],null,zoneRect(p,'discard'),ms));
+  if(p&&(m=s.match(/：重撃カード(\d+)枚→捨て札/)))return push(()=>fly('重撃',null,zoneRect(p,'discard'),ms));
+  if((m=s.match(/^(.+?)：「(.+?)」DP\d+で/))){const q=P.find(x=>x.name===m[1]);if(q)return push(()=>pop(zoneRect(q,'damage'),'ダメージ','dmg',ms*2));}
+  if((m=s.match(/^判定：AT\d+（(.+?)） vs DF\d+（(.+?)）/))){const a=m[1].match(/効果\+(\d+)/),d=m[2].match(/効果\+(\d+)/);const bs=G.bs;
+    if(a&&bs)push(()=>pop(rectOf(`#app [data-pw="${bs.atk.p.idx}"]`),`効果 +${a[1]}`,'eff',ms*2));
+    if(d&&bs)push(()=>pop(rectOf(`#app [data-pw="${bs.def.p.idx}"]`),`効果 +${d[1]}`,'eff',ms*2));return;}
+  if(p&&/(Lv\d+の効果|忍転身|破れ|合図|スタンバイ能力|登場時)/.test(s)&&!/捨てなかった|効果：.*ない$/.test(s))return push(()=>ability(p,s.slice(p.name.length+1),ms*2));
+}
+function push(f){FX.q.push(f);if(!FX.busy)run();}
+async function run(){FX.busy=true;while(FX.q.length){const f=FX.q.shift();try{await f();}catch(e){}}FX.busy=false;const w=FX.waiters;FX.waiters=[];w.forEach(r=>r());}
+FX.drain=()=>FX.busy||FX.q.length?new Promise(r=>FX.waiters.push(r)):Promise.resolve();
+// G.log に積むたびに演出を作る（エンジンの log と、カード定義側の log の両方がここを通る）
+const _setup=setupGame;setupGame=function(){const r=_setup.apply(this,arguments);FX.q=[];if(layer)layer.innerHTML='';
+  const arr=G.log;arr.push=function(...xs){const n=Array.prototype.push.apply(this,xs);for(const x of xs)try{fromLog(String(x&&x.s!=null?x.s:x));}catch(e){}return n;};return r;};
+// 次の判断の前に演出を待つ（人間・CPUとも）
+const _mr=Replay.makeRecorder;Replay.makeRecorder=function(){const w=_mr.apply(this,arguments);
+  return new Proxy(w,{get(t,k){const v=t[k];if(typeof v==='function'&&['prepAction','chooseGauge','attack','defend','heavy','chain','pickCards'].includes(k))return async function(...a){await FX.drain();return v.apply(t,a);};return v;}});};
+})();
+
+
+</script>
+</body>
+</html>
+
