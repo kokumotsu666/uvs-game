@@ -159,6 +159,23 @@ header button:disabled{opacity:.35}
 #cardpeek .card .nm{font-size:18px;white-space:normal;padding-right:24px}
 #cardpeek .card .tx{display:block;font-size:14px;line-height:1.65;white-space:normal}
 #cardpeek .cardpeek-hint{font-size:11px;color:var(--dim);margin:10px 0 0}
+.hiden-cost{width:min(520px,calc(100% - 24px));max-height:calc(100dvh - 24px);padding:0;border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--fg);overflow:hidden}
+.hiden-cost[open]{display:flex;flex-direction:column}
+.hiden-cost::backdrop{background:#000b}
+.hiden-cost header,.hiden-cost footer{flex:none;padding:10px 14px;background:var(--panel2)}
+.hiden-cost header{display:block;position:static}
+.hiden-cost h2,.hiden-cost h3{margin:0 0 6px}
+.hiden-cost footer button{width:100%;min-height:44px}
+.hiden-cost-scroll{min-height:0;overflow:auto;overscroll-behavior:contain;padding:12px 14px}
+.hiden-cost-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin:0 0 14px}
+.hiden-cost-entry{display:grid;grid-template-columns:minmax(0,1fr) 44px;align-items:start;gap:4px}
+.hiden-cost-card{position:relative;text-align:left;padding:0;min-width:0}
+.hiden-cost-card .card{width:100%;min-height:82px}
+.hiden-cost-card .nm{white-space:normal;overflow-wrap:anywhere;padding-right:12px}
+.hiden-cost-card[aria-pressed="true"]{outline:3px solid var(--acc);outline-offset:1px}
+.hiden-cost-card[aria-pressed="true"]::after{content:"✓";position:absolute;right:4px;top:4px;border-radius:50%;background:var(--acc);color:var(--bg);padding:0 4px}
+.hiden-cost-info{min-height:44px;padding:0}
+.hiden-cost [hidden]{display:none}
 </style>
 <style>
 /* v1.8 新UI（2026-11-06）：モック https://claude.ai/artifact/2916UR435Sqh5DB9wBAGLw の配置 */
@@ -1878,6 +1895,15 @@ const Human={
   async heavy(p,elig,ctx){const need=ctx.isAtk?ctx.df-ctx.at:ctx.at-ctx.df+100;const st=need<=0?'現在このまま勝ち':`あと+${need}で${ctx.isAtk?'成功':'防げる'}（同値は攻撃側の勝ち）`;const dp=ctx.dp===0?'このアタックはDP0（通ってもダメージなし）':`このアタックのDPは${ctx.dp}`;return await pickCard(p,elig,`重撃（${ctx.isAtk?'アタック側':'ディフェンス側'}）：AT${ctx.at} vs DF${ctx.df}。${st}。${dp}`,true,'パス');},
   async chain(p,avail){const b=[{value:'R',label:'【連撃】緑カードで追加バトル'},{value:null,label:'宣言しない（カードはゲージへ）'}];const r=await uiPrompt(p.idx,{title:'連撃を宣言しますか？（宣言するとこのカードは捨て札）',buttons:b});return r.value;},
   async pickCards(p,cards,n,title,allowLess){
+    if(/^秘伝「.+」のコスト：捨てる.+属性のカードを選択$/.test(title)){
+      return pickGaugeCards(p,p,cards,n,title,'秘伝忍法・コスト選択');
+    }
+    if(title==='本能のままに：研究斑鳩Lv3で捨てるゲージ'){
+      return pickGaugeCards(p,p,cards,n,title,'斑鳩Lv3・忍ゲージ破壊');
+    }
+    if(title==='研究斑鳩Lv5：相手ゲージを破壊'){
+      return pickGaugeCards(p,P[1-p.idx],cards,n,title,'斑鳩Lv5・忍ゲージ破壊');
+    }
     const sel=[];
     while(sel.length<n){
       const rest=cards.filter(c=>!sel.includes(c));if(!rest.length)break;
@@ -2128,11 +2154,12 @@ function render(){
 }
 function openOv(html){const ov=$('#overlay');ov.className='on';ov.innerHTML=`<div class="ov">${html}<div class="btns"><button class="primary" id="ovclose">閉じる</button></div></div>`;$('#ovclose').onclick=closeOv;ov.onclick=e=>{if(e.target===ov)closeOv();};}
 function closeOv(){const ov=$('#overlay');ov.className='';ov.innerHTML='';}
-function showDetail(c){if(!c)return;let h=`<h2>${c.name}</h2><dl class="detail">`;
+function cardDetailHTML(c){let h=`<h2>${c.name}</h2><dl class="detail">`;
   if(c.type==='char')h+=`<dt>種類</dt><dd>キャラクター Lv${c.lv}（${c.id}）</dd><dt>AT/DF</dt><dd>${c.at}/${c.df}</dd>`;
   else if(c.type==='support')h+=`<dt>種類</dt><dd>サポート（${c.id}） 属性:${c.color}</dd><dt>使用条件</dt><dd>陽${c.gp.yo}/陰${c.gp.in}</dd>`;
   else h+=`<dt>種類</dt><dd>バトル（${c.id}） 属性:${c.color} 技属性:${c.tech}</dd><dt>AT/DF/DP</dt><dd>+${c.at}/+${c.df}/DP${c.dp}</dd><dt>使用条件</dt><dd>陽${c.gp.yo}/陰${c.gp.in}${c.needs?`、忍ゲージに${c.needs.join('・')}`:''}</dd><dt>アイコン</dt><dd>${c.icons.map(i=>i==='R'?'連撃':i==='U'?'重撃':i).join('・')||'なし'}</dd>`;
-  h+=`<dt>テキスト</dt><dd>${c.text||'（なし）'}</dd></dl>`;openOv(h);}
+  return h+`<dt>テキスト</dt><dd>${c.text||'（なし）'}</dd></dl>`;}
+function showDetail(c){if(c)openOv(cardDetailHTML(c));}
 function showZone(p,z){const arr=z==='yo'?p.gYo:z==='in'?p.gIn:z==='damage'?p.damage:p.discard;const t=z==='yo'?'陽ゲージ':z==='in'?'陰ゲージ':z==='damage'?'ダメージエリア':'捨て札';openOv(`<h2>${p.name}の${t}（${arr.length}）</h2><div class="hand" style="flex-wrap:wrap">${arr.map(c=>cardHTML(c,{small:true})).join('')||'<span class="small">なし</span>'}</div>`);document.querySelectorAll('#overlay [data-uid]').forEach(el=>el.onclick=e=>{e.stopPropagation();showDetail(findCard(+el.dataset.uid));});}
 function showLog(){openOv(`<h2>ログ</h2><div class="btns" style="margin:0 0 8px"><button id="copylog" class="primary">ログをコピー</button></div><div class="log" style="max-height:60vh;user-select:text;-webkit-user-select:text">${G.log.map(l=>`<div class="${l.hl?'hl':''}">${l.s}</div>`).join('')}</div>`);const d=$('#overlay .log');d.scrollTop=d.scrollHeight;$('#copylog').onclick=e=>{e.stopPropagation();copyText(fullLogText(),e.target);};}
 function showRules(){openOv(`<h2>採用ルール v2（閃乱カグラ版＋リメイク決定事項）</h2><div class="detail"><p><b>${Replay.LOG_VERSION}</b>：緑の巻物は案1、固定デッキ・AIはv1.11サイクル14の設定。キャラ能力は全員NEW版に統一。登場時・勝利時・スタンバイ能力の詳細はキャラカードを確認してください。牛乳による再登場でも登場時能力が発動します。</p>
@@ -2258,6 +2285,113 @@ function nvHand(p,show){
 
 let cardPeek=null,cardPeekPrompt=null;
 function closeCardPeek(){if(cardPeek)cardPeek.remove();cardPeek=null;cardPeekPrompt=null;}
+async function pickGaugeCards(p,owner,cards,n,title,heading){
+  const gauge=[...owner.gYo,...owner.gIn];
+  if(!Number.isInteger(n)||n<1||new Set(cards.map(c=>c.uid)).size<n||cards.some(c=>!gauge.includes(c))){
+    throw new Error(`忍ゲージ選択の候補が無効: T${G.turn} ${title} 必要=${n} 候補=${cards.map(c=>c.uid).join(',')}`);
+  }
+  closeCardPeek();
+  closeOv();
+  const {cards:chosen}=await uiPrompt(p.idx,{title,gaugePick:{owner,cards,n,heading}});
+  return chosen;
+}
+let gaugePickView=null;
+function syncGaugePickView(prompt){
+  if(gaugePickView?.prompt===prompt)return;
+  if(gaugePickView){
+    gaugePickView.dialog.close();
+    gaugePickView.dialog.remove();
+    gaugePickView=null;
+  }
+  if(!prompt?.spec.gaugePick)return;
+  const {owner,cards,n,heading}=prompt.spec.gaugePick;
+  const candidates=new Map(cards.map(card=>[card.uid,card]));
+  const allCards=new Map([...owner.gYo,...owner.gIn].map(card=>[card.uid,card]));
+  const selected=new Set();
+  const dialog=document.createElement('dialog');
+  dialog.className='hiden-cost';
+  dialog.setAttribute('aria-labelledby','hiden-cost-title');
+  const gauge=(label,group)=>`<h3>${label}</h3><div class="hiden-cost-grid">${group.map(card=>`
+    <div class="hiden-cost-entry">
+      <button type="button" class="hiden-cost-card" data-cost-uid="${card.uid}" aria-pressed="false"${candidates.has(card.uid)?'':' disabled'}>${cardHTML(card)}</button>
+      <button type="button" class="hiden-cost-info" data-info-uid="${card.uid}" aria-label="${card.name}の詳細">ⓘ</button>
+    </div>`).join('')||'<span>カードなし</span>'}</div>`;
+  dialog.innerHTML=`<header>
+    <h2 id="hiden-cost-title" tabindex="-1">${heading}</h2>
+    <div>${prompt.spec.title}</div><div>選択者：${P[prompt.pi].name} ／ 対象：${owner.name}の忍ゲージ</div><div data-cost-count aria-live="polite"></div>
+  </header>
+  <div class="hiden-cost-scroll" data-cost-list>
+    ${gauge('陽ゲージ',owner.gYo)}${gauge('陰ゲージ',owner.gIn)}
+  </div>
+  <div class="hiden-cost-scroll" data-cost-detail hidden></div>
+  <footer>
+    <button type="button" class="primary" data-cost-confirm disabled>選択確定</button>
+    <button type="button" data-cost-back hidden>選択画面に戻る</button>
+  </footer>`;
+  const list=dialog.querySelector('[data-cost-list]');
+  const detail=dialog.querySelector('[data-cost-detail]');
+  const confirm=dialog.querySelector('[data-cost-confirm]');
+  const back=dialog.querySelector('[data-cost-back]');
+  let infoButton;
+  function update(){
+    dialog.querySelector('[data-cost-count]').textContent=`選択 ${selected.size} / 必要 ${n} 枚`;
+    confirm.disabled=selected.size!==n;
+    for(const button of dialog.querySelectorAll('[data-cost-uid]')){
+      const uid=Number(button.dataset.costUid);
+      const chosen=selected.has(uid);
+      button.setAttribute('aria-pressed',String(chosen));
+      button.disabled=!candidates.has(uid)||(!chosen&&selected.size===n);
+    }
+  }
+  dialog.addEventListener('cancel',event=>event.preventDefault());
+  dialog.addEventListener('click',event=>{
+    const button=event.target.closest('button');
+    if(!button||button.disabled||G.prompt!==prompt)return;
+    if(button===back){
+      detail.hidden=true;
+      detail.innerHTML='';
+      list.hidden=false;
+      back.hidden=true;
+      confirm.hidden=false;
+      infoButton.focus();
+      return;
+    }
+    if(!detail.hidden)return;
+    if(button===confirm){
+      if(selected.size!==n)return;
+      const chosen=Array.from(selected,uid=>candidates.get(uid));
+      if(chosen.some(card=>!card||(!owner.gYo.includes(card)&&!owner.gIn.includes(card)))){
+        console.error('忍ゲージ選択が無効', {turn:G.turn,title:prompt.spec.title,selected:[...selected]});
+        return;
+      }
+      resolvePrompt({cards:chosen});
+      syncGaugePickView(null);
+      return;
+    }
+    if(button.dataset.infoUid){
+      const card=allCards.get(Number(button.dataset.infoUid));
+      if(!card)return;
+      infoButton=button;
+      list.hidden=true;
+      confirm.hidden=true;
+      detail.innerHTML=cardDetailHTML(card);
+      detail.hidden=false;
+      back.hidden=false;
+      back.focus();
+      return;
+    }
+    const uid=Number(button.dataset.costUid);
+    if(!candidates.has(uid))return;
+    if(selected.has(uid))selected.delete(uid);
+    else if(selected.size<n)selected.add(uid);
+    update();
+  });
+  gaugePickView={prompt,dialog};
+  document.body.appendChild(dialog);
+  update();
+  dialog.showModal();
+  dialog.querySelector('#hiden-cost-title').focus();
+}
 function showCardPeek(c){
   if(!c)return;closeCardPeek();cardPeekPrompt=G.prompt;
   cardPeek=document.createElement('div');cardPeek.id='cardpeek';
@@ -2277,6 +2411,7 @@ function pickHint(k){const pr=G.prompt;if(!k||!pr)return '';
   if(k.startsWith('b')){const b=pr.spec.buttons[+k.slice(1)];return b?`もう一度タップで決定：${b.label}`:'';}
   if(k==='ch')return `もう一度タップで決定：${pr.spec.charLabel||'キャラ能力'}`;return '';}
 function nvRender(){
+  syncGaugePickView(G.prompt);
   if(cardPeek&&(cardPeekPrompt!==G.prompt||G.over))closeCardPeek();
   if(!P.length)return;
   const app=$('#app');app.classList.add('nv');
@@ -2387,7 +2522,7 @@ function fromLog(s){
   if((m=s.match(/^判定：AT\d+（(.+?)） vs DF\d+（(.+?)）/))){const a=m[1].match(/効果\+(\d+)/),d=m[2].match(/効果\+(\d+)/);const bs=G.bs;
     if(a&&bs)push(()=>pop(rectOf(`#app [data-pw="${bs.atk.p.idx}"]`),`効果 +${a[1]}`,'eff',ms*2));
     if(d&&bs)push(()=>pop(rectOf(`#app [data-pw="${bs.def.p.idx}"]`),`効果 +${d[1]}`,'eff',ms*2));return;}
-  if(p&&/(Lv\d+の効果|忍転身|破れ|合図|スタンバイ能力|登場時)/.test(s)&&!/捨てなかった|効果：.*ない$/.test(s))return push(()=>ability(p,s.slice(p.name.length+1),ms*2));
+  if(p&&/(Lv\d+の効果|忍転身|柳生Lv2で|破れ|合図|スタンバイ能力|登場時)/.test(s)&&!/捨てなかった|効果：.*ない$/.test(s))return push(()=>ability(p,s.slice(p.name.length+1),ms*2));
 }
 function push(f){FX.q.push(f);if(!FX.busy)run();}
 async function run(){FX.busy=true;while(FX.q.length){const f=FX.q.shift();try{await f();}catch(e){}}FX.busy=false;const w=FX.waiters;FX.waiters=[];w.forEach(r=>r());}
