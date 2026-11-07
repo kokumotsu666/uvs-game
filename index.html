@@ -212,15 +212,13 @@ header button:disabled{opacity:.35}
 .nv-info .gr .lit{color:#4cd07d;font-weight:700}.nv-info .gr .off{color:#7d8496}
 .nv-info .gr.ban{color:#ff8a80}
 .nv-mid{flex:1;min-height:0;display:flex;gap:6px}
-.nv-gs{display:flex;gap:3px;align-self:flex-end;max-height:100%}
+.nv-gs{display:flex;gap:3px;align-self:flex-end;height:50dvh;max-height:100%}
 .nv-gs.opp{align-self:flex-start}
 .nv-g{width:38px;display:flex;flex-direction:column;gap:2px;cursor:pointer}
 .nv-g .h{font-size:10px;font-weight:700;text-align:center}
 .nv-g.yo .h{color:#f07a55}.nv-g.in .h{color:#6a9cf0}
-.nv-g .col{flex:1;min-height:2px;padding:0 2px;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;overflow:hidden}
-.nv-g.yo .col{background:#d9534f14}.nv-g.in .col{background:#3b7dd814}
-.nv-g .col{border-radius:6px}
-.nv-gs.opp .col{justify-content:flex-start}
+.nv-g .col{flex:1;min-height:2px;border-radius:6px;padding:2px;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;overflow:hidden}
+.nv-g.yo .col{border:1px solid #d9534f66;background:#d9534f14}.nv-g.in .col{border:1px solid #3b7dd866;background:#3b7dd814}
 .nv-g .stub{flex:0 0 auto;height:18px;border-radius:3px;background:var(--panel);font-size:8.5px;line-height:18px;color:var(--dim);padding-left:3px;white-space:nowrap;overflow:hidden;border-left:4px solid var(--sen)}
 .nv-g .stub.c陽{border-left-color:var(--yo)}.nv-g .stub.c陰{border-left-color:var(--in)}.nv-g .stub.cx{border-left-color:#777}
 .nv-center{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:4px;position:relative}
@@ -2250,7 +2248,7 @@ function nvInfo(p,greenTop){
   return `<div class="nv-info">${greenTop?gr+nums:nums+gr}</div>`;
 }
 function nvGauge(p,z){const arr=z==='yo'?p.gYo:p.gIn;
-  return `<div class="nv-g ${z}" data-zone="${z}" data-p="${p.idx}"><div class="col">${arr.slice(-7).map(c=>`<div class="stub ${COLC[c.color]||'cx'}">${c.name}</div>`).join('')}</div><div class="h">${z==='yo'?'陽':'陰'}</div></div>`;}
+  return `<div class="nv-g ${z}" data-zone="${z}" data-p="${p.idx}"><div class="h">${z==='yo'?'陽':'陰'}</div><div class="col">${arr.slice(-7).map(c=>`<div class="stub ${COLC[c.color]||'cx'}">${c.name}</div>`).join('')}</div></div>`;}
 function nvChar(p,flip,lit,picked){const ch=p.charDeck[0];const sups=p.supports.map(s=>s.card.name).join('・');
   return `<div class="nv-char ${flip?'flip':''} ${lit?'lit':''} ${picked?'picked':''}" ${lit?'data-charv="1"':`data-uid="${ch.uid}"`}><div class="t"><b>${p.charName}</b><span>Lv${ch.lv}</span></div><div class="s">AT ${charAT(p)}・DF ${charDF(p)}</div><div class="x">${cardText(ch)||''}</div>${sups?`<div class="sup">使用中：${sups}</div>`:''}${lit&&G.prompt.spec.charLabel?`<div class="sup">タップ：${G.prompt.spec.charLabel}</div>`:''}</div>`;}
 function nvBattle(){const bs=G.bs;if(!bs)return '';
