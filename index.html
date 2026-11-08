@@ -245,7 +245,6 @@ header button:disabled{opacity:.35}
 body:not(:has(#overlay.on,#cardpeek)) .nv-center[data-impact] .nv-totals{z-index:26}
 .nv-totals b{display:inline-block;font-size:clamp(24px,7vw,32px)}
 .nv-totals .sep{color:var(--dim);font-weight:400}
-.nv-result-hint{cursor:pointer;color:var(--fg)}
 .nv-status{display:flex;align-items:center;gap:6px;min-width:0;min-height:44px}
 .nv-status .nv-prompt{flex:1}
 .nv-row .nv-info{flex:0 1 auto;width:min(72%,260px)}
@@ -1865,7 +1864,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=Solver; else root.
    - 記録は人間・CPUの区別なく全判断を含む。再生は記録を使い切ったら
      元のコントローラ（人間／CPU）に引き継ぐ（＝ログからの再開）
    ========================================================= */
-const UI_VER='演出v2.2';
+const UI_VER='演出v2.3';
 (function(root){
 const LOG_VERSION='v'+CONFIG.ruleVersion;
 
@@ -2263,14 +2262,16 @@ function recentEvent(message){
   return '';
 }
 function refreshRecentLog(onAppend=false){
-  if(onAppend&&G.log.at(-1)!==recentEntry){
-    recentEntry=G.log.at(-1);
+  const end=window.FX?.recentLogEnd()??G.log.length;
+  const latest=G.log[end-1];
+  if(onAppend&&latest!==recentEntry){
+    recentEntry=latest;
     recentEntryTime=performance.now();
   }
   const recent=$('#nvrecent');
   if(!recent)return;
   const fadeElapsed=performance.now()-recentEntryTime;
-  const lines=G.log.slice(-4).map(entry=>{
+  const lines=G.log.slice(Math.max(0,end-4),end).map(entry=>{
     const line=document.createElement('span');
     line.textContent=entry.s;
     if(entry.hl)line.className='hl';
@@ -2347,7 +2348,7 @@ function newGame(mode,d1,d2,first,delay,cpu='solver',resume=null,undo=0){
     hooks:{render:()=>{if(!G.replaying)render();},
       turnStart:async({p})=>{REC.marks.push({turn:G.turn,p,i:REC.ops.length});if(G.replaying)return;render();const mine=p===bottomIdx();await showBanner('turn',G.mode==='cpu'?(mine?'あなたのターン':'相手のターン'):`${P[p].name}のターン`,`ターン${G.turn}　${P[p].charName} Lv${P[p].charDeck[0].lv}`);},
       phase:async ph=>{if(G.replaying)return;render();const title={prep:'準備フェイズ',battle:'バトルフェイズ',end:'終了フェイズ'}[ph];if(title)await showBanner('phase',title);},gameOver:()=>{if(G.replaying)window.FX?.resumeBattle(G.bs);G.replaying=false;render();void showGameOver();autoCopy('決着');},turnEnd:()=>autoCopy(`T${G.turn}終了`),
-      showResult:async bs=>{if(G.replaying)return;const humans=P.filter(x=>!x.ai);if(!humans.length){await sleep(G.delay*2);return;}const viewer=G.mode==='hotseat'?G.viewer:humans[0].idx;await uiPrompt(viewer,{battleResult:true,title:(bs.success&&G.noChainTurn&&bs.atk.p===P[G.cur])?`※${G.noChainBy||'相手の効果'}により、このターンは連撃できません`:'',buttons:[{value:'ok',label:'次へ',primary:true}]},false);}}});
+      showResult:async()=>{if(!G.replaying)await window.FX?.finishBattle();}}});
   G.meta={seed,decks:[d1,d2],first:G.first,rngFirst,ctl:codes,cards:P.map(Replay.cardMap),undo};
   G.replaying=!!(rstate&&rstate.ops.length);if(G.replaying)G.delay=0;
   if(resume)log(undo?`（戻る：操作${resume.ops.length}件まで再生。戻る${undo}回目）`:`（ログから再開：操作${resume.ops.length}件を再生）`,true);
@@ -2424,10 +2425,10 @@ function showBattleStack(seat){
 function nvSide(p,opponent,lit=false){
   const gauges=`<div class="nv-gs ${opponent?'opp':''}">${nvGauge(p,'yo')}${nvGauge(p,'in')}</div>`;
   const char=nvChar(p,opponent,lit,!opponent&&pickKey()==='ch');
-  return `<div class="nv-side ${opponent?'opp':'own'}${p.idx===G.cur?' is-active':''}">${opponent?char+nvStack(p,true)+gauges:gauges+nvStack(p,false)+char}</div>`;
+  return `<div class="nv-side ${opponent?'opp':'own'}${p.idx===G.cur?' is-active':''}" data-side-seat="${p.idx}">${opponent?char+nvStack(p,true)+gauges:gauges+nvStack(p,false)+char}</div>`;
 }
 function nvChoice(pr,me){ // 札を選ばない問い（ゲージの陽陰、結果の確認など）と、手札にない札を選ぶ問いは中央に出す
-  if(!pr||pr.pi!==me.idx||pr.spec.battleResult)return '';const sp=pr.spec;
+  if(!pr||pr.pi!==me.idx)return '';const sp=pr.spec;
   const outside=(sp.cards||[]).map(findCard).filter(c=>c&&!me.hand.includes(c));
   if(sp.cards&&!outside.length)return '';
   const cs=outside.length?`<div class="cards">${outside.map(c=>cardHTML(c,{sel:true,small:true})).join('')}</div>`:'';
@@ -2597,15 +2598,14 @@ function nvRender(){
   const who=G.mode==='cpu'?(mine?'あなたのターン':'相手のターン'):`${P[G.cur]?P[G.cur].name:''}のターン`;
   const pr=G.prompt;const lit=!!(pr&&pr.pi===me.idx&&pr.spec.charValue);
   const sources=window.FX?.battleSources(G.bs);
-  const resultPrompt=pr?.pi===me.idx&&pr.spec.battleResult;
-  const ph=pickHint(pickKey());const ptxt=pr&&pr.pi===me.idx?(ph?`<b class="pk">${ph}</b>`:`${pr.spec.title}`):(G.over?'ゲーム終了':(P[G.cur]&&P[G.cur].ai?'CPU思考中…':(G.log.length?G.log[G.log.length-1].s:'')));
+  const ph=pickHint(pickKey());const ptxt=pr&&pr.pi===me.idx?(ph?`<b class="pk">${ph}</b>`:`${pr.spec.title}`):(G.over?'ゲーム終了':G.bs?.stage==='result'?'':P[G.cur]?.ai?'CPU思考中…':G.log.at(-1)?.s||'');
   app.innerHTML=`
   <div class="nv-bar">${G.mode!=='watch'?`<button id="btnundo" ${canUndo()&&undoTarget('step')>=0?'':'disabled'}>1手戻す</button><button id="btnturn" ${canUndo()&&undoTarget('turn')>=0?'':'disabled'}>ターン最初へ</button>`:''}<button id="btnlog">ログ</button><button id="btnrule">ルール</button><button id="btnreset">最初から</button><span class="sp"></span><span id="autostat">${autoStat}</span><span>${Replay.LOG_VERSION}</span></div>
   <div class="nv-opbar"><span><span class="nv-turn ${mine?'mine':'theirs'}">T${G.turn} ${who}・${PH[G.phase]||''}</span>　${op.name}${op.ai?'（CPU）':''}</span><small class="small" data-ui-version style="white-space:nowrap">${UI_VER}</small><span class="nv-backs">手札 ${op.hand.slice(0,8).map(()=>'<i></i>').join('')}<b>${op.hand.length}</b></span></div>
   <div class="nv-row">${nvInfo(op,true)}${nvGval(op,'相手',true)}</div>
   <div class="nv-mid"><div class="nv-center">${nvSide(op,true)}${nvTotals(me,op)}${nvSide(me,false,lit)}${nvChoice(pr,me)}</div></div>
   <div class="nv-row">${nvGval(me,'自分',false)}${nvInfo(me,false)}</div>
-  <div class="nv-status"><div class="nv-prompt ${resultPrompt?'nv-result-hint':pr&&pr.pi===me.idx?'':'idle'}" id="nvprompt"${resultPrompt?' role="button" tabindex="0"':''}>${resultPrompt?`画面をタップして進む${ptxt?` · ${ptxt}`:''}`:ptxt}</div></div>
+  <div class="nv-status"><div class="nv-prompt ${pr&&pr.pi===me.idx?'':'idle'}" id="nvprompt">${ptxt}</div></div>
   <button type="button" id="nvrecent" class="nv-recent" aria-label="直近のログ。タップで詳細を表示"></button>
   ${nvHand(me,showMe)}`;
   refreshRecentLog();
@@ -2620,26 +2620,7 @@ function nvRender(){
   app.querySelectorAll('[data-uid]:not(.nv-stack [data-uid])').forEach(el=>el.onclick=e=>{e.stopPropagation();const uid=+el.dataset.uid;const p2=G.prompt;if(p2&&p2.spec.cards&&p2.spec.cards.includes(uid)&&el.classList.contains('sel')){const k='c'+uid;if(pickKey()!==k){setPick(k);showCardPeek(findCard(uid));return;}closeCardPeek();UI.pick=null;resolvePrompt({card:findCard(uid)});return;}showCardPeek(findCard(uid));});
   app.querySelectorAll('[data-charv]').forEach(el=>el.onclick=()=>{const p2=G.prompt;if(!(p2&&p2.spec.charValue))return;if(pickKey()!=='ch'){setPick('ch');return;}UI.pick=null;resolvePrompt({value:p2.spec.charValue});});
   app.querySelectorAll('[data-zone]').forEach(el=>el.onclick=e=>{e.stopPropagation();showZone(P[+el.dataset.p],el.dataset.zone);});
-  const promptText=$('#nvprompt');
-  app.onclick=null;
-  if(resultPrompt){
-    let advanceRequested=false;
-    const advance=async()=>{
-      if(advanceRequested||G.prompt!==pr)return;
-      advanceRequested=true;
-      // A tap can arrive before the collision has reached the center.
-      await window.FX?.finishBattle();
-      if(G.prompt===pr)resolvePrompt({value:pr.spec.buttons[0].value});
-    };
-    app.onclick=e=>{
-      if(!e.target.closest('button,[data-uid],[data-zone],.nv-played[role="button"]'))advance();
-    };
-    promptText.onkeydown=e=>{
-      if(e.key==='Enter'||e.key===' '){e.preventDefault();advance();}
-    };
-  }else{
-    promptText.onclick=showLog;
-  }
+  $('#nvprompt').onclick=showLog;
   const hd=$('#nvhand');if(hd)hd.scrollLeft=hd.scrollWidth;
   const bu=$('#btnundo');if(bu)bu.onclick=()=>doUndo('step');const bt=$('#btnturn');if(bt)bt.onclick=()=>doUndo('turn');
   $('#btnlog').onclick=showLog;$('#btnrule').onclick=showRules;$('#btnreset').onclick=()=>{if(G.prompt)resolvePrompt({value:'__abort'});location.reload();};
@@ -2689,7 +2670,15 @@ function zoneRect(p,z){if(!p)return null;
 function cardEl(name,big){const t=CARDS[name];const d=document.createElement('div');d.className='fx-card';
   d.innerHTML=t?cardHTML(t,{text:big}):`<div class="card"><div class="nm">${name}</div></div>`;return d;}
 function place(el,cx,cy){el.style.left=cx+'px';el.style.top=cy+'px';}
-const anim=(el,kf,ms)=>new Promise(r=>{if(!ms||typeof el.animate!=='function'){r();return;}const a=el.animate(kf,{duration:ms,easing:'cubic-bezier(.2,.8,.2,1)',fill:'forwards'});a.onfinish=r;a.oncancel=r;});
+const anim=(el,frames,ms,signal)=>new Promise(resolve=>{
+  if(!ms||signal?.aborted||typeof el.animate!=='function'){resolve();return;}
+  const animation=el.animate(frames,{duration:ms,easing:'cubic-bezier(.2,.8,.2,1)',fill:signal?'none':'forwards'});
+  const done=()=>{signal?.removeEventListener('abort',cancel);resolve();};
+  const cancel=()=>{animation.cancel();done();};
+  animation.onfinish=done;
+  animation.oncancel=done;
+  signal?.addEventListener('abort',cancel,{once:true});
+});
 // 演出の種類
 async function showCenter(names,label,ms){ // 中央に札を出す（使用・公開・重撃）
   const c=centerRect();const box=document.createElement('div');box.className='fx-center';place(box,c.left+c.width/2,c.top+c.height/2);
@@ -2710,12 +2699,33 @@ async function pop(target,text,cls,ms){ // 数字の横に小さく出す（常�
   if(!target)return;const el=document.createElement('div');el.className='fx-pop '+(cls||'');el.textContent=text;place(el,target.left+target.width/2,target.top);L().appendChild(el);
   await anim(el,[{opacity:0,transform:'translate(-50%,0)'},{opacity:1,transform:'translate(-50%,-18px)'},{opacity:0,transform:'translate(-50%,-30px)'}],ms);el.remove();}
 let battleView=null;
-function createBattleView(bs){return {bs,elements:new Set(),flights:new Set(),counts:[0,0],totals:[],resolved:false};}
+function createBattleView(bs){
+  return {bs,elements:new Set(),flights:new Set(),counts:[0,0],totals:[],resolved:false,finished:false,controller:new AbortController()};
+}
+function finishBattleView(view){
+  if(view.finished)return;
+  view.finished=true;
+  view.controller.abort();
+  for(const el of view.elements)el.remove();
+  view.elements.clear();
+  if(battleView!==view)return;
+  view.impact=false;
+  view.logCursor=null;
+  document.querySelector('#app .nv-center')?.removeAttribute('data-impact');
+  if(!G.replaying)refreshRecentLog(true);
+}
 function clearBattleView(){
   if(!battleView)return;
-  for(const el of battleView.elements){el.getAnimations().forEach(a=>a.cancel());el.remove();}
+  finishBattleView(battleView);
   battleView=null;
-  document.querySelector('#app .nv-center')?.removeAttribute('data-impact');
+}
+function stageResultLog(entries,first){
+  const view=battleView;
+  if(!base()||!view||view.bs!==G.bs||G.bs.stage!=='result'||view.finished)return false;
+  view.logCursor??=first;
+  const prefix=view.bs.def.p.name+'：「'+view.bs.atk.card.name+'」DP';
+  if(entries.some(entry=>entry.s?.startsWith(prefix)))view.damaged=true;
+  return true;
 }
 function usedCards(side){return side.card?[side.card,...side.heavy]:[];}
 function battleSources(bs){
@@ -2741,41 +2751,92 @@ function battleFlight(view,node,source,ms){
   const {el,rect}=battleClone(view,node,'fx-battle-card');
   const dx=source.left+(source.width-rect.width)/2-rect.left;
   const dy=source.top+(source.height-rect.height)/2-rect.top;
-  void anim(node,[{opacity:0},{opacity:0,offset:.85},{opacity:1}],ms);
-  const task=anim(el,[{transform:`translate(${dx}px,${dy}px) scale(.85)`,opacity:.65},{transform:'translate(0,0)',opacity:1}],ms);
+  void anim(node,[{opacity:0},{opacity:0,offset:.85},{opacity:1}],ms,view.controller.signal);
+  const task=anim(el,[{transform:`translate(${dx}px,${dy}px) scale(.85)`,opacity:.65},{transform:'translate(0,0)',opacity:1}],ms,view.controller.signal);
   view.flights.add(task);
   task.then(()=>{finishBattleClone(view,el);view.flights.delete(task);});
+}
+function resultWait(ms,signal){
+  return new Promise(resolve=>{
+    if(signal.aborted){resolve();return;}
+    const done=()=>{clearTimeout(timer);signal.removeEventListener('abort',done);resolve();};
+    const timer=setTimeout(done,ms);
+    signal.addEventListener('abort',done,{once:true});
+  });
+}
+function revealResultLog(view){
+  if(view.logCursor==null||view.logCursor>=G.log.length)return;
+  view.logCursor++;
+  refreshRecentLog(true);
+}
+function glowResult(view,ratio){
+  const winner=view.bs.success?'at':'df';
+  const color=winner==='at'?'#ff9d76':'#8bbaff';
+  const signal=view.controller.signal;
+  return Promise.all(['at','df'].map(key=>{
+    const el=document.querySelector(`[data-battle-total="${key}"]`);
+    if(!el)return;
+    const frames=key===winner
+      ?[{transform:'scale(1)'},{transform:'scale(1.16)',textShadow:`0 0 14px ${color}`,offset:.28},{transform:'scale(1)',textShadow:'none'}]
+      :[{opacity:1},{opacity:.48,offset:.28},{opacity:1}];
+    return anim(el,frames,320*ratio,signal);
+  }));
+}
+function shakeDamage(view,ratio){
+  if(!view.bs.success||!view.damaged)return;
+  const seat=view.bs.def.p.idx;
+  const card=document.querySelector(`.nv-side[data-side-seat="${seat}"] .nv-char`);
+  if(!card)return;
+  return anim(card,[{translate:'0px'},{translate:'-5px',boxShadow:'0 0 14px #ff8888aa'},{translate:'5px'},{translate:'-3px'},{translate:'0px'}],260*ratio,view.controller.signal);
 }
 async function battleImpact(view,[attackStack,defenseStack],center,ratio){
   // Both stacks share a z-index, so the winner is painted last, below the flash.
   const paintOrder=view.bs.success?[defenseStack,attackStack]:[attackStack,defenseStack];
   const frames=paintOrder.filter(Boolean).map(node=>({node:node.cloneNode(true),rect:node.getBoundingClientRect()}));
-  await Promise.all(view.flights);
-  if(battleView!==view||G.bs!==view.bs)return;
-  const cx=center.left+center.width/2,cy=center.top+center.height/2;
-  view.impact=true;
-  document.querySelector('#app .nv-center')?.setAttribute('data-impact','');
-  const copies=frames.map(({node,rect})=>battleClone(view,node,'fx-battle-stack',rect));
-  const shifts=copies.map(({rect,el})=>{
-    const above=rect.top+rect.height/2<cy;
-    const dx=cx-rect.left-rect.width/2+(above?-11:11);
-    const dy=cy-rect.top-rect.height/2+(above?-9:9);
-    return {el,dx,dy,hit:`translate(${dx}px,${dy}px)`};
-  });
-  await Promise.all(shifts.map(({el,hit})=>anim(el,[{transform:'none'},{transform:hit}],290*ratio)));
-  if(battleView!==view||G.bs!==view.bs)return;
-  const flash=document.createElement('div');flash.className='fx-battle-impact';place(flash,cx-45,cy-45);
-  L().appendChild(flash);view.elements.add(flash);
-  pulseTotals();
-  await Promise.all([
-    anim(flash,[{opacity:0,transform:'scale(.3)'},{opacity:.95,offset:.3},{opacity:0,transform:'scale(1.6)'}],125*ratio),
-    ...shifts.map(({el,dx,dy,hit})=>anim(el,[{transform:hit},{transform:`translate(${dx-5}px,${dy+4}px)`},{transform:hit}],125*ratio))
-  ]);
-  finishBattleClone(view,flash);
-  if(battleView!==view||G.bs!==view.bs)return;
-  await Promise.all(shifts.map(({el,hit})=>anim(el,[{transform:hit,opacity:1},{transform:'none',opacity:0}],180*ratio)));
-  copies.forEach(({el})=>finishBattleClone(view,el));
-  if(battleView===view){view.impact=false;document.querySelector('#app .nv-center')?.removeAttribute('data-impact');}
+  const signal=view.controller.signal;
+  const move=(el,frames,ms)=>anim(el,frames,ms*ratio,signal);
+  try{
+    await Promise.all(view.flights);
+    if(signal.aborted)return;
+    const cx=center.left+center.width/2,cy=center.top+center.height/2;
+    view.impact=true;
+    document.querySelector('#app .nv-center')?.setAttribute('data-impact','');
+    const copies=frames.map(({node,rect})=>battleClone(view,node,'fx-battle-stack',rect));
+    const shifts=copies.map(({rect,el})=>{
+      const above=rect.top+rect.height/2<cy;
+      const dx=cx-rect.left-rect.width/2+(above?-11:11);
+      const dy=cy-rect.top-rect.height/2+(above?-9:9);
+      return {el,dx,dy,hit:`translate(${dx}px,${dy}px)`};
+    });
+    await Promise.all(shifts.map(({el,hit})=>move(el,[{transform:'none'},{transform:hit}],275)));
+    if(signal.aborted)return;
+    const flash=document.createElement('div');
+    flash.className='fx-battle-impact';
+    place(flash,cx-45,cy-45);
+    L().appendChild(flash);
+    view.elements.add(flash);
+    revealResultLog(view);
+    const flashMotion=move(flash,[{opacity:0,transform:'scale(.3)'},{opacity:.95,offset:.3},{opacity:0,transform:'scale(1.6)'}],125);
+    const glow=glowResult(view,ratio);
+    await Promise.all([
+      flashMotion,
+      ...shifts.map(({el,dx,dy,hit})=>move(el,[{transform:hit},{transform:`translate(${dx-5}px,${dy+4}px)`},{transform:hit}],125))
+    ]);
+    finishBattleClone(view,flash);
+    if(signal.aborted)return;
+    const retreat=Promise.all(shifts.map(({el,hit})=>move(el,[{transform:hit,opacity:1},{transform:'none',opacity:0}],180)))
+      .then(()=>copies.forEach(({el})=>finishBattleClone(view,el)));
+    await glow;
+    if(signal.aborted)return;
+    const shake=shakeDamage(view,ratio);
+    for(let i=0;i<2&&view.logCursor!=null&&view.logCursor<G.log.length&&!signal.aborted;i++){
+      revealResultLog(view);
+      await resultWait(175*ratio,signal);
+    }
+    await Promise.all([retreat,shake]);
+  }finally{
+    finishBattleView(view);
+  }
 }
 function pulseTotals(keys=['at','df']){
   for(const key of keys){
@@ -2809,9 +2870,18 @@ function battleFrame(bs,sources){
     view.resolved=true;
     const center=rectOf('#app .nv-totals');
     if(center)view.completion=battleImpact(view,stacks,center,ms/300);
+    else finishBattleView(view);
   }
 }
 FX.finishBattle=()=>battleView?.completion;
+FX.recentLogEnd=()=>battleView?.logCursor;
+document.querySelector('#app').addEventListener('click',event=>{
+  if(!battleView?.completion||battleView.finished||G.prompt||document.querySelector('#overlay.on,dialog[open]'))return;
+  if(event.target.closest('button,[data-zone],.nv-played[role="button"]'))return;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  finishBattleView(battleView);
+},true);
 FX.battleFrame=battleFrame;
 FX.battleSources=battleSources;
 FX.resumeBattle=bs=>{
@@ -2821,6 +2891,7 @@ FX.resumeBattle=bs=>{
   battleView.counts=[usedCards(bs.atk).length,usedCards(bs.def).length];
   battleView.totals=[bs.at,bs.df];
   battleView.resolved=bs.stage==='result';
+  battleView.finished=battleView.resolved;
 };
 // G.log の行 → 演出
 function fromLog(s){
@@ -2842,10 +2913,14 @@ async function run(){FX.busy=true;while(FX.q.length){const f=FX.q.shift();try{aw
 FX.drain=()=>FX.busy||FX.q.length?new Promise(r=>FX.waiters.push(r)):Promise.resolve();
 // G.log に積むたびに演出を作る（エンジンの log と、カード定義側の log の両方がここを通る）
 const _setup=setupGame;setupGame=function(){clearBattleView();const r=_setup.apply(this,arguments);FX.q=[];if(layer)layer.innerHTML='';
-  const arr=G.log;arr.push=function(...xs){const n=Array.prototype.push.apply(this,xs);if(!G.replaying)refreshRecentLog(true);for(const x of xs)try{fromLog(String(x&&x.s!=null?x.s:x));}catch(e){}return n;};return r;};
+  const arr=G.log;arr.push=function(...xs){const first=this.length;const n=Array.prototype.push.apply(this,xs);
+    if(stageResultLog(xs,first))return n;
+    if(!G.replaying)refreshRecentLog(true);
+    for(const x of xs)try{fromLog(String(x&&x.s!=null?x.s:x));}catch(e){}
+    return n;};return r;};
 // 次の判断の前に演出を待つ（人間・CPUとも）
 const _mr=Replay.makeRecorder;Replay.makeRecorder=function(){const w=_mr.apply(this,arguments);
-  return new Proxy(w,{get(t,k){const v=t[k];if(typeof v==='function'&&['prepAction','chooseGauge','attack','defend','heavy','chain','pickCards'].includes(k))return async function(...a){await FX.drain();return v.apply(t,a);};return v;}});};
+  return new Proxy(w,{get(t,k){const v=t[k];if(typeof v==='function'&&['prepAction','chooseGauge','attack','defend','heavy','chain','pickCards'].includes(k))return async function(...a){await Promise.all([FX.drain(),FX.finishBattle()]);return v.apply(t,a);};return v;}});};
 })();
 
 
