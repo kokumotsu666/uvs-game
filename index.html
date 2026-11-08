@@ -1904,7 +1904,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=Solver; else root.
    - 記録は人間・CPUの区別なく全判断を含む。再生は記録を使い切ったら
      元のコントローラ（人間／CPU）に引き継ぐ（＝ログからの再開）
    ========================================================= */
-const UI_VER='演出v3.0';
+const UI_VER='演出v3.1';
 (function(root){
 const LOG_VERSION='v'+CONFIG.ruleVersion;
 
@@ -2458,11 +2458,11 @@ function nvGauge(p,z){const arr=z==='yo'?p.gYo:p.gIn;
 // Presentation-only artwork mapping. Each character level has its own image slot.
 // Lv1-Lv5 currently point to the same file; replace individual entries to add unique art later.
 const UVS_CHAR_ART_PATH=Object.freeze({
-  '飛鳥':Object.freeze([null,'./assets/characters/asuka.webp?v=3.0','./assets/characters/asuka.webp?v=3.0','./assets/characters/asuka.webp?v=3.0','./assets/characters/asuka.webp?v=3.0','./assets/characters/asuka.webp?v=3.0']),
-  '斑鳩':Object.freeze([null,'./assets/characters/ikaruga.webp','./assets/characters/ikaruga.webp','./assets/characters/ikaruga.webp','./assets/characters/ikaruga.webp','./assets/characters/ikaruga.webp']),
-  '葛城':Object.freeze([null,'./assets/characters/katsuragi.webp','./assets/characters/katsuragi.webp','./assets/characters/katsuragi.webp','./assets/characters/katsuragi.webp','./assets/characters/katsuragi.webp']),
-  '柳生':Object.freeze([null,'./assets/characters/yagyu.webp','./assets/characters/yagyu.webp','./assets/characters/yagyu.webp','./assets/characters/yagyu.webp','./assets/characters/yagyu.webp']),
-  '雲雀':Object.freeze([null,'./assets/characters/hibari.webp','./assets/characters/hibari.webp','./assets/characters/hibari.webp','./assets/characters/hibari.webp','./assets/characters/hibari.webp'])
+  '飛鳥':Object.freeze([null,'./assets/characters/asuka.webp?v=3.0','./assets/characters/asuka.webp?v=3.0','./assets/characters/asuka.webp?v=3.0','./assets/characters/asuka-lv4.webp','./assets/characters/asuka-lv4.webp']),
+  '斑鳩':Object.freeze([null,'./assets/characters/ikaruga.webp','./assets/characters/ikaruga.webp','./assets/characters/ikaruga.webp','./assets/characters/ikaruga-lv4.webp','./assets/characters/ikaruga-lv4.webp']),
+  '葛城':Object.freeze([null,'./assets/characters/katsuragi.webp','./assets/characters/katsuragi.webp','./assets/characters/katsuragi.webp','./assets/characters/katsuragi-lv4.webp','./assets/characters/katsuragi-lv4.webp']),
+  '柳生':Object.freeze([null,'./assets/characters/yagyu-lv1.webp','./assets/characters/yagyu-lv1.webp','./assets/characters/yagyu-lv1.webp','./assets/characters/yagyu-lv4.webp','./assets/characters/yagyu-lv4.webp']),
+  '雲雀':Object.freeze([null,'./assets/characters/hibari.webp','./assets/characters/hibari.webp','./assets/characters/hibari.webp','./assets/characters/hibari-lv4.webp','./assets/characters/hibari-lv4.webp'])
 });
 function nvChar(p,flip,lit,picked){const ch=window.FX?.character(p).card??p.charDeck[0];const level=window.FX?.levelNotice(p);const sups=p.supports.map(s=>s.card.name).join('・');const artPath=UVS_CHAR_ART_PATH[p.charName]?.[ch.lv];const artHtml=artPath?`<img class="uvs-character-art" src="${artPath}" alt="" aria-hidden="true" onerror="this.remove()">`:'';
   return `<div class="nv-char ${flip?'flip':''} ${lit?'lit':''} ${picked?'picked':''}" ${lit?'data-charv="1"':`data-uid="${ch.uid}"`}>${artHtml}<div class="t"><b>${p.charName}</b><span>Lv${ch.lv}</span></div><div class="s">AT ${ch.at}・DF ${ch.df}</div><div class="x">${cardText(ch)||''}</div>${level?`<span class="nv-level-notice">Lv${level.from} → Lv${level.to}</span>`:''}${sups?`<div class="sup">使用中：${sups}</div>`:''}${lit&&G.prompt.spec.charLabel?`<div class="sup">タップ：${G.prompt.spec.charLabel}</div>`:''}</div>`;}
