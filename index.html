@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>UVS Engine — 飛鳥 vs 柳生</title>
+<title>UVS engine</title>
 <style>
 :root{--bg:#14161c;--panel:#1e2129;--panel2:#262a35;--line:#3a3f4d;--fg:#e8e9ee;--dim:#9aa0b0;
  --yo:#d9534f;--in:#3b7dd8;--sen:#d8a62a;--hi:#4caf50;--hiden:#9b59b6;--acc:#f0c15c}
@@ -260,6 +260,10 @@ body:not(:has(#overlay.on,#cardpeek)) .nv-center[data-impact] .nv-totals{z-index
 .nv-totals{gap:clamp(4px,2vw,12px);font-size:11px}
 .nv-totals .seat{color:var(--dim);margin-right:4px}
 .nv-totals .combatant{min-width:0;text-align:center}
+.nv-outcome{position:absolute;z-index:1;bottom:calc(100% + 2px);left:50%;transform:translateX(-50%);padding:1px 9px;border-radius:8px;background:#151a25df;font-size:17px;font-weight:900;letter-spacing:.05em;line-height:1.25}
+.nv-outcome.hit{color:#ffac84;text-shadow:0 0 9px #ee633f90}
+.nv-outcome.guard{color:#a9d2ff;text-shadow:0 0 9px #478fff90}
+.nv-level-notice{position:absolute;z-index:2;left:50%;top:50%;transform:translate(-50%,-50%);padding:2px 5px;border:1px solid #e9c77c88;border-radius:6px;background:#191b25ed;color:#ffe4a2;font-size:11px;font-weight:800;white-space:nowrap;pointer-events:none}
 .nv-recent{flex:none;width:100%;height:57px;display:flex;flex-direction:column;justify-content:flex-end;gap:0;min-height:0;padding:2px 6px;text-align:left;font:10.5px/13px system-ui,sans-serif;color:var(--dim);border:1px solid #414657;background:#242733aa;border-radius:6px}
 .nv-recent > span{display:block;flex:none;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .nv-recent .hl{color:var(--fg)}
@@ -1864,7 +1868,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=Solver; else root.
    - 記録は人間・CPUの区別なく全判断を含む。再生は記録を使い切ったら
      元のコントローラ（人間／CPU）に引き継ぐ（＝ログからの再開）
    ========================================================= */
-const UI_VER='演出v2.3';
+const UI_VER='演出v2.4';
 (function(root){
 const LOG_VERSION='v'+CONFIG.ruleVersion;
 
@@ -2301,7 +2305,7 @@ async function showGameOver(){
 
 /* ---------- 開始画面 ---------- */
 function startScreen(){
-  $('#app').innerHTML=`<header><h1>UVS Engine — 固定デッキ5種（${Replay.LOG_VERSION}・再現ログ・汎用AI）</h1><small class="small" data-ui-version>${UI_VER}</small></header>
+  $('#app').innerHTML=`<header><h1>UVS engine</h1><small class="small" data-ui-version>${UI_VER}</small></header>
   <div class="board"><h3 style="margin:6px 0">Unlimited VS 再現エンジン（試作）</h3>
    <p class="small">リメイク向けルールv2で、固定デッキ5種（飛鳥・連撃／柳生・射撃／斑鳩・対抗封じ／葛城・削り／雲雀・反撃、各30枚＋キャラ5枚）を対戦させます。1台の端末で交代して遊ぶか、CPUと対戦できます。</p>
    <h4>モード</h4>
@@ -2348,7 +2352,7 @@ function newGame(mode,d1,d2,first,delay,cpu='solver',resume=null,undo=0){
     hooks:{render:()=>{if(!G.replaying)render();},
       turnStart:async({p})=>{REC.marks.push({turn:G.turn,p,i:REC.ops.length});if(G.replaying)return;render();const mine=p===bottomIdx();await showBanner('turn',G.mode==='cpu'?(mine?'あなたのターン':'相手のターン'):`${P[p].name}のターン`,`ターン${G.turn}　${P[p].charName} Lv${P[p].charDeck[0].lv}`);},
       phase:async ph=>{if(G.replaying)return;render();const title={prep:'準備フェイズ',battle:'バトルフェイズ',end:'終了フェイズ'}[ph];if(title)await showBanner('phase',title);},gameOver:()=>{if(G.replaying)window.FX?.resumeBattle(G.bs);G.replaying=false;render();void showGameOver();autoCopy('決着');},turnEnd:()=>autoCopy(`T${G.turn}終了`),
-      showResult:async()=>{if(!G.replaying)await window.FX?.finishBattle();}}});
+      showResult:async()=>{if(!G.replaying)await Promise.all([window.FX?.finishBattle(),window.FX?.drain()]);}}});
   G.meta={seed,decks:[d1,d2],first:G.first,rngFirst,ctl:codes,cards:P.map(Replay.cardMap),undo};
   G.replaying=!!(rstate&&rstate.ops.length);if(G.replaying)G.delay=0;
   if(resume)log(undo?`（戻る：操作${resume.ops.length}件まで再生。戻る${undo}回目）`:`（ログから再開：操作${resume.ops.length}件を再生）`,true);
@@ -2366,7 +2370,7 @@ startScreen();
 const COLC={'陽':'c陽','陰':'c陰','閃':'c閃'};
 function nvGval(p,who,right){return `<div class="nv-gval ${right?'right':''}"><span class="who">${who}のゲージ</span><div class="v"><span class="y" data-zone="yo" data-p="${p.idx}">陽 ${yo(p)}</span><span class="n" data-zone="in" data-p="${p.idx}">陰 ${inn(p)}</span></div></div>`;}
 function nvInfo(p,opponent){
-  const nums=`<div class="nums"><span>山札 <b>${p.deck.length}</b></span><span class="z" data-zone="discard" data-p="${p.idx}">捨札 <b>${p.discard.length}</b></span><span class="z" data-zone="damage" data-p="${p.idx}">ダメ <b>${p.damage.length}</b></span></div>`;
+  const nums=`<div class="nums"><span>山札 <b>${p.deck.length}</b></span><span class="z" data-zone="discard" data-p="${p.idx}">捨札 <b>${p.discard.length}</b></span><span class="z" data-zone="damage" data-p="${p.idx}">ダメ <b>${window.FX?.character(p).damage??p.damage.length}</b></span></div>`;
   const nd=chainNeeds(p);let gr='';
   if(nd.length){const ban=chainBanned(p);gr=`<div class="gr ${ban?'ban':''}">${ban?'連撃不可 ':'使用条件：'}${nd.map(n=>{const ok=gaugeAll(p).some(x=>x.name===n);return `<span class="${ok?'lit':'off'}">${n}${ok?'✓':'✗'}</span>`;}).join(' ')}</div>`;}
   else gr='<div class="gr"><span class="off">緑なし</span></div>';
@@ -2384,8 +2388,8 @@ const UVS_CHAR_ART_PATH=Object.freeze({
   '柳生':Object.freeze([null,'./assets/characters/yagyu.webp','./assets/characters/yagyu.webp','./assets/characters/yagyu.webp','./assets/characters/yagyu.webp','./assets/characters/yagyu.webp']),
   '雲雀':Object.freeze([null,'./assets/characters/hibari.webp','./assets/characters/hibari.webp','./assets/characters/hibari.webp','./assets/characters/hibari.webp','./assets/characters/hibari.webp'])
 });
-function nvChar(p,flip,lit,picked){const ch=p.charDeck[0];const sups=p.supports.map(s=>s.card.name).join('・');const artPath=UVS_CHAR_ART_PATH[p.charName]?.[ch.lv];const artHtml=artPath?`<img class="uvs-character-art" src="${artPath}" alt="" aria-hidden="true" onerror="this.remove()">`:'';
-  return `<div class="nv-char ${flip?'flip':''} ${lit?'lit':''} ${picked?'picked':''}" ${lit?'data-charv="1"':`data-uid="${ch.uid}"`}>${artHtml}<div class="t"><b>${p.charName}</b><span>Lv${ch.lv}</span></div><div class="s">AT ${ch.at}・DF ${ch.df}</div><div class="x">${cardText(ch)||''}</div>${sups?`<div class="sup">使用中：${sups}</div>`:''}${lit&&G.prompt.spec.charLabel?`<div class="sup">タップ：${G.prompt.spec.charLabel}</div>`:''}</div>`;}
+function nvChar(p,flip,lit,picked){const ch=window.FX?.character(p).card??p.charDeck[0];const level=window.FX?.levelNotice(p);const sups=p.supports.map(s=>s.card.name).join('・');const artPath=UVS_CHAR_ART_PATH[p.charName]?.[ch.lv];const artHtml=artPath?`<img class="uvs-character-art" src="${artPath}" alt="" aria-hidden="true" onerror="this.remove()">`:'';
+  return `<div class="nv-char ${flip?'flip':''} ${lit?'lit':''} ${picked?'picked':''}" ${lit?'data-charv="1"':`data-uid="${ch.uid}"`}>${artHtml}<div class="t"><b>${p.charName}</b><span>Lv${ch.lv}</span></div><div class="s">AT ${ch.at}・DF ${ch.df}</div><div class="x">${cardText(ch)||''}</div>${level?`<span class="nv-level-notice">Lv${level.from} → Lv${level.to}</span>`:''}${sups?`<div class="sup">使用中：${sups}</div>`:''}${lit&&G.prompt.spec.charLabel?`<div class="sup">タップ：${G.prompt.spec.charLabel}</div>`:''}</div>`;}
 function nvStack(p,opponent){
   const bs=G.bs;
   const side=bs&&(bs.atk.p===p?bs.atk:bs.def);
@@ -2410,7 +2414,9 @@ function nvTotals(me,op){
     const total=Number.isFinite(bs?.[key])?bs[key]:'—';
     return `<span class="combatant ${key==='at'?'atk':'def'}"><span class="seat">${label}</span>${key.toUpperCase()} <b data-battle-total="${key}">${total}</b></span>`;
   };
-  return `<div class="nv-totals">${value(op,'相手')}<span class="sep" aria-hidden="true">｜</span>${value(me,'自分')}</div>`;
+const result=window.FX?.resultNotice();
+  const notice=result?`<span class="nv-outcome ${result.success?'hit':'guard'}">${result.success?'HIT DP'+result.dp:'GUARD'}</span>`:'';
+  return `<div class="nv-totals">${value(op,'相手')}<span class="sep" aria-hidden="true">｜</span>${value(me,'自分')}${notice}</div>`;
 }
 function showBattleStack(seat){
   const bs=G.bs;
@@ -2657,7 +2663,7 @@ Human.attack=async function(p,usable,mode){
 // v1.8 新UI 第2段階（2026-11-06）：札の使用・移動とキャラ能力の演出。ゲームの進行（エンジン・乱数・再現ログ）は変えない
 // 仕組み：G.log に積まれる行から演出を作って順に再生する。次の判断（人間・CPUとも）の前に、演出が終わるのを待つ
 (function(){
-const FX={q:[],busy:false,waiters:[]};window.FX=FX;
+const FX={};window.FX=FX;
 const base=()=>{if(!G||G.replaying||SETTINGS.anim==='off')return 0;return SETTINGS.anim==='short'?150:300;}; // 1演出0.3秒（短め設定は半分）
 let layer=null;function L(){if(!layer){layer=document.createElement('div');layer.id='fx';document.body.appendChild(layer);}return layer;}
 const pOf=s=>P.find(p=>s.startsWith(p.name+'：'));
@@ -2680,29 +2686,94 @@ const anim=(el,frames,ms,signal)=>new Promise(resolve=>{
   signal?.addEventListener('abort',cancel,{once:true});
 });
 // 演出の種類
-async function showCenter(names,label,ms){ // 中央に札を出す（使用・公開・重撃）
+async function showCenter(names,label,ms,signal){ // 中央に札を出す（使用・公開・重撃）
   const c=centerRect();const box=document.createElement('div');box.className='fx-center';place(box,c.left+c.width/2,c.top+c.height/2);
   box.innerHTML=(label?`<div class="fx-label">${label}</div>`:'')+'<div class="fx-row"></div>';const row=box.querySelector('.fx-row');
   for(const n of names){if(n)row.appendChild(cardEl(n,true));else{const w=document.createElement('div');w.className='fx-none';w.textContent='ディフェンスなし';row.appendChild(w);}}
-  L().appendChild(box);await anim(box,[{opacity:0,transform:'translate(-50%,-50%) scale(.6)'},{opacity:1,transform:'translate(-50%,-50%) scale(1)'}],ms*0.4);
-  await new Promise(r=>setTimeout(r,ms*0.6));await anim(box,[{opacity:1},{opacity:0}],ms*0.3);box.remove();}
-async function fly(name,from,to,ms){ // 札が置き場へ動く
+  L().appendChild(box);await anim(box,[{opacity:0,transform:'translate(-50%,-50%) scale(.6)'},{opacity:1,transform:'translate(-50%,-50%) scale(1)'}],ms*0.4,signal);
+  await resultWait(ms*0.6,signal);await anim(box,[{opacity:1},{opacity:0}],ms*0.3,signal);box.remove();}
+async function fly(name,from,to,ms,signal){ // 札が置き場へ動く
   if(!to)return;const f=from||centerRect();const el=cardEl(name,false);el.classList.add('fx-fly');L().appendChild(el);
   const fx=f.left+f.width/2,fy=f.top+f.height/2,tx=to.left+to.width/2,ty=to.top+to.height/2;place(el,fx,fy);
-  await anim(el,[{transform:'translate(-50%,-50%) scale(1)',opacity:1},{transform:`translate(calc(-50% + ${tx-fx}px),calc(-50% + ${ty-fy}px)) scale(.35)`,opacity:.3}],ms);el.remove();}
-async function ability(p,text,ms){ // キャラ能力：キャラを中央に出し、効果を添える
+  await anim(el,[{transform:'translate(-50%,-50%) scale(1)',opacity:1},{transform:`translate(calc(-50% + ${tx-fx}px),calc(-50% + ${ty-fy}px)) scale(.35)`,opacity:.3}],ms,signal);el.remove();}
+async function ability(p,text,ms,signal){ // キャラ能力：キャラを中央に出し、効果を添える
   const c=centerRect();const ch=p.charDeck[0];const box=document.createElement('div');box.className='fx-center fx-ability';place(box,c.left+c.width/2,c.top+c.height/2);
   box.innerHTML=`<div class="fx-label">${p.charName}${ch?' Lv'+ch.lv:''}</div><div class="fx-abtext">${text}</div>`;L().appendChild(box);
-  await anim(box,[{opacity:0,transform:'translate(-50%,-50%) scale(.7)'},{opacity:1,transform:'translate(-50%,-50%) scale(1)'}],ms*0.3);
-  await new Promise(r=>setTimeout(r,ms*0.7));await anim(box,[{opacity:1},{opacity:0}],ms*0.3);box.remove();}
-async function pop(target,text,cls,ms){ // 数字の横に小さく出す（常在効果・ダメージ）
+  await anim(box,[{opacity:0,transform:'translate(-50%,-50%) scale(.7)'},{opacity:1,transform:'translate(-50%,-50%) scale(1)'}],ms*0.3,signal);
+  await resultWait(ms*0.7,signal);await anim(box,[{opacity:1},{opacity:0}],ms*0.3,signal);box.remove();}
+async function pop(target,text,cls,ms,signal){ // 数字の横に小さく出す（常在効果・ダメージ）
   if(!target)return;const el=document.createElement('div');el.className='fx-pop '+(cls||'');el.textContent=text;place(el,target.left+target.width/2,target.top);L().appendChild(el);
-  await anim(el,[{opacity:0,transform:'translate(-50%,0)'},{opacity:1,transform:'translate(-50%,-18px)'},{opacity:0,transform:'translate(-50%,-30px)'}],ms);el.remove();}
+  await anim(el,[{opacity:0,transform:'translate(-50%,0)'},{opacity:1,transform:'translate(-50%,-18px)'},{opacity:0,transform:'translate(-50%,-30px)'}],ms,signal);el.remove();}
+let fxSession=null;
+const reducedMotion=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+const characterSnapshot=p=>({card:p.charDeck[0],damage:p.damage.length});
+function resetCharacters(keepNotices=false){
+  const state=P.map(characterSnapshot);
+  fxSession.observed=state.slice();
+  fxSession.displayed=state;
+  if(!keepNotices)fxSession.levels=[];
+}
+function observeCharacters(){
+  const session=fxSession;
+  if(G.replaying)return;
+  for(const p of P){
+    const next=characterSnapshot(p),previous=session.observed[p.idx];
+    if(previous.card===next.card&&previous.damage===next.damage)continue;
+    session.observed[p.idx]=next;
+    const step={seat:p.idx,previous,next,turn:G.turn};
+    const view=battleView;
+    if(base()&&view?.bs===G.bs&&G.bs?.stage==='result'&&!view.finished){
+      view.characters.push(step);
+    }else if(base()&&!reducedMotion()&&previous.card.lv!==next.card.lv){
+      push(signal=>presentCharacter(step,base()/300,signal,session));
+    }else{
+      showCharacter(step,session);
+    }
+  }
+}
+function showCharacter(step,session){
+  const {seat,previous,next,turn}=step;
+  session.displayed[seat]=next;
+  if(previous.card.lv!==next.card.lv)session.levels[seat]={from:previous.card.lv,to:next.card.lv,turn};
+}
+async function presentCharacter(step,ratio,signal,session){
+  if(signal.aborted)return;
+  const {seat,previous,next}=step;
+  const levelChanged=previous.card.lv!==next.card.lv;
+  if(levelChanged&&next.damage>previous.damage){
+    session.displayed[seat]={card:previous.card,damage:next.damage};
+    render();
+    await resultWait(65*ratio,signal);
+    if(signal.aborted)return;
+  }
+  showCharacter(step,session);
+  render();
+  if(!levelChanged)return;
+  const card=document.querySelector(`.nv-side[data-side-seat="${seat}"] .nv-char`);
+  if(card)await anim(card,[
+    {outline:'1px solid #eed69a',outlineOffset:'0px',boxShadow:'0 0 4px #e9c77c55'},
+    {outline:'2px solid #ffe4a2',outlineOffset:'4px',boxShadow:'0 0 16px #e9c77caa',offset:.35},
+    {outline:'1px solid transparent',outlineOffset:'0px',boxShadow:'0 0 4px #e9c77c00'}
+  ],215*ratio,signal);
+  if(signal.aborted)return;
+  session.levels[seat]=null;
+  render();
+}
+FX.character=p=>G.replaying?characterSnapshot(p):fxSession?.displayed[p.idx]??characterSnapshot(p);
+FX.levelNotice=p=>{
+  const notice=fxSession?.levels[p.idx];
+  return !G.replaying&&notice?.turn===G.turn?notice:null;
+};
+FX.resultNotice=()=>{
+  if(!G.replaying&&SETTINGS.anim==='off'&&G.bs?.stage==='result')return G.bs;
+  const result=fxSession?.result;
+  return !G.replaying&&result?.turn===G.turn&&(!G.bs||G.bs===result.bs)?result.bs:null;
+};
 let battleView=null;
 function createBattleView(bs){
-  return {bs,elements:new Set(),flights:new Set(),counts:[0,0],totals:[],resolved:false,finished:false,controller:new AbortController()};
+  return {bs,elements:new Set(),flights:new Set(),counts:[0,0],totals:[],resolved:false,finished:false,characters:[],controller:new AbortController()};
 }
-function finishBattleView(view){
+function finishBattleView(view,repaint=true){
   if(view.finished)return;
   view.finished=true;
   view.controller.abort();
@@ -2711,12 +2782,19 @@ function finishBattleView(view){
   if(battleView!==view)return;
   view.impact=false;
   view.logCursor=null;
+  const reduced=reducedMotion();
+  resetCharacters(reduced);
+  if(!reduced){
+    fxSession.result=null;
+    document.querySelector('.nv-outcome')?.remove();
+    document.querySelectorAll('.nv-level-notice').forEach(el=>el.remove());
+  }
   document.querySelector('#app .nv-center')?.removeAttribute('data-impact');
-  if(!G.replaying)refreshRecentLog(true);
+  if(!G.replaying){refreshRecentLog(true);if(repaint&&G.bs===view.bs&&view.characters.length)render();}
 }
 function clearBattleView(){
   if(!battleView)return;
-  finishBattleView(battleView);
+  finishBattleView(battleView,false);
   battleView=null;
 }
 function stageResultLog(entries,first){
@@ -2787,7 +2865,7 @@ function shakeDamage(view,ratio){
   const seat=view.bs.def.p.idx;
   const card=document.querySelector(`.nv-side[data-side-seat="${seat}"] .nv-char`);
   if(!card)return;
-  return anim(card,[{translate:'0px'},{translate:'-5px',boxShadow:'0 0 14px #ff8888aa'},{translate:'5px'},{translate:'-3px'},{translate:'0px'}],260*ratio,view.controller.signal);
+  return anim(card,[{translate:'0px'},{translate:'-5px',boxShadow:'0 0 14px #ff8888aa'},{translate:'5px'},{translate:'-3px'},{translate:'0px'}],220*ratio,view.controller.signal);
 }
 async function battleImpact(view,[attackStack,defenseStack],center,ratio){
   // Both stacks share a z-index, so the winner is painted last, below the flash.
@@ -2817,7 +2895,9 @@ async function battleImpact(view,[attackStack,defenseStack],center,ratio){
     view.elements.add(flash);
     revealResultLog(view);
     const flashMotion=move(flash,[{opacity:0,transform:'scale(.3)'},{opacity:.95,offset:.3},{opacity:0,transform:'scale(1.6)'}],125);
-    const glow=glowResult(view,ratio);
+    fxSession.result={bs:view.bs,turn:G.turn};
+    render();
+    const glow=reducedMotion()?undefined:glowResult(view,ratio);
     await Promise.all([
       flashMotion,
       ...shifts.map(({el,dx,dy,hit})=>move(el,[{transform:hit},{transform:`translate(${dx-5}px,${dy+4}px)`},{transform:hit}],125))
@@ -2828,12 +2908,19 @@ async function battleImpact(view,[attackStack,defenseStack],center,ratio){
       .then(()=>copies.forEach(({el})=>finishBattleClone(view,el)));
     await glow;
     if(signal.aborted)return;
-    const shake=shakeDamage(view,ratio);
-    for(let i=0;i<2&&view.logCursor!=null&&view.logCursor<G.log.length&&!signal.aborted;i++){
+    const shake=reducedMotion()?undefined:shakeDamage(view,ratio);
+    await shake;
+    for(const step of view.characters){
+      if(signal.aborted)break;
+      revealResultLog(view);
+      if(reducedMotion()){showCharacter(step,fxSession);render();}
+      else await presentCharacter(step,ratio,signal,fxSession);
+    }
+    for(let i=0;i<(view.characters.length?0:2)&&view.logCursor!=null&&view.logCursor<G.log.length&&!signal.aborted;i++){
       revealResultLog(view);
       await resultWait(175*ratio,signal);
     }
-    await Promise.all([retreat,shake]);
+    await retreat;
   }finally{
     finishBattleView(view);
   }
@@ -2846,7 +2933,11 @@ function pulseTotals(keys=['at','df']){
 }
 function battleFrame(bs,sources){
   const ms=base();
-  if(!ms||!bs){clearBattleView();return;}
+  if(!ms||!bs){
+    clearBattleView();
+    if(!G.replaying&&bs?.stage==='result')fxSession.result={bs,turn:G.turn};
+    return;
+  }
   if(battleView?.bs!==bs){
     clearBattleView();
     battleView=createBattleView(bs);
@@ -2886,6 +2977,7 @@ FX.battleFrame=battleFrame;
 FX.battleSources=battleSources;
 FX.resumeBattle=bs=>{
   clearBattleView();
+  resetCharacters();
   if(!bs)return;
   battleView=createBattleView(bs);
   battleView.counts=[usedCards(bs.atk).length,usedCards(bs.def).length];
@@ -2897,23 +2989,44 @@ FX.resumeBattle=bs=>{
 function fromLog(s){
   if(!G.replaying&&G.bs&&(s.startsWith('公開：')||/^P\d+：重撃「/.test(s))){render();return;}
   const ms=base();if(!ms||!P.length)return;const p=pOf(s);let m;
-  if(p&&(m=s.match(/：サポート「(.+?)」を使用/)))return push(()=>showCenter([m[1]],`${p.name}：サポート`,ms*2));
-  if(p&&(m=s.match(/：「(.+?)」を(陽|陰)ゲージに置いた/))){const z=m[2]==='陽'?'yo':'in';return push(()=>fly(m[1],zoneRect(p,'hand'),zoneRect(p,z),ms));}
-  if(p&&(m=s.match(/：「(.+?)」→(陽|陰)ゲージ/))){const z=m[2]==='陽'?'yo':'in';return push(()=>fly(m[1],null,zoneRect(p,z),ms));}
-  if(p&&(m=s.match(/：「(.+?)」→捨て札/)))return push(()=>fly(m[1],null,zoneRect(p,'discard'),ms));
-  if(p&&(m=s.match(/：重撃カード(\d+)枚→捨て札/)))return push(()=>fly('重撃',null,zoneRect(p,'discard'),ms));
-  if((m=s.match(/^(.+?)：「(.+?)」DP\d+で/))){const q=P.find(x=>x.name===m[1]);if(q)return push(()=>pop(zoneRect(q,'damage'),'ダメージ','dmg',ms*2));}
+  if(p&&(m=s.match(/：サポート「(.+?)」を使用/)))return push(signal=>showCenter([m[1]],`${p.name}：サポート`,ms*2,signal));
+  if(p&&(m=s.match(/：「(.+?)」を(陽|陰)ゲージに置いた/))){const z=m[2]==='陽'?'yo':'in';return push(signal=>fly(m[1],zoneRect(p,'hand'),zoneRect(p,z),ms,signal));}
+  if(p&&(m=s.match(/：「(.+?)」→(陽|陰)ゲージ/))){const z=m[2]==='陽'?'yo':'in';return push(signal=>fly(m[1],null,zoneRect(p,z),ms,signal));}
+  if(p&&(m=s.match(/：「(.+?)」→捨て札/)))return push(signal=>fly(m[1],null,zoneRect(p,'discard'),ms,signal));
+  if(p&&(m=s.match(/：重撃カード(\d+)枚→捨て札/)))return push(signal=>fly('重撃',null,zoneRect(p,'discard'),ms,signal));
+  if((m=s.match(/^(.+?)：「(.+?)」DP\d+で/))){const q=P.find(x=>x.name===m[1]);if(q)return push(signal=>pop(zoneRect(q,'damage'),'ダメージ','dmg',ms*2,signal));}
   if((m=s.match(/^判定：AT\d+（(.+?)） vs DF\d+（(.+?)）/))){const a=m[1].match(/効果\+(\d+)/),d=m[2].match(/効果\+(\d+)/);const bs=G.bs;
-    if(a&&bs)push(()=>pop(rectOf('#app [data-battle-total="at"]'),`効果 +${a[1]}`,'eff',ms*2));
-    if(d&&bs)push(()=>pop(rectOf('#app [data-battle-total="df"]'),`効果 +${d[1]}`,'eff',ms*2));return;}
-  if(p&&/(Lv\d+の効果|忍転身|柳生Lv2で|破れ|合図|スタンバイ能力|登場時)/.test(s)&&!/捨てなかった|効果：.*ない$/.test(s))return push(()=>ability(p,s.slice(p.name.length+1),ms*2));
+    if(a&&bs)push(signal=>pop(rectOf('#app [data-battle-total="at"]'),`効果 +${a[1]}`,'eff',ms*2,signal));
+    if(d&&bs)push(signal=>pop(rectOf('#app [data-battle-total="df"]'),`効果 +${d[1]}`,'eff',ms*2,signal));return;}
+  if(p&&/(Lv\d+の効果|忍転身|柳生Lv2で|破れ|合図|スタンバイ能力|登場時)/.test(s)&&!/捨てなかった|効果：.*ない$/.test(s))return push(signal=>ability(p,s.slice(p.name.length+1),ms*2,signal));
 }
-function push(f){FX.q.push(f);if(!FX.busy)run();}
-async function run(){FX.busy=true;while(FX.q.length){const f=FX.q.shift();try{await f();}catch(e){}}FX.busy=false;const w=FX.waiters;FX.waiters=[];w.forEach(r=>r());}
-FX.drain=()=>FX.busy||FX.q.length?new Promise(r=>FX.waiters.push(r)):Promise.resolve();
+function push(effect){
+  const session=fxSession;
+  if(!session||session.controller.signal.aborted)return;
+  session.queue.push(effect);
+  if(session.task)return;
+  session.task=Promise.resolve().then(async()=>{
+    const signal=session.controller.signal;
+    try{
+      while(!signal.aborted&&session.queue.length){
+        const next=session.queue.shift();
+        try{await next(signal);}catch(error){if(!signal.aborted)console.error('UVS FX',error);}
+      }
+    }finally{
+      session.task=null;
+    }
+  });
+}
+FX.drain=()=>fxSession?.task;
 // G.log に積むたびに演出を作る（エンジンの log と、カード定義側の log の両方がここを通る）
-const _setup=setupGame;setupGame=function(){clearBattleView();const r=_setup.apply(this,arguments);FX.q=[];if(layer)layer.innerHTML='';
+const _setup=setupGame;setupGame=function(){fxSession?.controller.abort();clearBattleView();const r=_setup.apply(this,arguments);
+  const game=G;
+  fxSession={controller:new AbortController(),queue:[],task:null,result:null};
+  resetCharacters();
+  if(layer)layer.replaceChildren();
   const arr=G.log;arr.push=function(...xs){const first=this.length;const n=Array.prototype.push.apply(this,xs);
+    if(G!==game)return n;
+    observeCharacters();
     if(stageResultLog(xs,first))return n;
     if(!G.replaying)refreshRecentLog(true);
     for(const x of xs)try{fromLog(String(x&&x.s!=null?x.s:x));}catch(e){}
