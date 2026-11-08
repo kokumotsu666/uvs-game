@@ -362,6 +362,34 @@ body:has(#app.nv){
 .nv-recent > span.recent-new{animation:recent-line-in 180ms ease-out both}
 @keyframes recent-line-in{from{opacity:.35}to{opacity:1}}
 @media(prefers-reduced-motion:reduce){.nv-recent > span.recent-new{animation:none}}
+/* The printed frame and its contents share the same 3:4 box. */
+.card.tech-card{padding:0;border:0;background:none}
+.tech-card.c閃{--tech-art:url("assets/cards/sen.webp");--tech-color:var(--sen)}
+.tech-card.c陽{--tech-art:url("assets/cards/yo.webp");--tech-color:var(--yo)}
+.tech-card.c陰{--tech-art:url("assets/cards/in.webp");--tech-color:var(--in)}
+.tech-card.c飛{--tech-art:url("assets/cards/hi.webp");--tech-color:var(--hi)}
+.tech-card.c秘{--tech-art:url("assets/cards/hiden.webp");--tech-color:var(--hiden)}
+.tech-face{container-type:inline-size;display:flex;flex-direction:column;width:100%;aspect-ratio:3/4;overflow:hidden;padding:7px 6px;border-radius:7px;background:#252839 var(--tech-art) center/contain no-repeat;box-shadow:inset 0 0 0 1px var(--tech-color);color:#fff;text-shadow:0 1px 2px #000,0 0 4px #000}
+.tech-head{display:flex;align-items:flex-start;gap:2px}
+.card.tech-card .nm{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;min-width:0;min-height:0;overflow:hidden;padding:0;margin:0;line-height:1.15;font-size:clamp(9px,17cqw,19px)}
+.card.tech-card .ic{flex:none;margin-left:auto;white-space:nowrap;color:#ffe69b;font-size:clamp(8px,13cqw,15px);line-height:1.2;letter-spacing:0}
+.tech-card .needb{margin:2px 0 0;padding:0 3px;font-size:8px;line-height:1.15}
+.tech-values{margin-top:auto;min-width:0;background:#0a0b13a8;border-radius:3px}
+.card.tech-card .st{font-size:clamp(8px,16cqw,17px);font-weight:800;line-height:1.1;white-space:normal;font-variant-numeric:tabular-nums}
+.card.tech-card .st b.up{font-size:inherit}
+.tech-stats,.tech-dp,.tech-gp{white-space:nowrap}
+.tech-dp{display:inline-block;font-size:.83em}
+.card.tech-card .gp{font-size:clamp(7px,13cqw,13px);line-height:1.13;color:#f4f2fa}
+.card.tech-card.sel .tech-face{outline:2px solid #fff;outline-offset:-2px}
+.nv-hand .card.tech-card{min-height:0}
+.nv-stack{--battle-card:min(72px,68%);container-type:size}
+.nv-stack-card .card.tech-card{display:flex;align-items:flex-start;justify-content:center;overflow:visible}
+.nv-stack-card .tech-face{width:min(100%,75cqh)}
+.hiden-cost-card .card.tech-card{display:grid;place-items:center}
+.hiden-cost-card .tech-face{width:min(100%,78px)}
+#cardpeek .card.tech-card{padding:0}
+#cardpeek .tech-face{width:min(100%,168px);margin-inline:auto;padding:13px}
+#cardpeek .tech-card .nm{-webkit-line-clamp:unset}
 </style>
 </head>
 <body>
@@ -1868,7 +1896,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=Solver; else root.
    - 記録は人間・CPUの区別なく全判断を含む。再生は記録を使い切ったら
      元のコントローラ（人間／CPU）に引き継ぐ（＝ログからの再開）
    ========================================================= */
-const UI_VER='演出v2.5';
+const UI_VER='演出v2.6';
 (function(root){
 const LOG_VERSION='v'+CONFIG.ruleVersion;
 
@@ -2032,7 +2060,11 @@ function cardHTML(c,opts={}){
   const ic=c.icons.map(i=>i==='R'?'連':i==='U'?'重':i).join(' ');
   const tx=opts.text?`<div class="tx">${cardText(c)}</div>`:'';
   const eb=opts.boost||{};const nb=opts.need?'<span class="needb">連撃条件</span>':'';const num=(v,b)=>b?`<b class="up">+${v+b}</b>`:`+${v}`;
-  return `<div class="card c${c.color} ${sel} ${dis} ${opts.small?'small':''} ${opts.text?'big':''}" data-uid="${c.uid}"><span class="ty">${c.color}</span><div class="nm">${c.name}</div>${nb}<div class="st">${num(c.at,eb.at)}/${num(c.df,eb.df)}${c.dp!==1?` DP${c.dp}`:''}</div><div class="gp">陽${c.gp.yo}/陰${c.gp.in} ${c.tech}</div><div class="ic">${ic||'&nbsp;'}</div>${tx}</div>`;
+  return `<div class="card tech-card c${c.color} ${sel} ${dis} ${opts.small?'small':''} ${opts.text?'big':''}" data-uid="${c.uid}">
+    <div class="tech-face"><div class="tech-head"><div class="nm">${c.name}</div>${ic?`<div class="ic">${ic}</div>`:''}</div>${nb}
+      <div class="tech-values"><div class="st"><span class="tech-stats">${num(c.at,eb.at)}/${num(c.df,eb.df)}</span>${c.dp!==1?` <span class="tech-dp">DP${c.dp}</span>`:''}</div>
+      <div class="gp"><span class="tech-gp">陽${c.gp.yo}/陰${c.gp.in}</span> ${c.tech}</div></div>
+    </div>${tx}</div>`;
 }
 function usableNow(p,c){
   if(c.type==='support')return gpOK(p,c)&&(!c.canUse||c.canUse(p));
