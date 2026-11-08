@@ -248,6 +248,33 @@ body:not(:has(#overlay.on,#cardpeek)) .nv-center[data-impact] .nv-totals{z-index
 .nv-result-button{margin-left:auto;min-height:44px;flex:0 0 auto}
 .nv-status{display:flex;align-items:center;gap:6px;min-width:0;min-height:44px}
 .nv-status .nv-prompt{flex:1}
+.nv-row .nv-info{flex:0 1 auto;width:min(72%,260px)}
+.nv-row .nv-info .nums{display:flex;flex-wrap:wrap;gap:2px 10px}
+.nv-info.own{margin-left:auto;text-align:right}
+.nv-info.own .nums{justify-content:flex-end}
+.nv-info.opp{margin-right:auto;text-align:left}
+.nv-side.opp .nv-gs{flex-direction:row-reverse}
+.nv-stack-card.opponent{left:auto;right:calc((100% - var(--battle-card) - var(--spread) * var(--steps)) / 2 + var(--spread) * var(--index))}
+.nv-stack-card.opponent > .card{transform:rotate(180deg)}
+.nv-played[role="button"]{cursor:pointer}
+.nv-played:focus-visible{outline:2px solid var(--acc);outline-offset:-2px;border-radius:8px}
+.nv-totals{gap:clamp(4px,2vw,12px);font-size:11px}
+.nv-totals .seat{color:var(--dim);margin-right:4px}
+.nv-totals .combatant{min-width:0;text-align:center}
+.nv-recent{flex:none;width:100%;height:57px;display:flex;flex-direction:column;justify-content:flex-end;gap:0;min-height:0;padding:2px 6px;text-align:left;font:10.5px/13px system-ui,sans-serif;color:var(--dim);border:1px solid #414657;background:#242733aa;border-radius:6px}
+.nv-recent > span{display:block;flex:none;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nv-recent .hl{color:var(--fg)}
+@media(max-height:700px){.nv-recent{height:44px}.nv-recent > span:nth-last-child(n+4){display:none}}
+#overlay .nv-stack-detail{max-height:86dvh;overflow:hidden;display:flex;flex-direction:column}
+.nv-stack-detail .stack-list{min-height:0;overflow:auto;overscroll-behavior:contain}
+.nv-stack-detail h2,.nv-stack-detail .btns{flex:none}
+.nv-stack-detail .stack-list section+section{border-top:1px solid var(--line);margin-top:12px;padding-top:12px}
+.nv-victory{text-align:center}
+.nv-victory h2{font-size:clamp(27px,8vw,42px);color:#ffe1a0;text-shadow:0 0 18px #f0b13a88}
+.nv-victory.animated h2{animation:nv-victory-in 420ms ease-out both}
+.nv-victory.animated.short h2{animation-duration:210ms}
+@keyframes nv-victory-in{from{opacity:.1;transform:scale(.78)}to{opacity:1;transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.nv-victory.animated h2{animation:none}}
 #fx .fx-battle-card,#fx .fx-battle-stack,#fx .fx-battle-impact{position:absolute;pointer-events:none;z-index:2}
 body:has(#overlay.on,#cardpeek) #fx :is(.fx-battle-card,.fx-battle-stack,.fx-battle-impact){visibility:hidden}
 #fx .fx-battle-impact{width:90px;height:90px;border-radius:50%;background:radial-gradient(circle,#fff,#ffd18390 24%,transparent 67%);mix-blend-mode:screen}
@@ -451,7 +478,7 @@ function baseUsable(p,c){if(c.type!=='battle')return false;if(c.only&&c.only!==p
 function canAttack(p,c,mode){if(c.defOnly)return false;if(mode==='R'){if(c.color!=='飛')return false}else{if(c.color==='飛')return false}return baseUsable(p,c)}
 function canDefend(p,c){if(c.type!=='battle')return false;if(c.color==='飛'){if(CONFIG.greenDefense==='none')return false;if(CONFIG.greenDefense==='needs')return baseUsable(p,c);return !c.only||c.only===p.charName;} return baseUsable(p,c)}
 function heavyOK(p,c){if(c.type!=='battle'||!c.icons.includes('U')||c.noHeavy)return false;if(c.only&&c.only!==p.charName)return false;if(!CONFIG.heavy.ignoreGP&&!gpOK(p,c))return false;return true}
-function lose(p,why){G.over={loser:p.idx,why};ev('E',null,{loser:p.idx,winner:1-p.idx,reason:/^LO/.test(String(why))?'LO':'damage',why:String(why),loSeat:/^LO/.test(String(why))?p.idx:null,state:obsState()},'public',['rule','game-end']);log(`★ ${p.name}の敗北（${why}）。${P[1-p.idx].name}の勝利！`,true);throw new GameOver();}
+function lose(p,why){G.over={loser:p.idx,why};ev('E',null,{loser:p.idx,winner:1-p.idx,reason:/^LO/.test(String(why))?'LO':'damage',why:String(why),loSeat:/^LO/.test(String(why))?p.idx:null,state:obsState()},'public',['rule','game-end']);const winner=P[1-p.idx];log(`★ ${winner.name}（${winner.charName}）の勝利！ ${p.name}（${p.charName}）は敗北（${why}）。`,true);throw new GameOver();}
 function resolveLO(p){
   if(CONFIG.loRule!=='compare'){lose(p,`LO：${p.name}のドローフェイズ開始時に山札0枚（LOした側の負け）`);return;}
   const opponent=P[1-p.idx];
@@ -2202,7 +2229,30 @@ function showRules(){openOv(`<h2>採用ルール v2（閃乱カグラ版＋リ�
 <p><b>カードの移動</b>：陽→陽ゲージ、陰→陰ゲージ、閃→どちらか選択、緑・紫→捨て札。GPは消費されない閾値。</p>
 <p class="small">※テキストに「推定」とあるカードは、原文を判読できず数値や条件を補っています。カードをタップすると詳細を確認できます。</p>
 </div>`);}
-function showGameOver(){const o=G.over;if(!o)return;const w=P[1-o.loser];openOv(`<h2>${w.name}（${w.charName}）の勝利！</h2><p>${P[o.loser].name}の敗北：${o.why}</p><p class="small">ターン${G.turn}。ログボタンから全経過を確認できます。</p>`);}
+function refreshRecentLog(){
+  const recent=$('#nvrecent');
+  if(!recent)return;
+  const lines=G.log.slice(-4).map(entry=>{
+    const line=document.createElement('span');
+    line.textContent=entry.s;
+    if(entry.hl)line.className='hl';
+    return line;
+  });
+  recent.replaceChildren(...lines);
+}
+
+let victoryGame=null;
+async function showGameOver(){
+  const game=G;
+  if(!game.over||victoryGame===game)return;
+  victoryGame=game;
+  await Promise.all([window.FX?.finishBattle(),window.FX?.drain()]);
+  if(G!==game)return;
+  const loser=P[game.over.loser],winner=P[1-loser.idx];
+  const animation=SETTINGS.anim==='off'?'':` animated ${SETTINGS.anim==='short'?'short':''}`;
+  openOv(`<div class="nv-victory${animation}"><h2>${winner.charName}の勝利！</h2><p>${winner.name} WIN</p><p>${loser.name}（${loser.charName}）の敗北（${game.over.why}）</p></div>`);
+  $('#overlay').onclick=closeOv;
+}
 
 /* ---------- 開始画面 ---------- */
 function startScreen(){
@@ -2243,6 +2293,7 @@ function newGame(mode,d1,d2,first,delay,cpu='solver',resume=null,undo=0){
   const base=c=>c==='H'?Human:c==='S'?Solver.makeSolver({sampleFix:true,profiles:FINAL_PROFILES}):AI; // 汎用AI（係数表。雲雀だけ専用の値）＋防御側サンプリング修正
   const label=c=>c==='H'?'人間':c==='S'?'CPU(ソルバー)':'CPU(経験則AI)';
   const ai=codes.map(c=>c!=='H');
+  closeOv();
   const banner=$('#banner');banner.className='';banner.replaceChildren();
   REC={ops:[],marks:[]};UI.delay=delay;
   const rstate=resume?{ops:resume.ops,i:0,live:false}:null;
@@ -2251,7 +2302,7 @@ function newGame(mode,d1,d2,first,delay,cpu='solver',resume=null,undo=0){
   setupGame({mode,decks:[d1,d2],ai,ctls,ctlLabels:codes.map(label),first,delay,spectate:mode==='watch',rng,
     hooks:{render:()=>{if(!G.replaying)render();},
       turnStart:async({p})=>{REC.marks.push({turn:G.turn,p,i:REC.ops.length});if(G.replaying)return;render();const mine=p===bottomIdx();await showBanner('turn',G.mode==='cpu'?(mine?'あなたのターン':'相手のターン'):`${P[p].name}のターン`,`ターン${G.turn}　${P[p].charName} Lv${P[p].charDeck[0].lv}`);},
-      phase:async ph=>{if(G.replaying)return;render();const title={prep:'準備フェイズ',battle:'バトルフェイズ',end:'終了フェイズ'}[ph];if(title)await showBanner('phase',title);},gameOver:()=>{G.replaying=false;render();showGameOver();autoCopy('決着');},turnEnd:()=>autoCopy(`T${G.turn}終了`),
+      phase:async ph=>{if(G.replaying)return;render();const title={prep:'準備フェイズ',battle:'バトルフェイズ',end:'終了フェイズ'}[ph];if(title)await showBanner('phase',title);},gameOver:()=>{if(G.replaying)window.FX?.resumeBattle(G.bs);G.replaying=false;render();void showGameOver();autoCopy('決着');},turnEnd:()=>autoCopy(`T${G.turn}終了`),
       showResult:async bs=>{if(G.replaying)return;const humans=P.filter(x=>!x.ai);if(!humans.length){await sleep(G.delay*2);return;}const viewer=G.mode==='hotseat'?G.viewer:humans[0].idx;await uiPrompt(viewer,{battleResult:true,title:(bs.success&&G.noChainTurn&&bs.atk.p===P[G.cur])?`※${G.noChainBy||'相手の効果'}により、このターンは連撃できません`:'',buttons:[{value:'ok',label:'次へ',primary:true}]},false);}}});
   G.meta={seed,decks:[d1,d2],first:G.first,rngFirst,ctl:codes,cards:P.map(Replay.cardMap),undo};
   G.replaying=!!(rstate&&rstate.ops.length);if(G.replaying)G.delay=0;
@@ -2268,18 +2319,13 @@ startScreen();
 // v1.8 新UI（2026-11-06）。描画とHuman（人間の操作）だけを差し替える。エンジン・AI・再現ログの形式は変えない
 (function(){
 const COLC={'陽':'c陽','陰':'c陰','閃':'c閃'};
-const kindOf=p=>p.idx===G.cur?'ATK':'DEF';
-function nvPower(p,who,right){
-  const k=kindOf(p);const hl=(G.turnSwapHL&&G.turnSwapHL>Date.now())?'hl':'';
-  return `<div class="nv-power ${right?'right':''} ${hl} ${k.toLowerCase()}" data-pw="${p.idx}"><span class="who">${who}</span>${powerBox(p,k,shownPower(p,k))}</div>`;
-}
 function nvGval(p,who,right){return `<div class="nv-gval ${right?'right':''}"><span class="who">${who}のゲージ</span><div class="v"><span class="y" data-zone="yo" data-p="${p.idx}">陽 ${yo(p)}</span><span class="n" data-zone="in" data-p="${p.idx}">陰 ${inn(p)}</span></div></div>`;}
-function nvInfo(p,greenTop){
+function nvInfo(p,opponent){
   const nums=`<div class="nums"><span>山札 <b>${p.deck.length}</b></span><span class="z" data-zone="discard" data-p="${p.idx}">捨札 <b>${p.discard.length}</b></span><span class="z" data-zone="damage" data-p="${p.idx}">ダメ <b>${p.damage.length}</b></span></div>`;
   const nd=chainNeeds(p);let gr='';
-  if(nd.length){const ban=chainBanned(p);gr=`<div class="gr ${ban?'ban':''}">${ban?'連撃不可 ':'緑 '}${nd.map(n=>{const ok=gaugeAll(p).some(x=>x.name===n);return `<span class="${ok?'lit':'off'}">${n}${ok?'✓':'✗'}</span>`;}).join(' ')}</div>`;}
+  if(nd.length){const ban=chainBanned(p);gr=`<div class="gr ${ban?'ban':''}">${ban?'連撃不可 ':'使用条件：'}${nd.map(n=>{const ok=gaugeAll(p).some(x=>x.name===n);return `<span class="${ok?'lit':'off'}">${n}${ok?'✓':'✗'}</span>`;}).join(' ')}</div>`;}
   else gr='<div class="gr"><span class="off">緑なし</span></div>';
-  return `<div class="nv-info">${greenTop?gr+nums:nums+gr}</div>`;
+  return `<div class="nv-info ${opponent?'opp':'own'}">${opponent?gr+nums:nums+gr}</div>`;
 }
 function nvGauge(p,z){const arr=z==='yo'?p.gYo:p.gIn;
   return `<div class="nv-g ${z}" data-zone="${z}" data-p="${p.idx}"><div class="h">${z==='yo'?'陽':'陰'}</div><div class="col">${arr.slice(-7).map(c=>`<div class="stub ${COLC[c.color]||'cx'}">${c.name}</div>`).join('')}</div></div>`;}
@@ -2294,8 +2340,8 @@ const UVS_CHAR_ART_PATH=Object.freeze({
   '雲雀':Object.freeze([null,'./assets/characters/hibari.webp','./assets/characters/hibari.webp','./assets/characters/hibari.webp','./assets/characters/hibari.webp','./assets/characters/hibari.webp'])
 });
 function nvChar(p,flip,lit,picked){const ch=p.charDeck[0];const sups=p.supports.map(s=>s.card.name).join('・');const artPath=UVS_CHAR_ART_PATH[p.charName]?.[ch.lv];const artHtml=artPath?`<img class="uvs-character-art" src="${artPath}" alt="" aria-hidden="true" onerror="this.remove()">`:'';
-  return `<div class="nv-char ${flip?'flip':''} ${lit?'lit':''} ${picked?'picked':''}" ${lit?'data-charv="1"':`data-uid="${ch.uid}"`}>${artHtml}<div class="t"><b>${p.charName}</b><span>Lv${ch.lv}</span></div><div class="s">AT ${charAT(p)}・DF ${charDF(p)}</div><div class="x">${cardText(ch)||''}</div>${sups?`<div class="sup">使用中：${sups}</div>`:''}${lit&&G.prompt.spec.charLabel?`<div class="sup">タップ：${G.prompt.spec.charLabel}</div>`:''}</div>`;}
-function nvStack(p){
+  return `<div class="nv-char ${flip?'flip':''} ${lit?'lit':''} ${picked?'picked':''}" ${lit?'data-charv="1"':`data-uid="${ch.uid}"`}>${artHtml}<div class="t"><b>${p.charName}</b><span>Lv${ch.lv}</span></div><div class="s">AT ${ch.at}・DF ${ch.df}</div><div class="x">${cardText(ch)||''}</div>${sups?`<div class="sup">使用中：${sups}</div>`:''}${lit&&G.prompt.spec.charLabel?`<div class="sup">タップ：${G.prompt.spec.charLabel}</div>`:''}</div>`;}
+function nvStack(p,opponent){
   const bs=G.bs;
   const side=bs&&(bs.atk.p===p?bs.atk:bs.def);
   const label=side&&side.card?`${side===bs.atk?'攻撃':'防御'}${side.heavy.length?` · 重撃 ${side.heavy.length}枚`:''}`:'使用カード';
@@ -2304,22 +2350,37 @@ function nvStack(p){
     const cards=[side.card,...side.heavy];
     const boost=side===bs.atk?bs.boost?.atk:bs.boost?.def;
     const back=bs.stage==='def';
-    content=`<div class="nv-stack" style="--steps:${cards.length-1||1}">${cards.map((c,i)=>`<div class="nv-stack-card" data-play-index="${i}" style="--index:${i};--depth:${cards.length-i}">${cardHTML(c,{small:true,back,boost:i===0?boost:null})}</div>`).join('')}</div>`;
+    content=`<div class="nv-stack" style="--steps:${cards.length-1||1}">${cards.map((c,i)=>`<div class="nv-stack-card${opponent?' opponent':''}" data-play-index="${i}" style="--index:${i};--depth:${cards.length-i}">${cardHTML(c,{small:true,back,boost:i===0?boost:null})}</div>`).join('')}</div>`;
   }else if(side&&bs.stage!=='def'){
     content='<span class="nv-played-wait">防御なし</span>';
   }
-  return `<div class="nv-played" data-play-seat="${p.idx}"><span class="nv-played-label">${label}</span>${content}</div>`;
+  const inspect=side?.card&&bs.stage!=='def'?' role="button" tabindex="0" aria-label="使用カードの詳細"':'';
+  return `<div class="nv-played" data-play-seat="${p.idx}"${inspect}><span class="nv-played-label">${label}</span>${content}</div>`;
 }
-function nvTotals(){
+function nvTotals(me,op){
   const bs=G.bs;
-  const at=Number.isFinite(bs?.at)?bs.at:'—';
-  const df=Number.isFinite(bs?.df)?bs.df:'—';
-  return `<div class="nv-totals"><span class="atk">AT <b data-battle-total="at">${at}</b></span><span class="sep" aria-hidden="true">｜</span><span class="def">DF <b data-battle-total="df">${df}</b></span></div>`;
+  const attacker=bs?.atk.p.idx??G.cur;
+  const value=(p,label)=>{
+    const key=p.idx===attacker?'at':'df';
+    const total=Number.isFinite(bs?.[key])?bs[key]:'—';
+    return `<span class="combatant ${key==='at'?'atk':'def'}"><span class="seat">${label}</span>${key.toUpperCase()} <b data-battle-total="${key}">${total}</b></span>`;
+  };
+  return `<div class="nv-totals">${value(op,'相手')}<span class="sep" aria-hidden="true">｜</span>${value(me,'自分')}</div>`;
+}
+function showBattleStack(seat){
+  const bs=G.bs;
+  if(!bs||bs.stage==='def')return;
+  const attack=bs.atk.p.idx===seat;
+  const side=attack?bs.atk:bs.def;
+  if(!side.card)return;
+  const details=[side.card,...side.heavy].map((card,i)=>`<section><small>${i?'重撃 '+i:'本体カード'}</small>${cardDetailHTML(card)}</section>`).join('');
+  openOv(`<h2>${side.p.name}（${side.p.charName}）の${attack?'攻撃':'防御'}</h2><div class="stack-list">${details}</div>`);
+  $('#overlay .ov').classList.add('nv-stack-detail');
 }
 function nvSide(p,opponent,lit=false){
   const gauges=`<div class="nv-gs ${opponent?'opp':''}">${nvGauge(p,'yo')}${nvGauge(p,'in')}</div>`;
   const char=nvChar(p,opponent,lit,!opponent&&pickKey()==='ch');
-  return `<div class="nv-side ${opponent?'opp':'own'}">${opponent?char+nvStack(p)+gauges:gauges+nvStack(p)+char}</div>`;
+  return `<div class="nv-side ${opponent?'opp':'own'}">${opponent?char+nvStack(p,true)+gauges:gauges+nvStack(p,false)+char}</div>`;
 }
 function nvChoice(pr,me){ // 札を選ばない問い（ゲージの陽陰、結果の確認など）と、手札にない札を選ぶ問いは中央に出す
   if(!pr||pr.pi!==me.idx||pr.spec.battleResult)return '';const sp=pr.spec;
@@ -2494,18 +2555,24 @@ function nvRender(){
   app.innerHTML=`
   <div class="nv-bar">${G.mode!=='watch'?`<button id="btnundo" ${canUndo()&&undoTarget('step')>=0?'':'disabled'}>1手戻す</button><button id="btnturn" ${canUndo()&&undoTarget('turn')>=0?'':'disabled'}>ターン最初へ</button>`:''}<button id="btnlog">ログ</button><button id="btnrule">ルール</button><button id="btnreset">最初から</button><span class="sp"></span><span id="autostat">${autoStat}</span><span>${Replay.LOG_VERSION}</span></div>
   <div class="nv-opbar"><span><span class="nv-turn ${mine?'mine':'theirs'}">T${G.turn} ${who}・${PH[G.phase]||''}</span>　${op.name}${op.ai?'（CPU）':''}</span><small class="small" data-ui-version style="white-space:nowrap">${UI_VER}</small><span class="nv-backs">手札 ${op.hand.slice(0,8).map(()=>'<i></i>').join('')}<b>${op.hand.length}</b></span></div>
-  <div class="nv-row">${nvPower(op,'相手のパワー',false)}${nvInfo(op,true)}${nvGval(op,'相手',true)}</div>
-  <div class="nv-mid"><div class="nv-center">${nvSide(op,true)}${nvTotals()}${nvSide(me,false,lit)}${nvChoice(pr,me)}</div></div>
-  <div class="nv-row">${nvGval(me,'自分',false)}${nvInfo(me,false)}${nvPower(me,'自分のパワー',true)}</div>
+  <div class="nv-row">${nvInfo(op,true)}${nvGval(op,'相手',true)}</div>
+  <div class="nv-mid"><div class="nv-center">${nvSide(op,true)}${nvTotals(me,op)}${nvSide(me,false,lit)}${nvChoice(pr,me)}</div></div>
+  <div class="nv-row">${nvGval(me,'自分',false)}${nvInfo(me,false)}</div>
   <div class="nv-status"><div class="nv-prompt ${pr&&pr.pi===me.idx?'':'idle'}" id="nvprompt">${ptxt}</div>${resultPrompt?'<button class="primary nv-result-button" data-bi="0">次へ</button>':''}</div>
+  <button type="button" id="nvrecent" class="nv-recent" aria-label="直近のログ。タップで詳細を表示"></button>
   ${nvHand(me,showMe)}`;
-  animatePowers();
+  refreshRecentLog();
+  $('#nvrecent').onclick=showLog;
+  app.querySelectorAll('.nv-played[role="button"]').forEach(stack=>{
+    const open=()=>showBattleStack(Number(stack.dataset.playSeat));
+    stack.onclick=open;
+    stack.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}};
+  });
   window.FX?.battleFrame(G.bs,sources);
   app.querySelectorAll('[data-bi]').forEach(b=>b.onclick=e=>{e.stopPropagation();const p2=G.prompt;if(!p2)return;const k='b'+b.dataset.bi;if(b.classList.contains('nv-pass')&&pickKey()!==k){setPick(k);return;}const sp=p2.spec.buttons[+b.dataset.bi];UI.pick=null;resolvePrompt({value:sp.value});});
-  app.querySelectorAll('[data-uid]').forEach(el=>el.onclick=e=>{e.stopPropagation();const uid=+el.dataset.uid;const p2=G.prompt;if(p2&&p2.spec.cards&&p2.spec.cards.includes(uid)&&el.classList.contains('sel')){const k='c'+uid;if(pickKey()!==k){setPick(k);showCardPeek(findCard(uid));return;}closeCardPeek();UI.pick=null;resolvePrompt({card:findCard(uid)});return;}showCardPeek(findCard(uid));});
+  app.querySelectorAll('[data-uid]:not(.nv-stack [data-uid])').forEach(el=>el.onclick=e=>{e.stopPropagation();const uid=+el.dataset.uid;const p2=G.prompt;if(p2&&p2.spec.cards&&p2.spec.cards.includes(uid)&&el.classList.contains('sel')){const k='c'+uid;if(pickKey()!==k){setPick(k);showCardPeek(findCard(uid));return;}closeCardPeek();UI.pick=null;resolvePrompt({card:findCard(uid)});return;}showCardPeek(findCard(uid));});
   app.querySelectorAll('[data-charv]').forEach(el=>el.onclick=()=>{const p2=G.prompt;if(!(p2&&p2.spec.charValue))return;if(pickKey()!=='ch'){setPick('ch');return;}UI.pick=null;resolvePrompt({value:p2.spec.charValue});});
   app.querySelectorAll('[data-zone]').forEach(el=>el.onclick=e=>{e.stopPropagation();showZone(P[+el.dataset.p],el.dataset.zone);});
-  app.querySelectorAll('[data-pw]').forEach(el=>el.onclick=()=>showPowerDetail(P[+el.dataset.pw]));
   const np=$('#nvprompt');if(np)np.onclick=showLog;
   const hd=$('#nvhand');if(hd)hd.scrollLeft=hd.scrollWidth;
   const bu=$('#btnundo');if(bu)bu.onclick=()=>doUndo('step');const bt=$('#btnturn');if(bt)bt.onclick=()=>doUndo('turn');
@@ -2513,8 +2580,6 @@ function nvRender(){
 }
 render=nvRender;
 const _start=startScreen;startScreen=function(){$('#app').classList.remove('nv');return _start.apply(this,arguments);};
-// 攻守交代：ターン開始の帯と一緒に、パワー表示を枠で強調する
-const _banner=showBanner;showBanner=async function(kind,text,sub){if(kind==='turn'&&bannerMs('turn')>0){G.turnSwapHL=Date.now()+1500;render();setTimeout(()=>{if(G.turnSwapHL&&G.turnSwapHL<=Date.now()){G.turnSwapHL=0;render();}},1600);}return _banner.apply(this,arguments);};
 // ---- 人間の操作：すべて手札から ----
 Human.prepAction=async function(p,opts,ctx){
   const has=v=>opts.find(o=>o.value===v);const go=has('go');const lv=has('lv5');
@@ -2677,9 +2742,10 @@ function battleFrame(bs,sources){
   if(bs.stage==='result'&&!view.resolved){
     view.resolved=true;
     const center=rectOf('#app .nv-totals');
-    if(center)void battleImpact(view,stacks,center,ms/300);
+    if(center)view.completion=battleImpact(view,stacks,center,ms/300);
   }
 }
+FX.finishBattle=()=>battleView?.completion;
 FX.battleFrame=battleFrame;
 FX.battleSources=battleSources;
 FX.resumeBattle=bs=>{
@@ -2701,8 +2767,8 @@ function fromLog(s){
   if(p&&(m=s.match(/：重撃カード(\d+)枚→捨て札/)))return push(()=>fly('重撃',null,zoneRect(p,'discard'),ms));
   if((m=s.match(/^(.+?)：「(.+?)」DP\d+で/))){const q=P.find(x=>x.name===m[1]);if(q)return push(()=>pop(zoneRect(q,'damage'),'ダメージ','dmg',ms*2));}
   if((m=s.match(/^判定：AT\d+（(.+?)） vs DF\d+（(.+?)）/))){const a=m[1].match(/効果\+(\d+)/),d=m[2].match(/効果\+(\d+)/);const bs=G.bs;
-    if(a&&bs)push(()=>pop(rectOf(`#app [data-pw="${bs.atk.p.idx}"]`),`効果 +${a[1]}`,'eff',ms*2));
-    if(d&&bs)push(()=>pop(rectOf(`#app [data-pw="${bs.def.p.idx}"]`),`効果 +${d[1]}`,'eff',ms*2));return;}
+    if(a&&bs)push(()=>pop(rectOf('#app [data-battle-total="at"]'),`効果 +${a[1]}`,'eff',ms*2));
+    if(d&&bs)push(()=>pop(rectOf('#app [data-battle-total="df"]'),`効果 +${d[1]}`,'eff',ms*2));return;}
   if(p&&/(Lv\d+の効果|忍転身|柳生Lv2で|破れ|合図|スタンバイ能力|登場時)/.test(s)&&!/捨てなかった|効果：.*ない$/.test(s))return push(()=>ability(p,s.slice(p.name.length+1),ms*2));
 }
 function push(f){FX.q.push(f);if(!FX.busy)run();}
@@ -2710,7 +2776,7 @@ async function run(){FX.busy=true;while(FX.q.length){const f=FX.q.shift();try{aw
 FX.drain=()=>FX.busy||FX.q.length?new Promise(r=>FX.waiters.push(r)):Promise.resolve();
 // G.log に積むたびに演出を作る（エンジンの log と、カード定義側の log の両方がここを通る）
 const _setup=setupGame;setupGame=function(){clearBattleView();const r=_setup.apply(this,arguments);FX.q=[];if(layer)layer.innerHTML='';
-  const arr=G.log;arr.push=function(...xs){const n=Array.prototype.push.apply(this,xs);for(const x of xs)try{fromLog(String(x&&x.s!=null?x.s:x));}catch(e){}return n;};return r;};
+  const arr=G.log;arr.push=function(...xs){const n=Array.prototype.push.apply(this,xs);for(const x of xs)try{fromLog(String(x&&x.s!=null?x.s:x));}catch(e){}if(!G.replaying)refreshRecentLog();return n;};return r;};
 // 次の判断の前に演出を待つ（人間・CPUとも）
 const _mr=Replay.makeRecorder;Replay.makeRecorder=function(){const w=_mr.apply(this,arguments);
   return new Proxy(w,{get(t,k){const v=t[k];if(typeof v==='function'&&['prepAction','chooseGauge','attack','defend','heavy','chain','pickCards'].includes(k))return async function(...a){await FX.drain();return v.apply(t,a);};return v;}});};
