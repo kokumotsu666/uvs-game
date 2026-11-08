@@ -282,8 +282,8 @@ header button:disabled{opacity:.35}
 /* Character illustrations: UI-only, never part of gameplay state. */
 .nv-char{position:relative;isolation:isolate;overflow:hidden}
 .nv-char .uvs-character-art{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center center;pointer-events:none;z-index:0}
-.nv-char:has(.uvs-character-art)::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to bottom,rgba(20,25,34,.75),rgba(20,25,34,.12) 38%,rgba(20,25,34,.9))}
-.nv-char > :not(.uvs-character-art){position:relative;z-index:2;text-shadow:0 1px 3px #000}
+.nv-char:has(.uvs-character-art)::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to bottom,rgba(20,25,34,.85),rgba(20,25,34,.62) 54%,rgba(20,25,34,.18) 78%,rgba(20,25,34,.35))}
+.nv-char:has(.uvs-character-art) > :not(.uvs-character-art){position:relative;z-index:2;text-shadow:0 1px 3px #000}.nv-char:has(.uvs-character-art) .x{color:#eef0f5}
 </style>
 </head>
 <body>
