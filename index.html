@@ -245,7 +245,7 @@ header button:disabled{opacity:.35}
 body:not(:has(#overlay.on,#cardpeek)) .nv-center[data-impact] .nv-totals{z-index:26}
 .nv-totals b{display:inline-block;font-size:clamp(24px,7vw,32px)}
 .nv-totals .sep{color:var(--dim);font-weight:400}
-.nv-result-button{margin-left:auto;min-height:44px;flex:0 0 auto}
+.nv-result-hint{cursor:pointer;color:var(--fg)}
 .nv-status{display:flex;align-items:center;gap:6px;min-width:0;min-height:44px}
 .nv-status .nv-prompt{flex:1}
 .nv-row .nv-info{flex:0 1 auto;width:min(72%,260px)}
@@ -270,6 +270,7 @@ body:not(:has(#overlay.on,#cardpeek)) .nv-center[data-impact] .nv-totals{z-index
 .nv-stack-detail h2,.nv-stack-detail .btns{flex:none}
 .nv-stack-detail .stack-list section+section{border-top:1px solid var(--line);margin-top:12px;padding-top:12px}
 .nv-victory{text-align:center}
+.ov:has(> .nv-victory) > .btns{justify-content:center}
 .nv-victory h2{font-size:clamp(27px,8vw,42px);color:#ffe1a0;text-shadow:0 0 18px #f0b13a88}
 .nv-victory.animated h2{animation:nv-victory-in 420ms ease-out both}
 .nv-victory.animated.short h2{animation-duration:210ms}
@@ -2558,7 +2559,7 @@ function nvRender(){
   <div class="nv-row">${nvInfo(op,true)}${nvGval(op,'相手',true)}</div>
   <div class="nv-mid"><div class="nv-center">${nvSide(op,true)}${nvTotals(me,op)}${nvSide(me,false,lit)}${nvChoice(pr,me)}</div></div>
   <div class="nv-row">${nvGval(me,'自分',false)}${nvInfo(me,false)}</div>
-  <div class="nv-status"><div class="nv-prompt ${pr&&pr.pi===me.idx?'':'idle'}" id="nvprompt">${ptxt}</div>${resultPrompt?'<button class="primary nv-result-button" data-bi="0">次へ</button>':''}</div>
+  <div class="nv-status"><div class="nv-prompt ${resultPrompt?'nv-result-hint':pr&&pr.pi===me.idx?'':'idle'}" id="nvprompt"${resultPrompt?' role="button" tabindex="0"':''}>${resultPrompt?`画面をタップして進む${ptxt?` · ${ptxt}`:''}`:ptxt}</div></div>
   <button type="button" id="nvrecent" class="nv-recent" aria-label="直近のログ。タップで詳細を表示"></button>
   ${nvHand(me,showMe)}`;
   refreshRecentLog();
@@ -2573,7 +2574,21 @@ function nvRender(){
   app.querySelectorAll('[data-uid]:not(.nv-stack [data-uid])').forEach(el=>el.onclick=e=>{e.stopPropagation();const uid=+el.dataset.uid;const p2=G.prompt;if(p2&&p2.spec.cards&&p2.spec.cards.includes(uid)&&el.classList.contains('sel')){const k='c'+uid;if(pickKey()!==k){setPick(k);showCardPeek(findCard(uid));return;}closeCardPeek();UI.pick=null;resolvePrompt({card:findCard(uid)});return;}showCardPeek(findCard(uid));});
   app.querySelectorAll('[data-charv]').forEach(el=>el.onclick=()=>{const p2=G.prompt;if(!(p2&&p2.spec.charValue))return;if(pickKey()!=='ch'){setPick('ch');return;}UI.pick=null;resolvePrompt({value:p2.spec.charValue});});
   app.querySelectorAll('[data-zone]').forEach(el=>el.onclick=e=>{e.stopPropagation();showZone(P[+el.dataset.p],el.dataset.zone);});
-  const np=$('#nvprompt');if(np)np.onclick=showLog;
+  const promptText=$('#nvprompt');
+  app.onclick=null;
+  if(resultPrompt){
+    const advance=()=>{
+      if(G.prompt===pr)resolvePrompt({value:pr.spec.buttons[0].value});
+    };
+    app.onclick=e=>{
+      if(!e.target.closest('button,[data-uid],[data-zone],.nv-played[role="button"]'))advance();
+    };
+    promptText.onkeydown=e=>{
+      if(e.key==='Enter'||e.key===' '){e.preventDefault();advance();}
+    };
+  }else{
+    promptText.onclick=showLog;
+  }
   const hd=$('#nvhand');if(hd)hd.scrollLeft=hd.scrollWidth;
   const bu=$('#btnundo');if(bu)bu.onclick=()=>doUndo('step');const bt=$('#btnturn');if(bt)bt.onclick=()=>doUndo('turn');
   $('#btnlog').onclick=showLog;$('#btnrule').onclick=showRules;$('#btnreset').onclick=()=>{if(G.prompt)resolvePrompt({value:'__abort'});location.reload();};
