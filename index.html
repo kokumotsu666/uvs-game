@@ -2612,8 +2612,10 @@ function battleFlight(view,node,source,ms){
   view.flights.add(task);
   task.then(()=>{finishBattleClone(view,el);view.flights.delete(task);});
 }
-async function battleImpact(view,stacks,center,ratio){
-  const frames=stacks.filter(Boolean).map(node=>({node:node.cloneNode(true),rect:node.getBoundingClientRect()}));
+async function battleImpact(view,[attackStack,defenseStack],center,ratio){
+  // Both stacks share a z-index, so the winner is painted last, below the flash.
+  const paintOrder=view.bs.success?[defenseStack,attackStack]:[attackStack,defenseStack];
+  const frames=paintOrder.filter(Boolean).map(node=>({node:node.cloneNode(true),rect:node.getBoundingClientRect()}));
   await Promise.all(view.flights);
   if(battleView!==view||G.bs!==view.bs)return;
   const cx=center.left+center.width/2,cy=center.top+center.height/2;
