@@ -2,7 +2,7 @@
 
 ## Scope
 - UI only; game rules, AI, card data, turn state, logs and replay behavior are unchanged.
-- All levels 1-5 of each character share one transparent illustration.
+- Artwork selection is **character × level (Lv1–Lv5)**, with 25 independent UI mapping entries. For this initial version, all five entries of each character refer to the same transparent file; later, individual levels can use different images without changing rules or card data.
 - The existing HTML card name, level, AT/DF, and ability text remain displayed.
 - If an image file is missing, its <img> is removed and the previous text-only card remains.
 
@@ -26,3 +26,9 @@ Do **not** replace files with older intermediate drafts or combine images into o
 6. Merge only after assets are present and tests pass. GitHub Pages serves public assets after merge.
 
 This is a staging branch. The published GitHub Pages site stays unchanged until merge.
+
+## Separation contract
+- Core rules, card text, AI, turn state and replay logs are authoritative and remain independent of UI.
+- When card text/abilities change, adjust only the UI rendering/layout as necessary.
+- Mapping key = existing character name + current character card level (`p.charDeck[0].lv`); do not alter core card data to select images.
+- Distinct Lv1-Lv5 art may be added later by replacing the corresponding UI file path, without changing gameplay.
