@@ -282,8 +282,11 @@ header button:disabled{opacity:.35}
 /* Character illustrations: UI-only, never part of gameplay state. */
 .nv-char{position:relative;isolation:isolate;overflow:hidden}
 .nv-char .uvs-character-art{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center center;pointer-events:none;z-index:0}
-.nv-char:has(.uvs-character-art)::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to bottom,rgba(20,25,34,.75),rgba(20,25,34,.12) 35%,rgba(20,25,34,.12) 55%,rgba(20,25,34,.82))}
-.nv-char:has(.uvs-character-art) > :not(.uvs-character-art){position:relative;z-index:2;text-shadow:0 1px 3px #000}.nv-char:has(.uvs-character-art) .x{color:#eef0f5}
+.nv-char > :is(.t,.s,.x:not(:empty)){position:relative;z-index:1;margin-inline:-4px;padding-inline:4px;border-radius:8px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.10);color:#f3f6ff}
+.nv-char > .t{background:rgba(20,26,36,.55)}.nv-char > .t span{color:inherit}
+.nv-char > .s{background:rgba(20,26,36,.60)}
+.nv-char > .x:not(:empty){background:rgba(20,26,36,.75);overflow-y:auto}
+.nv-char > .sup{position:relative;z-index:1}
 </style>
 </head>
 <body>
