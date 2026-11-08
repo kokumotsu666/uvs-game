@@ -1865,7 +1865,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=Solver; else root.
    - 記録は人間・CPUの区別なく全判断を含む。再生は記録を使い切ったら
      元のコントローラ（人間／CPU）に引き継ぐ（＝ログからの再開）
    ========================================================= */
-const UI_VER='演出v2.1';
+const UI_VER='演出v2.2';
 (function(root){
 const LOG_VERSION='v'+CONFIG.ruleVersion;
 
@@ -2785,7 +2785,7 @@ function pulseTotals(keys=['at','df']){
 }
 function battleFrame(bs,sources){
   const ms=base();
-  if(!ms||!bs||window.matchMedia('(prefers-reduced-motion: reduce)').matches){clearBattleView();return;}
+  if(!ms||!bs){clearBattleView();return;}
   if(battleView?.bs!==bs){
     clearBattleView();
     battleView=createBattleView(bs);
