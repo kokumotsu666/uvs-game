@@ -2418,6 +2418,9 @@ Human.pickCards=async function(p,cards,n,title,allowLess){
     if(/^秘伝「.+」のコスト：捨てる.+属性のカードを選択$/.test(title)){
       return pickGaugeCards(p,p,cards,n,title,'秘伝忍法・コスト選択');
     }
+    if(title==='本能のままに：忍ゲージから捨て札にするカードを選択'){
+      return pickGaugeCards(p,p,cards,n,title,'本能のままに・忍ゲージ破壊');
+    }
     if(title==='本能のままに：研究斑鳩Lv3で捨てるゲージ'){
       return pickGaugeCards(p,p,cards,n,title,'斑鳩Lv3・忍ゲージ破壊');
     }
