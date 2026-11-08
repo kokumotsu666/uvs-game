@@ -1,0 +1,32 @@
+{
+  "counts": {
+    "final": {
+      "games": 76000,
+      "unique": 76000,
+      "seatFirstCells": 304,
+      "gamesPerCell": 250
+    },
+    "confirm": {
+      "games": 52000,
+      "unique": 52000,
+      "seatFirstCells": 208,
+      "gamesPerCell": 250
+    }
+  },
+  "metricValuesChecked": 28672000,
+  "unchangedEnvironmentGames": 24000,
+  "matched": {
+    "replay": 512,
+    "observationOff": 512,
+    "unmodified": 40
+  },
+  "cacheGuard": {
+    "rejected": true,
+    "firstGame": 1,
+    "secondGames": 0
+  },
+  "workers": 15,
+  "maxTurn": 28,
+  "seconds": 18.695,
+  "errors": []
+}

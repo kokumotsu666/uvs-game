@@ -1,0 +1,376 @@
+{
+  "date": "2026-11-05T03:21:30.234Z",
+  "reason": "Quality correction after seeing zero empirical variance, not a success-based change; cannot treat no exposure as equivalence",
+  "preregisteredNormalResultsRetained": true,
+  "rule": "For cluster linear contrast, R_i=sum absolute net coefficients at matchup i; K=sum R_i^2/n_i. two-sided Hoeffding epsilon=sqrt(K*log(2/alpha)/2); alpha=.05, familywise alpha=.05/118. Original normal interval retained.",
+  "changed": [
+    {
+      "id": "Y_oldOpp_pair6",
+      "phase": "final",
+      "estimate": 0,
+      "normal": {
+        "ci95": [
+          0,
+          0
+        ],
+        "simultaneous95": [
+          0,
+          0
+        ]
+      },
+      "boundedCI95": [
+        -0.17178776333869503,
+        0.17178776333869503
+      ],
+      "boundedSimultaneous95": [
+        -0.26014709805922653,
+        0.26014709805922653
+      ]
+    },
+    {
+      "id": "Y_newOpp_pair6",
+      "phase": "final",
+      "estimate": 0,
+      "normal": {
+        "ci95": [
+          0,
+          0
+        ],
+        "simultaneous95": [
+          0,
+          0
+        ]
+      },
+      "boundedCI95": [
+        -0.17178776333869503,
+        0.17178776333869503
+      ],
+      "boundedSimultaneous95": [
+        -0.26014709805922653,
+        0.26014709805922653
+      ]
+    },
+    {
+      "id": "I_oldOpp_pair8",
+      "phase": "final",
+      "estimate": 0,
+      "normal": {
+        "ci95": [
+          0,
+          0
+        ],
+        "simultaneous95": [
+          0,
+          0
+        ]
+      },
+      "boundedCI95": [
+        -0.17178776333869503,
+        0.17178776333869503
+      ],
+      "boundedSimultaneous95": [
+        -0.26014709805922653,
+        0.26014709805922653
+      ]
+    },
+    {
+      "id": "I_newOpp_pair8",
+      "phase": "final",
+      "estimate": 0,
+      "normal": {
+        "ci95": [
+          0,
+          0
+        ],
+        "simultaneous95": [
+          0,
+          0
+        ]
+      },
+      "boundedCI95": [
+        -0.17178776333869503,
+        0.17178776333869503
+      ],
+      "boundedSimultaneous95": [
+        -0.26014709805922653,
+        0.26014709805922653
+      ]
+    },
+    {
+      "id": "K_oldOpp_pair9",
+      "phase": "final",
+      "estimate": 0,
+      "normal": {
+        "ci95": [
+          0,
+          0
+        ],
+        "simultaneous95": [
+          0,
+          0
+        ]
+      },
+      "boundedCI95": [
+        -0.17178776333869503,
+        0.17178776333869503
+      ],
+      "boundedSimultaneous95": [
+        -0.26014709805922653,
+        0.26014709805922653
+      ]
+    },
+    {
+      "id": "K_newOpp_pair9",
+      "phase": "final",
+      "estimate": 0,
+      "normal": {
+        "ci95": [
+          0,
+          0
+        ],
+        "simultaneous95": [
+          0,
+          0
+        ]
+      },
+      "boundedCI95": [
+        -0.17178776333869503,
+        0.17178776333869503
+      ],
+      "boundedSimultaneous95": [
+        -0.26014709805922653,
+        0.26014709805922653
+      ]
+    },
+    {
+      "id": "H_contextInteraction",
+      "phase": "final",
+      "estimate": 0,
+      "normal": {
+        "ci95": [
+          0,
+          0
+        ],
+        "simultaneous95": [
+          0,
+          0
+        ]
+      },
+      "boundedCI95": [
+        -0.17178776333869503,
+        0.17178776333869503
+      ],
+      "boundedSimultaneous95": [
+        -0.26014709805922653,
+        0.26014709805922653
+      ]
+    },
+    {
+      "id": "Y_oldOpp_pair6",
+      "phase": "confirm",
+      "estimate": 0,
+      "normal": {
+        "ci95": [
+          0,
+          0
+        ],
+        "simultaneous95": [
+          0,
+          0
+        ]
+      },
+      "boundedCI95": [
+        -0.17178776333869503,
+        0.17178776333869503
+      ],
+      "boundedSimultaneous95": [
+        -0.26014709805922653,
+        0.26014709805922653
+      ]
+    },
+    {
+      "id": "Y_newOpp_pair6",
+      "phase": "confirm",
+      "estimate": 0,
+      "normal": {
+        "ci95": [
+          0,
+          0
+        ],
+        "simultaneous95": [
+          0,
+          0
+        ]
+      },
+      "boundedCI95": [
+        -0.17178776333869503,
+        0.17178776333869503
+      ],
+      "boundedSimultaneous95": [
+        -0.26014709805922653,
+        0.26014709805922653
+      ]
+    },
+    {
+      "id": "I_oldOpp_pair8",
+      "phase": "confirm",
+      "estimate": 0,
+      "normal": {
+        "ci95": [
+          0,
+          0
+        ],
+        "simultaneous95": [
+          0,
+          0
+        ]
+      },
+      "boundedCI95": [
+        -0.17178776333869503,
+        0.17178776333869503
+      ],
+      "boundedSimultaneous95": [
+        -0.26014709805922653,
+        0.26014709805922653
+      ]
+    },
+    {
+      "id": "I_newOpp_pair8",
+      "phase": "confirm",
+      "estimate": 0,
+      "normal": {
+        "ci95": [
+          0,
+          0
+        ],
+        "simultaneous95": [
+          0,
+          0
+        ]
+      },
+      "boundedCI95": [
+        -0.17178776333869503,
+        0.17178776333869503
+      ],
+      "boundedSimultaneous95": [
+        -0.26014709805922653,
+        0.26014709805922653
+      ]
+    },
+    {
+      "id": "K_oldOpp_pair9",
+      "phase": "confirm",
+      "estimate": 0,
+      "normal": {
+        "ci95": [
+          0,
+          0
+        ],
+        "simultaneous95": [
+          0,
+          0
+        ]
+      },
+      "boundedCI95": [
+        -0.17178776333869503,
+        0.17178776333869503
+      ],
+      "boundedSimultaneous95": [
+        -0.26014709805922653,
+        0.26014709805922653
+      ]
+    },
+    {
+      "id": "K_newOpp_pair9",
+      "phase": "confirm",
+      "estimate": 0,
+      "normal": {
+        "ci95": [
+          0,
+          0
+        ],
+        "simultaneous95": [
+          0,
+          0
+        ]
+      },
+      "boundedCI95": [
+        -0.17178776333869503,
+        0.17178776333869503
+      ],
+      "boundedSimultaneous95": [
+        -0.26014709805922653,
+        0.26014709805922653
+      ]
+    },
+    {
+      "id": "H_contextInteraction",
+      "phase": "confirm",
+      "estimate": 0,
+      "normal": {
+        "ci95": [
+          0,
+          0
+        ],
+        "simultaneous95": [
+          0,
+          0
+        ]
+      },
+      "boundedCI95": [
+        -0.17178776333869503,
+        0.17178776333869503
+      ],
+      "boundedSimultaneous95": [
+        -0.26014709805922653,
+        0.26014709805922653
+      ]
+    }
+  ],
+  "secondary": [
+    {
+      "id": "rawI_pair8",
+      "estimate": 0,
+      "normal": {
+        "ci95": [
+          0,
+          0
+        ],
+        "simultaneous95": [
+          0,
+          0
+        ]
+      },
+      "boundedCI95": [
+        -0.2716203031481239,
+        0.2716203031481239
+      ],
+      "boundedSimultaneous95": [
+        -0.36563948713638483,
+        0.36563948713638483
+      ]
+    },
+    {
+      "id": "rawH_pair6",
+      "estimate": 0,
+      "normal": {
+        "ci95": [
+          0,
+          0
+        ],
+        "simultaneous95": [
+          0,
+          0
+        ]
+      },
+      "boundedCI95": [
+        -0.2716203031481239,
+        0.2716203031481239
+      ],
+      "boundedSimultaneous95": [
+        -0.36563948713638483,
+        0.36563948713638483
+      ]
+    }
+  ]
+}

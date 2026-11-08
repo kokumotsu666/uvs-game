@@ -1,0 +1,1628 @@
+{
+  "createdUTC": "2026-11-05T02:24:34.206Z",
+  "contrasts": [
+    {
+      "id": "Y_oldOpp_pair0",
+      "terms": [
+        {
+          "env": "Y",
+          "pi": 0,
+          "c": -1
+        },
+        {
+          "env": "OLD",
+          "pi": 0,
+          "c": 1
+        }
+      ],
+      "description": "対象だけ新版−全旧版（相手旧版）"
+    },
+    {
+      "id": "Y_newOpp_pair0",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 0,
+          "c": -1
+        },
+        {
+          "env": "minusY",
+          "pi": 0,
+          "c": 1
+        }
+      ],
+      "description": "全新版−対象だけ旧版（相手新版）"
+    },
+    {
+      "id": "Y_oldOpp_pair4",
+      "terms": [
+        {
+          "env": "Y",
+          "pi": 4,
+          "c": 1
+        },
+        {
+          "env": "OLD",
+          "pi": 4,
+          "c": -1
+        }
+      ],
+      "description": "対象だけ新版−全旧版（相手旧版）"
+    },
+    {
+      "id": "Y_newOpp_pair4",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 4,
+          "c": 1
+        },
+        {
+          "env": "minusY",
+          "pi": 4,
+          "c": -1
+        }
+      ],
+      "description": "全新版−対象だけ旧版（相手新版）"
+    },
+    {
+      "id": "Y_oldOpp_pair5",
+      "terms": [
+        {
+          "env": "Y",
+          "pi": 5,
+          "c": 1
+        },
+        {
+          "env": "OLD",
+          "pi": 5,
+          "c": -1
+        }
+      ],
+      "description": "対象だけ新版−全旧版（相手旧版）"
+    },
+    {
+      "id": "Y_newOpp_pair5",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 5,
+          "c": 1
+        },
+        {
+          "env": "minusY",
+          "pi": 5,
+          "c": -1
+        }
+      ],
+      "description": "全新版−対象だけ旧版（相手新版）"
+    },
+    {
+      "id": "Y_oldOpp_pair6",
+      "terms": [
+        {
+          "env": "Y",
+          "pi": 6,
+          "c": 1
+        },
+        {
+          "env": "OLD",
+          "pi": 6,
+          "c": -1
+        }
+      ],
+      "description": "対象だけ新版−全旧版（相手旧版）"
+    },
+    {
+      "id": "Y_newOpp_pair6",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 6,
+          "c": 1
+        },
+        {
+          "env": "minusY",
+          "pi": 6,
+          "c": -1
+        }
+      ],
+      "description": "全新版−対象だけ旧版（相手新版）"
+    },
+    {
+      "id": "Y_oldOpp_overall",
+      "terms": [
+        {
+          "env": "Y",
+          "pi": 0,
+          "c": -0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 0,
+          "c": 0.25
+        },
+        {
+          "env": "Y",
+          "pi": 4,
+          "c": 0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 4,
+          "c": -0.25
+        },
+        {
+          "env": "Y",
+          "pi": 5,
+          "c": 0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 5,
+          "c": -0.25
+        },
+        {
+          "env": "Y",
+          "pi": 6,
+          "c": 0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 6,
+          "c": -0.25
+        }
+      ],
+      "description": "柳生変更の対外4平均、相手旧版"
+    },
+    {
+      "id": "Y_newOpp_overall",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 0,
+          "c": -0.25
+        },
+        {
+          "env": "minusY",
+          "pi": 0,
+          "c": 0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 4,
+          "c": 0.25
+        },
+        {
+          "env": "minusY",
+          "pi": 4,
+          "c": -0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 5,
+          "c": 0.25
+        },
+        {
+          "env": "minusY",
+          "pi": 5,
+          "c": -0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 6,
+          "c": 0.25
+        },
+        {
+          "env": "minusY",
+          "pi": 6,
+          "c": -0.25
+        }
+      ],
+      "description": "柳生変更の対外4平均、相手新版"
+    },
+    {
+      "id": "Y_contextInteraction",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 0,
+          "c": -0.25
+        },
+        {
+          "env": "minusY",
+          "pi": 0,
+          "c": 0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 4,
+          "c": 0.25
+        },
+        {
+          "env": "minusY",
+          "pi": 4,
+          "c": -0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 5,
+          "c": 0.25
+        },
+        {
+          "env": "minusY",
+          "pi": 5,
+          "c": -0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 6,
+          "c": 0.25
+        },
+        {
+          "env": "minusY",
+          "pi": 6,
+          "c": -0.25
+        },
+        {
+          "env": "Y",
+          "pi": 0,
+          "c": 0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 0,
+          "c": -0.25
+        },
+        {
+          "env": "Y",
+          "pi": 4,
+          "c": -0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 4,
+          "c": 0.25
+        },
+        {
+          "env": "Y",
+          "pi": 5,
+          "c": -0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 5,
+          "c": 0.25
+        },
+        {
+          "env": "Y",
+          "pi": 6,
+          "c": -0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 6,
+          "c": 0.25
+        }
+      ],
+      "description": "柳生効果の相手新版環境−旧版環境"
+    },
+    {
+      "id": "I_oldOpp_pair1",
+      "terms": [
+        {
+          "env": "I",
+          "pi": 1,
+          "c": -1
+        },
+        {
+          "env": "OLD",
+          "pi": 1,
+          "c": 1
+        }
+      ],
+      "description": "対象だけ新版−全旧版（相手旧版）"
+    },
+    {
+      "id": "I_newOpp_pair1",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 1,
+          "c": -1
+        },
+        {
+          "env": "minusI",
+          "pi": 1,
+          "c": 1
+        }
+      ],
+      "description": "全新版−対象だけ旧版（相手新版）"
+    },
+    {
+      "id": "I_oldOpp_pair4",
+      "terms": [
+        {
+          "env": "I",
+          "pi": 4,
+          "c": -1
+        },
+        {
+          "env": "OLD",
+          "pi": 4,
+          "c": 1
+        }
+      ],
+      "description": "対象だけ新版−全旧版（相手旧版）"
+    },
+    {
+      "id": "I_newOpp_pair4",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 4,
+          "c": -1
+        },
+        {
+          "env": "minusI",
+          "pi": 4,
+          "c": 1
+        }
+      ],
+      "description": "全新版−対象だけ旧版（相手新版）"
+    },
+    {
+      "id": "I_oldOpp_pair7",
+      "terms": [
+        {
+          "env": "I",
+          "pi": 7,
+          "c": 1
+        },
+        {
+          "env": "OLD",
+          "pi": 7,
+          "c": -1
+        }
+      ],
+      "description": "対象だけ新版−全旧版（相手旧版）"
+    },
+    {
+      "id": "I_newOpp_pair7",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 7,
+          "c": 1
+        },
+        {
+          "env": "minusI",
+          "pi": 7,
+          "c": -1
+        }
+      ],
+      "description": "全新版−対象だけ旧版（相手新版）"
+    },
+    {
+      "id": "I_oldOpp_pair8",
+      "terms": [
+        {
+          "env": "I",
+          "pi": 8,
+          "c": 1
+        },
+        {
+          "env": "OLD",
+          "pi": 8,
+          "c": -1
+        }
+      ],
+      "description": "対象だけ新版−全旧版（相手旧版）"
+    },
+    {
+      "id": "I_newOpp_pair8",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 8,
+          "c": 1
+        },
+        {
+          "env": "minusI",
+          "pi": 8,
+          "c": -1
+        }
+      ],
+      "description": "全新版−対象だけ旧版（相手新版）"
+    },
+    {
+      "id": "I_oldOpp_overall",
+      "terms": [
+        {
+          "env": "I",
+          "pi": 1,
+          "c": -0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 1,
+          "c": 0.25
+        },
+        {
+          "env": "I",
+          "pi": 4,
+          "c": -0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 4,
+          "c": 0.25
+        },
+        {
+          "env": "I",
+          "pi": 7,
+          "c": 0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 7,
+          "c": -0.25
+        },
+        {
+          "env": "I",
+          "pi": 8,
+          "c": 0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 8,
+          "c": -0.25
+        }
+      ],
+      "description": "斑鳩変更の対外4平均、相手旧版"
+    },
+    {
+      "id": "I_newOpp_overall",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 1,
+          "c": -0.25
+        },
+        {
+          "env": "minusI",
+          "pi": 1,
+          "c": 0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 4,
+          "c": -0.25
+        },
+        {
+          "env": "minusI",
+          "pi": 4,
+          "c": 0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 7,
+          "c": 0.25
+        },
+        {
+          "env": "minusI",
+          "pi": 7,
+          "c": -0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 8,
+          "c": 0.25
+        },
+        {
+          "env": "minusI",
+          "pi": 8,
+          "c": -0.25
+        }
+      ],
+      "description": "斑鳩変更の対外4平均、相手新版"
+    },
+    {
+      "id": "I_contextInteraction",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 1,
+          "c": -0.25
+        },
+        {
+          "env": "minusI",
+          "pi": 1,
+          "c": 0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 4,
+          "c": -0.25
+        },
+        {
+          "env": "minusI",
+          "pi": 4,
+          "c": 0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 7,
+          "c": 0.25
+        },
+        {
+          "env": "minusI",
+          "pi": 7,
+          "c": -0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 8,
+          "c": 0.25
+        },
+        {
+          "env": "minusI",
+          "pi": 8,
+          "c": -0.25
+        },
+        {
+          "env": "I",
+          "pi": 1,
+          "c": 0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 1,
+          "c": -0.25
+        },
+        {
+          "env": "I",
+          "pi": 4,
+          "c": 0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 4,
+          "c": -0.25
+        },
+        {
+          "env": "I",
+          "pi": 7,
+          "c": -0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 7,
+          "c": 0.25
+        },
+        {
+          "env": "I",
+          "pi": 8,
+          "c": -0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 8,
+          "c": 0.25
+        }
+      ],
+      "description": "斑鳩効果の相手新版環境−旧版環境"
+    },
+    {
+      "id": "K_oldOpp_pair2",
+      "terms": [
+        {
+          "env": "K",
+          "pi": 2,
+          "c": -1
+        },
+        {
+          "env": "OLD",
+          "pi": 2,
+          "c": 1
+        }
+      ],
+      "description": "対象だけ新版−全旧版（相手旧版）"
+    },
+    {
+      "id": "K_newOpp_pair2",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 2,
+          "c": -1
+        },
+        {
+          "env": "minusK",
+          "pi": 2,
+          "c": 1
+        }
+      ],
+      "description": "全新版−対象だけ旧版（相手新版）"
+    },
+    {
+      "id": "K_oldOpp_pair5",
+      "terms": [
+        {
+          "env": "K",
+          "pi": 5,
+          "c": -1
+        },
+        {
+          "env": "OLD",
+          "pi": 5,
+          "c": 1
+        }
+      ],
+      "description": "対象だけ新版−全旧版（相手旧版）"
+    },
+    {
+      "id": "K_newOpp_pair5",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 5,
+          "c": -1
+        },
+        {
+          "env": "minusK",
+          "pi": 5,
+          "c": 1
+        }
+      ],
+      "description": "全新版−対象だけ旧版（相手新版）"
+    },
+    {
+      "id": "K_oldOpp_pair7",
+      "terms": [
+        {
+          "env": "K",
+          "pi": 7,
+          "c": -1
+        },
+        {
+          "env": "OLD",
+          "pi": 7,
+          "c": 1
+        }
+      ],
+      "description": "対象だけ新版−全旧版（相手旧版）"
+    },
+    {
+      "id": "K_newOpp_pair7",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 7,
+          "c": -1
+        },
+        {
+          "env": "minusK",
+          "pi": 7,
+          "c": 1
+        }
+      ],
+      "description": "全新版−対象だけ旧版（相手新版）"
+    },
+    {
+      "id": "K_oldOpp_pair9",
+      "terms": [
+        {
+          "env": "K",
+          "pi": 9,
+          "c": 1
+        },
+        {
+          "env": "OLD",
+          "pi": 9,
+          "c": -1
+        }
+      ],
+      "description": "対象だけ新版−全旧版（相手旧版）"
+    },
+    {
+      "id": "K_newOpp_pair9",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 9,
+          "c": 1
+        },
+        {
+          "env": "minusK",
+          "pi": 9,
+          "c": -1
+        }
+      ],
+      "description": "全新版−対象だけ旧版（相手新版）"
+    },
+    {
+      "id": "K_oldOpp_overall",
+      "terms": [
+        {
+          "env": "K",
+          "pi": 2,
+          "c": -0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 2,
+          "c": 0.25
+        },
+        {
+          "env": "K",
+          "pi": 5,
+          "c": -0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 5,
+          "c": 0.25
+        },
+        {
+          "env": "K",
+          "pi": 7,
+          "c": -0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 7,
+          "c": 0.25
+        },
+        {
+          "env": "K",
+          "pi": 9,
+          "c": 0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 9,
+          "c": -0.25
+        }
+      ],
+      "description": "葛城変更の対外4平均、相手旧版"
+    },
+    {
+      "id": "K_newOpp_overall",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 2,
+          "c": -0.25
+        },
+        {
+          "env": "minusK",
+          "pi": 2,
+          "c": 0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 5,
+          "c": -0.25
+        },
+        {
+          "env": "minusK",
+          "pi": 5,
+          "c": 0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 7,
+          "c": -0.25
+        },
+        {
+          "env": "minusK",
+          "pi": 7,
+          "c": 0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 9,
+          "c": 0.25
+        },
+        {
+          "env": "minusK",
+          "pi": 9,
+          "c": -0.25
+        }
+      ],
+      "description": "葛城変更の対外4平均、相手新版"
+    },
+    {
+      "id": "K_contextInteraction",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 2,
+          "c": -0.25
+        },
+        {
+          "env": "minusK",
+          "pi": 2,
+          "c": 0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 5,
+          "c": -0.25
+        },
+        {
+          "env": "minusK",
+          "pi": 5,
+          "c": 0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 7,
+          "c": -0.25
+        },
+        {
+          "env": "minusK",
+          "pi": 7,
+          "c": 0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 9,
+          "c": 0.25
+        },
+        {
+          "env": "minusK",
+          "pi": 9,
+          "c": -0.25
+        },
+        {
+          "env": "K",
+          "pi": 2,
+          "c": 0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 2,
+          "c": -0.25
+        },
+        {
+          "env": "K",
+          "pi": 5,
+          "c": 0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 5,
+          "c": -0.25
+        },
+        {
+          "env": "K",
+          "pi": 7,
+          "c": 0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 7,
+          "c": -0.25
+        },
+        {
+          "env": "K",
+          "pi": 9,
+          "c": -0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 9,
+          "c": 0.25
+        }
+      ],
+      "description": "葛城効果の相手新版環境−旧版環境"
+    },
+    {
+      "id": "H_oldOpp_pair3",
+      "terms": [
+        {
+          "env": "H",
+          "pi": 3,
+          "c": -1
+        },
+        {
+          "env": "OLD",
+          "pi": 3,
+          "c": 1
+        }
+      ],
+      "description": "対象だけ新版−全旧版（相手旧版）"
+    },
+    {
+      "id": "H_newOpp_pair3",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 3,
+          "c": -1
+        },
+        {
+          "env": "minusH",
+          "pi": 3,
+          "c": 1
+        }
+      ],
+      "description": "全新版−対象だけ旧版（相手新版）"
+    },
+    {
+      "id": "H_oldOpp_pair6",
+      "terms": [
+        {
+          "env": "H",
+          "pi": 6,
+          "c": -1
+        },
+        {
+          "env": "OLD",
+          "pi": 6,
+          "c": 1
+        }
+      ],
+      "description": "対象だけ新版−全旧版（相手旧版）"
+    },
+    {
+      "id": "H_newOpp_pair6",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 6,
+          "c": -1
+        },
+        {
+          "env": "minusH",
+          "pi": 6,
+          "c": 1
+        }
+      ],
+      "description": "全新版−対象だけ旧版（相手新版）"
+    },
+    {
+      "id": "H_oldOpp_pair8",
+      "terms": [
+        {
+          "env": "H",
+          "pi": 8,
+          "c": -1
+        },
+        {
+          "env": "OLD",
+          "pi": 8,
+          "c": 1
+        }
+      ],
+      "description": "対象だけ新版−全旧版（相手旧版）"
+    },
+    {
+      "id": "H_newOpp_pair8",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 8,
+          "c": -1
+        },
+        {
+          "env": "minusH",
+          "pi": 8,
+          "c": 1
+        }
+      ],
+      "description": "全新版−対象だけ旧版（相手新版）"
+    },
+    {
+      "id": "H_oldOpp_pair9",
+      "terms": [
+        {
+          "env": "H",
+          "pi": 9,
+          "c": -1
+        },
+        {
+          "env": "OLD",
+          "pi": 9,
+          "c": 1
+        }
+      ],
+      "description": "対象だけ新版−全旧版（相手旧版）"
+    },
+    {
+      "id": "H_newOpp_pair9",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 9,
+          "c": -1
+        },
+        {
+          "env": "minusH",
+          "pi": 9,
+          "c": 1
+        }
+      ],
+      "description": "全新版−対象だけ旧版（相手新版）"
+    },
+    {
+      "id": "H_oldOpp_overall",
+      "terms": [
+        {
+          "env": "H",
+          "pi": 3,
+          "c": -0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 3,
+          "c": 0.25
+        },
+        {
+          "env": "H",
+          "pi": 6,
+          "c": -0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 6,
+          "c": 0.25
+        },
+        {
+          "env": "H",
+          "pi": 8,
+          "c": -0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 8,
+          "c": 0.25
+        },
+        {
+          "env": "H",
+          "pi": 9,
+          "c": -0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 9,
+          "c": 0.25
+        }
+      ],
+      "description": "雲雀変更の対外4平均、相手旧版"
+    },
+    {
+      "id": "H_newOpp_overall",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 3,
+          "c": -0.25
+        },
+        {
+          "env": "minusH",
+          "pi": 3,
+          "c": 0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 6,
+          "c": -0.25
+        },
+        {
+          "env": "minusH",
+          "pi": 6,
+          "c": 0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 8,
+          "c": -0.25
+        },
+        {
+          "env": "minusH",
+          "pi": 8,
+          "c": 0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 9,
+          "c": -0.25
+        },
+        {
+          "env": "minusH",
+          "pi": 9,
+          "c": 0.25
+        }
+      ],
+      "description": "雲雀変更の対外4平均、相手新版"
+    },
+    {
+      "id": "H_contextInteraction",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 3,
+          "c": -0.25
+        },
+        {
+          "env": "minusH",
+          "pi": 3,
+          "c": 0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 6,
+          "c": -0.25
+        },
+        {
+          "env": "minusH",
+          "pi": 6,
+          "c": 0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 8,
+          "c": -0.25
+        },
+        {
+          "env": "minusH",
+          "pi": 8,
+          "c": 0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 9,
+          "c": -0.25
+        },
+        {
+          "env": "minusH",
+          "pi": 9,
+          "c": 0.25
+        },
+        {
+          "env": "H",
+          "pi": 3,
+          "c": 0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 3,
+          "c": -0.25
+        },
+        {
+          "env": "H",
+          "pi": 6,
+          "c": 0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 6,
+          "c": -0.25
+        },
+        {
+          "env": "H",
+          "pi": 8,
+          "c": 0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 8,
+          "c": -0.25
+        },
+        {
+          "env": "H",
+          "pi": 9,
+          "c": 0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 9,
+          "c": -0.25
+        }
+      ],
+      "description": "雲雀効果の相手新版環境−旧版環境"
+    },
+    {
+      "id": "environment_pair0",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 0,
+          "c": 1
+        },
+        {
+          "env": "OLD",
+          "pi": 0,
+          "c": -1
+        }
+      ],
+      "description": "全新版−全旧版（表の左キャラ勝率差）"
+    },
+    {
+      "id": "environment_pair1",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 1,
+          "c": 1
+        },
+        {
+          "env": "OLD",
+          "pi": 1,
+          "c": -1
+        }
+      ],
+      "description": "全新版−全旧版（表の左キャラ勝率差）"
+    },
+    {
+      "id": "environment_pair2",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 2,
+          "c": 1
+        },
+        {
+          "env": "OLD",
+          "pi": 2,
+          "c": -1
+        }
+      ],
+      "description": "全新版−全旧版（表の左キャラ勝率差）"
+    },
+    {
+      "id": "environment_pair3",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 3,
+          "c": 1
+        },
+        {
+          "env": "OLD",
+          "pi": 3,
+          "c": -1
+        }
+      ],
+      "description": "全新版−全旧版（表の左キャラ勝率差）"
+    },
+    {
+      "id": "environment_pair4",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 4,
+          "c": 1
+        },
+        {
+          "env": "OLD",
+          "pi": 4,
+          "c": -1
+        }
+      ],
+      "description": "全新版−全旧版（表の左キャラ勝率差）"
+    },
+    {
+      "id": "environment_pair5",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 5,
+          "c": 1
+        },
+        {
+          "env": "OLD",
+          "pi": 5,
+          "c": -1
+        }
+      ],
+      "description": "全新版−全旧版（表の左キャラ勝率差）"
+    },
+    {
+      "id": "environment_pair6",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 6,
+          "c": 1
+        },
+        {
+          "env": "OLD",
+          "pi": 6,
+          "c": -1
+        }
+      ],
+      "description": "全新版−全旧版（表の左キャラ勝率差）"
+    },
+    {
+      "id": "environment_pair7",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 7,
+          "c": 1
+        },
+        {
+          "env": "OLD",
+          "pi": 7,
+          "c": -1
+        }
+      ],
+      "description": "全新版−全旧版（表の左キャラ勝率差）"
+    },
+    {
+      "id": "environment_pair8",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 8,
+          "c": 1
+        },
+        {
+          "env": "OLD",
+          "pi": 8,
+          "c": -1
+        }
+      ],
+      "description": "全新版−全旧版（表の左キャラ勝率差）"
+    },
+    {
+      "id": "environment_pair9",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 9,
+          "c": 1
+        },
+        {
+          "env": "OLD",
+          "pi": 9,
+          "c": -1
+        }
+      ],
+      "description": "全新版−全旧版（表の左キャラ勝率差）"
+    },
+    {
+      "id": "environment_character0",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 0,
+          "c": 0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 0,
+          "c": -0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 1,
+          "c": 0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 1,
+          "c": -0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 2,
+          "c": 0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 2,
+          "c": -0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 3,
+          "c": 0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 3,
+          "c": -0.25
+        }
+      ],
+      "description": "飛鳥・連撃の全新版環境−全旧版環境"
+    },
+    {
+      "id": "environment_character1",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 0,
+          "c": -0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 0,
+          "c": 0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 4,
+          "c": 0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 4,
+          "c": -0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 5,
+          "c": 0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 5,
+          "c": -0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 6,
+          "c": 0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 6,
+          "c": -0.25
+        }
+      ],
+      "description": "柳生・射撃の全新版環境−全旧版環境"
+    },
+    {
+      "id": "environment_character2",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 1,
+          "c": -0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 1,
+          "c": 0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 4,
+          "c": -0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 4,
+          "c": 0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 7,
+          "c": 0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 7,
+          "c": -0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 8,
+          "c": 0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 8,
+          "c": -0.25
+        }
+      ],
+      "description": "斑鳩・対抗封じの全新版環境−全旧版環境"
+    },
+    {
+      "id": "environment_character3",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 2,
+          "c": -0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 2,
+          "c": 0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 5,
+          "c": -0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 5,
+          "c": 0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 7,
+          "c": -0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 7,
+          "c": 0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 9,
+          "c": 0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 9,
+          "c": -0.25
+        }
+      ],
+      "description": "葛城・削りの全新版環境−全旧版環境"
+    },
+    {
+      "id": "environment_character4",
+      "terms": [
+        {
+          "env": "NEW",
+          "pi": 3,
+          "c": -0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 3,
+          "c": 0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 6,
+          "c": -0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 6,
+          "c": 0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 8,
+          "c": -0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 8,
+          "c": 0.25
+        },
+        {
+          "env": "NEW",
+          "pi": 9,
+          "c": -0.25
+        },
+        {
+          "env": "OLD",
+          "pi": 9,
+          "c": 0.25
+        }
+      ],
+      "description": "雲雀・反撃の全新版環境−全旧版環境"
+    }
+  ],
+  "mainComparisonCount": 59,
+  "multiplicityFamily": 118,
+  "phases": [
+    "final",
+    "confirm"
+  ],
+  "method": "paired seed-cluster, sum stratified matchup means; normal CI95; Bonferroni simultaneous95 across all main comparisons in both independent seed phases",
+  "diagnostics": "rawI/rawH vs role on NEW, first100 confirm seeds; descriptive unadjusted CI only; no parameter optimization",
+  "selection": "all four changed characters retained after screening; all important contrasts independently confirmed; no success-based pruning"
+}
