@@ -2119,12 +2119,14 @@ function showPowerDetail(p){
   openOv(h+'</div>');
 }
 // ターン開始・フェイズの帯（演出のみ。ゲームの進行は表示が終わるまで待つ）
-function bannerMs(kind){if(G.replaying||SETTINGS.anim==='off'||!G.delay)return 0;const base=kind==='turn'?900:500;return SETTINGS.anim==='short'?Math.round(base/2):base;}
+function bannerMs(kind){if(G.replaying||SETTINGS.anim==='off')return 0;const base=kind==='turn'?900:500;return SETTINGS.anim==='short'?Math.round(base/2):base;}
 async function showBanner(kind,text,sub){
   const ms=bannerMs(kind);if(!ms)return;const mine=G.cur===bottomIdx();
   const el=$('#banner');el.className=`on ${mine?'mine':'theirs'} ${kind==='phase'?'phase':''}`;
   el.innerHTML=`<div class="band" style="--bd:${ms}ms">${text}${sub?`<small>${sub}</small>`:''}</div>`;
-  await sleep(ms);el.className='';el.innerHTML='';
+  const band=el.firstElementChild;
+  await sleep(ms);
+  if(el.firstElementChild===band){el.className='';el.replaceChildren();}
 }
 function actionsHTML(){
   const pr=G.prompt;
@@ -2241,6 +2243,7 @@ function newGame(mode,d1,d2,first,delay,cpu='solver',resume=null,undo=0){
   const base=c=>c==='H'?Human:c==='S'?Solver.makeSolver({sampleFix:true,profiles:FINAL_PROFILES}):AI; // 汎用AI（係数表。雲雀だけ専用の値）＋防御側サンプリング修正
   const label=c=>c==='H'?'人間':c==='S'?'CPU(ソルバー)':'CPU(経験則AI)';
   const ai=codes.map(c=>c!=='H');
+  const banner=$('#banner');banner.className='';banner.replaceChildren();
   REC={ops:[],marks:[]};UI.delay=delay;
   const rstate=resume?{ops:resume.ops,i:0,live:false}:null;
   // CPUの席は再生中もCPUに同じ問いを投げて乱数を進める（再開・戻るの後もCPUが同じ手を返す）
@@ -2248,7 +2251,7 @@ function newGame(mode,d1,d2,first,delay,cpu='solver',resume=null,undo=0){
   setupGame({mode,decks:[d1,d2],ai,ctls,ctlLabels:codes.map(label),first,delay,spectate:mode==='watch',rng,
     hooks:{render:()=>{if(!G.replaying)render();},
       turnStart:async({p})=>{REC.marks.push({turn:G.turn,p,i:REC.ops.length});if(G.replaying)return;render();const mine=p===bottomIdx();await showBanner('turn',G.mode==='cpu'?(mine?'あなたのターン':'相手のターン'):`${P[p].name}のターン`,`ターン${G.turn}　${P[p].charName} Lv${P[p].charDeck[0].lv}`);},
-      phase:async ph=>{if(G.replaying)return;render();if(ph==='battle')await showBanner('phase','バトルフェイズ');},gameOver:()=>{G.replaying=false;render();showGameOver();autoCopy('決着');},turnEnd:()=>autoCopy(`T${G.turn}終了`),
+      phase:async ph=>{if(G.replaying)return;render();const title={prep:'準備フェイズ',battle:'バトルフェイズ',end:'終了フェイズ'}[ph];if(title)await showBanner('phase',title);},gameOver:()=>{G.replaying=false;render();showGameOver();autoCopy('決着');},turnEnd:()=>autoCopy(`T${G.turn}終了`),
       showResult:async bs=>{if(G.replaying)return;const humans=P.filter(x=>!x.ai);if(!humans.length){await sleep(G.delay*2);return;}const viewer=G.mode==='hotseat'?G.viewer:humans[0].idx;await uiPrompt(viewer,{battleResult:true,title:(bs.success&&G.noChainTurn&&bs.atk.p===P[G.cur])?`※${G.noChainBy||'相手の効果'}により、このターンは連撃できません`:'',buttons:[{value:'ok',label:'次へ',primary:true}]},false);}}});
   G.meta={seed,decks:[d1,d2],first:G.first,rngFirst,ctl:codes,cards:P.map(Replay.cardMap),undo};
   G.replaying=!!(rstate&&rstate.ops.length);if(G.replaying)G.delay=0;
