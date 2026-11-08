@@ -1904,7 +1904,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=Solver; else root.
    - 記録は人間・CPUの区別なく全判断を含む。再生は記録を使い切ったら
      元のコントローラ（人間／CPU）に引き継ぐ（＝ログからの再開）
    ========================================================= */
-const UI_VER='演出v2.9';
+const UI_VER='演出v3.0';
 (function(root){
 const LOG_VERSION='v'+CONFIG.ruleVersion;
 
@@ -2458,7 +2458,7 @@ function nvGauge(p,z){const arr=z==='yo'?p.gYo:p.gIn;
 // Presentation-only artwork mapping. Each character level has its own image slot.
 // Lv1-Lv5 currently point to the same file; replace individual entries to add unique art later.
 const UVS_CHAR_ART_PATH=Object.freeze({
-  '飛鳥':Object.freeze([null,'./assets/characters/asuka.webp','./assets/characters/asuka.webp','./assets/characters/asuka.webp','./assets/characters/asuka.webp','./assets/characters/asuka.webp']),
+  '飛鳥':Object.freeze([null,'./assets/characters/asuka.webp?v=3.0','./assets/characters/asuka.webp?v=3.0','./assets/characters/asuka.webp?v=3.0','./assets/characters/asuka.webp?v=3.0','./assets/characters/asuka.webp?v=3.0']),
   '斑鳩':Object.freeze([null,'./assets/characters/ikaruga.webp','./assets/characters/ikaruga.webp','./assets/characters/ikaruga.webp','./assets/characters/ikaruga.webp','./assets/characters/ikaruga.webp']),
   '葛城':Object.freeze([null,'./assets/characters/katsuragi.webp','./assets/characters/katsuragi.webp','./assets/characters/katsuragi.webp','./assets/characters/katsuragi.webp','./assets/characters/katsuragi.webp']),
   '柳生':Object.freeze([null,'./assets/characters/yagyu.webp','./assets/characters/yagyu.webp','./assets/characters/yagyu.webp','./assets/characters/yagyu.webp','./assets/characters/yagyu.webp']),
