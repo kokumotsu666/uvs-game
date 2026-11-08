@@ -295,7 +295,7 @@ body:has(#overlay.on,#cardpeek) #fx :is(.fx-battle-card,.fx-battle-stack,.fx-bat
 .nv-choice .bs{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
 .nv-choice button{min-height:44px;padding:6px 12px}
 .nv-choice .cards{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-height:40vh;overflow:auto}
-.nv-prompt{font-size:11px;min-height:28px;line-height:1.3;color:var(--fg);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer}
+.nv-prompt{font-size:11px;min-height:28px;line-height:1.3;color:var(--fg);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .nv-prompt.idle{color:var(--dim)}
 .nv-hand{display:flex;gap:5px;overflow-x:auto;padding:6px 2px 2px;min-height:100px;scrollbar-width:none}
 .nv-hand>:first-child{margin-left:auto}
@@ -1868,7 +1868,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=Solver; else root.
    - 記録は人間・CPUの区別なく全判断を含む。再生は記録を使い切ったら
      元のコントローラ（人間／CPU）に引き継ぐ（＝ログからの再開）
    ========================================================= */
-const UI_VER='演出v2.4';
+const UI_VER='演出v2.5';
 (function(root){
 const LOG_VERSION='v'+CONFIG.ruleVersion;
 
@@ -2626,7 +2626,6 @@ function nvRender(){
   app.querySelectorAll('[data-uid]:not(.nv-stack [data-uid])').forEach(el=>el.onclick=e=>{e.stopPropagation();const uid=+el.dataset.uid;const p2=G.prompt;if(p2&&p2.spec.cards&&p2.spec.cards.includes(uid)&&el.classList.contains('sel')){const k='c'+uid;if(pickKey()!==k){setPick(k);showCardPeek(findCard(uid));return;}closeCardPeek();UI.pick=null;resolvePrompt({card:findCard(uid)});return;}showCardPeek(findCard(uid));});
   app.querySelectorAll('[data-charv]').forEach(el=>el.onclick=()=>{const p2=G.prompt;if(!(p2&&p2.spec.charValue))return;if(pickKey()!=='ch'){setPick('ch');return;}UI.pick=null;resolvePrompt({value:p2.spec.charValue});});
   app.querySelectorAll('[data-zone]').forEach(el=>el.onclick=e=>{e.stopPropagation();showZone(P[+el.dataset.p],el.dataset.zone);});
-  $('#nvprompt').onclick=showLog;
   const hd=$('#nvhand');if(hd)hd.scrollLeft=hd.scrollWidth;
   const bu=$('#btnundo');if(bu)bu.onclick=()=>doUndo('step');const bt=$('#btnturn');if(bt)bt.onclick=()=>doUndo('turn');
   $('#btnlog').onclick=showLog;$('#btnrule').onclick=showRules;$('#btnreset').onclick=()=>{if(G.prompt)resolvePrompt({value:'__abort'});location.reload();};
