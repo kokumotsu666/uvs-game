@@ -222,7 +222,35 @@ header button:disabled{opacity:.35}
 .nv-g.yo .col{border:1px solid #d9534f66;background:#d9534f14}.nv-g.in .col{border:1px solid #3b7dd866;background:#3b7dd814}
 .nv-g .stub{flex:0 0 auto;height:18px;border-radius:3px;background:var(--panel);font-size:8.5px;line-height:18px;color:var(--dim);padding-left:3px;white-space:nowrap;overflow:hidden;border-left:4px solid var(--sen)}
 .nv-g .stub.c陽{border-left-color:var(--yo)}.nv-g .stub.c陰{border-left-color:var(--in)}.nv-g .stub.cx{border-left-color:#777}
-.nv-center{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:4px;position:relative}
+.nv-center{flex:1;min-width:0;display:grid;grid-template-rows:minmax(0,1fr) 36px minmax(0,1fr);gap:5px;position:relative}
+.nv-side{display:grid;grid-template-columns:minmax(0,1fr) minmax(88px,1.2fr) auto;align-items:center;gap:6px;min-height:0}
+.nv-side.own{grid-template-columns:auto minmax(88px,1.2fr) minmax(0,1fr)}
+.nv-side .nv-char{height:100%;min-height:0;justify-self:center}
+.nv-side .nv-gs{height:100%;min-height:0}
+.nv-side .nv-g{width:clamp(27px,9.5vw,38px)}
+.nv-played{min-width:0;min-height:0;height:100%;display:grid;grid-template-rows:auto minmax(0,1fr);justify-items:center;align-content:center;padding:4px 0;gap:4px}
+.nv-played-label{font-size:10px;color:var(--dim);text-align:center}
+.nv-stack{--battle-card:min(76px,68%);--spread:min(16px,calc((100% - var(--battle-card)) / var(--steps)));position:relative;align-self:center;width:100%;height:min(96px,100%);min-height:0}
+.nv-stack-card{position:absolute;top:0;left:calc((100% - var(--battle-card) - var(--spread) * var(--steps)) / 2 + var(--spread) * var(--index));width:var(--battle-card);height:100%;z-index:var(--depth)}
+.nv-stack-card .card{width:100%;height:100%;min-height:0;overflow:hidden;padding:5px;font-size:9px}
+.nv-stack-card .card .nm{font-size:10px;padding-right:7px}
+.nv-stack-card .card .st{font-size:10px;white-space:normal}
+.nv-stack-card .card .gp,.nv-stack-card .card .ic{font-size:9px}
+.nv-stack-card .card .ty{right:3px;font-size:8px}
+.nv-played-wait{align-self:center;font-size:10px;color:var(--dim);text-align:center}
+.nv-totals{display:flex;align-items:center;justify-content:center;gap:12px;white-space:nowrap;font-weight:800;font-variant-numeric:tabular-nums}
+.nv-totals .atk{color:#ff9d76}.nv-totals .def{color:#8bbaff}
+.nv-center[data-impact] .nv-played .nv-stack{visibility:hidden}
+.nv-totals{position:relative;pointer-events:none;text-shadow:0 1px 4px #15171d,0 0 6px #15171d}
+body:not(:has(#overlay.on,#cardpeek)) .nv-center[data-impact] .nv-totals{z-index:26}
+.nv-totals b{display:inline-block;font-size:clamp(24px,7vw,32px)}
+.nv-totals .sep{color:var(--dim);font-weight:400}
+.nv-result-button{margin-left:auto;min-height:44px;flex:0 0 auto}
+.nv-status{display:flex;align-items:center;gap:6px;min-width:0;min-height:44px}
+.nv-status .nv-prompt{flex:1}
+#fx .fx-battle-card,#fx .fx-battle-stack,#fx .fx-battle-impact{position:absolute;pointer-events:none;z-index:2}
+body:has(#overlay.on,#cardpeek) #fx :is(.fx-battle-card,.fx-battle-stack,.fx-battle-impact){visibility:hidden}
+#fx .fx-battle-impact{width:90px;height:90px;border-radius:50%;background:radial-gradient(circle,#fff,#ffd18390 24%,transparent 67%);mix-blend-mode:screen}
 .nv-char{width:100%;max-width:150px;flex:1 1 0;min-height:64px;max-height:160px;border-radius:10px;background:#252a35;border:1px solid var(--line);padding:6px 7px;display:flex;flex-direction:column;gap:3px;overflow:hidden;cursor:pointer}
 .nv-char.flip{transform:rotate(180deg)}
 .nv-char .t{display:flex;justify-content:space-between;align-items:baseline}
@@ -231,13 +259,6 @@ header button:disabled{opacity:.35}
 .nv-char .x{font-size:9.5px;color:var(--dim);line-height:1.3;overflow:hidden}
 .nv-char .sup{font-size:9px;color:var(--acc)}
 .nv-char.lit{box-shadow:0 0 0 2px var(--acc),0 0 16px #f0c15c88}
-.nv-vs{font-size:10px;letter-spacing:.2em;color:var(--dim)}
-.nv-battle{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;background:#0d0f14e8;border:1px solid var(--line);border-radius:10px;padding:6px;display:flex;flex-direction:column;align-items:center;gap:4px;width:max-content;max-width:100%}
-.nv-battle .cs{display:flex;gap:6px;align-items:flex-start}
-.nv-battle .side{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9px;color:var(--dim)}
-.nv-battle .card{width:66px;min-height:62px}
-.nv-battle .wait{width:66px;min-height:62px;border:1px dashed var(--line);border-radius:8px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:10px}
-.nv-battle .res{font-size:13px;font-weight:800}
 .nv-choice{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:4;background:#0d0f14f2;border:1px solid var(--acc);border-radius:12px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:8px;width:max-content;max-width:96%}
 .nv-choice .q{font-size:12px;text-align:center}
 .nv-choice .bs{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
@@ -2223,12 +2244,12 @@ function newGame(mode,d1,d2,first,delay,cpu='solver',resume=null,undo=0){
   REC={ops:[],marks:[]};UI.delay=delay;
   const rstate=resume?{ops:resume.ops,i:0,live:false}:null;
   // CPUの席は再生中もCPUに同じ問いを投げて乱数を進める（再開・戻るの後もCPUが同じ手を返す）
-  const ctls=codes.map((c,i)=>{let ctl=base(c);if(rstate)ctl=Replay.makeReplayer(ctl,rstate,i,()=>{G.replaying=false;G.delay=UI.delay;render();},c!=='H');return Replay.makeRecorder(ctl,REC,i);});
+  const ctls=codes.map((c,i)=>{let ctl=base(c);if(rstate)ctl=Replay.makeReplayer(ctl,rstate,i,()=>{G.replaying=false;G.delay=UI.delay;window.FX?.resumeBattle(G.bs);render();},c!=='H');return Replay.makeRecorder(ctl,REC,i);});
   setupGame({mode,decks:[d1,d2],ai,ctls,ctlLabels:codes.map(label),first,delay,spectate:mode==='watch',rng,
     hooks:{render:()=>{if(!G.replaying)render();},
       turnStart:async({p})=>{REC.marks.push({turn:G.turn,p,i:REC.ops.length});if(G.replaying)return;render();const mine=p===bottomIdx();await showBanner('turn',G.mode==='cpu'?(mine?'あなたのターン':'相手のターン'):`${P[p].name}のターン`,`ターン${G.turn}　${P[p].charName} Lv${P[p].charDeck[0].lv}`);},
       phase:async ph=>{if(G.replaying)return;render();if(ph==='battle')await showBanner('phase','バトルフェイズ');},gameOver:()=>{G.replaying=false;render();showGameOver();autoCopy('決着');},turnEnd:()=>autoCopy(`T${G.turn}終了`),
-      showResult:async bs=>{if(G.replaying)return;const humans=P.filter(x=>!x.ai);if(!humans.length){await sleep(G.delay*2);return;}const viewer=G.mode==='hotseat'?G.viewer:humans[0].idx;await uiPrompt(viewer,{title:`${bs.success?'アタック成功':'アタック失敗'}：AT${bs.at} vs DF${bs.df}${(bs.success&&G.noChainTurn&&bs.atk.p===P[G.cur])?`　※${G.noChainBy||'相手の効果'}により、このターンは連撃できません`:''}`,buttons:[{value:'ok',label:'次へ',primary:true}]},false);}}});
+      showResult:async bs=>{if(G.replaying)return;const humans=P.filter(x=>!x.ai);if(!humans.length){await sleep(G.delay*2);return;}const viewer=G.mode==='hotseat'?G.viewer:humans[0].idx;await uiPrompt(viewer,{battleResult:true,title:(bs.success&&G.noChainTurn&&bs.atk.p===P[G.cur])?`※${G.noChainBy||'相手の効果'}により、このターンは連撃できません`:'',buttons:[{value:'ok',label:'次へ',primary:true}]},false);}}});
   G.meta={seed,decks:[d1,d2],first:G.first,rngFirst,ctl:codes,cards:P.map(Replay.cardMap),undo};
   G.replaying=!!(rstate&&rstate.ops.length);if(G.replaying)G.delay=0;
   if(resume)log(undo?`（戻る：操作${resume.ops.length}件まで再生。戻る${undo}回目）`:`（ログから再開：操作${resume.ops.length}件を再生）`,true);
@@ -2271,15 +2292,34 @@ const UVS_CHAR_ART_PATH=Object.freeze({
 });
 function nvChar(p,flip,lit,picked){const ch=p.charDeck[0];const sups=p.supports.map(s=>s.card.name).join('・');const artPath=UVS_CHAR_ART_PATH[p.charName]?.[ch.lv];const artHtml=artPath?`<img class="uvs-character-art" src="${artPath}" alt="" aria-hidden="true" onerror="this.remove()">`:'';
   return `<div class="nv-char ${flip?'flip':''} ${lit?'lit':''} ${picked?'picked':''}" ${lit?'data-charv="1"':`data-uid="${ch.uid}"`}>${artHtml}<div class="t"><b>${p.charName}</b><span>Lv${ch.lv}</span></div><div class="s">AT ${charAT(p)}・DF ${charDF(p)}</div><div class="x">${cardText(ch)||''}</div>${sups?`<div class="sup">使用中：${sups}</div>`:''}${lit&&G.prompt.spec.charLabel?`<div class="sup">タップ：${G.prompt.spec.charLabel}</div>`:''}</div>`;}
-function nvBattle(){const bs=G.bs;if(!bs)return '';
-  const side=(s,isAtk)=>{let main;const bb=(bs.stage!=='def'&&bs.boost)?(isAtk?{at:bs.boost.atk.at}:{df:bs.boost.def.df}):null;
-    if(isAtk)main=cardHTML(s.card,{small:true,back:bs.stage==='def',boost:bb});
-    else main=bs.stage==='def'?'<div class="wait">ディフェンス<br>選択中</div>':(s.card?cardHTML(s.card,{small:true,boost:bb}):'<div class="wait">ディフェンス<br>なし</div>');
-    return `<div class="side">${isAtk?'アタック':'ディフェンス'}（${s.p.name}）${main}${s.heavy.length?`<span>重撃 ${s.heavy.length}枚</span>`:''}</div>`;};
-  let res='';if(bs.stage==='result')res=`<div class="res" style="color:${bs.success?'#ff8a80':'#80d8ff'}">${bs.success?`アタック成功 DP${bs.dp}`:'アタック失敗'}${bs.mode==='R'?'（連撃）':''}</div>`;
-  return `<div class="nv-battle"><div class="cs">${side(bs.atk,true)}${side(bs.def,false)}</div>${res}</div>`;}
+function nvStack(p){
+  const bs=G.bs;
+  const side=bs&&(bs.atk.p===p?bs.atk:bs.def);
+  const label=side&&side.card?`${side===bs.atk?'攻撃':'防御'}${side.heavy.length?` · 重撃 ${side.heavy.length}枚`:''}`:'使用カード';
+  let content='';
+  if(side?.card){
+    const cards=[side.card,...side.heavy];
+    const boost=side===bs.atk?bs.boost?.atk:bs.boost?.def;
+    const back=bs.stage==='def';
+    content=`<div class="nv-stack" style="--steps:${cards.length-1||1}">${cards.map((c,i)=>`<div class="nv-stack-card" data-play-index="${i}" style="--index:${i};--depth:${cards.length-i}">${cardHTML(c,{small:true,back,boost:i===0?boost:null})}</div>`).join('')}</div>`;
+  }else if(side&&bs.stage!=='def'){
+    content='<span class="nv-played-wait">防御なし</span>';
+  }
+  return `<div class="nv-played" data-play-seat="${p.idx}"><span class="nv-played-label">${label}</span>${content}</div>`;
+}
+function nvTotals(){
+  const bs=G.bs;
+  const at=Number.isFinite(bs?.at)?bs.at:'—';
+  const df=Number.isFinite(bs?.df)?bs.df:'—';
+  return `<div class="nv-totals"><span class="atk">AT <b data-battle-total="at">${at}</b></span><span class="sep" aria-hidden="true">｜</span><span class="def">DF <b data-battle-total="df">${df}</b></span></div>`;
+}
+function nvSide(p,opponent,lit=false){
+  const gauges=`<div class="nv-gs ${opponent?'opp':''}">${nvGauge(p,'yo')}${nvGauge(p,'in')}</div>`;
+  const char=nvChar(p,opponent,lit,!opponent&&pickKey()==='ch');
+  return `<div class="nv-side ${opponent?'opp':'own'}">${opponent?char+nvStack(p)+gauges:gauges+nvStack(p)+char}</div>`;
+}
 function nvChoice(pr,me){ // 札を選ばない問い（ゲージの陽陰、結果の確認など）と、手札にない札を選ぶ問いは中央に出す
-  if(!pr||pr.pi!==me.idx)return '';const sp=pr.spec;
+  if(!pr||pr.pi!==me.idx||pr.spec.battleResult)return '';const sp=pr.spec;
   const outside=(sp.cards||[]).map(findCard).filter(c=>c&&!me.hand.includes(c));
   if(sp.cards&&!outside.length)return '';
   const cs=outside.length?`<div class="cards">${outside.map(c=>cardHTML(c,{sel:true,small:true})).join('')}</div>`:'';
@@ -2293,7 +2333,7 @@ function nvHand(p,show){
   h.sort((a,b)=>a.r-b.r||(needMark(p,a.c)-needMark(p,b.c))||a.i-b.i);
   const pk=pickKey();const cards=h.map(({c})=>{const s=!!(sel&&sel.includes(c.uid));const html=cardHTML(c,{sel:s,dis:!!(sel&&!s),dimu:!usableNow(p,c),text:true,boost:handBoost(p,c),need:needMark(p,c)});return (pk==='c'+c.uid)?html.replace('class="card ','class="card picked '):html;}).join('');
   const pass=(mine&&pr.spec.cards)?(pr.spec.buttons||[]).map((b,i)=>`<div class="nv-pass ${b.primary?'primary':''} ${pickKey()==='b'+i?'picked':''}" data-bi="${i}" role="button">${b.label}</div>`).join(''):'';
-  return `<div class="nv-hand" id="nvhand">${cards||'<span class="small" style="margin:auto 0">手札なし</span>'}${pass}</div>`;}
+  return `<div class="nv-hand" id="nvhand" data-seat="${p.idx}">${cards||'<span class="small" style="margin:auto 0">手札なし</span>'}${pass}</div>`;}
 // 2026-11-06：誤操作対策。選べる札・「出さない」札・キャラ能力は、1回目のタップで持ち上げ、同じものをもう一度タップで決定
 
 let cardPeek=null,cardPeekPrompt=null;
@@ -2445,18 +2485,19 @@ function nvRender(){
   const mine=G.cur===v;const PH={draw:'ドロー',prep:'準備',battle:'バトル',end:'終了'};
   const who=G.mode==='cpu'?(mine?'あなたのターン':'相手のターン'):`${P[G.cur]?P[G.cur].name:''}のターン`;
   const pr=G.prompt;const lit=!!(pr&&pr.pi===me.idx&&pr.spec.charValue);
+  const sources=window.FX?.battleSources(G.bs);
+  const resultPrompt=pr?.pi===me.idx&&pr.spec.battleResult;
   const ph=pickHint(pickKey());const ptxt=pr&&pr.pi===me.idx?(ph?`<b class="pk">${ph}</b>`:`${pr.spec.title}`):(G.over?'ゲーム終了':(P[G.cur]&&P[G.cur].ai?'CPU思考中…':(G.log.length?G.log[G.log.length-1].s:'')));
   app.innerHTML=`
   <div class="nv-bar">${G.mode!=='watch'?`<button id="btnundo" ${canUndo()&&undoTarget('step')>=0?'':'disabled'}>1手戻す</button><button id="btnturn" ${canUndo()&&undoTarget('turn')>=0?'':'disabled'}>ターン最初へ</button>`:''}<button id="btnlog">ログ</button><button id="btnrule">ルール</button><button id="btnreset">最初から</button><span class="sp"></span><span id="autostat">${autoStat}</span><span>${Replay.LOG_VERSION}</span></div>
   <div class="nv-opbar"><span><span class="nv-turn ${mine?'mine':'theirs'}">T${G.turn} ${who}・${PH[G.phase]||''}</span>　${op.name}${op.ai?'（CPU）':''}</span><small class="small" data-ui-version style="white-space:nowrap">${UI_VER}</small><span class="nv-backs">手札 ${op.hand.slice(0,8).map(()=>'<i></i>').join('')}<b>${op.hand.length}</b></span></div>
   <div class="nv-row">${nvPower(op,'相手のパワー',false)}${nvInfo(op,true)}${nvGval(op,'相手',true)}</div>
-  <div class="nv-mid"><div class="nv-gs">${nvGauge(me,'yo')}${nvGauge(me,'in')}</div>
-   <div class="nv-center">${nvChar(op,true,false)}<span class="nv-vs">VS</span>${nvChar(me,false,lit,pickKey()==='ch')}${nvBattle()}${nvChoice(pr,me)}</div>
-   <div class="nv-gs opp">${nvGauge(op,'yo')}${nvGauge(op,'in')}</div></div>
+  <div class="nv-mid"><div class="nv-center">${nvSide(op,true)}${nvTotals()}${nvSide(me,false,lit)}${nvChoice(pr,me)}</div></div>
   <div class="nv-row">${nvGval(me,'自分',false)}${nvInfo(me,false)}${nvPower(me,'自分のパワー',true)}</div>
-  <div class="nv-prompt ${pr&&pr.pi===me.idx?'':'idle'}" id="nvprompt">${ptxt}</div>
+  <div class="nv-status"><div class="nv-prompt ${pr&&pr.pi===me.idx?'':'idle'}" id="nvprompt">${ptxt}</div>${resultPrompt?'<button class="primary nv-result-button" data-bi="0">次へ</button>':''}</div>
   ${nvHand(me,showMe)}`;
   animatePowers();
+  window.FX?.battleFrame(G.bs,sources);
   app.querySelectorAll('[data-bi]').forEach(b=>b.onclick=e=>{e.stopPropagation();const p2=G.prompt;if(!p2)return;const k='b'+b.dataset.bi;if(b.classList.contains('nv-pass')&&pickKey()!==k){setPick(k);return;}const sp=p2.spec.buttons[+b.dataset.bi];UI.pick=null;resolvePrompt({value:sp.value});});
   app.querySelectorAll('[data-uid]').forEach(el=>el.onclick=e=>{e.stopPropagation();const uid=+el.dataset.uid;const p2=G.prompt;if(p2&&p2.spec.cards&&p2.spec.cards.includes(uid)&&el.classList.contains('sel')){const k='c'+uid;if(pickKey()!==k){setPick(k);showCardPeek(findCard(uid));return;}closeCardPeek();UI.pick=null;resolvePrompt({card:findCard(uid)});return;}showCardPeek(findCard(uid));});
   app.querySelectorAll('[data-charv]').forEach(el=>el.onclick=()=>{const p2=G.prompt;if(!(p2&&p2.spec.charValue))return;if(pickKey()!=='ch'){setPick('ch');return;}UI.pick=null;resolvePrompt({value:p2.spec.charValue});});
@@ -2534,11 +2575,120 @@ async function ability(p,text,ms){ // キャラ能力：キャラを中央に出
 async function pop(target,text,cls,ms){ // 数字の横に小さく出す（常在効果・ダメージ）
   if(!target)return;const el=document.createElement('div');el.className='fx-pop '+(cls||'');el.textContent=text;place(el,target.left+target.width/2,target.top);L().appendChild(el);
   await anim(el,[{opacity:0,transform:'translate(-50%,0)'},{opacity:1,transform:'translate(-50%,-18px)'},{opacity:0,transform:'translate(-50%,-30px)'}],ms);el.remove();}
+let battleView=null;
+function createBattleView(bs){return {bs,elements:new Set(),flights:new Set(),counts:[0,0],totals:[],resolved:false};}
+function clearBattleView(){
+  if(!battleView)return;
+  for(const el of battleView.elements){el.getAnimations().forEach(a=>a.cancel());el.remove();}
+  battleView=null;
+  document.querySelector('#app .nv-center')?.removeAttribute('data-impact');
+}
+function usedCards(side){return side.card?[side.card,...side.heavy]:[];}
+function battleSources(bs){
+  if(!bs)return [];
+  const hand=document.querySelector('#nvhand');
+  const viewer=hand?.dataset.seat;
+  return [bs.atk,bs.def].map(side=>{
+    const own=viewer===String(side.p.idx);
+    const fallback=own?hand?.getBoundingClientRect():rectOf('#app .nv-backs');
+    return usedCards(side).map(c=>own?(hand.querySelector(`[data-uid="${c.uid}"]`)?.getBoundingClientRect()||fallback):fallback);
+  });
+}
+function battleClone(view,node,cls,rect=node.getBoundingClientRect()){
+  const el=node.cloneNode(true);
+  el.classList.add(cls);el.setAttribute('aria-hidden','true');
+  el.removeAttribute('data-play-index');
+  el.style.cssText+=`;left:${rect.left}px;top:${rect.top}px;width:${rect.width}px;height:${rect.height}px`;
+  L().appendChild(el);view.elements.add(el);
+  return {el,rect};
+}
+function finishBattleClone(view,el){el.remove();view.elements.delete(el);}
+function battleFlight(view,node,source,ms){
+  const {el,rect}=battleClone(view,node,'fx-battle-card');
+  const dx=source.left+(source.width-rect.width)/2-rect.left;
+  const dy=source.top+(source.height-rect.height)/2-rect.top;
+  void anim(node,[{opacity:0},{opacity:0,offset:.85},{opacity:1}],ms);
+  const task=anim(el,[{transform:`translate(${dx}px,${dy}px) scale(.85)`,opacity:.65},{transform:'translate(0,0)',opacity:1}],ms);
+  view.flights.add(task);
+  task.then(()=>{finishBattleClone(view,el);view.flights.delete(task);});
+}
+async function battleImpact(view,stacks,center,ratio){
+  const frames=stacks.filter(Boolean).map(node=>({node:node.cloneNode(true),rect:node.getBoundingClientRect()}));
+  await Promise.all(view.flights);
+  if(battleView!==view||G.bs!==view.bs)return;
+  const cx=center.left+center.width/2,cy=center.top+center.height/2;
+  view.impact=true;
+  document.querySelector('#app .nv-center')?.setAttribute('data-impact','');
+  const copies=frames.map(({node,rect})=>battleClone(view,node,'fx-battle-stack',rect));
+  const shifts=copies.map(({rect,el})=>{
+    const above=rect.top+rect.height/2<cy;
+    const dx=cx-rect.left-rect.width/2+(above?-11:11);
+    const dy=cy-rect.top-rect.height/2+(above?-9:9);
+    return {el,dx,dy,hit:`translate(${dx}px,${dy}px)`};
+  });
+  await Promise.all(shifts.map(({el,hit})=>anim(el,[{transform:'none'},{transform:hit}],290*ratio)));
+  if(battleView!==view||G.bs!==view.bs)return;
+  const flash=document.createElement('div');flash.className='fx-battle-impact';place(flash,cx-45,cy-45);
+  L().appendChild(flash);view.elements.add(flash);
+  pulseTotals();
+  await Promise.all([
+    anim(flash,[{opacity:0,transform:'scale(.3)'},{opacity:.95,offset:.3},{opacity:0,transform:'scale(1.6)'}],125*ratio),
+    ...shifts.map(({el,dx,dy,hit})=>anim(el,[{transform:hit},{transform:`translate(${dx-5}px,${dy+4}px)`},{transform:hit}],125*ratio))
+  ]);
+  finishBattleClone(view,flash);
+  if(battleView!==view||G.bs!==view.bs)return;
+  await Promise.all(shifts.map(({el,hit})=>anim(el,[{transform:hit,opacity:1},{transform:'none',opacity:0}],180*ratio)));
+  copies.forEach(({el})=>finishBattleClone(view,el));
+  if(battleView===view){view.impact=false;document.querySelector('#app .nv-center')?.removeAttribute('data-impact');}
+}
+function pulseTotals(keys=['at','df']){
+  for(const key of keys){
+    const el=document.querySelector(`[data-battle-total="${key}"]`);
+    if(el)void anim(el,[{transform:'scale(1)'},{transform:'scale(1.12)'},{transform:'scale(1)'}],160*(base()/300));
+  }
+}
+function battleFrame(bs,sources){
+  const ms=base();
+  if(!ms||!bs||window.matchMedia('(prefers-reduced-motion: reduce)').matches){clearBattleView();return;}
+  if(battleView?.bs!==bs){
+    clearBattleView();
+    battleView=createBattleView(bs);
+  }
+  const view=battleView;
+  if(view.impact)document.querySelector('#app .nv-center')?.setAttribute('data-impact','');
+  const stacks=[bs.atk,bs.def].map((side,index)=>{
+    const stack=document.querySelector(`[data-play-seat="${side.p.idx}"] .nv-stack`);
+    const cards=usedCards(side);
+    for(let i=view.counts[index];i<cards.length;i++){
+      const node=stack?.querySelector(`[data-play-index="${i}"]`);
+      if(node&&sources[index]?.[i])battleFlight(view,node,sources[index][i],(i?195:245)*ms/300);
+    }
+    view.counts[index]=cards.length;
+    return stack;
+  });
+  const totals=[bs.at,bs.df],changed=['at','df'].filter((_,i)=>Number.isFinite(view.totals[i])&&view.totals[i]!==totals[i]);
+  if(changed.length)pulseTotals(changed);
+  view.totals=totals;
+  if(bs.stage==='result'&&!view.resolved){
+    view.resolved=true;
+    const center=rectOf('#app .nv-totals');
+    if(center)void battleImpact(view,stacks,center,ms/300);
+  }
+}
+FX.battleFrame=battleFrame;
+FX.battleSources=battleSources;
+FX.resumeBattle=bs=>{
+  clearBattleView();
+  if(!bs)return;
+  battleView=createBattleView(bs);
+  battleView.counts=[usedCards(bs.atk).length,usedCards(bs.def).length];
+  battleView.totals=[bs.at,bs.df];
+  battleView.resolved=bs.stage==='result';
+};
 // G.log の行 → 演出
 function fromLog(s){
+  if(!G.replaying&&G.bs&&(s.startsWith('公開：')||/^P\d+：重撃「/.test(s))){render();return;}
   const ms=base();if(!ms||!P.length)return;const p=pOf(s);let m;
-  if((m=s.match(/^公開：(.+?)「(.+?)」.*? vs (.+?)(?:「(.+?)」|：ディフェンスなし)/)))return push(()=>showCenter([m[2],m[4]||null],'オープン',ms*2));
-  if(p&&(m=s.match(/：重撃「(.+?)」/)))return push(()=>showCenter([m[1]],`${p.name}：重撃`,ms));
   if(p&&(m=s.match(/：サポート「(.+?)」を使用/)))return push(()=>showCenter([m[1]],`${p.name}：サポート`,ms*2));
   if(p&&(m=s.match(/：「(.+?)」を(陽|陰)ゲージに置いた/))){const z=m[2]==='陽'?'yo':'in';return push(()=>fly(m[1],zoneRect(p,'hand'),zoneRect(p,z),ms));}
   if(p&&(m=s.match(/：「(.+?)」→(陽|陰)ゲージ/))){const z=m[2]==='陽'?'yo':'in';return push(()=>fly(m[1],null,zoneRect(p,z),ms));}
@@ -2554,7 +2704,7 @@ function push(f){FX.q.push(f);if(!FX.busy)run();}
 async function run(){FX.busy=true;while(FX.q.length){const f=FX.q.shift();try{await f();}catch(e){}}FX.busy=false;const w=FX.waiters;FX.waiters=[];w.forEach(r=>r());}
 FX.drain=()=>FX.busy||FX.q.length?new Promise(r=>FX.waiters.push(r)):Promise.resolve();
 // G.log に積むたびに演出を作る（エンジンの log と、カード定義側の log の両方がここを通る）
-const _setup=setupGame;setupGame=function(){const r=_setup.apply(this,arguments);FX.q=[];if(layer)layer.innerHTML='';
+const _setup=setupGame;setupGame=function(){clearBattleView();const r=_setup.apply(this,arguments);FX.q=[];if(layer)layer.innerHTML='';
   const arr=G.log;arr.push=function(...xs){const n=Array.prototype.push.apply(this,xs);for(const x of xs)try{fromLog(String(x&&x.s!=null?x.s:x));}catch(e){}return n;};return r;};
 // 次の判断の前に演出を待つ（人間・CPUとも）
 const _mr=Replay.makeRecorder;Replay.makeRecorder=function(){const w=_mr.apply(this,arguments);
