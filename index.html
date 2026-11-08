@@ -334,8 +334,31 @@ body:has(#overlay.on,#cardpeek) #fx :is(.fx-battle-card,.fx-battle-stack,.fx-bat
 .nv-char > :is(.t,.s,.x:not(:empty)){position:relative;z-index:1;margin-inline:-4px;padding-inline:4px;border-radius:8px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.10);color:#f3f6ff}
 .nv-char > .t{background:rgba(20,26,36,.55)}.nv-char > .t span{color:inherit}
 .nv-char > .s{background:rgba(20,26,36,.60)}
-.nv-char > .x:not(:empty){background:rgba(20,26,36,.75);overflow-y:auto}
+.nv-char > .x:not(:empty){background:rgba(20,26,36,.75);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
 .nv-char > .sup{position:relative;z-index:1}
+body:has(#app.nv){
+  background-color:var(--bg);
+  background-image:linear-gradient(rgba(8,12,22,.50),rgba(8,12,22,.50)),url("assets/backgrounds/bamboo-courtyard.webp");
+  background-position:center top;
+  background-size:cover;
+  background-repeat:no-repeat;
+}
+.nv-side.own{--character-glow:rgba(255,163,92,.18);--active-glow:rgba(255,173,106,.32)}
+.nv-side.opp{--character-glow:rgba(107,165,255,.18);--active-glow:rgba(125,181,255,.32)}
+.nv-side .nv-char:not(.lit,.picked){box-shadow:0 0 14px var(--character-glow)}
+.nv-side.is-active .nv-char:not(.lit,.picked){box-shadow:0 0 20px var(--active-glow)}
+.nv-played{background:rgba(20,26,36,.30);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);border-radius:10px}
+.nv-recent{background:#242733c7}
+.nv-recent > span:last-child{color:var(--recent-event,#f0f3fa)}
+.nv-recent > span[data-event]{color:var(--recent-event)}
+.nv-recent > span[data-event="damage"]{--recent-event:#ffaaa4}
+.nv-recent > span[data-event="defense"]{--recent-event:#a7cbff}
+.nv-recent > span[data-event="combo"]{--recent-event:#f7d987}
+.nv-recent > span[data-event="level"]{--recent-event:#a9e3bd}
+.nv-recent > span[data-event="result"]{--recent-event:#ffe19a}
+.nv-recent > span.recent-new{animation:recent-line-in 180ms ease-out both}
+@keyframes recent-line-in{from{opacity:.35}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.nv-recent > span.recent-new{animation:none}}
 </style>
 </head>
 <body>
@@ -2230,13 +2253,33 @@ function showRules(){openOv(`<h2>採用ルール v2（閃乱カグラ版＋リ�
 <p><b>カードの移動</b>：陽→陽ゲージ、陰→陰ゲージ、閃→どちらか選択、緑・紫→捨て札。GPは消費されない閾値。</p>
 <p class="small">※テキストに「推定」とあるカードは、原文を判読できず数値や条件を補っています。カードをタップすると詳細を確認できます。</p>
 </div>`);}
-function refreshRecentLog(){
+let recentEntry=null,recentEntryTime=0;
+function recentEvent(message){
+  if(message.startsWith('★'))return 'result';
+  if(/防御成功|→ アタック失敗/.test(message))return 'defense';
+  if(/現在Lv\d+|Lv\d+が戻った/.test(message))return 'level';
+  if(/で\d+ダメージ|ダメージを与えた/.test(message))return 'damage';
+  if(/：重撃「|【連撃】/.test(message))return 'combo';
+  return '';
+}
+function refreshRecentLog(onAppend=false){
+  if(onAppend&&G.log.at(-1)!==recentEntry){
+    recentEntry=G.log.at(-1);
+    recentEntryTime=performance.now();
+  }
   const recent=$('#nvrecent');
   if(!recent)return;
+  const fadeElapsed=performance.now()-recentEntryTime;
   const lines=G.log.slice(-4).map(entry=>{
     const line=document.createElement('span');
     line.textContent=entry.s;
     if(entry.hl)line.className='hl';
+    const event=recentEvent(entry.s);
+    if(event)line.dataset.event=event;
+    if(entry===recentEntry&&fadeElapsed<180&&!G.replaying&&SETTINGS.anim!=='off'){
+      line.classList.add('recent-new');
+      line.style.animationDelay='-'+fadeElapsed+'ms';
+    }
     return line;
   });
   recent.replaceChildren(...lines);
@@ -2381,7 +2424,7 @@ function showBattleStack(seat){
 function nvSide(p,opponent,lit=false){
   const gauges=`<div class="nv-gs ${opponent?'opp':''}">${nvGauge(p,'yo')}${nvGauge(p,'in')}</div>`;
   const char=nvChar(p,opponent,lit,!opponent&&pickKey()==='ch');
-  return `<div class="nv-side ${opponent?'opp':'own'}">${opponent?char+nvStack(p,true)+gauges:gauges+nvStack(p,false)+char}</div>`;
+  return `<div class="nv-side ${opponent?'opp':'own'}${p.idx===G.cur?' is-active':''}">${opponent?char+nvStack(p,true)+gauges:gauges+nvStack(p,false)+char}</div>`;
 }
 function nvChoice(pr,me){ // 札を選ばない問い（ゲージの陽陰、結果の確認など）と、手札にない札を選ぶ問いは中央に出す
   if(!pr||pr.pi!==me.idx||pr.spec.battleResult)return '';const sp=pr.spec;
@@ -2529,7 +2572,7 @@ function syncGaugePickView(prompt){
 function showCardPeek(c){
   if(!c)return;closeCardPeek();cardPeekPrompt=G.prompt;
   cardPeek=document.createElement('div');cardPeek.id='cardpeek';
-  cardPeek.innerHTML='<section class="cardpeek-panel" role="dialog" aria-label="カード詳細">'+cardHTML(c,{text:true})+'<p class="cardpeek-hint">外側をタップで閉じる・同じ手札カードをもう一度タップで決定</p></section>';
+  cardPeek.innerHTML='<section class="cardpeek-panel" role="dialog" aria-label="カード詳細">'+(c.type==='char'?cardDetailHTML(c):cardHTML(c,{text:true}))+'<p class="cardpeek-hint">外側をタップで閉じる・同じ手札カードをもう一度タップで決定</p></section>';
   document.body.appendChild(cardPeek);
 }
 document.addEventListener('click',e=>{
@@ -2580,7 +2623,12 @@ function nvRender(){
   const promptText=$('#nvprompt');
   app.onclick=null;
   if(resultPrompt){
-    const advance=()=>{
+    let advanceRequested=false;
+    const advance=async()=>{
+      if(advanceRequested||G.prompt!==pr)return;
+      advanceRequested=true;
+      // A tap can arrive before the collision has reached the center.
+      await window.FX?.finishBattle();
       if(G.prompt===pr)resolvePrompt({value:pr.spec.buttons[0].value});
     };
     app.onclick=e=>{
@@ -2794,7 +2842,7 @@ async function run(){FX.busy=true;while(FX.q.length){const f=FX.q.shift();try{aw
 FX.drain=()=>FX.busy||FX.q.length?new Promise(r=>FX.waiters.push(r)):Promise.resolve();
 // G.log に積むたびに演出を作る（エンジンの log と、カード定義側の log の両方がここを通る）
 const _setup=setupGame;setupGame=function(){clearBattleView();const r=_setup.apply(this,arguments);FX.q=[];if(layer)layer.innerHTML='';
-  const arr=G.log;arr.push=function(...xs){const n=Array.prototype.push.apply(this,xs);for(const x of xs)try{fromLog(String(x&&x.s!=null?x.s:x));}catch(e){}if(!G.replaying)refreshRecentLog();return n;};return r;};
+  const arr=G.log;arr.push=function(...xs){const n=Array.prototype.push.apply(this,xs);if(!G.replaying)refreshRecentLog(true);for(const x of xs)try{fromLog(String(x&&x.s!=null?x.s:x));}catch(e){}return n;};return r;};
 // 次の判断の前に演出を待つ（人間・CPUとも）
 const _mr=Replay.makeRecorder;Replay.makeRecorder=function(){const w=_mr.apply(this,arguments);
   return new Proxy(w,{get(t,k){const v=t[k];if(typeof v==='function'&&['prepAction','chooseGauge','attack','defend','heavy','chain','pickCards'].includes(k))return async function(...a){await FX.drain();return v.apply(t,a);};return v;}});};
