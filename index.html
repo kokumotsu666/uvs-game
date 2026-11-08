@@ -373,6 +373,11 @@ body:has(#app.nv){
 .card.card-frame.support-card .ic{color:#b0f4f4}
 .tech-face{container-type:inline-size;display:flex;flex-direction:column;width:100%;aspect-ratio:3/4;overflow:hidden;padding:7px 6px;border-radius:7px;background:#252839 var(--tech-art) center/contain no-repeat;box-shadow:inset 0 0 0 1px var(--tech-color);color:#fff;text-shadow:0 1px 2px #000,0 0 4px #000}
 .tech-head{display:flex;align-items:flex-start;gap:2px}
+.tech-head:has(.card-name-lines){flex-direction:column;gap:0}
+.tech-head:has(.card-name-lines) > .ic{order:-1;line-height:1}
+.card.card-frame .nm:has(.card-name-lines){display:block;width:100%}
+.card-name-lines{display:block;font-size:min(1em,calc(100cqw / var(--name-length)));line-height:1.26}
+.card-name-lines > span{display:block;white-space:nowrap}
 .card.card-frame .nm{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;min-width:0;min-height:0;overflow:hidden;padding:0;margin:0;line-height:1.15;font-size:clamp(9px,17cqw,19px)}
 .card.card-frame .ic{flex:none;margin-left:auto;white-space:nowrap;color:#ffe69b;font-size:clamp(8px,13cqw,15px);line-height:1.2;letter-spacing:0}
 .tech-card .needb{margin:2px 0 0;padding:0 3px;font-size:8px;line-height:1.15}
@@ -1898,7 +1903,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=Solver; else root.
    - 記録は人間・CPUの区別なく全判断を含む。再生は記録を使い切ったら
      元のコントローラ（人間／CPU）に引き継ぐ（＝ログからの再開）
    ========================================================= */
-const UI_VER='演出v2.7';
+const UI_VER='演出v2.8';
 (function(root){
 const LOG_VERSION='v'+CONFIG.ruleVersion;
 
@@ -2054,17 +2059,52 @@ function handBoost(p,c){
   if(G.prompt&&G.prompt.pi===p.idx&&/^重撃/.test(G.prompt.spec.title))return null;
   return cardBoost(p,c);
 }
+const CARD_NAME_BREAKS = {
+  'リミットブレイク': ['リミット', 'ブレイク'],
+  'くぐつダミー': ['くぐつ', 'ダミー'],
+  'はじめのチョップ': ['はじめの', 'チョップ'],
+  'ドラゴンダンス': ['ドラゴン', 'ダンス'],
+  '本能のままに': ['本能の', 'ままに'],
+  'サマーソルト': ['サマー', 'ソルト'],
+  '鉄壁のガード': ['鉄壁の', 'ガード'],
+  'ドラゴンバイト': ['ドラゴン', 'バイト'],
+  'お尻からドーン': ['お尻から', 'ドーン'],
+  'ドラゴンベアード': ['ドラゴン', 'ベアード'],
+  'ハーフムーン': ['ハーフ', 'ムーン'],
+  'もっかいウサギ蹴り': ['もっかい', 'ウサギ蹴り'],
+  'サマーソルトリバース': ['サマー', 'ソルト', 'リバース'],
+  'ふっとびさまーそると': ['ふっとび', 'さまー', 'そると'],
+  'スカイハイクロウ': ['スカイハイ', 'クロウ'],
+  'ミドルキック': ['ミドル', 'キック'],
+  '忍兎でブーン': ['忍兎で', 'ブーン'],
+  'じっちゃんの太巻き': ['じっちゃんの', '太巻き'],
+  '病院の待合室にて': ['病院の', '待合室にて'],
+  '雲雀つっこみ': ['雲雀', 'つっこみ'],
+  'アックスシュート': ['アックス', 'シュート'],
+  'スカイハイラッシュ': ['スカイハイ', 'ラッシュ'],
+  'ぐるぐるスピーン': ['ぐるぐる', 'スピーン'],
+  '飛燕鳳閃・壱式': ['飛燕鳳閃・', '壱式'],
+  'トルネードシュピンデル': ['トルネード', 'シュピンデル'],
+  'インテリメガネ': ['インテリ', 'メガネ'],
+  '海に行こう!': ['海に', '行こう!'],
+};
+function cardNameHTML(name){
+  if(!Object.hasOwn(CARD_NAME_BREAKS,name))return name;
+  const lines=CARD_NAME_BREAKS[name];
+  const longest=Math.max(...lines.map(line=>line.length));
+  return `<span class="card-name-lines" style="--name-length:${longest}">${lines.map(line=>`<span>${line}</span>`).join('')}</span>`;
+}
 function cardHTML(c,opts={}){
   if(opts.back)return `<div class="card back ${opts.small?'small':''}"></div>`;
   const sel=opts.sel?'sel':'';const dis=opts.dis?'dis':(opts.dimu&&!opts.sel?'dimu':'');
-  if(c.type==='support')return `<div class="card card-frame support-card c${c.color} ${sel} ${dis} ${opts.small?'small':''} ${opts.text?'big':''}" data-uid="${c.uid}"><div class="tech-face"><div class="tech-head"><div class="nm">${c.name}</div><div class="ic">SUP</div></div>
+  if(c.type==='support')return `<div class="card card-frame support-card c${c.color} ${sel} ${dis} ${opts.small?'small':''} ${opts.text?'big':''}" data-uid="${c.uid}"><div class="tech-face"><div class="tech-head"><div class="nm">${cardNameHTML(c.name)}</div><div class="ic">SUP</div></div>
     <div class="tech-values"><div class="gp">${c.color} <span class="tech-gp">陽${c.gp.yo}/陰${c.gp.in}</span></div></div></div>${opts.text?`<div class="tx">${cardText(c)}</div>`:''}</div>`;
   if(c.type==='char')return `<div class="card ${sel} ${opts.small?'small':''}" data-uid="${c.uid}"><span class="ty">CHR</span><div class="nm">${c.name} Lv${c.lv}</div><div class="st">${c.at}/${c.df}</div></div>`;
   const ic=c.icons.map(i=>i==='R'?'連':i==='U'?'重':i).join(' ');
   const tx=opts.text?`<div class="tx">${cardText(c)}</div>`:'';
   const eb=opts.boost||{};const nb=opts.need?'<span class="needb">連撃条件</span>':'';const num=(v,b)=>b?`<b class="up">+${v+b}</b>`:`+${v}`;
   return `<div class="card card-frame tech-card c${c.color} ${sel} ${dis} ${opts.small?'small':''} ${opts.text?'big':''}" data-uid="${c.uid}">
-    <div class="tech-face"><div class="tech-head"><div class="nm">${c.name}</div>${ic?`<div class="ic">${ic}</div>`:''}</div>${nb}
+    <div class="tech-face"><div class="tech-head"><div class="nm">${cardNameHTML(c.name)}</div>${ic?`<div class="ic">${ic}</div>`:''}</div>${nb}
       <div class="tech-values"><div class="st"><span class="tech-stats">${num(c.at,eb.at)}/${num(c.df,eb.df)}</span>${c.dp!==1?` <span class="tech-dp">DP${c.dp}</span>`:''}</div>
       <div class="gp"><span class="tech-gp">陽${c.gp.yo}/陰${c.gp.in}</span> ${c.tech}</div></div>
     </div>${tx}</div>`;
