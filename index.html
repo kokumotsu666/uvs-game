@@ -373,8 +373,8 @@ body:has(#app.nv){
 .card.card-frame.support-card .ic{color:#b0f4f4}
 .tech-face{container-type:inline-size;display:flex;flex-direction:column;width:100%;aspect-ratio:3/4;overflow:hidden;padding:7px 6px;border-radius:7px;background:#252839 var(--tech-art) center/contain no-repeat;box-shadow:inset 0 0 0 1px var(--tech-color);color:#fff;text-shadow:0 1px 2px #000,0 0 4px #000}
 .tech-head{display:flex;align-items:flex-start;gap:2px}
-.tech-head:has(.card-name-lines){flex-direction:column;gap:0}
-.tech-head:has(.card-name-lines) > .ic{order:-1;line-height:1}
+.support-card .tech-head:has(.card-name-lines){flex-direction:column;gap:0}
+.support-card .tech-head:has(.card-name-lines) > .ic{order:-1;line-height:1}
 .card.card-frame .nm:has(.card-name-lines){display:block;width:100%}
 .card-name-lines{display:block;font-size:min(1em,calc(100cqw / var(--name-length)));line-height:1.26}
 .card-name-lines > span{display:block;white-space:nowrap}
@@ -382,6 +382,7 @@ body:has(#app.nv){
 .card.card-frame .ic{flex:none;margin-left:auto;white-space:nowrap;color:#ffe69b;font-size:clamp(8px,13cqw,15px);line-height:1.2;letter-spacing:0}
 .tech-card .needb{margin:2px 0 0;padding:0 3px;font-size:8px;line-height:1.15}
 .tech-values{margin-top:auto;min-width:0;background:#0a0b13a8;border-radius:3px}
+.tech-values > .ic{text-align:right}
 .card.card-frame .st{font-size:clamp(8px,16cqw,17px);font-weight:800;line-height:1.1;white-space:normal;font-variant-numeric:tabular-nums}
 .card.card-frame .st b.up{font-size:inherit}
 .tech-stats,.tech-dp,.tech-gp{white-space:nowrap}
@@ -1903,7 +1904,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=Solver; else root.
    - 記録は人間・CPUの区別なく全判断を含む。再生は記録を使い切ったら
      元のコントローラ（人間／CPU）に引き継ぐ（＝ログからの再開）
    ========================================================= */
-const UI_VER='演出v2.8';
+const UI_VER='演出v2.9';
 (function(root){
 const LOG_VERSION='v'+CONFIG.ruleVersion;
 
@@ -2072,8 +2073,8 @@ const CARD_NAME_BREAKS = {
   'ドラゴンベアード': ['ドラゴン', 'ベアード'],
   'ハーフムーン': ['ハーフ', 'ムーン'],
   'もっかいウサギ蹴り': ['もっかい', 'ウサギ蹴り'],
-  'サマーソルトリバース': ['サマー', 'ソルト', 'リバース'],
-  'ふっとびさまーそると': ['ふっとび', 'さまー', 'そると'],
+  'サマーソルトリバース': ['サマーソルト', 'リバース'],
+  'ふっとびさまーそると': ['ふっとび', 'さまーそると'],
   'スカイハイクロウ': ['スカイハイ', 'クロウ'],
   'ミドルキック': ['ミドル', 'キック'],
   '忍兎でブーン': ['忍兎で', 'ブーン'],
@@ -2104,8 +2105,8 @@ function cardHTML(c,opts={}){
   const tx=opts.text?`<div class="tx">${cardText(c)}</div>`:'';
   const eb=opts.boost||{};const nb=opts.need?'<span class="needb">連撃条件</span>':'';const num=(v,b)=>b?`<b class="up">+${v+b}</b>`:`+${v}`;
   return `<div class="card card-frame tech-card c${c.color} ${sel} ${dis} ${opts.small?'small':''} ${opts.text?'big':''}" data-uid="${c.uid}">
-    <div class="tech-face"><div class="tech-head"><div class="nm">${cardNameHTML(c.name)}</div>${ic?`<div class="ic">${ic}</div>`:''}</div>${nb}
-      <div class="tech-values"><div class="st"><span class="tech-stats">${num(c.at,eb.at)}/${num(c.df,eb.df)}</span>${c.dp!==1?` <span class="tech-dp">DP${c.dp}</span>`:''}</div>
+    <div class="tech-face"><div class="tech-head"><div class="nm">${cardNameHTML(c.name)}</div></div>${nb}
+      <div class="tech-values">${ic?`<div class="ic">${ic}</div>`:''}<div class="st"><span class="tech-stats">${num(c.at,eb.at)}/${num(c.df,eb.df)}</span>${c.dp!==1?` <span class="tech-dp">DP${c.dp}</span>`:''}</div>
       <div class="gp"><span class="tech-gp">陽${c.gp.yo}/陰${c.gp.in}</span> ${c.tech}</div></div>
     </div>${tx}</div>`;
 }
