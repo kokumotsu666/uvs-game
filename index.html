@@ -376,13 +376,39 @@ body:not(:has(#overlay.on,#cardpeek)) .nv-center[data-impact] .nv-totals{z-index
 .nv-stack-detail .stack-list{min-height:0;overflow:auto;overscroll-behavior:contain}
 .nv-stack-detail h2,.nv-stack-detail .btns{flex:none}
 .nv-stack-detail .stack-list section+section{border-top:1px solid var(--line);margin-top:12px;padding-top:12px}
-.nv-victory{text-align:center}
-.ov:has(> .nv-victory) > .btns{justify-content:center}
-.nv-victory h2{font-size:clamp(27px,8vw,42px);color:#ffe1a0;text-shadow:0 0 18px #f0b13a88}
-.nv-victory.animated h2{animation:nv-victory-in 420ms ease-out both}
-.nv-victory.animated.short h2{animation-duration:210ms}
-@keyframes nv-victory-in{from{opacity:.1;transform:scale(.78)}to{opacity:1;transform:scale(1)}}
-@media(prefers-reduced-motion:reduce){.nv-victory.animated h2{animation:none}}
+.uvs-result{position:fixed;inset:0;width:100%;max-width:none;height:100vh;height:100dvh;max-height:none;margin:0;padding:0;border:0;
+ background:linear-gradient(180deg,#0b101de0,#101623c7 46%,#0b0d16f7),url("assets/backgrounds/bamboo-courtyard.webp") center top/cover,#111621;color:#f6efe4}
+.uvs-result::backdrop{background:#080d17}
+.uvs-result-layout{height:100%;width:min(100%,680px);margin:auto;display:grid;grid-template-rows:auto minmax(72px,1fr) auto auto;
+ gap:clamp(4px,1.2dvh,12px);padding:calc(10px + env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px))
+ calc(12px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));text-align:center}
+.uvs-result-heading h2{margin:0;color:#ffe4a5;font:800 clamp(28px,9vw,55px)/1.08 serif;text-shadow:0 2px 15px #d1954966}
+.uvs-result-heading span{color:#e8c57e;font-size:12px;font-weight:750;letter-spacing:.16em}
+.uvs-result-art{min-height:0;min-width:0;display:grid;place-items:center;overflow:hidden}
+.uvs-result-art img{width:min(calc(100% * var(--art-scale)),var(--art-width));height:min(calc(100% * var(--art-scale)),var(--art-height));
+ min-height:0;object-fit:contain;object-position:var(--art-x) var(--art-y)}
+.uvs-result-summary{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:7px 8px;border:1px solid #a9906170;border-radius:9px;background:#111622ed}
+.uvs-result-summary small{display:block;color:#e8c57e;font-weight:750;letter-spacing:.12em}
+.uvs-result-summary strong{display:block;font-size:clamp(15px,5vw,24px)}
+.uvs-result-summary p{grid-column:1/-1;margin:0;font-size:clamp(11px,3.3vw,14px);overflow-wrap:anywhere}
+.uvs-result-actions{display:grid;grid-template-columns:1fr .8fr 1.25fr;gap:6px}
+.uvs-result-actions button{padding:6px 3px;min-height:46px;font-size:clamp(11px,3.4vw,15px);font-weight:700}
+.uvs-result-actions [data-result="rematch"]{background:#74313c;border-color:#bd9460}
+@media(max-height:460px) and (orientation:landscape){
+ .uvs-result-layout{grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(65px,1fr) auto}
+ .uvs-result-art{grid-column:1;grid-row:1/-1}.uvs-result-heading,.uvs-result-summary,.uvs-result-actions{grid-column:2}
+ .uvs-result-summary{align-self:end}
+}
+
+.uvs-result.intro{--intro-tempo:1;animation:uvs-result-in calc(.26s * var(--intro-tempo)) ease-out both}
+.uvs-result.intro.short{--intro-tempo:.5}
+.uvs-result.intro .uvs-result-heading{animation:uvs-result-in calc(.18s * var(--intro-tempo)) ease-out calc(.2s * var(--intro-tempo)) both}
+.uvs-result.intro .uvs-result-art{animation:uvs-result-art-in calc(.32s * var(--intro-tempo)) ease-out calc(.5s * var(--intro-tempo)) both}
+.uvs-result.intro .uvs-result-summary{animation:uvs-result-in calc(.17s * var(--intro-tempo)) ease-out calc(1s * var(--intro-tempo)) both}
+.uvs-result.intro .uvs-result-actions{animation:uvs-result-in calc(.12s * var(--intro-tempo)) ease-out calc(1.3s * var(--intro-tempo)) both}
+@keyframes uvs-result-in{from{opacity:0}to{opacity:1}}
+@keyframes uvs-result-art-in{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.uvs-result.intro,.uvs-result.intro :is(.uvs-result-heading,.uvs-result-art,.uvs-result-summary,.uvs-result-actions){animation:none}}
 #fx .fx-battle-card,#fx .fx-battle-stack,#fx .fx-battle-impact{position:absolute;pointer-events:none;z-index:2}
 body:has(#overlay.on,#cardpeek) #fx :is(.fx-battle-card,.fx-battle-stack,.fx-battle-impact){visibility:hidden}
 #fx .fx-battle-impact{width:90px;height:90px;border-radius:50%;background:radial-gradient(circle,#fff,#ffd18390 24%,transparent 67%);mix-blend-mode:screen}
@@ -2006,7 +2032,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=Solver; else root.
    - 記録は人間・CPUの区別なく全判断を含む。再生は記録を使い切ったら
      元のコントローラ（人間／CPU）に引き継ぐ（＝ログからの再開）
    ========================================================= */
-const UI_VER='演出v3.8';
+const UI_VER='演出v3.9';
 (function(root){
 const LOG_VERSION='v'+CONFIG.ruleVersion;
 
@@ -2486,17 +2512,109 @@ function refreshRecentLog(onAppend=false){
   recent.replaceChildren(...lines);
 }
 
-let victoryGame=null;
+const UVS_RESULT_ART=Object.freeze({
+  asuka:    {path:'./assets/characters/asuka-lv4.webp?v=3.2',scale:1,    x:50,y:50,width:540,height:720},
+  yagyu:    {path:'./assets/characters/yagyu-lv4.webp?v=3.2',scale:.98,  x:50,y:50,width:540,height:720},
+  ikaruga:  {path:'./assets/characters/ikaruga-lv4.webp?v=3.2',scale:1,  x:50,y:50,width:540,height:720},
+  katsuragi:{path:'./assets/characters/katsuragi-lv4.webp?v=3.2',scale:1,x:50,y:50,width:580,height:720},
+  hibari:   {path:'./assets/characters/hibari-lv4.webp?v=3.2',scale:1,  x:50,y:50,width:540,height:720}
+});
+let presentedResult=null;
+let resultDialog=null;
+let matchStartSettings=null;
+
+function closeResult(){
+  if(!resultDialog)return;
+  resultDialog.close();
+  resultDialog.remove();
+  resultDialog=null;
+}
+
 async function showGameOver(){
   const game=G;
-  if(!game.over||victoryGame===game)return;
-  victoryGame=game;
+  if(!game.over||presentedResult===game)return;
+  presentedResult=game;
   await Promise.all([window.FX?.finishBattle(),window.FX?.drain()]);
-  if(G!==game)return;
-  const loser=P[game.over.loser],winner=P[1-loser.idx];
-  const animation=SETTINGS.anim==='off'?'':` animated ${SETTINGS.anim==='short'?'short':''}`;
-  openOv(`<div class="nv-victory${animation}"><h2>${winner.charName}の勝利！</h2><p>${winner.name} WIN</p><p>${loser.name}（${loser.charName}）の敗北（${game.over.why}）</p></div>`);
-  $('#overlay').onclick=closeOv;
+  if(G===game)openResult(true);
+}
+
+function openResult(intro=false){
+  const game=G;
+  if(!game.over||resultDialog)return;
+  const loser=P[game.over.loser];
+  const winner=loser&&P[1-loser.idx];
+  const id=START_ROSTER.find(entry=>entry.name===loser?.charName)?.id;
+  const art=UVS_RESULT_ART[id];
+  const dialog=document.createElement('dialog');
+  dialog.className='uvs-result';
+  dialog.setAttribute('aria-labelledby','uvs-result-title');
+  dialog.innerHTML=`<div class="uvs-result-layout">
+    <div class="uvs-result-heading"><h2 id="uvs-result-title">${winner?'勝負あり':'引き分け'}</h2>
+      ${winner?`<span>WINNER · ${winner.name}</span>`:''}</div>
+    <div class="uvs-result-art"></div>
+    <div class="uvs-result-summary">
+      ${winner?`<div><small>WINNER</small><strong>${winner.name} ${winner.charName}</strong></div>
+      <div><small>LOSER</small><strong>${loser.name} ${loser.charName}</strong></div>
+      <p>最終ダメージ：${loser.damage.length} / ${CONFIG.winDamage}</p>`:''}
+      <p>${game.over.why||''}</p>
+    </div>
+    <div class="uvs-result-actions">
+      <button type="button" data-result="board">盤面を見る</button>
+      <button type="button" data-result="rematch">再戦</button>
+      <button type="button" data-result="select">キャラ選択へ戻る</button>
+    </div>
+  </div>`;
+  if(art){
+    const img=new Image();
+    img.alt=loser.charName+'のダメージイラスト';
+    img.style.cssText=`--art-scale:${art.scale};--art-x:${art.x}%;--art-y:${art.y}%;--art-width:${art.width}px;--art-height:${art.height}px`;
+    img.onerror=()=>{console.warn('リザルト画像を読み込めません',id,art.path);img.remove();};
+    img.src=art.path;
+    dialog.querySelector('.uvs-result-art').append(img);
+  }else if(loser){console.warn('リザルト画像が未登録です',loser.charName);}
+  let acted=false;
+  dialog.querySelectorAll('[data-result]').forEach(button=>button.onclick=()=>{
+    if(acted||G!==game)return;
+    acted=true;
+    const action=button.dataset.result;
+    closeResult();
+    if(action==='rematch'){
+      const {first,cpu,codes}=matchStartSettings;
+      const [d1,d2]=game.meta.decks;
+      newGame(game.mode,d1,d2,first,UI.delay,cpu,null,0,codes);
+    }else if(action==='select'){startScreen();}
+  });
+
+  const motion=matchMedia('(prefers-reduced-motion: reduce)');
+  const animate=intro&&SETTINGS.anim!=='off'&&!motion.matches;
+  const actions=dialog.querySelector('.uvs-result-actions');
+  let timer;
+  const reveal=()=>{
+    clearTimeout(timer);
+    if(resultDialog!==dialog||!dialog.classList.contains('intro'))return;
+    dialog.classList.remove('intro','short');
+    actions.inert=false;
+    actions.firstElementChild.focus({preventScroll:true});
+  };
+  if(animate){
+    dialog.classList.add('intro');
+    if(SETTINGS.anim==='short')dialog.classList.add('short');
+    actions.inert=true;
+    dialog.addEventListener('click',event=>{
+      if(!dialog.classList.contains('intro'))return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      reveal();
+    },true);
+    dialog.addEventListener('close',()=>clearTimeout(timer),{once:true});
+    timer=setTimeout(reveal,SETTINGS.anim==='short'?730:1460);
+  }
+  dialog.addEventListener('cancel',event=>{event.preventDefault();reveal();});
+
+  resultDialog=dialog;
+  document.body.append(dialog);
+  closeOv();
+  dialog.showModal();
 }
 
 const UVS_CHAR_ART_PATH=Object.freeze({
@@ -2699,7 +2817,8 @@ function startScreen(){
   $('#rulesbtn').onclick=showRules;
   paint();
 }
-function newGame(mode,d1,d2,first,delay,cpu='solver',resume=null,undo=0){
+function newGame(mode,d1,d2,first,delay,cpu='solver',resume=null,undo=0,rematchCodes=null){
+  closeResult();
   CONFIG.deckSize=30;
   const seed=resume?resume.seed:Math.floor(Math.random()*2147483647);
   const rng=Replay.mulberry32(seed);
@@ -2707,7 +2826,8 @@ function newGame(mode,d1,d2,first,delay,cpu='solver',resume=null,undo=0){
   const rngFirst=(first==='random'||first==null)?'random':'fixed';
   if(rngFirst==='fixed')first=+first;
   // 座席ごとのコントローラ: H=人間, S=ソルバー, A=経験則AI
-  const codes=resume?resume.ctl:[mode==='watch'?(cpu==='solver'?'S':'A'):'H',(mode==='watch'||mode==='cpu')?(cpu==='solver'?'S':'A'):'H'];
+  const codes=resume?.ctl??rematchCodes??[mode==='watch'?(cpu==='solver'?'S':'A'):'H',(mode==='watch'||mode==='cpu')?(cpu==='solver'?'S':'A'):'H'];
+  if(!undo||!matchStartSettings)matchStartSettings={first:rngFirst==='random'?'random':first,cpu,codes:[...codes]};
   const base=c=>c==='H'?Human:c==='S'?Solver.makeSolver({sampleFix:true,profiles:FINAL_PROFILES}):AI; // 汎用AI（係数表。雲雀だけ専用の値）＋防御側サンプリング修正
   const label=c=>c==='H'?'人間':c==='S'?'CPU(ソルバー)':'CPU(経験則AI)';
   const ai=codes.map(c=>c!=='H');
@@ -2984,7 +3104,7 @@ function nvRender(){
   const sources=window.FX?.battleSources(G.bs);
   const ph=pickHint(pickKey());const ptxt=pr&&pr.pi===me.idx?(ph?`<b class="pk">${ph}</b>`:`${pr.spec.title}`):(G.over?'ゲーム終了':G.bs?.stage==='result'?'':P[G.cur]?.ai?'CPU思考中…':G.log.at(-1)?.s||'');
   app.innerHTML=`
-  <div class="nv-bar">${G.mode!=='watch'?`<button id="btnundo" ${canUndo()&&undoTarget('step')>=0?'':'disabled'}>1手戻す</button><button id="btnturn" ${canUndo()&&undoTarget('turn')>=0?'':'disabled'}>ターン最初へ</button>`:''}<button id="btnlog">ログ</button><button id="btnrule">ルール</button><button id="btnreset">最初から</button><span class="sp"></span><span id="autostat">${autoStat}</span><span>${Replay.LOG_VERSION}</span></div>
+  <div class="nv-bar">${G.mode!=='watch'?`<button id="btnundo" ${canUndo()&&undoTarget('step')>=0?'':'disabled'}>1手戻す</button><button id="btnturn" ${canUndo()&&undoTarget('turn')>=0?'':'disabled'}>ターン最初へ</button>`:''}<button id="btnlog">ログ</button><button id="btnrule">ルール</button>${G.over?'<button id="btnresult">リザルト</button>':'<button id="btnreset">最初から</button>'}<span class="sp"></span><span id="autostat">${autoStat}</span><span>${Replay.LOG_VERSION}</span></div>
   <div class="nv-opbar"><span><span class="nv-turn ${mine?'mine':'theirs'}">T${G.turn} ${who}・${PH[G.phase]||''}</span>　${op.name}${op.ai?'（CPU）':''}</span><small class="small" data-ui-version style="white-space:nowrap">${UI_VER}</small><span class="nv-backs">手札 ${op.hand.slice(0,8).map(()=>'<i></i>').join('')}<b>${op.hand.length}</b></span></div>
   <div class="nv-row">${nvInfo(op,true)}${nvGval(op,'相手',true)}</div>
   <div class="nv-mid"><div class="nv-center">${nvSide(op,true)}${nvTotals(me,op)}${nvSide(me,false,lit)}${nvChoice(pr,me)}</div></div>
@@ -3006,7 +3126,7 @@ function nvRender(){
   app.querySelectorAll('[data-zone]').forEach(el=>el.onclick=e=>{e.stopPropagation();showZone(P[+el.dataset.p],el.dataset.zone);});
   const hd=$('#nvhand');if(hd)hd.scrollLeft=hd.scrollWidth;
   const bu=$('#btnundo');if(bu)bu.onclick=()=>doUndo('step');const bt=$('#btnturn');if(bt)bt.onclick=()=>doUndo('turn');
-  $('#btnlog').onclick=showLog;$('#btnrule').onclick=showRules;$('#btnreset').onclick=()=>{if(G.prompt)resolvePrompt({value:'__abort'});location.reload();};
+  $('#btnlog').onclick=showLog;$('#btnrule').onclick=showRules;const result=$('#btnresult');if(result)result.onclick=()=>openResult();else $('#btnreset').onclick=()=>{if(G.prompt)resolvePrompt({value:'__abort'});location.reload();};
 }
 render=nvRender;
 const _start=startScreen;startScreen=function(){$('#app').classList.remove('nv');return _start.apply(this,arguments);};
