@@ -414,6 +414,7 @@ body:has(#overlay.on,#cardpeek) #fx :is(.fx-battle-card,.fx-battle-stack,.fx-bat
 /* Character illustrations: UI-only, never part of gameplay state. */
 .nv-char{position:relative;isolation:isolate;overflow:hidden}
 .nv-char .uvs-character-art{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center center;pointer-events:none;z-index:0}
+.nv-char .uvs-character-art.attack-crop{object-fit:cover;object-position:var(--art-x) var(--art-y);transform:scale(var(--art-scale));transform-origin:var(--art-x) var(--art-y)}
 .nv-char > :is(.t,.s,.x:not(:empty)){position:relative;z-index:1;margin-inline:-4px;padding-inline:4px;border-radius:8px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.10);color:#f3f6ff}
 .nv-char > .t{background:rgba(20,26,36,.55)}.nv-char > .t span{color:inherit}
 .nv-char > .s{background:rgba(20,26,36,.60)}
@@ -1984,7 +1985,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=Solver; else root.
    - 記録は人間・CPUの区別なく全判断を含む。再生は記録を使い切ったら
      元のコントローラ（人間／CPU）に引き継ぐ（＝ログからの再開）
    ========================================================= */
-const UI_VER='演出v3.6';
+const UI_VER='演出v3.7';
 (function(root){
 const LOG_VERSION='v'+CONFIG.ruleVersion;
 
@@ -2710,7 +2711,19 @@ function nvGauge(p,z){const arr=z==='yo'?p.gYo:p.gIn;
 
 // Presentation-only artwork mapping. Each character level has its own image slot.
 // Lv1-Lv5 currently point to the same file; replace individual entries to add unique art later.
-function nvChar(p,flip,lit,picked){const ch=window.FX?.character(p).card??p.charDeck[0];const level=window.FX?.levelNotice(p);const sups=p.supports.map(s=>s.card.name).join('・');const artPath=UVS_CHAR_ART_PATH[p.charName]?.[ch.lv];const artHtml=artPath?`<img class="uvs-character-art" src="${artPath}" alt="" aria-hidden="true" onerror="this.remove()">`:'';
+// Crop settings for battle portraits at Lv4–5: [scale, horizontal %, vertical %].
+const UVS_ATTACK_ART_CROP=Object.freeze({
+  '飛鳥':[1.19,47,22],
+  '柳生':[1.21,49,22],
+  '斑鳩':[1.23,48,30],
+  '葛城':[1.14,49,25],
+  '雲雀':[1.16,50,21]
+});
+function nvChar(p,flip,lit,picked){const ch=window.FX?.character(p).card??p.charDeck[0];const level=window.FX?.levelNotice(p);const sups=p.supports.map(s=>s.card.name).join('・');const artPath=UVS_CHAR_ART_PATH[p.charName]?.[ch.lv];
+  const crop=ch.lv>=4&&UVS_ATTACK_ART_CROP[p.charName];
+  const artClass=crop?'uvs-character-art attack-crop':'uvs-character-art';
+  const artStyle=crop?` style="--art-scale:${crop[0]};--art-x:${crop[1]}%;--art-y:${crop[2]}%"`:'';
+  const artHtml=artPath?`<img class="${artClass}"${artStyle} src="${artPath}" alt="" aria-hidden="true" onerror="this.remove()">`:'';
   return `<div class="nv-char ${flip?'flip':''} ${lit?'lit':''} ${picked?'picked':''}" ${lit?'data-charv="1"':`data-uid="${ch.uid}"`}>${artHtml}<div class="t"><b>${p.charName}</b><span>Lv${ch.lv}</span></div><div class="s">AT ${ch.at}・DF ${ch.df}</div><div class="x">${cardText(ch)||''}</div>${level?`<span class="nv-level-notice">Lv${level.from} → Lv${level.to}</span>`:''}${sups?`<div class="sup">使用中：${sups}</div>`:''}${lit&&G.prompt.spec.charLabel?`<div class="sup">タップ：${G.prompt.spec.charLabel}</div>`:''}</div>`;}
 function nvStack(p,opponent){
   const bs=G.bs;
