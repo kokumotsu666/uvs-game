@@ -2032,7 +2032,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=Solver; else root.
    - 記録は人間・CPUの区別なく全判断を含む。再生は記録を使い切ったら
      元のコントローラ（人間／CPU）に引き継ぐ（＝ログからの再開）
    ========================================================= */
-const UI_VER='演出v3.9';
+const UI_VER='演出v4.0';
 (function(root){
 const LOG_VERSION='v'+CONFIG.ruleVersion;
 
@@ -2517,7 +2517,7 @@ const UVS_RESULT_ART=Object.freeze({
   yagyu:    {path:'./assets/characters/yagyu-lv4.webp?v=3.2',scale:.98,  x:50,y:50,width:540,height:720},
   ikaruga:  {path:'./assets/characters/ikaruga-lv4.webp?v=3.2',scale:1,  x:50,y:50,width:540,height:720},
   katsuragi:{path:'./assets/characters/katsuragi-lv4.webp?v=3.2',scale:1,x:50,y:50,width:580,height:720},
-  hibari:   {path:'./assets/characters/hibari-lv4.webp?v=3.2',scale:1,  x:50,y:50,width:540,height:720}
+  hibari:   {path:'./assets/characters/hibari-defeat-v40.webp',scale:1,  x:50,y:50,width:540,height:720}
 });
 let presentedResult=null;
 let resultDialog=null;
