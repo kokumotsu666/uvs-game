@@ -177,6 +177,86 @@ header button:disabled{opacity:.35}
 .hiden-cost-card[aria-pressed="true"]::after{content:"✓";position:absolute;right:4px;top:4px;border-radius:50%;background:var(--acc);color:var(--bg);padding:0 4px}
 .hiden-cost-info{min-height:44px;padding:0}
 .hiden-cost [hidden]{display:none}
+
+/* Character selection and its start-only panels */
+body:has(.uvs-select){
+ background:linear-gradient(150deg,#101724ab,#18141be8),url("assets/backgrounds/bamboo-courtyard.webp") center top/cover fixed,#10141e
+}
+.uvs-select{width:100%;display:grid;gap:clamp(8px,2dvh,20px);align-content:center;min-height:100vh;min-height:100dvh;
+ padding:calc(10px + env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
+.uvs-select header{position:static;padding:0 0 8px;background:none;border-bottom:1px solid #a18455;flex-wrap:wrap}
+.uvs-select h1{color:#ffe0a1;font-size:clamp(20px,6vw,32px);font-family:serif;line-height:1;letter-spacing:.025em}
+.uvs-select header small{display:block;font-size:10px;color:#c6b89f;font-family:system-ui;letter-spacing:0;margin-top:5px}
+.uvs-select header button,.uvs-select button[data-deck-detail]{min-height:44px}
+.uvs-select-stage{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;color:#f7dfb0}
+.uvs-select-stage b{letter-spacing:.1em}
+.uvs-select-stage span{font-size:12px;color:#dfd3c0}
+.uvs-select-hero{position:relative;isolation:isolate;overflow:hidden;display:grid;align-items:center;
+ min-height:clamp(142px,25dvh,218px);padding:12px;border:1px solid #a1845588;border-radius:10px;background:#242432}
+.uvs-select-hero img{position:absolute;top:0;right:0;width:55%;height:100%;object-fit:cover;object-position:center 16%;z-index:-2}
+.uvs-select-hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+ background:linear-gradient(90deg,#161923 0%,#161923 39%,#161923b0 55%,transparent 78%)}
+.uvs-select-copy{width:56%;color:#fbefdb}
+.uvs-select-copy h2{font-family:serif;font-size:clamp(24px,7vw,39px);line-height:1.12;margin:0;color:#ffe0a1}
+.uvs-select-copy strong{display:block;margin:3px 0;font-size:13px}
+.uvs-select-copy p{margin:3px 0;font-size:12px}
+.uvs-select-copy button{margin-top:5px;padding:5px 9px;font-size:12px}
+.uvs-select-hero.fade :is(img,.uvs-select-copy){animation:uvs-select-fade 165ms ease-out both}
+@keyframes uvs-select-fade{from{opacity:.35}to{opacity:1}}
+.uvs-roster-title{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#d9c5a8;font-size:12px}
+.uvs-roster-title button{min-height:44px;padding:5px 10px;font-size:12px}
+.uvs-roster{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));isolation:isolate;overflow:hidden;padding:5px 2px 3px;border-bottom:1px solid #a18455}
+.uvs-roster button{min-width:0;position:relative;background:none;border:0;padding:0;color:#e7dac4;outline-offset:-2px}
+.uvs-roster button[aria-pressed="true"]{z-index:2;color:#ffe2a2}
+.uvs-roster-art{position:relative;display:block;height:clamp(100px,28dvh,238px);pointer-events:none}
+.uvs-roster-art img{position:absolute;left:50%;bottom:6px;width:136%;height:94%;object-fit:contain;object-position:center bottom;
+ transform:translateX(-50%);transform-origin:center bottom;filter:brightness(.76);transition:transform 150ms ease-out,filter 150ms ease-out}
+.uvs-roster button[aria-pressed="true"] img{transform:translateX(-50%) scale(1.1);filter:brightness(1)}
+.uvs-roster button[aria-pressed="true"] .uvs-roster-art::after{content:"";position:absolute;bottom:0;left:20%;right:20%;height:5px;border-radius:50%;background:#ffd578;box-shadow:0 0 10px #ffc35d}
+.uvs-roster-name{display:block;padding:4px 0 2px;font-size:clamp(13px,4.1vw,18px);font-weight:700;white-space:nowrap}
+.uvs-select-controls{display:grid;grid-template-columns:1fr 2fr 1fr;gap:8px}
+.uvs-select-controls button{min-height:48px;font-size:17px;font-weight:700}
+.uvs-select-confirm,#uvs-match-start{color:#fff4dc;background:#762e34;border-color:#bb9160}
+#overlay .uvs-start-modal{max-height:min(90dvh,calc(var(--uvs-visible-height,100dvh) - 32px));min-width:0}
+#overlay:has(.uvs-start-load){top:var(--uvs-visible-top,0px);height:var(--uvs-visible-height,100dvh);bottom:auto}
+.uvs-start-load textarea{display:block;width:100%;font:inherit;font-size:16px;min-height:74px;max-height:25dvh;resize:vertical}
+.uvs-start-load #resumeerr{margin:6px 0;color:#ffb4ac;overflow-wrap:anywhere}
+.uvs-start-modal button,.uvs-start-settings select{min-height:44px}
+.uvs-start-settings select{max-width:100%;font-size:16px}
+.uvs-start-modal[data-actions] > .btns:last-child{display:none}
+#overlay .uvs-scroll{position:relative;color:#38271f;border:1px solid #b18a53;padding:14px 25px;
+ background:linear-gradient(90deg,#cfad77,#f6e5c5 12% 88%,#cfad77);text-align:center}
+.uvs-scroll::before,.uvs-scroll::after{content:"";position:absolute;top:0;bottom:0;width:10px;pointer-events:none;background:linear-gradient(90deg,#58302a,#9f593d,#58302a)}
+.uvs-scroll::before{left:3px}.uvs-scroll::after{right:3px}
+.uvs-scroll.animated{animation:uvs-scroll-open 210ms ease-out both}
+.uvs-scroll.animated.short{animation-duration:105ms}
+.uvs-scroll.closing{animation:uvs-scroll-open 120ms ease-in reverse both;pointer-events:none}
+@keyframes uvs-scroll-open{from{transform:scaleX(.76);opacity:.35}to{transform:scaleX(1);opacity:1}}
+.uvs-scroll-lineup{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:6px}
+.uvs-scroll-lineup img{width:100%;height:clamp(90px,24dvh,180px);object-fit:contain;display:block}
+.uvs-scroll-lineup figure{margin:0;min-width:0}
+.uvs-scroll-lineup figcaption{font-size:12px;overflow-wrap:anywhere}
+.uvs-scroll-lineup b{display:block;font-size:15px}
+.uvs-scroll-vs{font:700 clamp(23px,7vw,42px) serif;color:#762e34}
+.uvs-scroll .btns{justify-content:center}
+.uvs-select[data-motion="off"] .uvs-roster img{transition:none}
+@media(max-height:440px) and (orientation:landscape){.uvs-select{gap:6px}.uvs-select-hero{min-height:130px}.uvs-roster-art{height:90px}}
+@media(prefers-reduced-motion:reduce){.uvs-select-hero.fade :is(img,.uvs-select-copy),.uvs-scroll.animated{animation:none}.uvs-roster-art img{transition:none}}
+
+.uvs-select[data-motion="short"] .uvs-select-hero.fade :is(img,.uvs-select-copy){animation-duration:85ms}
+.uvs-select[data-motion="short"] .uvs-roster img{transition-duration:75ms}
+
+@media(max-height:520px) and (orientation:landscape){
+ .uvs-select{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:6px 12px}
+ .uvs-select > :is(header,.uvs-select-stage,.uvs-select-controls){grid-column:1/-1}
+ .uvs-select-hero{min-height:136px}
+ .uvs-roster-art{height:clamp(74px,24dvh,125px)}
+ .uvs-roster-name{font-size:14px}
+}
+
+.uvs-roster-art:not(:has(img))::before{content:"";position:absolute;left:16%;right:16%;bottom:8px;height:62%;border-radius:45% 45% 10% 10%;
+ background:radial-gradient(circle at 50% 24%,#a18455 0 12%,transparent 13%),radial-gradient(ellipse at 50% 78%,#a1845588 0 34%,transparent 35%)}
+
 </style>
 <style>
 /* v1.8 新UI（2026-11-06）：モック https://claude.ai/artifact/2916UR435Sqh5DB9wBAGLw の配置 */
@@ -1904,7 +1984,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=Solver; else root.
    - 記録は人間・CPUの区別なく全判断を含む。再生は記録を使い切ったら
      元のコントローラ（人間／CPU）に引き継ぐ（＝ログからの再開）
    ========================================================= */
-const UI_VER='演出v3.4';
+const UI_VER='演出v3.5';
 (function(root){
 const LOG_VERSION='v'+CONFIG.ruleVersion;
 
@@ -2379,33 +2459,205 @@ async function showGameOver(){
   $('#overlay').onclick=closeOv;
 }
 
+const UVS_CHAR_ART_PATH=Object.freeze({
+  '飛鳥':Object.freeze([null,'./assets/characters/asuka.webp?v=3.2','./assets/characters/asuka.webp?v=3.2','./assets/characters/asuka.webp?v=3.2','./assets/characters/asuka_attack.webp','./assets/characters/asuka_attack.webp']),
+  '斑鳩':Object.freeze([null,'./assets/characters/ikaruga.webp','./assets/characters/ikaruga.webp','./assets/characters/ikaruga.webp','./assets/characters/ikaruga_attack.webp','./assets/characters/ikaruga_attack.webp']),
+  '葛城':Object.freeze([null,'./assets/characters/katsuragi.webp','./assets/characters/katsuragi.webp','./assets/characters/katsuragi.webp','./assets/characters/katsuragi_attack.webp','./assets/characters/katsuragi_attack.webp']),
+  '柳生':Object.freeze([null,'./assets/characters/yagyu-lv1.webp?v=3.2','./assets/characters/yagyu-lv1.webp?v=3.2','./assets/characters/yagyu-lv1.webp?v=3.2','./assets/characters/yagyu_attack.webp','./assets/characters/yagyu_attack.webp']),
+  '雲雀':Object.freeze([null,'./assets/characters/hibari.webp','./assets/characters/hibari.webp','./assets/characters/hibari.webp','./assets/characters/hibari_attack.webp','./assets/characters/hibari_attack.webp'])
+});
+function showStartDecks(keys){let h='<h2>固定デッキ内容（各30枚＋キャラ5枚）</h2>';for(const k of keys){const d=DECKS[k];h+=`<h3>${k}</h3><p class="small">固定30枚はv1.12（サイクル36）の構成。キャラ能力は現行版。</p><table><tr><th>Lv</th><th>AT/DF</th><th>効果</th></tr>`;for(const c of CHARS[k])h+=`<tr><td>${c.lv}</td><td>${c.at}/${c.df}</td><td class="small">${c.text||'—'}</td></tr>`;h+='</table><table><tr><th>枚</th><th>カード</th><th>色GP</th><th>AT/DF</th><th>ｱｲｺﾝ</th><th>効果</th></tr>';for(const [n,c] of d.list30){const t=CARDS[n];h+=`<tr><td>${c}</td><td>${n}</td><td>${t.color}${t.gp.yo}/${t.gp.in}</td><td>${t.type==='battle'?`+${t.at}/+${t.df}${t.dp!==1?' DP'+t.dp:''}`:'SUP'}</td><td>${t.type==='battle'?t.icons.join(''):'—'}</td><td class="small">${(t.text||'').replace(/【使用条件】.*?。/,'')}</td></tr>`;}h+='</table>';}openOv(h);}
+
 /* ---------- 開始画面 ---------- */
+const START_ROSTER=[
+  ['asuka','飛鳥','凪と飛塵を忍ゲージに置き、右空を使える状態から連撃を狙います。'],
+  ['yagyu','柳生','手札交換で攻防を整え、Lv5では射撃・防御の技を強化します。'],
+  ['ikaruga','斑鳩','攻撃勝利から忍ゲージを削り、相手の技の使用条件を崩します。'],
+  ['katsuragi','葛城','サマーソルトなどの技とLv4・Lv5の能力で相手の山札を削ります。'],
+  ['hibari','雲雀','防御札で耐え、Lv4の防御時ドローやLv5の山札回収で粘ります。']
+].map(([id,name,description])=>{
+  const key=DECK_KEYS.find(k=>DECKS[k].char===name);
+  return {id,name,key,art:UVS_CHAR_ART_PATH[name]?.[1],deck:key,description};
+});
+const START_MODES={cpu:'CPU対戦',hotseat:'2人対戦',watch:'CPU同士を観戦'};
+const START_FIRST={random:'ランダム',0:'プレイヤー1',1:'プレイヤー2'};
+
+function startPortrait(entry){
+  return entry.art?`<img src="${entry.art}" alt="" draggable="false" onerror="this.remove()">`:'';
+}
+
 function startScreen(){
-  $('#app').innerHTML=`<header><h1>UVS engine</h1><small class="small" data-ui-version>${UI_VER}</small></header>
-  <div class="board"><h3 style="margin:6px 0">Unlimited VS 再現エンジン（試作）</h3>
-   <p class="small">リメイク向けルールv2で、固定デッキ5種（飛鳥・連撃／柳生・射撃／斑鳩・対抗封じ／葛城・削り／雲雀・反撃、各30枚＋キャラ5枚）を対戦させます。1台の端末で交代して遊ぶか、CPUと対戦できます。</p>
-   <h4>モード</h4>
-   <label><input type="radio" name="mode" value="cpu" checked> CPU対戦（あなたがプレイヤー1）</label>
-   <label><input type="radio" name="mode" value="hotseat"> 2人対戦（端末を交代）</label>
-   <label><input type="radio" name="mode" value="watch"> CPU同士を観戦</label>
-   <h4>デッキ</h4>
-   <label>プレイヤー1：<select id="d1"><option value="random" selected>ランダム</option>${DECK_KEYS.map(k=>`<option value="${k}">${k}</option>`).join('')}</select></label>
-   <label>プレイヤー2：<select id="d2"><option value="random" selected>ランダム</option>${DECK_KEYS.map(k=>`<option value="${k}">${k}</option>`).join('')}</select></label>
-   <label>先攻：<select id="first"><option value="random">ランダム</option><option value="0">プレイヤー1</option><option value="1">プレイヤー2</option></select></label>
-   <label>CPUの思考：<select id="cpu"><option value="solver" selected>ソルバー（計測と同じ）</option><option value="ai">経験則AI（旧）</option></select></label>
-   <label>CPUの待ち時間：<select id="delay"><option value="400">短い</option><option value="900" selected>普通</option><option value="1600">長い</option></select></label>
-   <label>ターン・フェイズの演出：<select id="anim"><option value="normal" ${SETTINGS.anim==='normal'?'selected':''}>普通</option><option value="short" ${SETTINGS.anim==='short'?'selected':''}>短い</option><option value="off" ${SETTINGS.anim==='off'?'selected':''}>なし</option></select></label>
-   <label><input type="checkbox" id="autocopy" ${SETTINGS.autoCopy?'checked':''}> ターン終了ごとにログをクリップボードへ自動コピー（テスト版）</label>
-   <div class="btns" style="margin-top:12px"><button class="primary" id="start">ゲーム開始</button><button id="rulesbtn">ルールを見る</button><button id="deckbtn">デッキ内容</button></div>
-   <h4>ログから再開</h4>
-   <textarea id="resume" rows="3" style="width:100%;box-sizing:border-box;font-size:12px" placeholder="コピーしたログ（#UVS … replay 以降を含む全文）を貼り付け"></textarea>
-   <div class="btns"><button id="resumebtn">貼り付けたログから再開</button><span id="resumeerr" class="small"></span></div>
-  </div>`;
-  const chooseDeck=key=>key==='random'?DECK_KEYS[Math.floor(Math.random()*DECK_KEYS.length)]:key;
-  $('#start').onclick=()=>{const mode=document.querySelector('input[name=mode]:checked').value;SETTINGS.autoCopy=$('#autocopy').checked;SETTINGS.anim=$('#anim').value;CONFIG.deckSize=30;newGame(mode,chooseDeck($('#d1').value),chooseDeck($('#d2').value),$('#first').value,+$('#delay').value,$('#cpu').value);};
-  $('#resumebtn').onclick=()=>{SETTINGS.autoCopy=$('#autocopy').checked;SETTINGS.anim=$('#anim').value;try{const m=Replay.parse($('#resume').value);const mode=m.ctl.every(c=>c!=='H')?'watch':m.ctl.every(c=>c==='H')?'hotseat':'cpu';CONFIG.deckSize=30;newGame(mode,m.decks[0],m.decks[1],m.first,+$('#delay').value,'solver',m);}catch(e){$('#resumeerr').textContent=e.message;}};
+  const random=()=>Math.floor(Math.random()*START_ROSTER.length);
+  const cursor=[random(),null];
+  const settings={mode:'cpu',first:'random',cpu:'solver',delay:900,anim:SETTINGS.anim,autoCopy:SETTINGS.autoCopy};
+  let seat=0,starting=false;
+  const app=$('#app');
+  app.innerHTML=`<main class="uvs-select">
+    <header><h1>UVS engine<small data-ui-version>${Replay.LOG_VERSION} · ${UI_VER}</small></h1>
+      <button id="uvs-start-load">ロード</button><button id="uvs-start-settings">設定</button><button id="rulesbtn">ルール</button>
+    </header>
+    <div class="uvs-select-stage" aria-live="polite"></div>
+    <section class="uvs-select-hero" aria-label="選択中のデッキ"></section>
+    <section aria-label="キャラクター一覧">
+      <div class="uvs-roster-title"><span>キャラクター選択</span><button id="uvs-random">ランダム</button></div>
+      <div class="uvs-roster">${START_ROSTER.map((entry,i)=>`<button type="button" data-roster="${i}" aria-pressed="false">
+        <span class="uvs-roster-art">${startPortrait(entry)}</span><span class="uvs-roster-name">${entry.name}</span>
+      </button>`).join('')}</div>
+    </section>
+    <div class="uvs-select-controls">
+      <button id="uvs-prev" aria-label="前のキャラクター">←</button><button class="uvs-select-confirm" id="uvs-choose">決定</button><button id="uvs-next" aria-label="次のキャラクター">→</button>
+    </div>
+  </main>`;
+  const screen=app.firstElementChild;
+  const hero=screen.querySelector('.uvs-select-hero');
+  const stage=screen.querySelector('.uvs-select-stage');
+  const roster=[...screen.querySelectorAll('[data-roster]')];
+  const animate=()=>settings.anim!=='off'&&!matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function paint(){
+    const entry=START_ROSTER[cursor[seat]];
+    screen.dataset.motion=settings.anim;
+    stage.innerHTML=`<b>PLAYER ${seat+1} / ${seat===0?'自キャラを選択':'相手キャラを選択'}</b>
+      <span>${seat===1?'P1：'+START_ROSTER[cursor[0]].name:START_MODES[settings.mode]}</span>`;
+    roster.forEach((button,i)=>button.setAttribute('aria-pressed',String(i===cursor[seat])));
+    hero.classList.toggle('fade',animate());
+    hero.innerHTML=`${startPortrait(entry)}<div class="uvs-select-copy">
+      <h2>${entry.name}</h2><strong>${entry.deck}</strong><p>${entry.description}</p>
+      <p>キャラ${CHARS[entry.key].length}枚 ＋ 山札${DECKS[entry.key].list30.reduce((sum,[,count])=>sum+count,0)}枚</p>
+      <button data-deck-detail>デッキ詳細</button>
+    </div>`;
+    hero.querySelector('[data-deck-detail]').onclick=()=>showStartDecks([entry.key]);
+  }
+  const select=index=>{cursor[seat]=(index+roster.length)%roster.length;paint();};
+  roster.forEach((button,i)=>button.onclick=()=>select(i));
+  $('#uvs-prev').onclick=()=>select(cursor[seat]-1);
+  $('#uvs-next').onclick=()=>select(cursor[seat]+1);
+  $('#uvs-random').onclick=()=>select(random());
+
+  function openStartPanel(html,kind,{actions=false,scroll=false}={}){
+    const previous=document.activeElement;
+    openOv(html);
+    const overlay=$('#overlay'), panel=overlay.firstElementChild;
+    panel.classList.add('uvs-start-modal',kind);
+    panel.setAttribute('role','dialog');
+    panel.setAttribute('aria-modal','true');
+    panel.setAttribute('aria-labelledby','uvs-panel-title');
+    if(actions)panel.dataset.actions='';
+    const lifecycle=new AbortController();
+    screen.inert=true;
+    function dismiss(restore=true){
+      lifecycle.abort();
+      overlay.style.removeProperty('--uvs-visible-height');
+      overlay.style.removeProperty('--uvs-visible-top');
+      closeOv();
+      screen.inert=false;
+      if(restore&&previous?.isConnected)previous.focus();
+    }
+    function close(){
+      if(panel.classList.contains('closing'))return;
+      if(scroll&&animate()){
+        panel.classList.remove('animated','short');panel.classList.add('closing');panel.inert=true;
+        setTimeout(()=>{if(panel.isConnected)dismiss();},130);
+      }else dismiss();
+    }
+    overlay.onclick=e=>{if(e.target===overlay)close();};
+    panel.querySelector('#ovclose').onclick=close;
+    if(actions)panel.querySelector('[data-start-cancel]').onclick=close;
+    panel.addEventListener('keydown',e=>{
+      if(e.key==='Escape'){e.preventDefault();close();}
+      if(e.key!=='Tab')return;
+      const items=[...panel.querySelectorAll('button,textarea,select,input')].filter(el=>!el.disabled&&el.getClientRects().length);
+      const first=items[0],last=items.at(-1);
+      if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus();}
+      if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus();}
+    });
+    if(kind==='uvs-start-load'&&window.visualViewport){
+      const viewport=window.visualViewport;
+      const fit=()=>{
+        overlay.style.setProperty('--uvs-visible-height',viewport.height+'px');
+        overlay.style.setProperty('--uvs-visible-top',viewport.offsetTop+'px');
+      };
+      for(const type of ['resize','scroll'])viewport.addEventListener(type,fit,{signal:lifecycle.signal});
+      fit();
+    }
+    const title=panel.querySelector('h2');title.tabIndex=-1;title.focus();
+    return {panel,dismiss};
+  }
+
+  function launch({mode=settings.mode,decks,first=settings.first,cpu=settings.cpu,replay=null},dismiss){
+    if(starting)return;
+    starting=true;
+    dismiss(false);
+    SETTINGS.anim=settings.anim;
+    SETTINGS.autoCopy=settings.autoCopy;
+    newGame(mode,decks[0],decks[1],first,settings.delay,cpu,replay);
+  }
+
+  function confirmMatch(){
+    const entries=cursor.map(i=>START_ROSTER[i]);
+    const {panel,dismiss}=openStartPanel(`<h2 id="uvs-panel-title">対戦確認</h2>
+      <div class="uvs-scroll-lineup">
+        ${entries.map((entry,i)=>`${i?'<strong class="uvs-scroll-vs">VS</strong>':''}<figure>
+          ${startPortrait(entry)}<figcaption>PLAYER ${i+1}<b>${entry.name}</b>${entry.deck}</figcaption>
+        </figure>`).join('')}
+      </div>
+      <p>${START_MODES[settings.mode]} ／ 先攻：${START_FIRST[settings.first]}</p>
+      <div class="btns"><button data-start-cancel>戻る</button><button id="uvs-match-start">対戦開始</button></div>`,
+      'uvs-scroll',{actions:true,scroll:true});
+    if(animate()){panel.classList.add('animated');if(settings.anim==='short')panel.classList.add('short');}
+    panel.querySelector('#uvs-match-start').onclick=e=>{
+      if(panel.classList.contains('closing'))return;
+      e.currentTarget.disabled=true;
+      launch({decks:entries.map(entry=>entry.key)},dismiss);
+    };
+  }
+  $('#uvs-choose').onclick=()=>{
+    if(seat===0){seat=1;cursor[1]??=random();paint();}
+    else confirmMatch();
+  };
+
+  $('#uvs-start-settings').onclick=()=>{
+    const options=(items,current)=>items.map(([value,label])=>`<option value="${value}" ${value===String(current)?'selected':''}>${label}</option>`).join('');
+    const {panel}=openStartPanel(`<h2 id="uvs-panel-title">対戦設定</h2>
+      <form>
+        <label>対戦モード：<select name="mode">${options(Object.entries(START_MODES),settings.mode)}</select></label>
+        <label>先攻：<select name="first">${options(['random','0','1'].map(value=>[value,START_FIRST[value]]),settings.first)}</select></label>
+        <label>CPUの思考：<select name="cpu">${options([['solver','ソルバー（計測と同じ）'],['ai','経験則AI（旧）']],settings.cpu)}</select></label>
+        <label>CPUの待ち時間：<select name="delay">${options([['400','短い'],['900','普通'],['1600','長い']],settings.delay)}</select></label>
+        <label>ターン・フェイズの演出：<select name="anim">${options([['normal','普通'],['short','短い'],['off','なし']],settings.anim)}</select></label>
+        <label><input type="checkbox" name="autoCopy" ${settings.autoCopy?'checked':''}> ターン終了時にログを自動コピー</label>
+      </form>`,'uvs-start-settings');
+    panel.querySelector('form').onchange=e=>{
+      const field=e.target;
+      settings[field.name]=field.type==='checkbox'?field.checked:field.name==='delay'?Number(field.value):field.value;
+      paint();
+    };
+  };
+
+  let loadDraft='';
+  $('#uvs-start-load').onclick=()=>{
+    const {panel,dismiss}=openStartPanel(`<h2 id="uvs-panel-title">対戦ログから再開</h2>
+      <label for="resume">コピーした対戦ログを貼り付けてください。</label>
+      <textarea id="resume" rows="4" spellcheck="false" aria-describedby="resumeerr" placeholder="#UVS ${Replay.LOG_VERSION} replay"></textarea>
+      <p id="resumeerr" role="alert"></p>
+      <div class="btns"><button data-start-cancel>キャンセル</button><button class="primary" id="resumebtn">読み込む</button></div>`,'uvs-start-load',{actions:true});
+    const input=panel.querySelector('#resume');
+    input.value=loadDraft;
+    input.oninput=()=>{loadDraft=input.value;panel.querySelector('#resumeerr').textContent='';};
+    panel.querySelector('#resumebtn').onclick=()=>{
+      let replay;
+      try{
+        replay=Replay.parse(input.value);
+        if(replay.decks.some(key=>!Object.hasOwn(DECKS,key)))throw Error('ログに対応するデッキが見つかりません。');
+        if(replay.ctl.some(code=>!['H','S','A'].includes(code)))throw Error('ログのプレイヤー操作方式が不正です。');
+        if(replay.ops.some(op=>!/^[01](?:P(?:g\d+[yi]|s\d+|[lnb])|G[yi]|[ADH](?:\d+|-)|C[R-]|K(?:\d+(?:\.\d+)*|-))$/.test(op)))throw Error('ログの操作履歴に読めない項目があります。');
+      }catch(e){panel.querySelector('#resumeerr').textContent=e.message;return;}
+      const mode=replay.ctl.every(c=>c!=='H')?'watch':replay.ctl.every(c=>c==='H')?'hotseat':'cpu';
+      launch({mode,decks:replay.decks,first:replay.first,cpu:'solver',replay},dismiss);
+    };
+  };
   $('#rulesbtn').onclick=showRules;
-  $('#deckbtn').onclick=()=>{let h='<h2>固定デッキ内容（各30枚＋キャラ5枚）</h2>';for(const k of DECK_KEYS){const d=DECKS[k];h+=`<h3>${k}</h3><p class="small">固定30枚はv1.12（サイクル36）の構成。キャラ能力は現行版。</p><table><tr><th>Lv</th><th>AT/DF</th><th>効果</th></tr>`;for(const c of CHARS[k])h+=`<tr><td>${c.lv}</td><td>${c.at}/${c.df}</td><td class="small">${c.text||'—'}</td></tr>`;h+='</table><table><tr><th>枚</th><th>カード</th><th>色GP</th><th>AT/DF</th><th>ｱｲｺﾝ</th><th>効果</th></tr>';for(const [n,c] of d.list30){const t=CARDS[n];h+=`<tr><td>${c}</td><td>${n}</td><td>${t.color}${t.gp.yo}/${t.gp.in}</td><td>${t.type==='battle'?`+${t.at}/+${t.df}${t.dp!==1?' DP'+t.dp:''}`:'SUP'}</td><td>${t.type==='battle'?t.icons.join(''):'—'}</td><td class="small">${(t.text||'').replace(/【使用条件】.*?。/,'')}</td></tr>`;}h+='</table>';}openOv(h);};
+  paint();
 }
 function newGame(mode,d1,d2,first,delay,cpu='solver',resume=null,undo=0){
   CONFIG.deckSize=30;
@@ -2458,13 +2710,6 @@ function nvGauge(p,z){const arr=z==='yo'?p.gYo:p.gIn;
 
 // Presentation-only artwork mapping. Each character level has its own image slot.
 // Lv1-Lv5 currently point to the same file; replace individual entries to add unique art later.
-const UVS_CHAR_ART_PATH=Object.freeze({
-  '飛鳥':Object.freeze([null,'./assets/characters/asuka.webp?v=3.2','./assets/characters/asuka.webp?v=3.2','./assets/characters/asuka.webp?v=3.2','./assets/characters/asuka_attack.webp','./assets/characters/asuka_attack.webp']),
-  '斑鳩':Object.freeze([null,'./assets/characters/ikaruga.webp','./assets/characters/ikaruga.webp','./assets/characters/ikaruga.webp','./assets/characters/ikaruga_attack.webp','./assets/characters/ikaruga_attack.webp']),
-  '葛城':Object.freeze([null,'./assets/characters/katsuragi.webp','./assets/characters/katsuragi.webp','./assets/characters/katsuragi.webp','./assets/characters/katsuragi_attack.webp','./assets/characters/katsuragi_attack.webp']),
-  '柳生':Object.freeze([null,'./assets/characters/yagyu-lv1.webp?v=3.2','./assets/characters/yagyu-lv1.webp?v=3.2','./assets/characters/yagyu-lv1.webp?v=3.2','./assets/characters/yagyu_attack.webp','./assets/characters/yagyu_attack.webp']),
-  '雲雀':Object.freeze([null,'./assets/characters/hibari.webp','./assets/characters/hibari.webp','./assets/characters/hibari.webp','./assets/characters/hibari_attack.webp','./assets/characters/hibari_attack.webp'])
-});
 function nvChar(p,flip,lit,picked){const ch=window.FX?.character(p).card??p.charDeck[0];const level=window.FX?.levelNotice(p);const sups=p.supports.map(s=>s.card.name).join('・');const artPath=UVS_CHAR_ART_PATH[p.charName]?.[ch.lv];const artHtml=artPath?`<img class="uvs-character-art" src="${artPath}" alt="" aria-hidden="true" onerror="this.remove()">`:'';
   return `<div class="nv-char ${flip?'flip':''} ${lit?'lit':''} ${picked?'picked':''}" ${lit?'data-charv="1"':`data-uid="${ch.uid}"`}>${artHtml}<div class="t"><b>${p.charName}</b><span>Lv${ch.lv}</span></div><div class="s">AT ${ch.at}・DF ${ch.df}</div><div class="x">${cardText(ch)||''}</div>${level?`<span class="nv-level-notice">Lv${level.from} → Lv${level.to}</span>`:''}${sups?`<div class="sup">使用中：${sups}</div>`:''}${lit&&G.prompt.spec.charLabel?`<div class="sup">タップ：${G.prompt.spec.charLabel}</div>`:''}</div>`;}
 function nvStack(p,opponent){
