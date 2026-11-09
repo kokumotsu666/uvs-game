@@ -153,12 +153,36 @@ header button:disabled{opacity:.35}
 .card.big .tx:empty{display:none}
 .card.big .ic{min-height:0}
 
-#cardpeek{position:fixed;inset:0;z-index:24;pointer-events:none;display:flex;align-items:center;justify-content:center;padding:14px 14px 130px}
-#cardpeek .cardpeek-panel{pointer-events:auto;width:min(310px,100%);max-height:calc(100dvh - 185px);overflow:auto;background:#1e2129;border:1px solid #78829b;border-radius:14px;padding:14px;box-shadow:0 12px 60px #000c}
-#cardpeek .card{width:100%;min-height:0;font-size:14px;cursor:default;padding:12px}
-#cardpeek .card .nm{font-size:18px;white-space:normal;padding-right:24px}
-#cardpeek .card .tx{display:block;font-size:14px;line-height:1.65;white-space:normal}
-#cardpeek .cardpeek-hint{font-size:11px;color:var(--dim);margin:10px 0 0}
+#cardpeek{position:fixed;inset:0;z-index:24;pointer-events:none;display:flex;align-items:center;justify-content:center;padding:12px 14px calc(130px + env(safe-area-inset-bottom,0px))}
+/* Enlarged cards only; the board and its card hit areas are unchanged. */
+#cardpeek .cardpeek-panel{
+ width:min(100%,calc((100dvh - 180px - env(safe-area-inset-bottom,0px)) * 63 / 88));
+ max-height:none;overflow:visible;background:none;border:0;border-radius:0;padding:0;box-shadow:none
+}
+#cardpeek .cardpeek-hint{margin:4px 0 0;padding:2px 5px;background:#141821ed;color:#e8e9ee;border-radius:4px}
+#overlay .uvs-card-detail-dialog{
+ width:min(100%,calc((100dvh - 90px) * 63 / 88));max-height:none;padding:0;border:0;background:none
+}
+#overlay .uvs-card-detail-dialog>.btns{justify-content:center;margin-top:8px}
+.uvs-detail-card{
+ width:100%;aspect-ratio:63/88;box-sizing:border-box;display:grid;grid-template-rows:minmax(0,1fr) auto;
+ position:relative;isolation:isolate;overflow:hidden;border:2px solid var(--tech-color,#b7a06e);border-radius:13px;
+ background:#212632 var(--tech-art,none) center/contain no-repeat;color:#f8f3e9;box-shadow:0 10px 38px #000b;
+ container-type:inline-size
+}
+.uvs-detail-art{position:relative;min-height:0;overflow:hidden;background:linear-gradient(145deg,#65758a25,transparent)}
+.uvs-detail-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 18%;pointer-events:none}
+.uvs-detail-level{position:absolute;top:8px;right:8px;padding:3px 9px;background:#151821eb;color:#ffe6a1;border:1px solid #d2b56e;font-size:clamp(14px,7cqw,25px);font-weight:850}
+.uvs-detail-text{
+ position:absolute;inset:auto 5% 4px;max-height:56%;overflow:auto;overscroll-behavior:contain;padding:7px 9px;
+ background:#121721d4;border:1px solid #d8c49a80;font-size:clamp(12px,5cqw,16px);line-height:1.5;
+ white-space:pre-wrap;overflow-wrap:anywhere;scrollbar-width:thin
+}
+.uvs-detail-footer{padding:4px 6% 7px;background:#151924f0;border-top:1px solid #bca36c80}
+.uvs-detail-footer h2{margin:0;font-size:clamp(16px,7.8cqw,27px);line-height:1.2;overflow-wrap:anywhere;color:#fff4d7}
+.uvs-detail-stats{display:flex;justify-content:space-between;gap:4px;font-size:clamp(13px,7.6cqw,28px);font-weight:850;font-variant-numeric:tabular-nums}
+.uvs-detail-stats .at{color:#ffad80}.uvs-detail-stats .df{color:#9ccbff}
+.uvs-detail-meta{font-size:clamp(10px,4.4cqw,14px);overflow-wrap:anywhere}
 .hiden-cost{width:min(520px,calc(100% - 24px));max-height:calc(100dvh - 24px);padding:0;border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--fg);overflow:hidden}
 .hiden-cost[open]{display:flex;flex-direction:column}
 .hiden-cost::backdrop{background:#000b}
@@ -476,9 +500,6 @@ body:has(#app.nv){
 .nv-stack-card .tech-face{width:min(100%,75cqh)}
 .hiden-cost-card .card.card-frame{display:grid;place-items:center}
 .hiden-cost-card .tech-face{width:min(100%,78px)}
-#cardpeek .card.card-frame{padding:0}
-#cardpeek .tech-face{width:min(100%,168px);margin-inline:auto;padding:13px}
-#cardpeek .card-frame .nm{-webkit-line-clamp:unset}
 </style>
 </head>
 <body>
@@ -1985,7 +2006,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=Solver; else root.
    - 記録は人間・CPUの区別なく全判断を含む。再生は記録を使い切ったら
      元のコントローラ（人間／CPU）に引き継ぐ（＝ログからの再開）
    ========================================================= */
-const UI_VER='演出v3.7';
+const UI_VER='演出v3.8';
 (function(root){
 const LOG_VERSION='v'+CONFIG.ruleVersion;
 
@@ -2396,7 +2417,25 @@ function cardDetailHTML(c){let h=`<h2>${c.name}</h2><dl class="detail">`;
   else if(c.type==='support')h+=`<dt>種類</dt><dd>サポート（${c.id}） 属性:${c.color}</dd><dt>使用条件</dt><dd>陽${c.gp.yo}/陰${c.gp.in}</dd>`;
   else h+=`<dt>種類</dt><dd>バトル（${c.id}） 属性:${c.color} 技属性:${c.tech}</dd><dt>AT/DF/DP</dt><dd>+${c.at}/+${c.df}/DP${c.dp}</dd><dt>使用条件</dt><dd>陽${c.gp.yo}/陰${c.gp.in}${c.needs?`、忍ゲージに${c.needs.join('・')}`:''}</dd><dt>アイコン</dt><dd>${c.icons.map(i=>i==='R'?'連撃':i==='U'?'重撃':i).join('・')||'なし'}</dd>`;
   return h+`<dt>テキスト</dt><dd>${c.text||'（なし）'}</dd></dl>`;}
-function showDetail(c){if(c)openOv(cardDetailHTML(c));}
+function enlargedCardHTML(c){
+  const character=c.type==='char';
+  const support=c.type==='support';
+  const art=character?UVS_CHAR_ART_PATH[c.name]?.[c.lv]:null;
+  const frame=character?'':support?' support-card':` tech-card c${c.color}`;
+  const stats=support?'':`<div class="uvs-detail-stats"><span class="at">AT ${character?c.at:'+'+c.at}</span><span class="df">DF ${character?c.df:'+'+c.df}</span></div>`;
+  const icons=c.icons?.map(i=>i==='R'?'連撃':i==='U'?'重撃':i).join('・');
+  const meta=character?'':`<div class="uvs-detail-meta">${support?'サポート':`${c.color}・${c.tech}・DP${c.dp}`}
+    ／ 陽${c.gp.yo}・陰${c.gp.in}${c.needs?.length?' ／ 忍ゲージ：'+c.needs.join('・'):''}${icons?' ／ '+icons:''}</div>`;
+  return `<article class="uvs-detail-card${frame}">
+    <div class="uvs-detail-art">
+      ${art?`<img src="${art}" alt="" onerror="this.remove()">`:''}
+      ${character?`<span class="uvs-detail-level">Lv${c.lv}</span>`:''}
+      <div class="uvs-detail-text" role="region" aria-label="能力テキスト" tabindex="0">${cardText(c)||(character?'能力なし。':'テキストなし。')}</div>
+    </div>
+    <footer class="uvs-detail-footer"><h2>${c.name}</h2>${meta}${stats}</footer>
+  </article>`;
+}
+function showDetail(c){if(!c)return;openOv(enlargedCardHTML(c));$("#overlay .ov").classList.add("uvs-card-detail-dialog");}
 function showZone(p,z){const arr=z==='yo'?p.gYo:z==='in'?p.gIn:z==='damage'?p.damage:p.discard;const t=z==='yo'?'陽ゲージ':z==='in'?'陰ゲージ':z==='damage'?'ダメージエリア':'捨て札';openOv(`<h2>${p.name}の${t}（${arr.length}）</h2><div class="hand" style="flex-wrap:wrap">${arr.map(c=>cardHTML(c,{small:true})).join('')||'<span class="small">なし</span>'}</div>`);document.querySelectorAll('#overlay [data-uid]').forEach(el=>el.onclick=e=>{e.stopPropagation();showDetail(findCard(+el.dataset.uid));});}
 function showLog(){openOv(`<h2>ログ</h2><div class="btns" style="margin:0 0 8px"><button id="copylog" class="primary">ログをコピー</button></div><div class="log" style="max-height:60vh;user-select:text;-webkit-user-select:text">${G.log.map(l=>`<div class="${l.hl?'hl':''}">${l.s}</div>`).join('')}</div>`);const d=$('#overlay .log');d.scrollTop=d.scrollHeight;$('#copylog').onclick=e=>{e.stopPropagation();copyText(fullLogText(),e.target);};}
 function showRules(){openOv(`<h2>採用ルール v2（閃乱カグラ版＋リメイク決定事項）</h2><div class="detail"><p><b>${Replay.LOG_VERSION}</b>：緑の巻物は案1、固定デッキ・AIはv1.12（サイクル36）の設定。葛城Lv3は登場時、手札1枚を捨ててよく、捨てた場合は2枚引きます。登場時・勝利時・スタンバイ能力の詳細はキャラカードを確認してください。牛乳による再登場でも登場時能力が発動します。</p>
@@ -2914,11 +2953,15 @@ function syncGaugePickView(prompt){
 function showCardPeek(c){
   if(!c)return;closeCardPeek();cardPeekPrompt=G.prompt;
   cardPeek=document.createElement('div');cardPeek.id='cardpeek';
-  cardPeek.innerHTML='<section class="cardpeek-panel" role="dialog" aria-label="カード詳細">'+(c.type==='char'?cardDetailHTML(c):cardHTML(c,{text:true}))+'<p class="cardpeek-hint">外側をタップで閉じる・同じ手札カードをもう一度タップで決定</p></section>';
+  cardPeek.innerHTML='<section class="cardpeek-panel" role="dialog" aria-label="カード詳細">'+enlargedCardHTML(c)+'<p class="cardpeek-hint">外側をタップで閉じる・同じ手札カードをもう一度タップで決定</p></section>';
   document.body.appendChild(cardPeek);
 }
 document.addEventListener('click',e=>{
-  if(cardPeek&&!cardPeek.querySelector('.cardpeek-panel').contains(e.target))closeCardPeek();
+  if(!cardPeek||cardPeek.querySelector('.cardpeek-panel').contains(e.target))return;
+  const handCard=e.target.closest('#nvhand .card.sel[data-uid]');
+  const confirmsPick=handCard&&pickKey()==='c'+handCard.dataset.uid;
+  closeCardPeek();
+  if(!confirmsPick){e.preventDefault();e.stopPropagation();}
 },true);
 
 function pickKey(){const pr=G.prompt;if(!pr||UI.pickFor!==pr)return null;return UI.pick||null;}
