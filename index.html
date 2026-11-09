@@ -1984,7 +1984,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=Solver; else root.
    - 記録は人間・CPUの区別なく全判断を含む。再生は記録を使い切ったら
      元のコントローラ（人間／CPU）に引き継ぐ（＝ログからの再開）
    ========================================================= */
-const UI_VER='演出v3.5';
+const UI_VER='演出v3.6';
 (function(root){
 const LOG_VERSION='v'+CONFIG.ruleVersion;
 
@@ -2477,13 +2477,13 @@ const START_ROSTER=[
   ['hibari','雲雀','防御札で耐え、Lv4の防御時ドローやLv5の山札回収で粘ります。']
 ].map(([id,name,description])=>{
   const key=DECK_KEYS.find(k=>DECKS[k].char===name);
-  return {id,name,key,art:UVS_CHAR_ART_PATH[name]?.[1],deck:key,description};
+  return {id,name,key,art:UVS_CHAR_ART_PATH[name]?.[1],selectArt:"./assets/characters/"+id+"_select.webp",deck:key,description};
 });
 const START_MODES={cpu:'CPU対戦',hotseat:'2人対戦',watch:'CPU同士を観戦'};
 const START_FIRST={random:'ランダム',0:'プレイヤー1',1:'プレイヤー2'};
 
-function startPortrait(entry){
-  return entry.art?`<img src="${entry.art}" alt="" draggable="false" onerror="this.remove()">`:'';
+function startPortrait(entry,art=entry.selectArt){
+  return art?`<img src="${art}" alt="" draggable="false" onerror="this.remove()">`:'';
 }
 
 function startScreen(){
@@ -2521,7 +2521,7 @@ function startScreen(){
       <span>${seat===1?'P1：'+START_ROSTER[cursor[0]].name:START_MODES[settings.mode]}</span>`;
     roster.forEach((button,i)=>button.setAttribute('aria-pressed',String(i===cursor[seat])));
     hero.classList.toggle('fade',animate());
-    hero.innerHTML=`${startPortrait(entry)}<div class="uvs-select-copy">
+    hero.innerHTML=`${startPortrait(entry,entry.art)}<div class="uvs-select-copy">
       <h2>${entry.name}</h2><strong>${entry.deck}</strong><p>${entry.description}</p>
       <p>キャラ${CHARS[entry.key].length}枚 ＋ 山札${DECKS[entry.key].list30.reduce((sum,[,count])=>sum+count,0)}枚</p>
       <button data-deck-detail>デッキ詳細</button>
