@@ -2032,7 +2032,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=Solver; else root.
    - 記録は人間・CPUの区別なく全判断を含む。再生は記録を使い切ったら
      元のコントローラ（人間／CPU）に引き継ぐ（＝ログからの再開）
    ========================================================= */
-const UI_VER='演出v4.0';
+const UI_VER='演出v4.1';
 (function(root){
 const LOG_VERSION='v'+CONFIG.ruleVersion;
 
@@ -2622,7 +2622,7 @@ const UVS_CHAR_ART_PATH=Object.freeze({
   '斑鳩':Object.freeze([null,'./assets/characters/ikaruga.webp','./assets/characters/ikaruga.webp','./assets/characters/ikaruga.webp','./assets/characters/ikaruga_attack.webp','./assets/characters/ikaruga_attack.webp']),
   '葛城':Object.freeze([null,'./assets/characters/katsuragi.webp','./assets/characters/katsuragi.webp','./assets/characters/katsuragi.webp','./assets/characters/katsuragi_attack.webp','./assets/characters/katsuragi_attack.webp']),
   '柳生':Object.freeze([null,'./assets/characters/yagyu-lv1.webp?v=3.2','./assets/characters/yagyu-lv1.webp?v=3.2','./assets/characters/yagyu-lv1.webp?v=3.2','./assets/characters/yagyu_attack.webp','./assets/characters/yagyu_attack.webp']),
-  '雲雀':Object.freeze([null,'./assets/characters/hibari.webp','./assets/characters/hibari.webp','./assets/characters/hibari.webp','./assets/characters/hibari_attack.webp','./assets/characters/hibari_attack.webp'])
+  '雲雀':Object.freeze([null,'./assets/characters/hibari.webp','./assets/characters/hibari.webp','./assets/characters/hibari.webp','./assets/characters/hibari-attack-v41.jpg','./assets/characters/hibari-attack-v41.jpg'])
 });
 function showStartDecks(keys){let h='<h2>固定デッキ内容（各30枚＋キャラ5枚）</h2>';for(const k of keys){const d=DECKS[k];h+=`<h3>${k}</h3><p class="small">固定30枚はv1.12（サイクル36）の構成。キャラ能力は現行版。</p><table><tr><th>Lv</th><th>AT/DF</th><th>効果</th></tr>`;for(const c of CHARS[k])h+=`<tr><td>${c.lv}</td><td>${c.at}/${c.df}</td><td class="small">${c.text||'—'}</td></tr>`;h+='</table><table><tr><th>枚</th><th>カード</th><th>色GP</th><th>AT/DF</th><th>ｱｲｺﾝ</th><th>効果</th></tr>';for(const [n,c] of d.list30){const t=CARDS[n];h+=`<tr><td>${c}</td><td>${n}</td><td>${t.color}${t.gp.yo}/${t.gp.in}</td><td>${t.type==='battle'?`+${t.at}/+${t.df}${t.dp!==1?' DP'+t.dp:''}`:'SUP'}</td><td>${t.type==='battle'?t.icons.join(''):'—'}</td><td class="small">${(t.text||'').replace(/【使用条件】.*?。/,'')}</td></tr>`;}h+='</table>';}openOv(h);}
 
