@@ -539,13 +539,14 @@ body:has(#app.nv){
    閃乱カグラ版ルール + 本チャットでの決定事項
    ========================================================= */
 const CONFIG = {
-  ruleVersion:'1.12',      // ルール・カードの版（2026-11-07 v1.11：先攻の1ターン目もバトルできる／LOした側の負け（旧ルール）／緑の巻物はダメージ2枚ごとに1枚ドロー。v1.8：緑5枚を前提2種・AT+700に、欺人脚の重撃アイコン削除、凪・怨砂の発動しない文を削除）
+  ruleVersion:'1.13',      /* 2026-11-09 v1.12：葛城Lv3を「登場時、手札1枚を捨ててよい。捨てた場合、2枚引く。」に変更（旧：アタック勝利のたび両者1枚引く）。基準デッキは夜間 v113m のサイクル36。v1.11：先攻1ターン目もバトル可・LOした側の負け */
   loRule:'lose',           // LO（ドローフェイズ開始時に山札0枚）の扱い：'lose'＝LOした側の負け（v1.11）／'compare'＝ダメージエリアの枚数を比べ、同数ならLO側の負け（v1.6〜1.10）
   deckSize:40, startHand:4, drawPerTurn:2, firstTurnDraw:1, firstTurnBattle:true,
   winDamage:5, tieWinner:'attacker', noDefenseAutoHit:true,
   greenDefense:'free',   // 緑の防御: 'free'=条件なしで出せ相手が緑なら無条件成功 / 'needs'=攻撃時と同じ前提条件が必要（満たせば無条件成功） / 'none'=緑は防御に出せない
   blowHeavy:true,        // 吹飛が相手の重撃も封じるか（falseならテキスト無効のみ）
   heavy:{ firstNeedsIcon:false, ignoreGP:true, maxCards:99, endMode:'bothPass' },
+  handLimit:0, // 2026-11-09 試験：0＝上限なし。正の数＝ターン終了時、手番プレイヤーは手札がこの枚数になるまで捨てる（RR_CONFIG で切替）
   aiNoHopelessHeavy:false, // true＝AI（人間は対象外）は手札の重撃札をすべて足しても勝てない時は重撃しない（2026-11-07追加）。v1.11の正本AIでは該当0枚と確認済みのため既定は切る（乱数の消費が変わり過去の結果と1局単位で比べられなくなる）。確認は chk_heavywaste.js
 };
 let UID=0;
@@ -668,7 +669,7 @@ function hidenOK(p){return gaugeAll(p).some(x=>x.color==='閃')&&p.gYo.some(x=>x
 function baseUsable(p,c){if(c.type!=='battle')return false;if(c.only&&c.only!==p.charName)return false;if(!gpOK(p,c))return false;if(c.needs&&!c.needs.every(n=>gaugeAll(p).some(x=>x.name===n)))return false;if(c.hiden&&!hidenOK(p))return false;return true}
 function canAttack(p,c,mode){if(c.defOnly)return false;if(mode==='R'){if(c.color!=='飛')return false}else{if(c.color==='飛')return false}return baseUsable(p,c)}
 function canDefend(p,c){if(c.type!=='battle')return false;if(c.color==='飛'){if(CONFIG.greenDefense==='none')return false;if(CONFIG.greenDefense==='needs')return baseUsable(p,c);return !c.only||c.only===p.charName;} return baseUsable(p,c)}
-function heavyOK(p,c){if(c.type!=='battle'||!c.icons.includes('U')||c.noHeavy)return false;if(c.only&&c.only!==p.charName)return false;if(!CONFIG.heavy.ignoreGP&&!gpOK(p,c))return false;return true}
+function heavyOK(p,c,isAtk,main){if(c.type!=='battle'||!(c.icons.includes('U')||(c.heavySelf&&main&&main.name===c.name))||c.noHeavy)return false; /* 2026-11-11試験：heavySelf＝同名の札が本体のときだけ重撃できる（main＝同じ側の本体の札） */if(CONFIG.heavy.colorSide&&isAtk!==undefined){if(c.color==='陰'&&isAtk)return false;if(c.color==='陽'&&!isAtk)return false;} /* 2026-11-11試験：colorSide＝陰の重撃は防御時のみ・陽は攻撃時のみ・閃はどちらも */if(c.only&&c.only!==p.charName)return false;if(!CONFIG.heavy.ignoreGP&&!gpOK(p,c))return false;return true}
 function lose(p,why){G.over={loser:p.idx,why};ev('E',null,{loser:p.idx,winner:1-p.idx,reason:/^LO/.test(String(why))?'LO':'damage',why:String(why),loSeat:/^LO/.test(String(why))?p.idx:null,state:obsState()},'public',['rule','game-end']);const winner=P[1-p.idx];log(`★ ${winner.name}（${winner.charName}）の勝利！ ${p.name}（${p.charName}）は敗北（${why}）。`,true);throw new GameOver();}
 function resolveLO(p){
   if(CONFIG.loRule!=='compare'){lose(p,`LO：${p.name}のドローフェイズ開始時に山札0枚（LOした側の負け）`);return;}
@@ -738,6 +739,7 @@ async function turn(pi){
   if(!(G.turn===1&&!CONFIG.firstTurnBattle)){G.phase='battle';await hook('phase','battle');await battlePhase(pi);}
   G.phase='end';await hook('phase','end');
   await withSrc(['rule','turn-end'],async()=>{for(const s of [...p.supports])if(s.expire==='endTurn')await removeSupport(p,s);});
+  if(CONFIG.handLimit>0&&p.hand.length>CONFIG.handLimit)await withSrc(['rule','hand-limit'],async()=>{const k=p.hand.length-CONFIG.handLimit;let cs=await p.ctl.pickCards(p,p.hand,k,`手札上限：手札を${k}枚捨ててください`,false);cs=[...new Set(cs)].filter(x=>p.hand.includes(x));if(cs.length!==k)throw new Error('Invalid hand-limit discard');for(const x of cs){rm(p.hand,x);p.discard.push(x);}log(`${p.name}：手札上限で${cs.map(x=>'「'+x.name+'」').join('')}を捨てた（手札${p.hand.length}）`);});
   p.turnMod={at:0,df:0};G.noTextTurn=false;G.noChainTurn=false;
   log(`${p.name}：ターン終了`);ev('T',pi,{state:obsState()},'public',['rule','turn-end']);
   await hook('turnEnd',{turn:G.turn,p:pi});
@@ -855,11 +857,11 @@ async function battle(pi,mode,from){
     const blocked=i=>{const f=bs.flags;if(f.noHeavyBoth)return true;if(i===1&&(f.noOppHeavy))return true;if(i===0&&f.noAtkHeavy)return true;return false};
     while(passes<2&&count<CONFIG.heavy.maxCards){
       const side=who===0?bs.atk:bs.def;const pl=side.p;
-      const elig=blocked(who)?[]:pl.hand.filter(c=>heavyOK(pl,c));
+      const elig=blocked(who)?[]:pl.hand.filter(c=>heavyOK(pl,c,who===0,side.card));
       let add=null;
       if(!elig.length&&!side.noHeavyLogged){side.noHeavyLogged=true;log(`${pl.name}：重撃に使えるカードなし${blocked(who)?'（効果で禁止）':''}`);}
       const hopeless=elig.length&&pl.ai&&CONFIG.aiNoHopelessHeavy&&heavyHopeless(bs,who,elig);
-      if(elig.length&&!hopeless){bs.heavyTurn=who;hook('render');add=await pl.ctl.heavy(pl,elig,{at:bs.at,df:bs.df,dp:bs.dp,isAtk:who===0});}
+      if(elig.length&&!hopeless){bs.heavyTurn=who;hook('render');add=await pl.ctl.heavy(pl,elig,{at:bs.at,df:bs.df,dp:bs.dp,isAtk:who===0,main:side.card});}
       if(add){OBS_SRC.push(['rule','heavy']);rm(pl.hand,add);side.heavy.push(add);count++;passes=0;computeTotals(bs);log(`${pl.name}：重撃「${add.name}」(+${add.at}/+${add.df}) → AT${bs.at} vs DF${bs.df}`);ev('W',pl.idx,{uid:add.uid,side:who===0?'atk':'def',at:bs.at,df:bs.df},'public');OBS_SRC.pop();}
       else{passes++;if(elig.length)log(`${pl.name}：パス${hopeless?'（重撃札をすべて使っても届かない）':''}`);}
       who=1-who;
@@ -1049,7 +1051,7 @@ function heavyPolicy(p,o,elig,ctx,committed,hp){
   const enough=prof.hPick==='max'?(sorted[sorted.length-1][key]>=gap?sorted[sorted.length-1]:null):sorted.find(c=>c[key]>=gap); // 足りる中で最小の札（hPick=max なら最強の札）
   if(enough)return enough;
   const best=sorted[sorted.length-1];
-  const rest=p.hand.filter(c=>c!==best&&heavyOK(p,c)).sort((a,b)=>b[key]-a[key]).slice(0,budget-committed-1);
+  const rest=p.hand.filter(c=>c!==best&&heavyOK(p,c,ctx.isAtk,ctx.main)).sort((a,b)=>b[key]-a[key]).slice(0,budget-committed-1);
   const potential=best[key]+rest.reduce((s,c)=>s+c[key],0);
   if(potential>=gap&&p.hand.length-1-rest.length>=minHand)return best;
   return null;
@@ -1124,7 +1126,7 @@ const AI={
     if(!normal.length)return null;
     const best=[...normal].sort((a,b)=>(b.df)-(a.df))[0];
     const myDF=charDF(p)+best.df;
-    const heavyDF=p.hand.filter(c=>c!==best&&heavyOK(p,c)).reduce((s,c)=>s+c.df,0);
+    const heavyDF=p.hand.filter(c=>c!==best&&heavyOK(p,c,false,best)).reduce((s,c)=>s+c.df,0);
     if(myDF>=threat-100)return best;
     if(p.hand.length>=4&&myDF+heavyDF>=threat)return best;
     if(p.damage.length>=3&&p.hand.length>=3)return best;
@@ -1176,6 +1178,7 @@ if(typeof module!=='undefined'&&module.exports){module.exports={heavyHopeless,he
 
 // Node用の互換（GitHub版では index.html 内の同じスコープで共有される関数を、Node の solver.js から参照できるようにする。挙動は変えない）
 if(typeof globalThis!=='undefined'&&typeof module!=='undefined'&&module.exports){globalThis.isCounterDeck=isCounterDeck;globalThis.counterDrawValue=counterDrawValue;}
+
 </script>
 <script>
 // Vol.1 の追加カード定義（飛鳥・柳生デッキに入っていないもの）。※推定 と書いたものは原文未判読
@@ -1276,21 +1279,24 @@ CHARS["雲雀・LO"]=CHARS["雲雀"];
 
 };
 if(typeof module!=='undefined'&&module.exports)module.exports=__f;else window.UVS_CARDS_EXTRA=__f;})();
+
+
 </script>
 <script>
+// 2026-11-09 v1.12：5デッキの list を夜間 v113m サイクル36 の基準デッキに更新（note は旧版の説明のまま）
 // 固定デッキ5種（2026-11-02 確定版 v1.2: 飛鳥を連撃型v3に、柳生をv2キャラに）。エンジンに登録し、明文化ドキュメントもここから生成する
 (function(){const __f=function(E){
   const {DECKS,CHARS,CARDS}=E;
   const FIXED={
-    '飛鳥・連撃':{char:'飛鳥',chars:'飛鳥v6',list:[['凪',3],['省刃',3],['飛塵',3],['右空',3],['冥砂',3],['砂風車',1],['ハーフムーン',2],['捌き連刃',2],['旋空砂',2],['怨砂',2],['狭朱',2],['緑の巻物',2],['牛乳',2]],
+    '飛鳥・連撃':{char:'飛鳥',chars:'飛鳥v6',list:[['はじめのチョップ',1],['ハーフムーン',1],['リミットブレイク',2],['二刀繚斬',1],['凪',3],['右空',3],['天刃',1],['志昇陣',1],['怨砂',1],['旋空砂',3],['本能のままに',1],['残月',2],['狭朱',1],['省刃',1],['緑の巻物',3],['踊り傘',2],['飛塵',3]],
       note:'連撃型。右空3＋前提札各3で連撃の条件を揃え、Lv3登場時の手札入れ替え（任意。緑を捨てたら2枚引く）、Lv4/Lv5の連撃付与、Lv5登場時の緑回収でつなぐ。2026-11-02 仮確定（砂風車1・ハーフムーン2の中間案、Lv3はv6）'},
-    '柳生・射撃':{char:'柳生',chars:'柳生v2',list:[['散り傘',2],['狂い傘',1],['踊り傘',2],['残月',2],['狭朱',2],['天刃',2],['連刃',2],['零雹',2],['諸行の音',2],['開華',2],['返し雨',2],['くぐつダミー',2],['リミットブレイク',2],['赤の巻物',1],['緑の巻物',2],['薙ぎ払う足',2]],
+    '柳生・射撃':{char:'柳生',chars:'柳生v2',list:[['くぐつダミー',3],['もっかいウサギ蹴り',1],['サマーソルト',1],['ドラゴンダンス',1],['ドラゴンバイト',2],['ハーフムーン',2],['牛乳',3],['狂い傘',2],['狭朱・改',2],['省刃',3],['緑の巻物',1],['薙ぎ払う足',3],['踊り傘',2],['鉄壁のガード',3],['開華',1]],
       note:'5chレシピの30枚版。キャラは継戦型v2（Lv2/Lv4は2枚引き1枚を山札の下へ、Lv4は毎ターン最大1枚・Lv5は最大2枚を山札の下と入れ替え、捨て札にしない）。2026-11-02 仮確定'},
-    '斑鳩・対抗封じ':{char:'斑鳩',list:[['天刃',3],['省刃',3],['はじめのチョップ',3],['残月',3],['ハーフムーン',3],['もっかいウサギ蹴り',3],['怨砂',3],['リミットブレイク',2],['鉄壁のガード',2],['くぐつダミー',2],['牛乳',2],['緑の巻物',1]],
+    '斑鳩・対抗封じ':{char:'斑鳩',list:[['くぐつダミー',1],['はじめのチョップ',2],['もっかいウサギ蹴り',3],['クナイ投擲',2],['ハーフムーン',3],['ミドルキック',1],['攻断円',1],['本能のままに',3],['欺人脚',3],['残月',1],['狭朱',2],['磁転昇',1],['神',3],['紅閃',2],['緑の巻物',2]],
       note:'重撃札を厚くし、Lv5のアタックで相手のディフェンス札のテキスト（鉄壁・くぐつのDF強化など）を封じる。対雲雀LO 52%（v1.2計測）'},
-    '葛城・削り':{char:'葛城',list:[['サマーソルト',3],['ドラゴンベアード',3],['ドラゴンバイト',3],['はじめのチョップ',3],['省刃',3],['もっかいウサギ蹴り',3],['ハーフムーン',3],['残月',2],['鉄壁のガード',2],['くぐつダミー',2],['牛乳',2],['緑の巻物',1]],
+    '葛城・削り':{char:'葛城',list:[['くぐつダミー',3],['アックスシュート',1],['サマーソルト',3],['サマーソルトリバース',3],['ドラゴンダンス',2],['ドラゴンバイト',1],['ハーフムーン',3],['天刃',3],['怨砂',3],['攻断円',1],['散り傘',1],['狭朱',1],['省刃',2],['緑の巻物',1],['鉄壁のガード',2]],
       note:'勝利時に相手の山札を削る札とLv4/Lv5で山札切れを狙う。Lv4の削りはリメイク追加。対雲雀LO 65%（v1.2計測）'},
-    '雲雀・反撃':{char:'雲雀',chars:'雲雀v2',list:[['緑の巻物',3],['鉄壁のガード',3],['くぐつダミー',3],['はじめのチョップ',3],['本能のままに',2],['雲雀つっこみ',2],['えあウサギ',2],['ドラゴンベアード',3],['もっかいウサギ蹴り',3],['ハーフムーン',3],['牛乳',2],['病院の待合室にて',1]],
+    '雲雀・反撃':{char:'雲雀',chars:'雲雀v2',list:[['えあウサギ',2],['くぐつダミー',3],['はじめのチョップ',3],['ふっとびさまーそると',1],['もっかいウサギ蹴り',2],['ウサギ蹴り',2],['ドラゴンベアード',1],['ハーフムーン',3],['ミドルキック',1],['天刃',2],['怨砂',3],['病院の待合室にて',1],['省刃',1],['踊り傘',1],['鉄壁のガード',3],['零雹',1]],
       note:'高DFキャラ＋防御札＋緑の巻物で守る。Lv4は防御属性のカード（鉄壁・くぐつ）でディフェンスするたび1枚引き、守りきった手札で反撃する（2026-11-02 試験採用、旧Lv4の連撃封じから変更）'},
   };
   // 2026-11-07 試験（UVS_V112=1 の時だけ）：飛鳥2＝Lv4/Lv5「連撃アイコンを持つバトルカード使用時AT+200/DF+200」、Lv5は登場時に緑を回収。連撃付与なし。キャラ配列は飛鳥の写し（飛鳥1＝飛鳥・連撃は変えない）
@@ -1311,11 +1317,15 @@ if(typeof module!=='undefined'&&module.exports)module.exports=__f;else window.UV
   return FIXED;
 };
 if(typeof module!=='undefined'&&module.exports)module.exports=__f;else window.UVS_DECKS_FIXED=__f;})();
+
+
 </script>
 <script>
 
+
 // solver.js がブラウザから engine の内部状態（G・P・RNG）を参照できるようにする
 window.UVS_ENGINE={heavyHopeless,CONFIG,CARDS,DECKS,AI,heavyPolicy,isGuard,cardBoost,cpuProfile,CPU_PROFILE_DEFAULT,CPU_PROFILE_COUNTER,CPU_PROFILES,threatList,coverage,yo,inn,gaugeAll,charAT,charDF,canAttack,canDefend,heavyOK,computeTotals,cardVal,baseUsable,get G(){return G},get P(){return P},get RNG(){return RNG}};
+
 
 </script>
 <script>
@@ -1426,7 +1436,7 @@ function heavyPolicy(p,o,elig,ctx,committed,hp){
   const enough=prof.hPick==='max'?(sorted[sorted.length-1][key]>=gap?sorted[sorted.length-1]:null):sorted.find(c=>c[key]>=gap);
   if(enough)return enough;
   const best=sorted[sorted.length-1];
-  const rest=p.hand.filter(c=>c!==best&&heavyOK(p,c)).sort((a,b)=>b[key]-a[key]).slice(0,budget-committed-1);
+  const rest=p.hand.filter(c=>c!==best&&heavyOK(p,c,ctx.isAtk,ctx.main)).sort((a,b)=>b[key]-a[key]).slice(0,budget-committed-1);
   const potential=best[key]+rest.reduce((s,c)=>s+c[key],0);
   if(potential>=gap&&p.hand.length-1-rest.length>=minHand)return best;
   return null;
@@ -1447,11 +1457,21 @@ function vplayer(p,hand){const v=Object.create(p);v.hand=hand;return v;}
 function dmgValue(target,dp){
   if(dp<=0)return 0;
   const lethal=target.damage.length+dp>=CONFIG.winDamage;
+  if(useW().noOverkill)dp=Math.min(dp,Math.max(0,CONFIG.winDamage-target.damage.length)); // 2026-11-11：W.noOverkill＝5点を超えるダメージは数えない
   return useW().dmg*dp+(lethal?useW().lethal:0)-lvGain(target,dp);
 }
+// 2026-11-11 Claude：W.lvHand＝ダメージで新しく一番上になるキャラの「登場時」能力で手札が増える分を、受けた側の得として数える（手札1枚＝W.hand）
+//  1枚引く＝+1／2枚引き1枚戻す＝+1／捨ててよい・捨てたら2枚引く＝+1（手札がある時）／飛鳥Lv3＝手札に緑がある時+1／飛鳥Lv5＝捨て札に緑がある時+1。入れ替え（同数引く）は0
+function handGainOnTop(t,c){const x=c.text||'';let m;
+  if((m=x.match(/登場時、(\d)枚引き、手札(\d)枚を選んで山札の一番下に戻す/)))return +m[1]-(+m[2]);
+  if((m=x.match(/登場時、(\d)枚引く/)))return +m[1];
+  if(/捨てたカードが緑のバトルカードなら代わりに2枚引く/.test(x))return t.hand.some(h=>h.color==='飛')?1:0;
+  if((m=x.match(/登場時、手札1枚を捨ててよい。捨てた場合、(\d)枚引く/)))return t.hand.length?Math.max(0,+m[1]-1):0;
+  if(/登場時、捨て札の最後にある緑のバトルカード1枚を手札に戻す/.test(x))return t.discard.some(h=>h.color==='飛')?1:0;
+  return 0;}
 // 被弾でLvが上がる価値（受ける側のキャラの設定）。既定はすべて0
-function lvGain(t,dp){const Q=profOf(t);if(!(Q.hULv2||Q.hULv3||Q.hULv4||Q.hULv5))return 0;let g=0;
-  for(let i=0;i<dp;i++){if(t.charDeck.length-i<2)break;const c=t.charDeck[i+1];g+=Q['hULv'+c.lv]||0;}return g*useW().hand;}
+function lvGain(t,dp){const Q=profOf(t);const LH=!!useW().lvHand;if(!LH&&!(Q.hULv2||Q.hULv3||Q.hULv4||Q.hULv5))return 0;let g=0;
+  for(let i=0;i<dp;i++){if(t.charDeck.length-i<2)break;const c=t.charDeck[i+1];g+=Q['hULv'+c.lv]||0;if(LH)g+=handGainOnTop(t,c);}return g*useW().hand;}
 // ゲージ目標：デッキ（30枚の構成）のGP条件。デッキごとに一度だけ数える
 const GP_REQ=new Map();
 function gpReq(p){let r=GP_REQ.get(p.deckKey);if(r)return r;const d=E.DECKS[p.deckKey];const list=[];let my=0,mi=0;
@@ -1539,6 +1559,13 @@ function loBattleDelta(A,D,atkCard,defCard,success,dp,paid){ // paid: 重撃の�
 // 自分の局面だけが変わる効果（サポート・任意ドローなど）の LO 価値の変化
 function loSelfDelta(p,dDeck,dDmg,dOppDeck){const s0=loSnap(p);const s={...s0,md:Math.max(0,s0.md+dDeck),mg:Math.max(0,s0.mg+(dDmg||0)),od:Math.max(0,s0.od+(dOppDeck||0))};return loValue(s)-loValue(s0);}
 
+// 2026-11-11 Claude：秘伝の評価を2点直す（既定で有効。UVS_HIDENFIX=0 で従来どおり）
+//  ①攻めて勝ったときの「相手が手札を1枚捨てる」は、相手の手札が残っている時だけ価値を数える
+//  ②守りで秘伝を出すときは、攻めに取っておく機会の損（1ダメージの価値×hidenKeep、既定0.5）を守る側の損として数える。受けないと負ける時は数えない
+const HIDENFIX=!(typeof process!=='undefined'&&process.env&&process.env.UVS_HIDENFIX==='0'); // 2026-11-11 ユーザーの決定で既定を有効に。UVS_HIDENFIX=0 で従来の評価
+// 2026-11-12 Claude：UVS_AIHGP=1＝重撃にゲージ条件があるルール（CONFIG.heavy.ignoreGP=false、案A）では、手札の重撃札にも「ゲージが足りない分だけ価値を下げる」扱いを使う。
+//  従来は「重撃札はGP無視で使えるので常に価値あり」（v1.12 の ignoreGP=true 向け）のまま案Aでも使っていたため、コスト5の重撃札を手札に抱え続けてゲージに置かなかった（claude_cost5_probe.js で確認）。最終確認：claude_hgpduel_*（案A実デッキで54.7%、今のルールで50.0%ちょうど）
+const AIHGP=!(typeof process!=='undefined'&&process.env&&process.env.UVS_AIHGP==='0'); // 2026-11-12 ユーザーの決定でロジックを確定し、既定を有効に。UVS_AIHGP=0 で従来の評価。今のルール（ignoreGP=true）では効かない
 // 1バトルをロールアウトして、攻撃側から見た利得を返す（状態は変更しない）
 function evalBattle(A,D,atkCard,defCard,mode,decider=null){
   // decider: 判断している側の席。その側のプロファイルが標準以外なら、ロールアウトでは両者が各自のプロファイルで重撃を出す（PR #1 と同じ扱い）
@@ -1550,7 +1577,7 @@ function evalBattle(A,D,atkCard,defCard,mode,decider=null){
   // コスト
   { // コスト（攻撃札→防御札の順）
     const c=atkCard;if(c.hiden)pay+=-1*3*useW().gauge;if(c.costMill)pay+=-1*c.costMill*deckValue(a);if(c.costHand)pay+=-1*c.costHand*useW().hand;
-    const e=defCard;if(e){if(e.hiden)pay+=1*3*useW().gauge;if(e.costMill)pay+=1*e.costMill*deckValue(d);if(e.costHand)pay+=1*e.costHand*useW().hand;}
+    const e=defCard;if(e){if(e.hiden)pay+=1*3*useW().gauge;if(HIDENFIX&&e.hiden&&D.damage.length+atkCard.dp<CONFIG.winDamage)pay+=(profOf(D).hidenKeep??0.5)*useW().dmg; /* ② */if(e.costMill)pay+=1*e.costMill*deckValue(d);if(e.costHand)pay+=1*e.costHand*useW().hand;}
   }
   let success,dp=atkCard.dp,aHeavy=[],dHeavy=[];
   if(defCard&&defCard.color==='飛'&&atkCard.color==='飛'&&!E.G.noTextTurn){success=false;}
@@ -1564,8 +1591,8 @@ function evalBattle(A,D,atkCard,defCard,mode,decider=null){
     while(passes<2&&count<CONFIG.heavy.maxCards){
       const side=who===0?bs.atk:bs.def;const pl=side.p;const opp=who===0?d:a;
       const losingSide=who===0?bs.at<bs.df:bs.df<=bs.at; // heavyPolicy は負けている側しか出さないので、それ以外は候補を作らない
-      const elig=(!losingSide||bs.dp<=0||blocked(who))?[]:pl.hand.filter(c=>heavyOK(pl,c));
-      let add=null;if(elig.length){hctx.at=bs.at;hctx.df=bs.df;hctx.dp=bs.dp;hctx.isAtk=who===0;add=heavyPolicy(pl,opp,elig,hctx,side.heavy.length,who===0?hpA:hpD);}
+      const elig=(!losingSide||bs.dp<=0||blocked(who))?[]:pl.hand.filter(c=>heavyOK(pl,c,who===0,side.card));
+      let add=null;if(elig.length){hctx.at=bs.at;hctx.df=bs.df;hctx.dp=bs.dp;hctx.isAtk=who===0;hctx.main=side.card;add=heavyPolicy(pl,opp,elig,hctx,side.heavy.length,who===0?hpA:hpD);}
       if(add){pl.hand=pl.hand.filter(c=>c!==add);side.heavy.push(add);count++;passes=0;computeTotals(bs);}
       else passes++;
       who=1-who;
@@ -1579,7 +1606,7 @@ function evalBattle(A,D,atkCard,defCard,mode,decider=null){
   if(defCard){pay+=useW().hand;if(defCard.color!=='飛'&&defCard.color!=='秘')pay-=gaugeValue(D,defCard);}
   if(success){
     pay+=dmgValue(D,dp);
-    if(atkCard.onWin){ if(atkCard.hiden)pay+=useW().hand; // 1ハンデス
+    if(atkCard.onWin){ if(atkCard.hiden)pay+=(HIDENFIX&&!d.hand.length)?0:useW().hand; /* ① */ // 1ハンデス
       else{const fx=loFx(atkCard);const isMill=!!(fx.winMill||fx.noDefMill);const w=isMill?P_().w_onWinMill:0.8; // 削り札の勝利時効果の価値（手札1枚分の倍率、既定0.8＝従来）。LO評価ありならLOが近いほど薄め、近い分はLO予測で数える
         pay+=useW().hand*w*(isMill&&loOn()?(1-loNear(A)):1);}}
     // 連撃の見込み
@@ -1602,7 +1629,7 @@ function evalBattle(A,D,atkCard,defCard,mode,decider=null){
     const lethal=success&&D.damage.length+dp>=CONFIG.winDamage;
     if(!lethal){
       // 決着しない攻撃に防御札・重撃札を使うと、次の手番の資源が減る
-      const reserve=c=>c.icons.includes('U')?P_.atkReserveHeavy:0;
+      const reserve=c=>(c.icons.includes('U')||c.heavySelf)?P_.atkReserveHeavy:0;
       pay-=reserve(atkCard)+aHeavy.reduce((n,c)=>n+reserve(c),0);
       if(!success)pay-=P_.atkFailPenalty;
       if(A.hand.length-aHeavy.length-1<P_.atkLowHand)pay-=P_.atkLowHandPen;
@@ -1735,11 +1762,12 @@ function handUtility(p,hand,extraYo,extraIn,extraNames){
     const d=distGP(p,c,extraYo,extraIn);
     const bst=Q.effVal?cardBoost(p,c,extraYo,extraIn):null; // テキストで強化された分（これから置く札でゲージが増える分も含む）
     let v=(cardVal(c)+(bst?bst.at+bst.df:0))/600*W_.hand; // 素の価値（基準600で手札1枚分）
-    if(c.icons.includes('U'))v+=W_.hand*Q.hUHeavy; // 重撃札はGP無視で使えるので常に価値あり
+    const isU=c.icons.includes('U')||(c.heavySelf&&hand.filter(x=>x.name===c.name).length>=2); // 2026-11-11：heavySelf は同名がもう1枚あれば重撃札として数える
+    if(isU)v+=W_.hand*Q.hUHeavy; // 重撃札はGP無視で使えるので常に価値あり
     if(c.dp===0){v*=Q.hUDp0;v+=W_.hand*Q.hUDp0Add;}
-    if(Q.handHeavy&&c.icons.includes('U'))v+=W_.hand*Q.handHeavy;
+    if(Q.handHeavy&&isU)v+=W_.hand*Q.handHeavy;
     if(chainV&&c.icons.includes('R'))v+=W_.hand*chainV; // 連撃の起点を残す価値
-    u+= c.icons.includes('U') ? v*(Q.hUHeavyFloor+(1-Q.hUHeavyFloor)/(1+d)) : v/(1+d);
+    u+= (isU&&!((AIHGP||W_.hgp)&&!CONFIG.heavy.ignoreGP)) ? v*(Q.hUHeavyFloor+(1-Q.hUHeavyFloor)/(1+d)) : v/(1+d); // AIHGP：重撃にもゲージ条件があるなら、重撃札も届かない分だけ下げる（2026-11-12：重みの差分 W.hgp=true でも同じ。AI対戦の比較用）
   }
   if(P_().hUCover){const o=E.P[1-p.idx];if(o)u+=W_.hand*P_().hUCover*coverage(p,hand,threatList(o));}
   // 山札にある緑の前提札が揃う価値（将来の連撃）
@@ -1860,6 +1888,10 @@ const TurnLayer={
         return gain>(c3.m==='avoid'?c3.w*W_.hand:0)?[best.c]:[];}
       return sc.slice(0,n).map(x=>x.c);}
     enter(this,p);
+    if(title.startsWith('手札上限')){ /* 2026-11-09 試験：手札上限の捨て札。手札効用の落ちが最小の札を1枚ずつ貪欲に捨てる（サポートは使ったときの価値を足す） */
+      const W_=useW();const o=E.P[1-p.idx];let h=cards.slice();const out=[];
+      for(let t=0;t<n;t++){const base=handUtility(p,h,0,0,[]);let bc=null,bl=Infinity;for(const c of h){const l=base-handUtility(p,h.filter(x=>x!==c),0,0,[])+(c.type==='support'?Math.max(supportValue(p,o,c),W_.hand):0);if(l<bl){bl=l;bc=c;}}out.push(bc);h=h.filter(x=>x!==bc);}
+      return out;}
     if(title.startsWith('秘薬')){ // 陰ゲージに置いた後の手札の使いやすさが最も高い札
       let best=null,bv=-Infinity;for(const c of cards){const v=Object.create(p);v.gIn=p.gIn.concat([c]);const u=handUtility(v,p.hand,0,0,[]);if(u>bv){bv=u;best=c;}}return best?[best]:[];}
     if(title.startsWith('海に行こう!')){ // 戻した後の手札の使いやすさが最も高くなるように、1枚ずつ貪欲に選ぶ（ゲージ選択は、そのゲージから4枚戻した結果で比べる）
@@ -1916,9 +1948,9 @@ function solveHeavy(p,o,elig,ctx,bs,hp0){const W_=useW();const isAtk=ctx.isAtk;c
       let who=1-meIdx,passes=c0?0:1;
       while(passes<2&&count<CONFIG.heavy.maxCards){const side=who===0?vb.atk:vb.def;const pl=side.p;const opp=who===0?vb.def.p:vb.atk.p;
         const losing=who===0?vb.at<vb.df:vb.df<=vb.at;
-        let el=(!losing||vb.dp<=0||blocked(vb.flags,who))?[]:pl.hand.filter(c=>heavyOK(pl,c));
+        let el=(!losing||vb.dp<=0||blocked(vb.flags,who))?[]:pl.hand.filter(c=>heavyOK(pl,c,who===0,side.card));
         if(el.length&&E.CONFIG.aiNoHopelessHeavy&&E.heavyHopeless(vb,who,el))el=[]; // 読みの中も実際と同じく、届かない重撃はしない
-        let add=null;if(el.length){hctx.at=vb.at;hctx.df=vb.df;hctx.dp=vb.dp;hctx.isAtk=who===0;add=heavyPolicy(pl,opp,el,hctx,side.heavy.length,who===meIdx?hpMe:hpOp);}
+        let add=null;if(el.length){hctx.at=vb.at;hctx.df=vb.df;hctx.dp=vb.dp;hctx.isAtk=who===0;hctx.main=side.card;add=heavyPolicy(pl,opp,el,hctx,side.heavy.length,who===meIdx?hpMe:hpOp);}
         if(add){pl.hand=pl.hand.filter(c=>c!==add);side.heavy.push(add);added[who]++;count++;passes=0;computeTotals(vb);}else passes++;
         who=1-who;}
       const success=CONFIG.tieWinner==='attacker'?vb.at>=vb.df:vb.at>vb.df;
@@ -1939,10 +1971,12 @@ function attackList(p,usable,mode){
   else if(c.m==='do'&&!mode)list=[...new Set(list.concat(usable.filter(isGuard)))];
   return list;
 }
+// 2026-11-11 Claude：AIの版。UVS_AIV=2＝ユーザーの決定（1ダメージ＝手札1枚分、溢れたダメージは数えない、Lvが上がって手札が増える分を数える）。未指定は従来（版1）
+const AIV2={dmg:220,noOverkill:true,lvHand:true};
 function makeSolver(params){
   if(params&&params.turnLayer===false)throw Error('turnLayer:false（経験則AIのターン層を使う）は廃止しました');
   const inst=Object.assign({},SolverProto,TurnLayer);
-  inst.W=Object.assign({},W,params&&params.W||{});
+  inst.W=Object.assign({},W,(typeof process!=='undefined'&&process.env&&process.env.UVS_AIV==='2')?AIV2:{},params&&params.W||{});
   inst.S=Object.assign({},S,params&&params.S||{});
   inst.hp=Object.assign({minHand:2,budgetExtra:1},params&&params.hp||{});
   inst.chainMargin=(params&&params.chainMargin)??400;
@@ -2009,12 +2043,15 @@ Solver.makeSolver=makeSolver;Solver.evalBattle=evalBattle;
 // 2026-11-07：デッキごとのゲージ条件の保存（GP_REQ）を消す。同じデッキ名で中身を差し替える時（デッキ調整のワーカー）に呼ぶ。消さないと最初のデッキの条件を使い続ける
 Solver.resetDeckCache=()=>{GP_REQ.clear();};
 // 単体テスト用（新LO）。withProfile で判断側のプロファイルを一時的に設定して呼ぶ
-Solver.loTest={hiddenPool,guardHitValue,loNear,loValue,loSnap,loFlip,loBattleDelta,loSelfDelta,loFx,loTopDraw,supportValue,supportValueBase,evalBattle,withProfile(prof,fn,inst){const s=curP,c=cur;curP=prof;cur=inst||null;try{return fn();}finally{curP=s;cur=c;}}};Solver.solveMatrix=solveMatrix;Solver.defaults={W,S};
+Solver.loTest={hiddenPool,guardHitValue,loNear,loValue,loSnap,loFlip,loBattleDelta,loSelfDelta,loFx,loTopDraw,supportValue,supportValueBase,evalBattle,withProfile(prof,fn,inst){const s=curP,c=cur;curP=prof;cur=inst||null;try{return fn();}finally{curP=s;cur=c;}}};Solver.solveMatrix=solveMatrix;Solver.defaults={W,S,AIV2};
 
 if(typeof module!=='undefined'&&module.exports)module.exports=Solver; else root.Solver=Solver;
 })(typeof window!=='undefined'?window:globalThis);
+
+
 </script>
 <script>
+
 
 'use strict';
 /* =========================================================
@@ -2032,7 +2069,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=Solver; else root.
    - 記録は人間・CPUの区別なく全判断を含む。再生は記録を使い切ったら
      元のコントローラ（人間／CPU）に引き継ぐ（＝ログからの再開）
    ========================================================= */
-const UI_VER='演出v4.2';
+const UI_VER='演出v4.3';
 (function(root){
 const LOG_VERSION='v'+CONFIG.ruleVersion;
 
@@ -2096,7 +2133,7 @@ function header(meta,P,CONFIG){
     `#UVS ${LOG_VERSION} replay`,
     `#ui: ${UI_VER}`,
     `#legend: token "<p><op><arg>" p=0/1(P1/P2) op: P=準備(g<uid>y|i ゲージ置き, s<uid> サポート, l スタンバイ能力, n やめる, b バトルへ/終了) G=閃のゲージ(y/i) A=攻撃uid(-=なし) D=防御uid(-=なし) H=重撃uid(-=パス) C=連撃(R/-) K=選択uid.uid(-=なし)`,
-    `#rules: 緑の巻物=案1(ダメージ2枚ごと1ドロー・陰ゲージ) v2 連撃統合・緑無条件防御・秘伝ハンデス1 deckSize=${CONFIG.deckSize} tie=${CONFIG.tieWinner} noDefenseAutoHit=${CONFIG.noDefenseAutoHit} heavy.ignoreGP=${CONFIG.heavy.ignoreGP} greenDefense=${CONFIG.greenDefense} blowHeavy=${CONFIG.blowHeavy} firstTurnBattle=${CONFIG.firstTurnBattle} win=${CONFIG.winDamage}dmg|drawPhaseLO(${CONFIG.loRule==='compare'?'damageArea,tie=LOsideLose':'LOsideLose'})`,
+    `#rules: v1.13 重撃=陽陰ゲージ条件必須 LO=ダメージ比較(同点LO側敗北) ハーフムーン=同名本体時のみ重撃・陰乱DF+300 怨砂=400/400 病院の待合室にて=禁止 緑の巻物=案1(ダメージ2枚ごと1ドロー・陰ゲージ) v2 連撃統合・緑無条件防御・秘伝ハンデス1 deckSize=${CONFIG.deckSize} tie=${CONFIG.tieWinner} noDefenseAutoHit=${CONFIG.noDefenseAutoHit} heavy.ignoreGP=${CONFIG.heavy.ignoreGP} greenDefense=${CONFIG.greenDefense} blowHeavy=${CONFIG.blowHeavy} firstTurnBattle=${CONFIG.firstTurnBattle} win=${CONFIG.winDamage}dmg|drawPhaseLO(${CONFIG.loRule==='compare'?'damageArea,tie=LOsideLose':'LOsideLose'})`,
     `seed=${meta.seed} d0=${meta.decks[0]} d1=${meta.decks[1]} first=${meta.first} c0=${meta.ctl[0]} c1=${meta.ctl[1]}`,
     ...(meta.undo?[`#undo: ${meta.undo}（テストプレイ中に「戻る」を使った回数。ops は戻した後の手順）`]:[]),
     `#rngFirst: ${meta.rngFirst||'fixed'}`,
@@ -2118,13 +2155,29 @@ if(typeof module!=='undefined'&&module.exports)module.exports=Replay;else root.R
 })(typeof window!=='undefined'?window:globalThis);
 
 
+
 </script>
 <script>
 
+
 window.UVS_CARDS_EXTRA({CARDS,CHARS,yo,inn,gaugeAll,draw,mill,log,rm,toBottom,applyDamage,cardVal,get G(){return G},get P(){return P},get RNG(){return RNG}});
 const FIXED=window.UVS_DECKS_FIXED({DECKS,CHARS,CARDS});
-const FINAL_DECKS={"飛鳥・連撃":{"char":"飛鳥","list":[["はじめのチョップ",1],["ハーフムーン",1],["リミットブレイク",2],["二刀繚斬",1],["凪",3],["右空",3],["天刃",1],["志昇陣",1],["怨砂",1],["旋空砂",3],["本能のままに",1],["残月",2],["狭朱",1],["省刃",1],["緑の巻物",3],["踊り傘",2],["飛塵",3]]},"柳生・射撃":{"char":"柳生","list":[["くぐつダミー",3],["もっかいウサギ蹴り",1],["サマーソルト",1],["ドラゴンダンス",1],["ドラゴンバイト",2],["ハーフムーン",2],["牛乳",3],["狂い傘",2],["狭朱・改",2],["省刃",3],["緑の巻物",1],["薙ぎ払う足",3],["踊り傘",2],["鉄壁のガード",3],["開華",1]]},"斑鳩・対抗封じ":{"char":"斑鳩","list":[["くぐつダミー",1],["はじめのチョップ",2],["もっかいウサギ蹴り",3],["クナイ投擲",2],["ハーフムーン",3],["ミドルキック",1],["攻断円",1],["本能のままに",3],["欺人脚",3],["残月",1],["狭朱",2],["磁転昇",1],["神",3],["紅閃",2],["緑の巻物",2]]},"葛城・削り":{"char":"葛城","list":[["くぐつダミー",3],["アックスシュート",1],["サマーソルト",3],["サマーソルトリバース",3],["ドラゴンダンス",2],["ドラゴンバイト",1],["ハーフムーン",3],["天刃",3],["怨砂",3],["攻断円",1],["散り傘",1],["狭朱",1],["省刃",2],["緑の巻物",1],["鉄壁のガード",2]]},"雲雀・反撃":{"char":"雲雀","list":[["えあウサギ",2],["くぐつダミー",3],["はじめのチョップ",3],["ふっとびさまーそると",1],["もっかいウサギ蹴り",2],["ウサギ蹴り",2],["ドラゴンベアード",1],["ハーフムーン",3],["ミドルキック",1],["天刃",2],["怨砂",3],["病院の待合室にて",1],["省刃",1],["踊り傘",1],["鉄壁のガード",3],["零雹",1]]}};
-const FINAL_PROFILES={"飛鳥・連撃":{"c_heavyDef":"avoid","w_heavyDef":1,"hUSupport":1.6,"gTarget":"weighted","c_sup_green":"avoid","n_sup_green":3,"c_heavySolve":"do","w_heavySolve":2,"c_heavyAtk":"do","w_heavyAtk":3,"hUHeavy":0.2,"w_sup_green":0.3,"hUGreenNeed":0.3},"柳生・射撃":{"c_guardDefend":"do","w_guardDefend":1500,"c_swap":"cond","c_heavyDef":"cond","w_heavyDef":2,"c_heavyAtk":"do","w_heavyAtk":1,"hUSupport":1.6,"hUDp0Add":2.5,"gTarget":"max","c_guardGauge":"cond","n_guardGauge":3,"hUHeavyFloor":0.4,"c_attackPass":"do","w_attackPass":300},"斑鳩・対抗封じ":{"c_guardDefend":"do","w_guardDefend":0,"effVal":false,"c_heavyDef":"avoid","w_heavyDef":2,"hAtkBudget":2,"c_heavyAtk":"do","w_heavyAtk":2,"c_sup_green":"cond","n_sup_green":2,"gTarget":"weighted","hUDeckGreen":0.3,"hUGreenNeed":0.8,"hUHeavyFloor":0.8},"葛城・削り":{"c_guardGauge":"never","c_guardDefend":"do","w_guardDefend":800,"c_sup_green":"cond","w_sup_green":1,"c_heavySolve":"avoid","n_heavySolve":3,"hAtkBudget":3,"w_heavySolve":2,"gTarget":"none","c_heavyDef":"avoid","w_heavyDef":1,"hUChainStart":0.6,"hUGreenNeed":0.8,"n_sup_green":2,"c_heavyAtk":"avoid","w_heavyAtk":2,"hUDeckGreen":0,"effVal":false},"雲雀・反撃":{"c_sup_hospital":"do","w_sup_hospital":0.3,"hUHeavyFloor":0.8,"c_sup_milk":"cond","n_sup_milk":null,"c_heavyAtk":"do","w_heavyAtk":2,"c_gauge":"avoid","w_gauge":0.3,"c_heavyDef":"do","w_heavyDef":1,"c_attackPass":"do","w_attackPass":800,"n_attackPass":4,"c_heavySolve":"do","w_heavySolve":2,"c_sup_green":"do","w_sup_green":1,"c_noDefense":"cond","n_noDefense":2,"effVal":false,"hUDp0Add":2.5,"gTarget":"weighted"}};
+const FINAL_DECKS={"飛鳥・連撃":{"char":"飛鳥","list":[["もっかいウサギ蹴り",1],["リミットブレイク",2],["二刀繚斬",2],["凪",3],["右空",3],["天刃",1],["志昇陣",1],["旋空砂",2],["本能のままに",1],["残月",2],["牛乳",3],["狭朱",1],["緑の巻物",3],["踊り傘",2],["飛塵",3]]},"柳生・射撃":{"char":"柳生","list":[["くぐつダミー",3],["もっかいウサギ蹴り",3],["サマーソルト",2],["ハーフムーン",1],["本能のままに",2],["残月",1],["牛乳",3],["狂い傘",2],["狭朱・改",1],["省刃",2],["緑の巻物",1],["薙ぎ払う足",3],["諸行の音",2],["踊り傘",1],["返し雨",1],["鉄壁のガード",2]]},"斑鳩・対抗封じ":{"char":"斑鳩","list":[["はじめのチョップ",1],["もっかいウサギ蹴り",3],["クナイ投擲",3],["ドラゴンダンス",1],["ミドルキック",1],["怨砂",2],["攻断円",1],["本能のままに",3],["残月",3],["牛乳",1],["省刃",3],["磁転昇",3],["紅閃",2],["緑の巻物",1],["鉄壁のガード",2]]},"葛城・削り":{"char":"葛城","list":[["くぐつダミー",3],["サマーソルト",3],["サマーソルトリバース",3],["トルネードシュピンデル",3],["ハーフムーン",2],["天刃",3],["攻断円",2],["散り傘",1],["欺人脚",1],["牛乳",3],["省刃",1],["踊り傘",2],["鉄壁のガード",3]]},"雲雀・反撃":{"char":"雲雀","list":[["くぐつダミー",3],["はじめのチョップ",2],["ふっとびさまーそると",2],["もっかいウサギ蹴り",2],["サマーソルト",2],["ドラゴンバイト",2],["ハーフムーン",3],["天刃",3],["怨砂",3],["残月",1],["海に行こう!",1],["烈突",1],["牛乳",2],["鉄壁のガード",2],["開華",1]]}};
+const FINAL_PROFILES={"飛鳥・連撃":{"name":"飛鳥・連撃","atkReserveHeavy":0,"atkFailPenalty":0,"atkLowHand":0,"atkLowHandPen":0,"atkLethalMul":0,"defGuardWin":0,"hUCover":0,"handHeavy":0,"drawDeckAware":false,"holdGuard":0,"holdHeavyMaxDrop":null,"heavy":null,"routeHeuristicToSolver":false,"c_guardGauge":"do","w_guardGauge":0,"n_guardGauge":2,"c_guardDefend":"cond","w_guardDefend":1500,"n_guardDefend":4,"c_guardAttack":"cond","w_guardAttack":0,"c_noDefense":"do","w_noDefense":0,"n_noDefense":3,"c_attackPass":"never","w_attackPass":0,"n_attackPass":4,"c_heavyAtk":"do","w_heavyAtk":3,"c_heavyDef":"do","w_heavyDef":3,"c_chain":"cond","w_chain":0,"c_gauge":"cond","w_gauge":0,"c_sup_hiyaku":"cond","w_sup_hiyaku":0,"c_sup_umi":"cond","w_sup_umi":0,"c_sup_futomaki":"cond","w_sup_futomaki":0,"c_sup_megane":"cond","w_sup_megane":0,"c_sup_green":"avoid","w_sup_green":0.3,"c_sup_milk":"cond","w_sup_milk":0,"c_sup_red":"cond","w_sup_red":0,"c_sup_bread":"cond","w_sup_bread":0,"c_sup_hospital":"cond","w_sup_hospital":0,"c_lv3Discard":"cond","w_lv3Discard":0,"c_swap":"cond","w_swap":0,"c_standby":"cond","w_standby":0,"n_standby":6,"c_heavySolve":"do","w_heavySolve":2,"n_heavySolve":4,"hAtkMinHand":null,"hDefMinHand":null,"hAtkBudget":null,"hDefBudget":null,"hPick":"min","gTarget":"weighted","w_gTarget":1,"hUChainStart":0,"hUChainStartDeck":0,"hULv2":0,"hULv3":0,"hULv4":0,"hULv5":0,"c_loEval":"do","w_loEval":0.5,"n_loHorizon":6,"w_loPass":0,"w_loTrend":0,"w_onWinMill":0.8,"deckLowN":6,"deckLowVal":200,"hUSupport":1.6,"hUGreenBase":0.3,"hUGreenNeed":0.3,"hUHiden":1.6,"hUHeavy":0.2,"hUHeavyFloor":0.6,"hUDp0":0.6,"hUDp0Add":1.2,"effVal":true,"hUDeckGreen":0.15,"hUGreenDef":0.5,"supGreenOff":0.5,"supRedDmg":0.9,"supMilkDmg":0.9,"supMilkHand":0.3,"supBread":0.25,"supHospital":0.5,"swapTh":0.6,"lv3DrawVal":0.6,"n_sup_green":3},"柳生・射撃":{"name":"柳生・射撃","atkReserveHeavy":0,"atkFailPenalty":0,"atkLowHand":0,"atkLowHandPen":0,"atkLethalMul":0,"defGuardWin":0,"hUCover":0,"handHeavy":0,"drawDeckAware":false,"holdGuard":0,"holdHeavyMaxDrop":null,"heavy":null,"routeHeuristicToSolver":false,"c_guardGauge":"cond","w_guardGauge":0,"n_guardGauge":3,"c_guardDefend":"do","w_guardDefend":1500,"n_guardDefend":4,"c_guardAttack":"cond","w_guardAttack":0,"c_noDefense":"do","w_noDefense":0,"n_noDefense":3,"c_attackPass":"do","w_attackPass":300,"n_attackPass":4,"c_heavyAtk":"do","w_heavyAtk":1,"c_heavyDef":"cond","w_heavyDef":2,"c_chain":"cond","w_chain":0,"c_gauge":"cond","w_gauge":0,"c_sup_hiyaku":"cond","w_sup_hiyaku":0,"c_sup_umi":"cond","w_sup_umi":0,"c_sup_futomaki":"cond","w_sup_futomaki":0,"c_sup_megane":"cond","w_sup_megane":0,"c_sup_green":"cond","w_sup_green":0,"c_sup_milk":"cond","w_sup_milk":0,"c_sup_red":"cond","w_sup_red":0,"c_sup_bread":"cond","w_sup_bread":0,"c_sup_hospital":"cond","w_sup_hospital":0,"c_lv3Discard":"cond","w_lv3Discard":0,"c_swap":"cond","w_swap":0,"c_standby":"cond","w_standby":0,"n_standby":6,"c_heavySolve":"do","w_heavySolve":0,"n_heavySolve":4,"hAtkMinHand":null,"hDefMinHand":null,"hAtkBudget":null,"hDefBudget":null,"hPick":"min","gTarget":"max","w_gTarget":1,"hUChainStart":0,"hUChainStartDeck":0,"hULv2":0,"hULv3":0,"hULv4":0,"hULv5":0,"c_loEval":"do","w_loEval":0.5,"n_loHorizon":6,"w_loPass":0,"w_loTrend":0,"w_onWinMill":0.8,"deckLowN":6,"deckLowVal":200,"hUSupport":1.6,"hUGreenBase":0.3,"hUGreenNeed":0.5,"hUHiden":1.6,"hUHeavy":0.5,"hUHeavyFloor":0.4,"hUDp0":0.6,"hUDp0Add":2.5,"effVal":true,"hUDeckGreen":0.15,"hUGreenDef":0.5,"supGreenOff":0.5,"supRedDmg":0.9,"supMilkDmg":0.9,"supMilkHand":0.3,"supBread":0.25,"supHospital":0.5,"swapTh":0.6,"lv3DrawVal":0.6},"斑鳩・対抗封じ":{"name":"斑鳩・対抗封じ","atkReserveHeavy":0,"atkFailPenalty":0,"atkLowHand":0,"atkLowHandPen":0,"atkLethalMul":0,"defGuardWin":0,"hUCover":0,"handHeavy":0,"drawDeckAware":false,"holdGuard":0,"holdHeavyMaxDrop":null,"heavy":null,"routeHeuristicToSolver":false,"c_guardGauge":"do","w_guardGauge":0,"n_guardGauge":2,"c_guardDefend":"do","w_guardDefend":0,"n_guardDefend":4,"c_guardAttack":"cond","w_guardAttack":0,"c_noDefense":"do","w_noDefense":0,"n_noDefense":3,"c_attackPass":"do","w_attackPass":0,"n_attackPass":4,"c_heavyAtk":"do","w_heavyAtk":2,"c_heavyDef":"avoid","w_heavyDef":2,"c_chain":"cond","w_chain":0,"c_gauge":"cond","w_gauge":0,"c_sup_hiyaku":"cond","w_sup_hiyaku":0,"c_sup_umi":"cond","w_sup_umi":0,"c_sup_futomaki":"cond","w_sup_futomaki":0,"c_sup_megane":"cond","w_sup_megane":0,"c_sup_green":"cond","w_sup_green":0,"c_sup_milk":"cond","w_sup_milk":0,"c_sup_red":"cond","w_sup_red":0,"c_sup_bread":"cond","w_sup_bread":0,"c_sup_hospital":"cond","w_sup_hospital":0,"c_lv3Discard":"cond","w_lv3Discard":0,"c_swap":"cond","w_swap":0,"c_standby":"cond","w_standby":0,"n_standby":6,"c_heavySolve":"never","w_heavySolve":0,"n_heavySolve":4,"hAtkMinHand":null,"hDefMinHand":null,"hAtkBudget":2,"hDefBudget":null,"hPick":"min","gTarget":"weighted","w_gTarget":1,"hUChainStart":0,"hUChainStartDeck":0,"hULv2":0,"hULv3":0,"hULv4":0,"hULv5":0,"c_loEval":"do","w_loEval":0.5,"n_loHorizon":6,"w_loPass":0,"w_loTrend":0,"w_onWinMill":0.8,"deckLowN":6,"deckLowVal":200,"hUSupport":0.8,"hUGreenBase":0.3,"hUGreenNeed":0.8,"hUHiden":1.6,"hUHeavy":0.5,"hUHeavyFloor":0.8,"hUDp0":0.6,"hUDp0Add":1.2,"effVal":false,"hUDeckGreen":0.3,"hUGreenDef":0.5,"supGreenOff":0.5,"supRedDmg":0.9,"supMilkDmg":0.9,"supMilkHand":0.3,"supBread":0.25,"supHospital":0.5,"swapTh":0.6,"lv3DrawVal":0.6,"n_sup_green":2},"葛城・削り":{"name":"葛城・削り","atkReserveHeavy":0,"atkFailPenalty":0,"atkLowHand":0,"atkLowHandPen":0,"atkLethalMul":0,"defGuardWin":0,"hUCover":0,"handHeavy":0,"drawDeckAware":false,"holdGuard":0,"holdHeavyMaxDrop":null,"heavy":null,"routeHeuristicToSolver":false,"c_guardGauge":"never","w_guardGauge":0,"n_guardGauge":2,"c_guardDefend":"do","w_guardDefend":800,"n_guardDefend":4,"c_guardAttack":"cond","w_guardAttack":0,"c_noDefense":"do","w_noDefense":0,"n_noDefense":3,"c_attackPass":"do","w_attackPass":0,"n_attackPass":4,"c_heavyAtk":"avoid","w_heavyAtk":2,"c_heavyDef":"do","w_heavyDef":3,"c_chain":"cond","w_chain":0,"c_gauge":"cond","w_gauge":0,"c_sup_hiyaku":"cond","w_sup_hiyaku":0,"c_sup_umi":"cond","w_sup_umi":0,"c_sup_futomaki":"cond","w_sup_futomaki":0,"c_sup_megane":"cond","w_sup_megane":0,"c_sup_green":"cond","w_sup_green":1,"c_sup_milk":"cond","w_sup_milk":0,"c_sup_red":"cond","w_sup_red":0,"c_sup_bread":"cond","w_sup_bread":0,"c_sup_hospital":"cond","w_sup_hospital":0,"c_lv3Discard":"cond","w_lv3Discard":0,"c_swap":"cond","w_swap":0,"c_standby":"cond","w_standby":0,"n_standby":6,"c_heavySolve":"avoid","w_heavySolve":2,"n_heavySolve":3,"hAtkMinHand":null,"hDefMinHand":1,"hAtkBudget":3,"hDefBudget":null,"hPick":"min","gTarget":"none","w_gTarget":1,"hUChainStart":0.6,"hUChainStartDeck":0,"hULv2":0,"hULv3":0,"hULv4":0,"hULv5":0,"c_loEval":"do","w_loEval":0.5,"n_loHorizon":6,"w_loPass":0,"w_loTrend":0,"w_onWinMill":0.8,"deckLowN":6,"deckLowVal":200,"hUSupport":0.8,"hUGreenBase":0.3,"hUGreenNeed":0.8,"hUHiden":1.6,"hUHeavy":0.5,"hUHeavyFloor":0.6,"hUDp0":0.6,"hUDp0Add":1.2,"effVal":false,"hUDeckGreen":0,"hUGreenDef":0.5,"supGreenOff":0.5,"supRedDmg":0.9,"supMilkDmg":0.9,"supMilkHand":0.3,"supBread":0.25,"supHospital":0.5,"swapTh":0.6,"lv3DrawVal":0.6,"n_sup_green":2},"雲雀・反撃":{"name":"雲雀・反撃","atkReserveHeavy":140,"atkFailPenalty":350,"atkLowHand":3,"atkLowHandPen":250,"atkLethalMul":1,"defGuardWin":120,"hUCover":0,"handHeavy":0.4,"drawDeckAware":true,"holdGuard":0,"holdHeavyMaxDrop":null,"heavy":{"atkMinHand":3,"atkBudgetExtra":0,"defMinHand":1,"defBudgetExtra":1},"routeHeuristicToSolver":true,"c_guardGauge":"do","w_guardGauge":0,"n_guardGauge":2,"c_guardDefend":"do","w_guardDefend":0,"n_guardDefend":4,"c_guardAttack":"cond","w_guardAttack":0,"c_noDefense":"cond","w_noDefense":0,"n_noDefense":2,"c_attackPass":"do","w_attackPass":800,"n_attackPass":4,"c_heavyAtk":"do","w_heavyAtk":3,"c_heavyDef":"do","w_heavyDef":3,"c_chain":"cond","w_chain":0,"c_gauge":"avoid","w_gauge":0.3,"c_sup_hiyaku":"cond","w_sup_hiyaku":0,"c_sup_umi":"cond","w_sup_umi":0,"c_sup_futomaki":"cond","w_sup_futomaki":0,"c_sup_megane":"cond","w_sup_megane":0,"c_sup_green":"do","w_sup_green":1,"c_sup_milk":"cond","w_sup_milk":0,"c_sup_red":"cond","w_sup_red":0,"c_sup_bread":"cond","w_sup_bread":0,"c_sup_hospital":"do","w_sup_hospital":0.3,"c_lv3Discard":"cond","w_lv3Discard":0,"c_swap":"cond","w_swap":0,"c_standby":"cond","w_standby":0,"n_standby":6,"c_heavySolve":"do","w_heavySolve":2,"n_heavySolve":4,"hAtkMinHand":null,"hDefMinHand":null,"hAtkBudget":null,"hDefBudget":null,"hPick":"min","gTarget":"weighted","w_gTarget":1,"hUChainStart":0,"hUChainStartDeck":0,"hULv2":0,"hULv3":0,"hULv4":0,"hULv5":0,"c_loEval":"do","w_loEval":0.5,"n_loHorizon":6,"w_loPass":0,"w_loTrend":0,"w_onWinMill":0.8,"deckLowN":6,"deckLowVal":200,"hUSupport":0.8,"hUGreenBase":0.3,"hUGreenNeed":0.5,"hUHiden":1.6,"hUHeavy":0.5,"hUHeavyFloor":0.8,"hUDp0":0.6,"hUDp0Add":2.5,"effVal":false,"hUDeckGreen":0.15,"hUGreenDef":0.5,"supGreenOff":0.5,"supRedDmg":0.9,"supMilkDmg":0.9,"supMilkHand":0.3,"supBread":0.25,"supHospital":0.5,"swapTh":0.6,"lv3DrawVal":0.6,"n_sup_milk":null}};
+// v1.13: adopted rules and card changes; no environment switches in browser.
+CONFIG.ruleVersion='1.13';
+CONFIG.heavy={firstNeedsIcon:false,ignoreGP:false,maxCards:99,endMode:'bothPass'};
+CONFIG.loRule='compare';
+const V113_BANNED=Object.freeze(['病院の待合室にて']);
+{const c=CARDS['ハーフムーン'];c.icons=c.icons.filter(x=>x!=='U');c.heavySelf=true;c.text='【強化】このカードでバトルする時、手札の「ハーフムーン」は重撃アイコンを持つ／【陰乱】陰5枚以上DF+300';c.mod=x=>({df:inn(x.me)>=5?300:0});}
+Object.assign(CARDS['怨砂'],{at:400,df:400});
+function displayCardIcons(c){
+  const icons=[...(c.icons||[])];
+  if(c.heavySelf&&typeof G!=='undefined'&&G&&G.bs){
+    for(const side of [G.bs.atk,G.bs.def])if(side&&side.card&&side.card.name===c.name&&side.p&&side.p.hand.includes(c)&&!icons.includes('U'))icons.push('U');
+  }
+  return icons;
+}
 for(const [key,def] of Object.entries(FINAL_DECKS)){const list=def.list;DECKS[key].list=list;DECKS[key].list30=list;FIXED[key].list=list;}
 const DECK_KEYS=Object.keys(FIXED);
 DECKS['雲雀・LO']=DECKS['雲雀・反撃'];
@@ -2229,7 +2282,7 @@ function cardHTML(c,opts={}){
   if(c.type==='support')return `<div class="card card-frame support-card c${c.color} ${sel} ${dis} ${opts.small?'small':''} ${opts.text?'big':''}" data-uid="${c.uid}"><div class="tech-face"><div class="tech-head"><div class="nm">${cardNameHTML(c.name)}</div><div class="ic">SUP</div></div>
     <div class="tech-values"><div class="gp">${c.color} <span class="tech-gp">陽${c.gp.yo}/陰${c.gp.in}</span></div></div></div>${opts.text?`<div class="tx">${cardText(c)}</div>`:''}</div>`;
   if(c.type==='char')return `<div class="card ${sel} ${opts.small?'small':''}" data-uid="${c.uid}"><span class="ty">CHR</span><div class="nm">${c.name} Lv${c.lv}</div><div class="st">${c.at}/${c.df}</div></div>`;
-  const ic=c.icons.map(i=>i==='R'?'連':i==='U'?'重':i).join(' ');
+  const ic=displayCardIcons(c).map(i=>i==='R'?'連':i==='U'?'重':i).join(' ');
   const tx=opts.text?`<div class="tx">${cardText(c)}</div>`:'';
   const eb=opts.boost||{};const nb=opts.need?'<span class="needb">連撃条件</span>':'';const num=(v,b)=>b?`<b class="up">+${v+b}</b>`:`+${v}`;
   return `<div class="card card-frame tech-card c${c.color} ${sel} ${dis} ${opts.small?'small':''} ${opts.text?'big':''}" data-uid="${c.uid}">
@@ -2464,13 +2517,14 @@ function enlargedCardHTML(c){
 function showDetail(c){if(!c)return;openOv(enlargedCardHTML(c));$("#overlay .ov").classList.add("uvs-card-detail-dialog");}
 function showZone(p,z){const arr=z==='yo'?p.gYo:z==='in'?p.gIn:z==='damage'?p.damage:p.discard;const t=z==='yo'?'陽ゲージ':z==='in'?'陰ゲージ':z==='damage'?'ダメージエリア':'捨て札';openOv(`<h2>${p.name}の${t}（${arr.length}）</h2><div class="hand" style="flex-wrap:wrap">${arr.map(c=>cardHTML(c,{small:true})).join('')||'<span class="small">なし</span>'}</div>`);document.querySelectorAll('#overlay [data-uid]').forEach(el=>el.onclick=e=>{e.stopPropagation();showDetail(findCard(+el.dataset.uid));});}
 function showLog(){openOv(`<h2>ログ</h2><div class="btns" style="margin:0 0 8px"><button id="copylog" class="primary">ログをコピー</button></div><div class="log" style="max-height:60vh;user-select:text;-webkit-user-select:text">${G.log.map(l=>`<div class="${l.hl?'hl':''}">${l.s}</div>`).join('')}</div>`);const d=$('#overlay .log');d.scrollTop=d.scrollHeight;$('#copylog').onclick=e=>{e.stopPropagation();copyText(fullLogText(),e.target);};}
-function showRules(){openOv(`<h2>採用ルール v2（閃乱カグラ版＋リメイク決定事項）</h2><div class="detail"><p><b>${Replay.LOG_VERSION}</b>：緑の巻物は案1、固定デッキ・AIはv1.12（サイクル36）の設定。葛城Lv3は登場時、手札1枚を捨ててよく、捨てた場合は2枚引きます。登場時・勝利時・スタンバイ能力の詳細はキャラカードを確認してください。牛乳による再登場でも登場時能力が発動します。</p>
-<p><b>勝利</b>：5ダメージを受けたプレイヤーは即敗北。自分のドローフェイズ開始時に山札0枚ならLOとなり、そのプレイヤーは即敗北。LO判定は病院解除などの開始時効果より先。ドローフェイズ以外の山札0枚ではLOしません。</p>
+function showRules(){openOv(`<h2>採用ルール v2（閃乱カグラ版＋リメイク決定事項）</h2><div class="detail"><p><b>${Replay.LOG_VERSION}</b>：緑の巻物は案1、固定デッキ・AIはv1.13（判定決着ルールでの1巡後）の設定。葛城Lv3は登場時、手札1枚を捨ててよく、捨てた場合は2枚引きます。登場時・勝利時・スタンバイ能力の詳細はキャラカードを確認してください。牛乳による再登場でも登場時能力が発動します。</p>
+<p><b>勝利</b>：5ダメージを受けたプレイヤーは即敗北。自分のドローフェイズ開始時に山札0枚ならLO判定決着。ダメージエリアの枚数が少ない側の勝ち、同数ならLOした側の負け。LO判定は病院解除などの開始時効果より先。ドローフェイズ以外の山札0枚ではLOしません。</p>
 <p><b>準備</b>：キャラデッキLv1〜5（5枚）＋固定山札30枚。初期手札4枚、マリガンなし。先攻1ターン目は1ドローで、バトルも行えます。以後毎ターン2ドロー。</p>
 <p><b>ダメージ</b>：Lv1〜4の被弾では先頭のキャラカードがダメージエリアへ移り、次のレベルが登場。最後のキャラで被弾した場合は5ダメージで即敗北。ダメージ処理で山札は消費せず、山札不足による第三の敗北条件はありません。</p>
 <p><b>準備フェイズ</b>：バトルカード1枚をゲージへ（1回）、サポート1枚（1回）、Lv5の合図など。</p>
 <p><b>バトル</b>：攻守が裏向きで同時に出して公開。AT≧DFで攻撃成功（同値は攻撃側）。ディフェンスを出さなければ確定ヒット。</p>
-<p><b>重撃</b>：1枚目は何でもよく、2枚目以降は重撃アイコン必須。GP条件は無視、枚数無制限。攻撃側から交互に追加し、両者が続けてパスで終了。2枚目以降は＋AT/＋DFのみ有効、バトル後は捨て札。</p>
+<p><b>重撃</b>：1枚目は何でもよく、2枚目以降は重撃アイコン必須。重撃札にも陽・陰のGP条件が必要、枚数無制限。攻撃側から交互に追加し、両者が続けてパスで終了。2枚目以降は＋AT/＋DFのみ有効、バトル後は捨て札。</p>
+<p><b>v1.13のカード変更</b>：ハーフムーンは500/500、本体が同名のときだけ手札の同名札に重撃を付与。同名AT強化は削除、陰5枚以上DF+300は維持。怨砂は400/400。病院の待合室にては禁止（カードデータは保持）。</p>
 <p><b>連撃（v2）</b>：連撃アイコンを持つ技で攻撃成功後、手札の緑カードで追加攻撃できる（元のカードは捨て札）。追加攻撃に使えるのは緑のみ。緑にも連撃があれば続けられる。緑の攻撃時使用条件は「忍ゲージに指定カード」。</p>
 <p><b>緑による防御（v2）</b>：緑は条件なしでディフェンスに出せる。相手の攻撃札が緑なら無条件で防御成功（連撃はそこで終了）。吹飛の無効化は緑には効かない。通常の攻撃に対して緑を出してもDF+0。</p>
 <p><b>秘伝忍法（紫）</b>：陽4/陰4に加え、忍ゲージから閃・陽・陰を1枚ずつ捨てる。DP2。勝利時のハンデスは1枚（v2）。</p>
@@ -2624,7 +2678,7 @@ const UVS_CHAR_ART_PATH=Object.freeze({
   '柳生':Object.freeze([null,'./assets/characters/yagyu-lv1.webp?v=3.2','./assets/characters/yagyu-lv1.webp?v=3.2','./assets/characters/yagyu-lv1.webp?v=3.2','./assets/characters/yagyu_attack.webp','./assets/characters/yagyu_attack.webp']),
   '雲雀':Object.freeze([null,'./assets/characters/hibari.webp','./assets/characters/hibari.webp','./assets/characters/hibari.webp','./assets/characters/hibari-attack-v42.webp','./assets/characters/hibari-attack-v42.webp'])
 });
-function showStartDecks(keys){let h='<h2>固定デッキ内容（各30枚＋キャラ5枚）</h2>';for(const k of keys){const d=DECKS[k];h+=`<h3>${k}</h3><p class="small">固定30枚はv1.12（サイクル36）の構成。キャラ能力は現行版。</p><table><tr><th>Lv</th><th>AT/DF</th><th>効果</th></tr>`;for(const c of CHARS[k])h+=`<tr><td>${c.lv}</td><td>${c.at}/${c.df}</td><td class="small">${c.text||'—'}</td></tr>`;h+='</table><table><tr><th>枚</th><th>カード</th><th>色GP</th><th>AT/DF</th><th>ｱｲｺﾝ</th><th>効果</th></tr>';for(const [n,c] of d.list30){const t=CARDS[n];h+=`<tr><td>${c}</td><td>${n}</td><td>${t.color}${t.gp.yo}/${t.gp.in}</td><td>${t.type==='battle'?`+${t.at}/+${t.df}${t.dp!==1?' DP'+t.dp:''}`:'SUP'}</td><td>${t.type==='battle'?t.icons.join(''):'—'}</td><td class="small">${(t.text||'').replace(/【使用条件】.*?。/,'')}</td></tr>`;}h+='</table>';}openOv(h);}
+function showStartDecks(keys){let h='<h2>固定デッキ内容（各30枚＋キャラ5枚）</h2>';for(const k of keys){const d=DECKS[k];h+=`<h3>${k}</h3><p class="small">固定30枚はv1.13（判定決着ルールでの1巡後）の構成。キャラ能力は現行版。</p><table><tr><th>Lv</th><th>AT/DF</th><th>効果</th></tr>`;for(const c of CHARS[k])h+=`<tr><td>${c.lv}</td><td>${c.at}/${c.df}</td><td class="small">${c.text||'—'}</td></tr>`;h+='</table><table><tr><th>枚</th><th>カード</th><th>色GP</th><th>AT/DF</th><th>ｱｲｺﾝ</th><th>効果</th></tr>';for(const [n,c] of d.list30){const t=CARDS[n];h+=`<tr><td>${c}</td><td>${n}</td><td>${t.color}${t.gp.yo}/${t.gp.in}</td><td>${t.type==='battle'?`+${t.at}/+${t.df}${t.dp!==1?' DP'+t.dp:''}`:'SUP'}</td><td>${t.type==='battle'?t.icons.join(''):'—'}</td><td class="small">${(t.text||'').replace(/【使用条件】.*?。/,'')}</td></tr>`;}h+='</table>';}openOv(h);}
 
 /* ---------- 開始画面 ---------- */
 const START_ROSTER=[
@@ -2850,8 +2904,10 @@ function newGame(mode,d1,d2,first,delay,cpu='solver',resume=null,undo=0,rematchC
 }
 startScreen();
 
+
 </script>
 <script>
+
 
 'use strict';
 // v1.8 新UI（2026-11-06）。描画とHuman（人間の操作）だけを差し替える。エンジン・AI・再現ログの形式は変えない
@@ -3153,8 +3209,10 @@ Human.attack=async function(p,usable,mode){
 })();
 
 
+
 </script>
 <script>
+
 
 'use strict';
 // v1.8 新UI 第2段階（2026-11-06）：札の使用・移動とキャラ能力の演出。ゲームの進行（エンジン・乱数・再現ログ）は変えない
@@ -3532,6 +3590,7 @@ const _setup=setupGame;setupGame=function(){fxSession?.controller.abort();clearB
 const _mr=Replay.makeRecorder;Replay.makeRecorder=function(){const w=_mr.apply(this,arguments);
   return new Proxy(w,{get(t,k){const v=t[k];if(typeof v==='function'&&['prepAction','chooseGauge','attack','defend','heavy','chain','pickCards'].includes(k))return async function(...a){await Promise.all([FX.drain(),FX.finishBattle()]);return v.apply(t,a);};return v;}});};
 })();
+
 
 
 </script>
