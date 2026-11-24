@@ -528,6 +528,9 @@ body:has(#app.nv){
 .hiden-cost-card .card.card-frame{display:grid;place-items:center}
 .hiden-cost-card .tech-face{width:min(100%,78px)}
 </style>
+<style>#tut-guide{position:fixed;z-index:30002;left:50%;transform:translateX(-50%);bottom:max(8px,env(safe-area-inset-bottom));width:min(620px,calc(100% - 16px));padding:10px 12px;color:#f5f6fb;background:#18212ff7;border:1px solid #e3bf6d;border-radius:10px;box-shadow:0 5px 20px #0009;font-size:13px;line-height:1.45;max-height:45dvh;overflow:auto}#tut-guide.tut-top{bottom:auto;top:var(--tut-top,42px)}#tut-guide p{margin:6px 0;white-space:pre-line}.tut-progress{color:#f4d598;font-size:12px}.tut-progress small{float:right;color:#b6c3d9}.tut-controls{display:flex;gap:6px;flex-wrap:wrap}.tut-controls button{padding:8px 10px;min-height:40px;flex:1;white-space:nowrap}.tut-controls [data-tut=next]{border-color:#e3bf6d;background:#594321}.tut-note,.tut-hint{font-size:11px;color:#ffdf92}.tut-hint:empty{display:none}#tut-shade{position:fixed;inset:0;width:100vw;height:100dvh;z-index:30000;pointer-events:none}.tut-target{outline:3px solid #ffda63!important;outline-offset:2px}.tutorial-active #cardpeek{z-index:29990}.tut-neutral{height:100%;min-height:65px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(150deg,#324358,#17222d);font-size:12px;color:#e3e8f0;text-align:center}.tutorial-active .nv-char{background:#1a2736}.tutorial-active .nv-char .tut-neutral strong{font-size:11px}.tutorial-active #v114-abilities{display:none!important}.tutorial-active .nv-bar{flex-wrap:wrap}.uvs-select>header{flex-wrap:wrap}.uvs-select>header #uvs-tutorial{white-space:nowrap}@media(max-height:700px){#tut-guide{font-size:12px;padding:7px 10px}.tut-controls button{min-height:36px;padding:6px}.tut-progress{font-size:11px}#tut-guide p{margin:4px 0}}
+#tut-log{white-space:pre-wrap;overflow-wrap:anywhere;max-height:35dvh;overflow:auto}
+</style>
 </head>
 <body>
 <div id="app"></div>
@@ -3220,6 +3223,7 @@ function nvRender(){
   $('#btnlog').onclick=showLog;$('#btnrule').onclick=showRules;const result=$('#btnresult');if(result)result.onclick=()=>openResult();else $('#btnreset').onclick=()=>{if(G.prompt)resolvePrompt({value:'__abort'});location.reload();};
 }
 render=nvRender;
+window.UVS_TUTORIAL_UI={closeCardPeek,showCardPeek,get peek(){return cardPeek},get pick(){return pickKey()}};
 const _start=startScreen;startScreen=function(){$('#app').classList.remove('nv');return _start.apply(this,arguments);};
 // ---- 人間の操作：すべて手札から ----
 Human.prepAction=async function(p,opts,ctx){
@@ -3636,6 +3640,114 @@ const _mr=Replay.makeRecorder;Replay.makeRecorder=function(){const w=_mr.apply(t
 // v1.14 display-only ability status; no controller, game state, RNG or replay mutations.
 function v114AbilityStatus(p){const ch=p.charDeck[0],bs=G.bs,side=bs&&[bs.atk,bs.def].find(s=>s.p===p);if(p.charName==='飛鳥'&&ch.lv>=4){const n=p.discard.filter(c=>c.type==='battle'&&c.tech==='斬撃').length;return '斬撃捨札'+n+'枚：AT+'+Math.min(1000,n*200)+'（最大1000）';}if(p.charName==='雲雀'&&ch.lv>=3){const at=(ch.lv-2)*200;if(side&&side.card)return '本体提出時：'+(side.submitMod?.at?'条件成立 AT+'+side.submitMod.at:'条件不成立 AT+0')+'／DF補正なし';return '本体提出後3枚以下：AT+'+at+'／現在の手札'+p.hand.length+'枚／DF補正なし';}if(p.charName==='葛城'&&ch.lv===3)return '登場時、お互い1枚引く（自分→相手）';return '';}
 (()=>{const original=render;render=function(){original();if(!P.length)return;let el=document.getElementById('v114-abilities');if(!el){el=document.createElement('div');el.id='v114-abilities';el.setAttribute('aria-live','polite');(document.querySelector('#app .nv-bar')||document.querySelector('#app header'))?.after(el);}el.replaceChildren(...P.map(p=>{const line=document.createElement('div');line.textContent=p.name+' '+p.charName+' Lv'+p.charDeck[0].lv+'：'+v114AbilityStatus(p);line.hidden=!v114AbilityStatus(p);return line;}));};})();
+</script>
+<script>
+/* Tutorial v1. UI/controller adapter only. The rule engine and card definitions are unchanged. */
+(function(){
+'use strict';
+const TEXT=[
+'チュートリアルを開始します。基本操作と1ターンの流れを説明します。',
+'勝利条件は、相手に合計5ダメージを与えることです。',
+'ターンは、準備、バトル、終了の順に進行します。',
+'手札は画面下部に表示されます。カードを1回選択すると詳細が表示されます。\nハイライトされたカードを1回選択してください。',
+'選択したカードをもう1回選択すると決定されます。\n1回目は確認、2回目は決定です。',
+'ATは攻撃力、DFは防御力、DPはダメージ数を示します。\n実際の数値は、基本値に効果による増減を加えた値です。',
+'準備フェイズでは、手札をゲージに配置します。\nハイライトされたカードをゲージに配置してください。',
+'ゲージへの配置が完了しました。サポートは準備フェイズで使用します。',
+'バトルフェイズでは、アタックカードを提出します。\nハイライトされたカードを選択し、もう1回選択して決定してください。',
+'ATが相手のDFを上回った場合、DPの値だけダメージが発生します。',
+'ダメージが発生しました。処理の内訳はログに記録されます。',
+'相手の攻撃に対しては、防御カードを提出します。\nハイライトされたカードで防御してください。',
+'DFが相手のAT以上の場合、ダメージは発生しません。',
+'重撃は、数値を加算して結果を変更する処理です。\n成功に必要な値は画面に表示されます。同値の場合は攻撃側が優先されます。',
+'重撃を実行してください。ハイライトされた操作を行ってください。',
+'重撃により結果が変更されました。',
+'終了フェイズへ進行します。進行ボタンとパスも、\n2回選択で決定されます。',
+'チュートリアルは以上です。'];
+const CHAPTERS=['開始と目的','画面と操作','準備フェイズ','バトル（攻撃）','バトル（防御）と重撃','終了'];
+const ACTIONS=new Set([4,7,9,10,12,15,17]);const STORAGE='uvs.tutorial.completed.v1';
+const ui=window.UVS_TUTORIAL_UI;
+const original={render,startScreen,newGame,canUndo,undoTarget,doUndo,autoCopy,replayText,fullLogText,showLog};
+const T={active:false,step:0,generation:0,waiters:new Set(),trace:[],scenes:[],mistakes:0,text:TEXT,chapters:CHAPTERS,goal:1,ids:{},advanced:new Set()};
+window.UVS_TUTORIAL=T;
+function interrupted(){const e=new Error('Tutorial cancelled');e.tutorialCancelled=true;return e;}
+function check(token){if(!T.active||token!==T.generation)throw interrupted();}
+function notify(){for(const fn of [...T.waiters])fn();}
+function until(predicate,token){check(token);if(predicate())return Promise.resolve();return new Promise((resolve,reject)=>{const fn=()=>{try{check(token);if(!predicate())return;T.waiters.delete(fn);resolve();}catch(e){T.waiters.delete(fn);reject(e);}};T.waiters.add(fn);});}
+function safe(promise,token){return new Promise((resolve,reject)=>{const cancel=()=>{try{check(token);}catch(e){T.waiters.delete(cancel);reject(e);}};T.waiters.add(cancel);Promise.resolve(promise).then(v=>{T.waiters.delete(cancel);try{check(token);resolve(v);}catch(e){reject(e);}},e=>{T.waiters.delete(cancel);reject(e);});});}
+function go(step){T.step=step;T.hint='';T.trace.push(step);if(step>=T.goal){render();paint();}notify();}
+async function gate(step,token){check(token);go(step);if(step<T.goal)return;await until(()=>T.advanced.has(step),token);}
+function desired(name,p=P[0]){const c=p.hand.find(c=>c.name===name);if(!c)throw Error('Missing practice card: '+name);return c;}
+function cleanText(s){for(const name of new Set(P.map(p=>p.charName)))s=s.split(name).join('練習');return s;}
+function fault(){T.mistakes++;T.hint='対象が違います。ハイライトされたカードを選択してください。';paint();}
+function next(){if(!T.active)return;const n=T.step;if(ACTIONS.has(n))return;if(n===18){finish(true);return;}if(n===5&&ui.peek){T.hint='詳細を閉じてから「次へ」を選択してください。';paint();return;}ui.closeCardPeek();closeOv();T.advanced.add(n);notify();}
+function targets(){const step=T.step,find=sel=>[...document.querySelectorAll(sel)];if(step===2)return find('.nv-info [data-zone="damage"]');if([4,7,9,12,15].includes(step)){if(step===7&&G.prompt&&!G.prompt.spec.cards)return find('.nv-choice [data-bi="0"]');const id=T.ids[step===4||step===7?'gauge':step===9?'attack':step===12?'defense':'heavy'];return find('#nvhand [data-uid="'+id+'"]');}if(step===6)return find('#cardpeek .uvs-detail-stats,#cardpeek .uvs-detail-meta');if(step===11)return find('#tut-log').length?find('#tut-log'):find('#nvrecent');if(step===14)return find('.nv-totals');if(step===17)return find('#nvhand [data-bi="0"]');return [];}
+function neutralize(){if(!T.active)return;document.body.classList.add('tutorial-active');const chars=[...document.querySelectorAll('#app .nv-char')];for(const el of chars){const p=P[el.classList.contains('flip')?1:0];el.removeAttribute('data-uid');el.removeAttribute('data-charv');el.innerHTML='<div class="tut-neutral">練習エリア<br><strong>AT '+charAT(p)+' / DF '+charDF(p)+'</strong></div>';}
+const ability=document.getElementById('v114-abilities');if(ability)ability.hidden=true;
+const head=document.querySelector('.nv-bar');if(head){for(const id of ['btnreset','btnresult','btnturn'])head.querySelector('#'+id)?.remove();const undo=head.querySelector('#btnundo');if(undo){undo.disabled=!canUndo();undo.title='直前の練習操作をやり直します';}}
+const recent=document.getElementById('nvrecent');if(recent)recent.textContent=cleanText(G.log.at(-1)?.s||'練習専用ログ');
+const prompt=document.getElementById('nvprompt');if(prompt)prompt.textContent=cleanText(prompt.textContent);
+}
+function paint(){if(!T.active)return;let panel=document.getElementById('tut-guide');if(!panel){panel=document.createElement('section');panel.id='tut-guide';panel.setAttribute('aria-label','チュートリアル');panel.setAttribute('role','region');document.body.appendChild(panel);}const n=T.step,chapter=n<=3?0:n<=6?1:n<=8?2:n<=11?3:n<=16?4:5;const disabled=ACTIONS.has(n)||(n===5&&!!ui.peek)||n<T.goal;
+const note=n===13?'※同値は攻撃側優先です。防御成功にはDFがATを上回る必要があります。':n===14&&G.bs?'現在 AT '+G.bs.at+' / DF '+G.bs.df+'。成功まで AT+'+Math.max(0,G.bs.df-G.bs.at)+'。':n===8?'「1手戻す」で直前の練習操作をやり直せます。':'';
+panel.innerHTML='<div class="tut-progress">ステップ '+n+' / 18　'+CHAPTERS[chapter]+' <small>練習盤面 '+(T.scene||1)+'</small></div><p id="tut-message" aria-live="polite"></p>'+(note?'<p class="tut-note"></p>':'')+'<p class="tut-hint" aria-live="polite"></p><div class="tut-controls"><button data-tut="back" '+(n<=1?'disabled':'')+'>戻る</button>'+(n===5?'<button data-tut="close-detail">詳細を閉じる</button>':'')+'<button data-tut="next" '+(disabled?'disabled':'')+'>'+(n===18?'キャラ選択へ戻る':'次へ')+'</button><button data-tut="skip">スキップ</button><button data-tut="exit">終了</button></div>';
+panel.querySelector('#tut-message').textContent=TEXT[n-1]||'';if(note)panel.querySelector('.tut-note').textContent=note;panel.querySelector('.tut-hint').textContent=T.hint||'';
+for(const el of document.querySelectorAll('.tut-target'))el.classList.remove('tut-target');const els=targets();for(const el of els)el.classList.add('tut-target');
+if(els[0]&&[4,7,9,12,15,17].includes(n)){const hand=document.getElementById('nvhand');if(hand&&hand.contains(els[0])){const card=els[0].getBoundingClientRect(),hr=hand.getBoundingClientRect();if(card.left<hr.left||card.right>hr.right)hand.scrollLeft+=card.left-hr.left-12;}}
+panel.classList.remove('tut-top');const bottom=panel.getBoundingClientRect(),hand=document.getElementById('nvhand')?.getBoundingClientRect();if((hand&&bottom.bottom>hand.top&&bottom.top<hand.bottom)||els.some(el=>{const r=el.getBoundingClientRect();return r.bottom>bottom.top&&r.top<bottom.bottom;}))panel.classList.add('tut-top');
+const top=document.querySelector('#app .nv-bar')?.getBoundingClientRect().bottom||0;panel.style.setProperty('--tut-top',Math.max(8,top+5)+'px');
+let shade=document.getElementById('tut-shade');if(!shade){shade=document.createElementNS('http://www.w3.org/2000/svg','svg');shade.id='tut-shade';shade.setAttribute('aria-hidden','true');document.body.appendChild(shade);}shade.setAttribute('viewBox','0 0 '+innerWidth+' '+innerHeight);const rects=els.map(el=>{const r=el.getBoundingClientRect();return '<rect x="'+(r.x-5)+'" y="'+(r.y-5)+'" width="'+(r.width+10)+'" height="'+(r.height+10)+'" rx="7" fill="black"/>';}).join('');shade.innerHTML='<defs><mask id="tut-cut"><rect width="100%" height="100%" fill="white"/>'+rects+'</mask></defs><rect width="100%" height="100%" fill="rgba(0,0,0,.58)" mask="url(#tut-cut)"/>';
+}
+function afterInteraction(){if(!T.active)return;if(T.step===4&&ui.peek&&ui.pick==='c'+T.ids.gauge)notify();paint();}
+window.addEventListener('click',e=>{if(!T.active)return;const b=e.target.closest('[data-tut]');if(b){e.preventDefault();e.stopImmediatePropagation();if(b.disabled)return;const action=b.dataset.tut;if(action==='next')next();else if(action==='back')restart(Math.max(1,T.step-1));else if(action==='close-detail'){ui.closeCardPeek();UI.pick=null;paint();}else finish(false);return;}
+if(T.step===5&&ui.peek&&!e.target.closest('.cardpeek-panel')){e.preventDefault();e.stopImmediatePropagation();ui.closeCardPeek();UI.pick=null;paint();return;}
+const allowed=targets().some(el=>el===e.target||el.contains(e.target))||e.target.closest('#btnundo')&&!document.getElementById('btnundo')?.disabled||(T.step===11&&e.target.closest('#ovclose'));
+if(!allowed){e.preventDefault();e.stopImmediatePropagation();fault();return;}queueMicrotask(afterInteraction);
+},true);
+window.addEventListener('keydown',e=>{if(!T.active)return;if(e.key==='Escape'){e.preventDefault();finish(false);return;}if((e.key==='Enter'||e.key===' ')&&e.target.matches('.nv-pass[role="button"]')){e.preventDefault();e.target.click();}},true);
+window.addEventListener('resize',()=>{if(T.active)paint();});window.visualViewport?.addEventListener('resize',()=>{if(T.active)paint();});
+function exercise(scene,token){check(token);T.scene=scene;const controller=makeController(scene,token);setupGame({mode:'tutorial',decks:T.keys,ctls:[controller,controller],ai:[false,true],first:scene===2?1:0,delay:0,rng:Replay.mulberry32(1141801),hooks:{render:()=>{check(token);render();},phase:async phase=>{check(token);if(scene===3&&phase==='end'){go(17);if(T.goal<=17)await safe(uiPrompt(0,{title:'終了フェイズ：ターン終了を2回選択',cards:[],buttons:[{value:'end',label:'ターン終了',primary:true}]}),token);}},turnStart:async()=>{check(token);if(scene===3&&G.cur===1){go(18);await until(()=>false,token);}},showResult:async bs=>{check(token);T.scenes.push({scene,success:bs.success,at:bs.at,df:bs.df,damage:P.map(p=>p.damage.length),heavy:bs.atk.heavy.length});if(scene===1){if(!bs.success||P[1].damage.length!==1)throw Error('Practice attack mismatch');await gate(11,token);}else if(scene===2){if(bs.success||P[0].damage.length)throw Error('Practice defense mismatch');await gate(13,token);}else{if(!bs.success||bs.atk.heavy.length!==1)throw Error('Practice heavy mismatch');await gate(16,token);}}}});
+G.tutorial=true;G.viewer=0;G.replaying=true;G.meta={ctl:['H','T'],decks:T.keys};G.log=[];G.turn=0;REC={ops:[],marks:[]};
+const pool=['天刃','ミドルキック','凪','省刃','紅閃','はじめのチョップ','ドラゴンダンス','連刃','飛塵','クナイ投擲'];
+for(const p of P){p.name=p.idx?'相手側':'操作側';p.hand=[];p.deck=pool.flatMap(name=>Array.from({length:3},()=>inst(CARDS[name])));p.gYo=[];p.gIn=[];p.discard=[];p.damage=[];p.flags={};}
+const take=(p,name,zone='hand')=>{const c=p.deck.find(x=>x.name===name);if(!c)throw Error('Practice pool exhausted '+name);rm(p.deck,c);p[zone].push(c);return c;};
+if(scene===1){T.ids.gauge=take(P[0],'天刃').uid;T.ids.attack=take(P[0],'ミドルキック').uid;take(P[0],'凪');take(P[0],'省刃');take(P[1],'クナイ投擲');}
+if(scene===2){T.ids.defense=take(P[0],'凪').uid;take(P[0],'ミドルキック');take(P[0],'天刃','gYo');take(P[1],'クナイ投擲');}
+if(scene===3){T.ids.attack=take(P[0],'ミドルキック').uid;T.ids.heavy=take(P[0],'天刃').uid;take(P[0],'凪');take(P[0],'紅閃','gYo');take(P[1],'凪');take(P[1],'紅閃','gYo');}
+// Stable draw order, using only real cards; practice overrides neither card definitions nor normal decks.
+for(const p of P){const front=p.deck.filter(c=>c.name==='ミドルキック');p.deck=[...front,...p.deck.filter(c=>c.name!=='ミドルキック')];}
+render();}
+function makeController(scene,token){let prepStarted=false;return{
+async prepAction(p,opts,ctx){check(token);if(p.idx||scene!==1)return{type:'go'};if(!p.flags.gauge){
+let action;go(4);if(T.goal<=7){action=safe(Human.prepAction(p,opts,ctx),token);action.catch(()=>{});}if(T.goal<=4)await until(()=>!!ui.peek&&ui.pick==='c'+T.ids.gauge,token);
+await gate(5,token);if(T.goal<=6){ui.showCardPeek(desired('ミドルキック'));paint();}await gate(6,token);ui.closeCardPeek();UI.pick=null;go(7);
+if(T.goal>7)return{type:'gauge',card:desired('天刃'),gauge:'yo'};const r=await action;if(r.type!=='gauge'||r.card.uid!==T.ids.gauge||r.gauge!=='yo')throw Error('Invalid guided gauge action');return r;
+}await gate(8,token);go(9);return{type:'go'};},
+async chooseGauge(p,c){check(token);if(scene===1&&p.idx===0&&T.step===7)return safe(Human.chooseGauge(p,c),token);return'yo';},
+async attack(p,usable){check(token);if(scene===1){go(9);const c=T.goal>9?desired('ミドルキック'):await safe(Human.attack(p,usable,null),token);if(!c||c.uid!==T.ids.attack)throw Error('Invalid guided attack');go(10);return c;}return desired(scene===2?'クナイ投擲':'ミドルキック',p);},
+async defend(p,usable,info){check(token);if(scene===2&&p.idx===0){go(12);return T.goal>12?desired('凪'):safe(Human.defend(p,usable,info),token);}return desired(scene===3?'凪':'クナイ投擲',p);},
+async heavy(p,elig,ctx){check(token);if(scene===3&&p.idx===0){await gate(14,token);go(15);return T.goal>15?desired('天刃'):safe(Human.heavy(p,elig,ctx),token);}return null;},
+async chain(){check(token);return null;},async pickCards(p,cards,n){check(token);return cards.slice(0,n);}
+};}
+async function run(token){try{exercise(1,token);await gate(1,token);await gate(2,token);await gate(3,token);await safe(turn(0),token);check(token);exercise(2,token);await safe(turn(1),token);check(token);exercise(3,token);await safe(turn(0),token);await safe(turn(1),token);}catch(e){if(e.tutorialCancelled)return;T.error=String(e.message);T.hint='練習を続行できません。「終了」で戻り、再開してください。';paint();}}
+function restart(step){if(!T.active)return;T.generation++;notify();G.prompt=null;ui.closeCardPeek();closeOv();T.goal=step;T.advanced=new Set();T.error=null;T.ids={};const token=T.generation;void run(token);}
+function begin(){if(T.active)return;const selected=Number(document.querySelector('[data-roster][aria-pressed="true"]')?.dataset.roster||0);T.keys=[START_ROSTER[selected%START_ROSTER.length].key,START_ROSTER[(selected+1)%START_ROSTER.length].key];T.saved={anim:SETTINGS.anim,autoCopy:SETTINGS.autoCopy,rec:REC};SETTINGS.anim='off';SETTINGS.autoCopy=false;UI.pick=null;T.active=true;T.trace=[];T.scenes=[];T.mistakes=0;closeResult();document.getElementById('banner').className='';restart(1);}
+function finish(completed){if(!T.active)return;if(completed&&T.step!==18)return;if(completed){try{localStorage.setItem(STORAGE,JSON.stringify({completed:true,version:1,at:new Date().toISOString()}));}catch{T.storageUnavailable=true;}}
+T.active=false;T.generation++;notify();G.prompt=null;ui.closeCardPeek();closeOv();document.getElementById('tut-guide')?.remove();document.getElementById('tut-shade')?.remove();document.body.classList.remove('tutorial-active');for(const el of document.querySelectorAll('.tut-target'))el.classList.remove('tut-target');SETTINGS.anim=T.saved.anim;SETTINGS.autoCopy=T.saved.autoCopy;REC=T.saved.rec;startScreen();}
+T.begin=begin;T.finish=()=>finish(false);T.restart=restart;T.completed=()=>{try{return JSON.parse(localStorage.getItem(STORAGE)||'null')?.completed===true;}catch{return false;}};
+render=function(){original.render();if(T.active){neutralize();paint();}};
+startScreen=function(){if(T.active){finish(false);return;}original.startScreen();const header=document.querySelector('.uvs-select>header');if(header&&!document.getElementById('uvs-tutorial')){const b=document.createElement('button');b.id='uvs-tutorial';b.textContent='チュートリアル';b.dataset.completed=String(T.completed());b.title=T.completed()?'完了済み。再受講できます。':'基本操作を練習します';b.onclick=begin;header.appendChild(b);}};
+newGame=function(){if(T.active)finish(false);return original.newGame.apply(this,arguments);};
+canUndo=function(){return T.active?[8,9,11,12,13,14,15,16,17].includes(T.step):original.canUndo();};
+undoTarget=function(kind){return T.active?(canUndo()?0:-1):original.undoTarget(kind);};
+doUndo=function(kind){if(!T.active)return original.doUndo(kind);if(!canUndo())return;restart(T.step<=9?7:T.step<=12?9:T.step<=14?12:15);};
+autoCopy=function(){if(G.tutorial)return;return original.autoCopy.apply(this,arguments);};
+replayText=function(){return G.tutorial?'':original.replayText();};
+fullLogText=function(){return G.tutorial?'[チュートリアル専用・再現ログ保存対象外]\n'+G.log.map(x=>cleanText(x.s)).join('\n'):original.fullLogText();};
+showLog=function(){if(!G.tutorial)return original.showLog();openOv('<h2>練習専用ログ</h2><pre id="tut-log" class="log"></pre>');document.getElementById('tut-log').textContent=fullLogText();if(T.active)paint();};
+startScreen();
+})();
+
 </script>
 </body>
 </html>
