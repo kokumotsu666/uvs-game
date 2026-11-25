@@ -96,7 +96,7 @@ td,th{border-bottom:1px solid var(--line);padding:3px 4px;text-align:left;vertic
 #actions .hand{max-height:140px}
 .battle .tot{font-variant-numeric:tabular-nums}
 @media(max-width:375px){.power{min-width:64px;padding:3px 4px}.power .power-num{font-size:16px}.char-panel{gap:4px}.card{width:98px}}
-@media(prefers-reduced-motion:reduce){.power.changed{animation:none}}
+@media(prefers-reduced-motion:reduce){body[data-motion-mode="reduce"] .power.changed{animation:none}}
 /* v1.6 UI: デュエルリンクス風。相手は上で小さく、自分は下。ATK/DEFの横にそのバトルの札。ターン・フェイズ演出 */
 header{padding:4px 8px;gap:5px;flex-wrap:wrap}
 header h1{font-size:12px;flex:none;white-space:nowrap}
@@ -141,7 +141,7 @@ header button:disabled{opacity:.35}
 #banner.theirs .band{background:linear-gradient(90deg,transparent,rgba(170,50,50,.95) 15%,rgba(170,50,50,.95) 85%,transparent)}
 #banner.phase .band{font-size:18px;padding:8px 0}
 @keyframes band-in{0%{transform:translateX(60%);opacity:0}18%{transform:translateX(0);opacity:1}78%{transform:translateX(0);opacity:1}100%{transform:translateX(-60%);opacity:0}}
-@media(prefers-reduced-motion:reduce){#banner .band{animation:none}}
+@media(prefers-reduced-motion:reduce){body[data-motion-mode="reduce"] #banner .band{animation:none}}
 /* テキストで強化された数値：通常は細字、強化分を含む値だけ太字＋色 */
 .card .st{font-weight:500}
 .card .st b.up{font-weight:900;color:#ffd36b}
@@ -265,7 +265,7 @@ body:has(.uvs-select){
 .uvs-scroll .btns{justify-content:center}
 .uvs-select[data-motion="off"] .uvs-roster img{transition:none}
 @media(max-height:440px) and (orientation:landscape){.uvs-select{gap:6px}.uvs-select-hero{min-height:130px}.uvs-roster-art{height:90px}}
-@media(prefers-reduced-motion:reduce){.uvs-select-hero.fade :is(img,.uvs-select-copy),.uvs-scroll.animated{animation:none}.uvs-roster-art img{transition:none}}
+@media(prefers-reduced-motion:reduce){body[data-motion-mode="reduce"] .uvs-select-hero.fade :is(img,.uvs-select-copy),body[data-motion-mode="reduce"] .uvs-scroll.animated{animation:none}body[data-motion-mode="reduce"] .uvs-roster-art img{transition:none}}
 
 .uvs-select[data-motion="short"] .uvs-select-hero.fade :is(img,.uvs-select-copy){animation-duration:85ms}
 .uvs-select[data-motion="short"] .uvs-roster img{transition-duration:75ms}
@@ -409,7 +409,7 @@ body:not(:has(#overlay.on,#cardpeek)) .nv-center[data-impact] .nv-totals{z-index
 .uvs-result.intro .uvs-result-actions{animation:uvs-result-in calc(.12s * var(--intro-tempo)) ease-out calc(1.3s * var(--intro-tempo)) both}
 @keyframes uvs-result-in{from{opacity:0}to{opacity:1}}
 @keyframes uvs-result-art-in{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
-@media(prefers-reduced-motion:reduce){.uvs-result.intro,.uvs-result.intro :is(.uvs-result-heading,.uvs-result-art,.uvs-result-summary,.uvs-result-actions){animation:none}}
+@media(prefers-reduced-motion:reduce){body[data-motion-mode="reduce"] .uvs-result.intro,body[data-motion-mode="reduce"] .uvs-result.intro :is(.uvs-result-heading,.uvs-result-art,.uvs-result-summary,.uvs-result-actions){animation:none}}
 #fx .fx-battle-card,#fx .fx-battle-stack,#fx .fx-battle-impact{position:absolute;pointer-events:none;z-index:2}
 body:has(#overlay.on,#cardpeek) #fx :is(.fx-battle-card,.fx-battle-stack,.fx-battle-impact){visibility:hidden}
 #fx .fx-battle-impact{width:90px;height:90px;border-radius:50%;background:radial-gradient(circle,#fff,#ffd18390 24%,transparent 67%);mix-blend-mode:screen}
@@ -493,7 +493,7 @@ body:has(#app.nv){
 .nv-recent > span[data-event="result"]{--recent-event:#ffe19a}
 .nv-recent > span.recent-new{animation:recent-line-in 180ms ease-out both}
 @keyframes recent-line-in{from{opacity:.35}to{opacity:1}}
-@media(prefers-reduced-motion:reduce){.nv-recent > span.recent-new{animation:none}}
+@media(prefers-reduced-motion:reduce){body[data-motion-mode="reduce"] .nv-recent > span.recent-new{animation:none}}
 /* The printed frame and its contents share the same 3:4 box. */
 .card.card-frame{padding:0;border:0;background:none}
 .tech-card.c閃{--tech-art:url("./assets/cards/sen.webp");--tech-color:var(--sen)}
@@ -531,7 +531,7 @@ body:has(#app.nv){
 <style>#tut-guide{position:fixed;z-index:30002;left:50%;transform:translateX(-50%);bottom:max(8px,env(safe-area-inset-bottom));width:min(620px,calc(100% - 16px));padding:10px 12px;color:#f5f6fb;background:#18212ff7;border:1px solid #e3bf6d;border-radius:10px;box-shadow:0 5px 20px #0009;font-size:13px;line-height:1.45;max-height:45dvh;overflow:auto}#tut-guide.tut-top{bottom:auto;top:var(--tut-top,42px)}#tut-guide p{margin:6px 0;white-space:pre-line}.tut-progress{color:#f4d598;font-size:12px}.tut-progress small{float:right;color:#b6c3d9}.tut-controls{display:flex;gap:6px;flex-wrap:wrap}.tut-controls button{padding:8px 10px;min-height:40px;flex:1;white-space:nowrap}.tut-controls [data-tut=next]{border-color:#e3bf6d;background:#594321}.tut-note,.tut-hint{font-size:11px;color:#ffdf92}.tut-hint:empty{display:none}#tut-shade{position:fixed;inset:0;width:100vw;height:100dvh;z-index:30000;pointer-events:none}.tut-target{outline:3px solid #ffda63!important;outline-offset:2px}.tutorial-active #cardpeek{z-index:29990}.tut-neutral{height:100%;min-height:65px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(150deg,#324358,#17222d);font-size:12px;color:#e3e8f0;text-align:center}.tutorial-active .nv-char{background:#1a2736}.tutorial-active .nv-char .tut-neutral strong{font-size:11px}.tutorial-active #v114-abilities{display:none!important}.tutorial-active .nv-bar{flex-wrap:wrap}.uvs-select>header{flex-wrap:wrap}.uvs-select>header #uvs-tutorial{white-space:nowrap}@media(max-height:700px){#tut-guide{font-size:12px;padding:7px 10px}.tut-controls button{min-height:36px;padding:6px}.tut-progress{font-size:11px}#tut-guide p{margin:4px 0}}
 #tut-log{white-space:pre-wrap;overflow-wrap:anywhere;max-height:35dvh;overflow:auto}
 </style>
-<style>#fx45{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:45}.fx45-pulse{position:absolute;border:2px solid #ffe187;border-radius:7px;pointer-events:none;box-sizing:border-box}.fx45-pulse.target{border-color:#8bcdff}.fx45-cardghost,.fx45-flip{position:absolute;pointer-events:none;transform-origin:center;overflow:hidden}.fx45-cardghost>.card{width:100%;height:100%;margin:0}.fx45-flip{transform-style:preserve-3d;overflow:visible}.fx45-front,.fx45-back{position:absolute;inset:0;backface-visibility:hidden}.fx45-back{transform:rotateY(180deg)}.fx45-front>*{width:100%!important;height:100%!important}.fx45-back .card{width:100%;height:100%}.nv-played.fx45-revealing .nv-stack{visibility:hidden}.fx45-damage{position:absolute;display:flex;align-items:center;justify-content:center;color:#ff736c;font-size:42px;font-weight:950;text-shadow:0 2px 3px #000,0 0 10px #b11;pointer-events:none}#fx45-notice{position:fixed;left:50%;top:max(47px,calc(env(safe-area-inset-top) + 43px));transform:translateX(-50%);z-index:46;width:min(460px,calc(100vw - 20px));padding:7px 10px;text-align:left;background:#202a39f2;border:1px solid #dfba63;border-radius:7px;box-shadow:0 4px 12px #0008;min-height:45px;overflow:hidden}#fx45-notice strong,#fx45-notice span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#fx45-notice strong{font-size:12px;color:#ffdfa0}#fx45-notice span{font-size:11px;color:#f3f4fa}#fx45-skip{position:fixed;right:max(7px,env(safe-area-inset-right));bottom:max(7px,env(safe-area-inset-bottom));z-index:47;min-height:30px;padding:4px 7px;font-size:10px;opacity:.83}#fx45-notice[hidden],#fx45-skip[hidden]{display:none!important}.nv-totals{align-items:flex-start;white-space:normal;gap:8px}.nv-totals .combatant{flex:1}.fx45-breakdown{display:flex;flex-wrap:wrap;justify-content:center;gap:1px 4px;max-width:165px;font-size:9px;line-height:1.3;font-weight:500;color:#d6dce8;text-shadow:0 1px 2px #111;overflow-wrap:anywhere}.fx45-breakdown span:not(:last-child):after{content:'＋';color:#aab0bd;margin-left:2px}.fx45-breakdown .effect{color:#aef29a;font-weight:800}.fx45-breakdown .heavy{color:#ffd888;font-weight:800}#banner{top:max(7px,env(safe-area-inset-top));z-index:44}#banner .band{padding:7px 12px;font-size:18px;width:min(580px,calc(100vw - 16px));border-radius:7px}#banner .band small{font-size:10px}#banner.phase .band{font-size:14px;padding:6px 12px}#banner.mine .band{background:linear-gradient(90deg,#253e70bb,#365f9ee0,#253e70bb)}#banner.theirs .band{background:linear-gradient(90deg,#6f2828bb,#8d3d3de0,#6f2828bb)}body:has(#banner.on) #fx45-notice{top:max(72px,calc(env(safe-area-inset-top) + 66px))}@media(max-width:375px){.fx45-breakdown{font-size:8px}.nv-totals b{font-size:25px}#fx45-notice{min-height:40px;padding:5px 8px}}@media(prefers-reduced-motion:reduce){#fx45,#fx45-notice,#fx45-skip{display:none!important}}
+<style>#fx45{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:45}.fx45-pulse{position:absolute;border:2px solid #ffe187;border-radius:7px;pointer-events:none;box-sizing:border-box}.fx45-pulse.target{border-color:#8bcdff}.fx45-cardghost,.fx45-flip{position:absolute;pointer-events:none;transform-origin:center;overflow:hidden}.fx45-cardghost>.card{width:100%;height:100%;margin:0}.fx45-flip{transform-style:preserve-3d;overflow:visible}.fx45-front,.fx45-back{position:absolute;inset:0;backface-visibility:hidden}.fx45-back{transform:rotateY(180deg)}.fx45-front>*{width:100%!important;height:100%!important}.fx45-back .card{width:100%;height:100%}.nv-played.fx45-revealing .nv-stack{visibility:hidden}.fx45-damage{position:absolute;display:flex;align-items:center;justify-content:center;color:#ff736c;font-size:42px;font-weight:950;text-shadow:0 2px 3px #000,0 0 10px #b11;pointer-events:none}#fx45-notice{position:fixed;left:50%;top:max(47px,calc(env(safe-area-inset-top) + 43px));transform:translateX(-50%);z-index:46;width:min(460px,calc(100vw - 20px));padding:7px 10px;text-align:left;background:#202a39f2;border:1px solid #dfba63;border-radius:7px;box-shadow:0 4px 12px #0008;min-height:45px;overflow:hidden}#fx45-notice strong,#fx45-notice span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#fx45-notice strong{font-size:12px;color:#ffdfa0}#fx45-notice span{font-size:11px;color:#f3f4fa}#fx45-skip{position:fixed;right:max(7px,env(safe-area-inset-right));bottom:max(7px,env(safe-area-inset-bottom));z-index:47;min-height:30px;padding:4px 7px;font-size:10px;opacity:.83}#fx45-notice[hidden],#fx45-skip[hidden]{display:none!important}.nv-totals{align-items:flex-start;white-space:normal;gap:8px}.nv-totals .combatant{flex:1}.fx45-breakdown{display:flex;flex-wrap:wrap;justify-content:center;gap:1px 4px;max-width:165px;font-size:9px;line-height:1.3;font-weight:500;color:#d6dce8;text-shadow:0 1px 2px #111;overflow-wrap:anywhere}.fx45-breakdown span:not(:last-child):after{content:'＋';color:#aab0bd;margin-left:2px}.fx45-breakdown .effect{color:#aef29a;font-weight:800}.fx45-breakdown .heavy{color:#ffd888;font-weight:800}#banner{top:max(7px,env(safe-area-inset-top));z-index:44}#banner .band{padding:7px 12px;font-size:18px;width:min(580px,calc(100vw - 16px));border-radius:7px}#banner .band small{font-size:10px}#banner.phase .band{font-size:14px;padding:6px 12px}#banner.mine .band{background:linear-gradient(90deg,#253e70bb,#365f9ee0,#253e70bb)}#banner.theirs .band{background:linear-gradient(90deg,#6f2828bb,#8d3d3de0,#6f2828bb)}body:has(#banner.on) #fx45-notice{top:max(72px,calc(env(safe-area-inset-top) + 66px))}@media(max-width:375px){.fx45-breakdown{font-size:8px}.nv-totals b{font-size:25px}#fx45-notice{min-height:40px;padding:5px 8px}}@media(prefers-reduced-motion:reduce){body[data-motion-mode="reduce"] #fx45,body[data-motion-mode="reduce"] #fx45-notice,body[data-motion-mode="reduce"] #fx45-skip{display:none!important}}
 
 .nv-bar{flex-wrap:wrap}#fx45-skip{position:static;right:auto;bottom:auto;margin-left:auto;flex:none;min-height:28px}body:has(#overlay.on,#cardpeek) #fx45,body:has(#overlay.on,#cardpeek) #fx45-notice{visibility:hidden}
 
@@ -541,7 +541,7 @@ body:has(#app.nv){
 .tut-controls[hidden]{display:none!important}
 .detail47-card{-webkit-text-size-adjust:100%;text-size-adjust:100%}.detail47-card .uvs-detail-text{height:auto;overflow:visible;display:block}
 </style><style>#motion48-status{font-size:10px;padding:4px 7px;min-height:28px;border-color:#8abca0}#motion48-status[data-enabled=false]{border-color:#d4b267;color:#ffe0a1}.motion48-demo{position:relative;height:105px;width:100%;overflow:hidden;background:#0d1725;border:1px solid #50627b;border-radius:8px;margin:12px 0}.motion48-demo-card{position:absolute;left:12px;top:24px;width:44px;height:60px;display:grid;place-items:center;border:2px solid #d5b260;border-radius:6px;background:repeating-linear-gradient(45deg,#3e3521,#3e3521 6px,#68542c 6px,#68542c 9px);font-size:10px;font-weight:bold;transform-origin:center}.motion48-demo-number{position:absolute;left:160px;top:28px;font-size:28px;font-weight:bold;color:#ff8677;opacity:0}
-</style></head>
+</style><style>body[data-motion-mode="off"] .power.changed{animation:none}body[data-motion-mode="off"] #banner .band{animation:none}body[data-motion-mode="off"] .uvs-select-hero.fade :is(img,.uvs-select-copy),body[data-motion-mode="off"] .uvs-scroll.animated{animation:none}body[data-motion-mode="off"] .uvs-roster-art img{transition:none}body[data-motion-mode="off"] .uvs-result.intro,body[data-motion-mode="off"] .uvs-result.intro :is(.uvs-result-heading,.uvs-result-art,.uvs-result-summary,.uvs-result-actions){animation:none}body[data-motion-mode="off"] .nv-recent > span.recent-new{animation:none}body[data-motion-mode="off"] #fx45,body[data-motion-mode="off"] #fx45-notice,body[data-motion-mode="off"] #fx45-skip{display:none!important}</style><style>body[data-motion-mode="off"] #fx45,body[data-motion-mode="off"] #fx45-notice,body[data-motion-mode="off"] #fx45-skip{display:none!important}</style></head>
 <body>
 <div id="app"></div>
 <div id="overlay"></div>
@@ -2104,7 +2104,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=Solver; else root.
    - 記録は人間・CPUの区別なく全判断を含む。再生は記録を使い切ったら
      元のコントローラ（人間／CPU）に引き継ぐ（＝ログからの再開）
    ========================================================= */
-const UI_VER='演出v4.8';
+const UI_VER='演出v4.9';
 (function(root){
 const LOG_VERSION='v'+CONFIG.ruleVersion;
 
@@ -2347,7 +2347,9 @@ function copyText(t,btn,cb){const done=ok=>{if(btn){btn.textContent=ok?'コピ�
   try{navigator.clipboard.writeText(t).then(()=>done(true),()=>fallback());}catch(e){fallback();}
   function fallback(){try{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();const ok=document.execCommand('copy');document.body.removeChild(ta);done(ok);}catch(e){done(false);}}}
 /* ---------- 再現ログ ---------- */
-const SETTINGS={autoCopy:true,anim:'normal'};
+const SETTINGS={autoCopy:true,anim:'normal',respectMotion:false};
+function uvsReducedMotion(){return SETTINGS.respectMotion===true&&!!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;}
+function uvsSyncMotion(settings=SETTINGS){document.body.dataset.motionMode=settings.anim==='off'?'off':settings.respectMotion===true&&!!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches?'reduce':'on';}
 let REC={ops:[]};
 function replayText(){return Replay.build(G.meta,P,CONFIG,REC.ops);}
 function fullLogText(){return G.log.map(l=>l.s).join('\n')+'\n\n'+replayText();}
@@ -2364,7 +2366,7 @@ function powerBox(p,kind,value){
  return `<div class="power ${kind.toLowerCase()} ${changed?'changed':''}"><span class="power-label">${kind}</span><span class="power-num" data-power="${key}" data-from="${changed?prev:value}" data-to="${value}">${value}</span><span class="power-delta">${delta>0?'+'+delta:delta<0?String(delta):'&nbsp;'}</span></div>`;
 }
 function animatePowers(){
- const reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const reduced=SETTINGS.anim==='off'||uvsReducedMotion();
  document.querySelectorAll('[data-power]').forEach(el=>{
    const from=Number(el.dataset.from),to=Number(el.dataset.to);
    if(from===to||reduced)return;
@@ -2476,7 +2478,7 @@ function showPowerDetail(p){
   openOv(h+'</div>');
 }
 // ターン開始・フェイズの帯（演出のみ。ゲームの進行は表示が終わるまで待つ）
-function bannerMs(kind){if(G.replaying||SETTINGS.anim==='off'||matchMedia('(prefers-reduced-motion: reduce)').matches)return 0;const ms=kind==='turn'?850:450;return SETTINGS.anim==='short'?Math.round(ms/2):ms;}
+function bannerMs(kind){if(G.replaying||SETTINGS.anim==='off'||uvsReducedMotion())return 0;const ms=kind==='turn'?850:450;return SETTINGS.anim==='short'?Math.round(ms/2):ms;}
 async function showBanner(kind,text,sub){const ms=bannerMs(kind);if(!ms)return;window.UVS_BANNER_FINISH?.();const el=$('#banner');el.className='on '+(G.cur===bottomIdx()?'mine':'theirs')+(kind==='phase'?' phase':'');el.innerHTML='<div class="band" style="--bd:'+ms+'ms"></div>';const band=el.firstElementChild;band.textContent=text;if(sub){const small=document.createElement('small');small.textContent=sub;band.append(small);}await new Promise(resolve=>{let timer;const finish=()=>{clearTimeout(timer);if(window.UVS_BANNER_FINISH===finish)window.UVS_BANNER_FINISH=null;if(el.firstElementChild===band){el.className='';el.replaceChildren();}resolve();};window.UVS_BANNER_FINISH=finish;timer=setTimeout(finish,ms);});}
 function actionsHTML(){
   const pr=G.prompt;
@@ -2669,7 +2671,7 @@ function openResult(intro=false){
   });
 
   const motion=matchMedia('(prefers-reduced-motion: reduce)');
-  const animate=intro&&SETTINGS.anim!=='off'&&!motion.matches;
+  const animate=intro&&SETTINGS.anim!=='off'&&!uvsReducedMotion();
   const actions=dialog.querySelector('.uvs-result-actions');
   let timer;
   const reveal=()=>{
@@ -2730,7 +2732,7 @@ function startPortrait(entry,art=entry.selectArt){
 function startScreen(){
   const random=()=>Math.floor(Math.random()*START_ROSTER.length);
   const cursor=[random(),null];
-  const settings={mode:'cpu',first:'random',cpu:'solver',delay:900,anim:SETTINGS.anim,autoCopy:SETTINGS.autoCopy};
+  const settings={mode:'cpu',first:'random',cpu:'solver',delay:900,anim:SETTINGS.anim,autoCopy:SETTINGS.autoCopy,respectMotion:SETTINGS.respectMotion};
   let seat=0,starting=false;
   const app=$('#app');
   app.innerHTML=`<main class="uvs-select">
@@ -2753,9 +2755,10 @@ function startScreen(){
   const hero=screen.querySelector('.uvs-select-hero');
   const stage=screen.querySelector('.uvs-select-stage');
   const roster=[...screen.querySelectorAll('[data-roster]')];
-  const animate=()=>settings.anim!=='off'&&!matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const animate=()=>settings.anim!=='off'&&!(settings.respectMotion&&matchMedia('(prefers-reduced-motion: reduce)').matches);
 
   function paint(){
+    uvsSyncMotion(settings);
     const entry=START_ROSTER[cursor[seat]];
     screen.dataset.motion=settings.anim;
     stage.innerHTML=`<b>PLAYER ${seat+1} / ${seat===0?'自キャラを選択':'相手キャラを選択'}</b>
@@ -2830,6 +2833,7 @@ function startScreen(){
     starting=true;
     dismiss(false);
     SETTINGS.anim=settings.anim;
+    SETTINGS.respectMotion=settings.respectMotion;
     SETTINGS.autoCopy=settings.autoCopy;
     newGame(mode,decks[0],decks[1],first,settings.delay,cpu,replay);
   }
@@ -2866,6 +2870,8 @@ function startScreen(){
         <label>CPUの思考：<select name="cpu">${options([['solver','ソルバー（計測と同じ）'],['ai','経験則AI（旧）']],settings.cpu)}</select></label>
         <label>CPUの待ち時間：<select name="delay">${options([['400','短い'],['900','普通'],['1600','長い']],settings.delay)}</select></label>
         <label>演出（ターン・フェイズ／カード）：<select name="anim">${options([['normal','普通'],['short','短い'],['off','なし']],settings.anim)}</select></label>
+        <label><input type="checkbox" name="respectMotion" ${settings.respectMotion?'checked':''}> 端末の「動きを減らす」に従う（初期値OFF）</label>
+        <p class="small">初期値は端末設定に関係なく演出ありです。演出「なし」は常に停止します。</p>
         <label><input type="checkbox" name="autoCopy" ${settings.autoCopy?'checked':''}> ターン終了時にログを自動コピー</label>
       </form>`,'uvs-start-settings');
     panel.querySelector('form').onchange=e=>{
@@ -3257,7 +3263,7 @@ Human.attack=async function(p,usable,mode){
 // 仕組み：G.log に積まれる行から演出を作って順に再生する。次の判断（人間・CPUとも）の前に、演出が終わるのを待つ
 (function(){
 const FX={};window.FX=FX;
-const base=()=>{if(!G||G.replaying||SETTINGS.anim==='off'||matchMedia('(prefers-reduced-motion: reduce)').matches)return 0;return SETTINGS.anim==='short'?150:300;}; // 1演出0.3秒（短め設定は半分）
+const base=()=>{if(!G||G.replaying||SETTINGS.anim==='off'||uvsReducedMotion())return 0;return SETTINGS.anim==='short'?150:300;}; // 1演出0.3秒（短め設定は半分）
 let layer=null;function L(){if(!layer){layer=document.createElement('div');layer.id='fx';document.body.appendChild(layer);}return layer;}
 const pOf=s=>P.find(p=>s.startsWith(p.name+'：'));
 const rectOf=sel=>{const e=document.querySelector(sel);return e?e.getBoundingClientRect():null;};
@@ -3298,7 +3304,7 @@ async function pop(target,text,cls,ms,signal){ // 数字の横に小さく出す
   if(!target)return;const el=document.createElement('div');el.className='fx-pop '+(cls||'');el.textContent=text;place(el,target.left+target.width/2,target.top);L().appendChild(el);
   await anim(el,[{opacity:0,transform:'translate(-50%,0)'},{opacity:1,transform:'translate(-50%,-18px)'},{opacity:0,transform:'translate(-50%,-30px)'}],ms,signal);el.remove();}
 let fxSession=null;
-const reducedMotion=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+const reducedMotion=()=>uvsReducedMotion();
 const characterSnapshot=p=>({card:p.charDeck[0],damage:p.damage.length});
 function resetCharacters(keepNotices=false){
   const state=P.map(characterSnapshot);
@@ -3660,7 +3666,7 @@ startScreen();
 (function(){
 'use strict';
 const F={handlesMotion:true,history:[],metrics:{},animations:new Set(),elements:new Set(),queue:[],ready:false,epoch:0,positions:new Map(),cards:new Map(),revealing:new Set(),publication:Promise.resolve()};window.UVS_FX45=F;
-const enabled=()=>F.ready&&G===F.game&&!G.replaying&&!G.tutorial&&SETTINGS.anim!=='off'&&!matchMedia('(prefers-reduced-motion: reduce)').matches;
+const enabled=()=>F.ready&&G===F.game&&!G.replaying&&!G.tutorial&&SETTINGS.anim!=='off'&&!uvsReducedMotion();
 const ratio=()=>SETTINGS.anim==='short'?.6:1;
 const count=(type,data={})=>{F.metrics[type]=(F.metrics[type]||0)+1;F.history.push({type,turn:G.turn,...data});if(F.history.length>240)F.history.shift();};
 let layer,rail,noticeTimer,current=null;
@@ -3719,7 +3725,7 @@ if(!bs.success&&placed(bs.def.p.idx))moves.push(motion(placed(bs.def.p.idx),[{sc
 function cancelVisuals(){for(const t of [...F.transfers.values()])t.cancel();F.targetPulses.clear();clearTimeout(noticeTimer);current=null;F.queue=[];if(rail)rail.hidden=true;for(const a of [...F.animations])a.cancel();for(const e of [...F.elements])remove(e);F.revealing.clear();document.querySelectorAll('.fx45-revealing').forEach(e=>e.classList.remove('fx45-revealing'));F.publication=Promise.resolve();}
 F.skipAll=function(){count('skip');F.epoch++;cancelVisuals();window.UVS_BANNER_FINISH?.();window.FX?.skip?.();};
 F.hasActive=()=>enabled()&&(!!current||F.queue.length>0||F.animations.size>0||!!window.UVS_BANNER_FINISH);
-const oldSetup=setupGame;setupGame=function(opts){F.ready=false;F.epoch++;cancelVisuals();F.positions.clear();F.cards.clear();F.lastSource=null;F.history=[];F.metrics={};const on=opts.mode!=='tutorial'&&SETTINGS.anim!=='off'&&!matchMedia('(prefers-reduced-motion: reduce)').matches;const prior=opts.hooks?.event;const args=on?{...opts,hooks:{...opts.hooks,event:e=>{prior?.(e);F.event(e);}}}:opts;const result=oldSetup.call(this,args);F.game=G;F.ready=true;remember();const arr=G.log,push=arr.push;arr.push=function(...xs){const n=push.apply(this,xs);if(G===F.game)for(const x of xs)F.fromLog(String(x.s??x));return n;};skipButton();return result;};
+const oldSetup=setupGame;setupGame=function(opts){F.ready=false;F.epoch++;cancelVisuals();F.positions.clear();F.cards.clear();F.lastSource=null;F.history=[];F.metrics={};const on=opts.mode!=='tutorial'&&SETTINGS.anim!=='off'&&!uvsReducedMotion();const prior=opts.hooks?.event;const args=on?{...opts,hooks:{...opts.hooks,event:e=>{prior?.(e);F.event(e);}}}:opts;const result=oldSetup.call(this,args);F.game=G;F.ready=true;remember();const arr=G.log,push=arr.push;arr.push=function(...xs){const n=push.apply(this,xs);if(G===F.game)for(const x of xs)F.fromLog(String(x.s??x));return n;};skipButton();return result;};
 const oldRender=render;render=function(){remember();const result=oldRender.apply(this,arguments);if(!G.tutorial){details();if(enabled())skipButton();F.syncArrivals();}return result;};
 const oldStart=startScreen;startScreen=function(){F.ready=false;F.epoch++;cancelVisuals();document.getElementById('fx45-skip')?.remove();window.FX?.skip?.();return oldStart.apply(this,arguments);};
 window.addEventListener('click',e=>{if(!F.hasActive()||e.target.closest('#tut-guide'))return;if(e.target.closest('#fx45-notice'))return;if(e.target.closest('#fx45-skip')){e.preventDefault();e.stopImmediatePropagation();F.skipAll();return;}if(e.target.closest('button,[role=button],[data-bi],[data-uid],[data-zone],dialog,#overlay.on,#cardpeek'))return;e.preventDefault();e.stopImmediatePropagation();F.skipAll();},true);
@@ -3769,10 +3775,10 @@ const oldStart=startScreen;startScreen=function(){const r=oldStart.apply(this,ar
 </script><script>
 /* Read-only presentation diagnostics; no game state or settings writes. */
 (function(){'use strict';const Q=window.UVS_MOTION48={};
-Q.state=function(){const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches,anim=SETTINGS.anim;let reason=reduced?'端末の「動きを減らす」設定で停止':anim==='off'?'ゲームの演出設定が「なし」':G.tutorial?'チュートリアル中は停止':G.replaying?'ログ再生中は停止':!window.UVS_FX45?.ready?'対戦開始待ち':'有効';return{anim,reduced,reason,enabled:reason==='有効',previewAllowed:!reduced&&anim!=='off'};};
-Q.open=function(){const s=Q.state();openOv('<h2>演出の状態</h2><p><b>'+s.reason+'</b></p><dl class="detail"><dt>ゲームの演出設定</dt><dd>'+({normal:'普通',short:'短い',off:'なし'}[s.anim]||s.anim)+'</dd><dt>端末の「動きを減らす」</dt><dd>'+(s.reduced?'有効（アニメーションを抑制しています）':'無効')+'</dd></dl><p class="small">カード詳細やルールの表示中は、その背後の演出を隠します。盤面の空いている場所をタップすると再生中の演出を送ります。</p><div class="motion48-demo" aria-label="演出の動作確認"><span class="motion48-demo-card">CARD</span><span class="motion48-demo-number">−1</span></div><button id="motion48-test" '+(s.previewAllowed?'':'disabled')+'>動きを確認</button><p class="small">この確認は表示だけを動かします。カードの選択や対戦操作は実行しません。</p>');const stage=document.querySelector('.motion48-demo'),card=stage.firstElementChild,num=stage.lastElementChild,button=document.getElementById('motion48-test');button.onclick=async()=>{if(!Q.state().previewAllowed||!stage.isConnected)return;button.disabled=true;const dx=Math.max(60,stage.clientWidth-100);const frames=[{transform:'translateX(0) rotateY(0deg)'},{transform:'translateX('+dx+'px) rotateY(0deg)',offset:.45},{transform:'translateX('+dx+'px) rotateY(180deg)',offset:.7},{transform:'translateX('+dx+'px) rotateY(360deg)'}];try{await card.animate(frames,{duration:1100,easing:'ease-in-out'}).finished;if(!stage.isConnected)return;num.style.left=(dx+22)+'px';await num.animate([{opacity:0,transform:'translateY(0)'},{opacity:1,offset:.3},{opacity:0,transform:'translateY(-24px)'}],{duration:450}).finished;}catch{}finally{if(button.isConnected)button.disabled=!Q.state().previewAllowed;}};};
+Q.state=function(){const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches,anim=SETTINGS.anim;const respect=SETTINGS.respectMotion===true,suppressed=respect&&reduced;let reason=anim==='off'?'ゲームの演出設定が「なし」':suppressed?'端末の「動きを減らす」設定で停止':G.tutorial?'チュートリアル中は停止':G.replaying?'ログ再生中は停止':!window.UVS_FX45?.ready?'対戦開始待ち':'有効';return{anim,reduced,respectMotion:respect,reason,enabled:reason==='有効',previewAllowed:!suppressed&&anim!=='off'};};
+Q.open=function(){const s=Q.state();openOv('<h2>演出の状態</h2><p><b>'+s.reason+'</b></p><dl class="detail"><dt>ゲームの演出設定</dt><dd>'+({normal:'普通',short:'短い',off:'なし'}[s.anim]||s.anim)+'</dd><dt>端末の「動きを減らす」</dt><dd>'+(s.reduced?(s.respectMotion?'有効（ゲームも従って停止）':'有効（ゲーム内では従わず演出あり）'):'無効')+'</dd></dl><p class="small">カード詳細やルールの表示中は、その背後の演出を隠します。盤面の空いている場所をタップすると再生中の演出を送ります。</p><div class="motion48-demo" aria-label="演出の動作確認"><span class="motion48-demo-card">CARD</span><span class="motion48-demo-number">−1</span></div><button id="motion48-test" '+(s.previewAllowed?'':'disabled')+'>動きを確認</button><p class="small">この確認は表示だけを動かします。カードの選択や対戦操作は実行しません。</p>');const stage=document.querySelector('.motion48-demo'),card=stage.firstElementChild,num=stage.lastElementChild,button=document.getElementById('motion48-test');button.onclick=async()=>{if(!Q.state().previewAllowed||!stage.isConnected)return;button.disabled=true;const dx=Math.max(60,stage.clientWidth-100);const frames=[{transform:'translateX(0) rotateY(0deg)'},{transform:'translateX('+dx+'px) rotateY(0deg)',offset:.45},{transform:'translateX('+dx+'px) rotateY(180deg)',offset:.7},{transform:'translateX('+dx+'px) rotateY(360deg)'}];try{await card.animate(frames,{duration:1100,easing:'ease-in-out'}).finished;if(!stage.isConnected)return;num.style.left=(dx+22)+'px';await num.animate([{opacity:0,transform:'translateY(0)'},{opacity:1,offset:.3},{opacity:0,transform:'translateY(-24px)'}],{duration:450}).finished;}catch{}finally{if(button.isConnected)button.disabled=!Q.state().previewAllowed;}};};
 function decorate(){const bar=document.querySelector('#app .nv-bar');if(!bar||G.tutorial)return;let b=document.getElementById('motion48-status');if(!b){b=document.createElement('button');b.id='motion48-status';b.onclick=Q.open;bar.append(b);}const s=Q.state();b.textContent=s.enabled?'演出：'+({normal:'普通',short:'短い'}[s.anim]||s.anim):'演出：停止';b.title=s.reason+'（クリックで状態と動作確認）';b.dataset.enabled=String(s.enabled);}
-const oldRender=render;render=function(){const r=oldRender.apply(this,arguments);decorate();return r;};const media=matchMedia('(prefers-reduced-motion: reduce)');media.addEventListener?.('change',decorate);
+const oldRender=render;render=function(){const r=oldRender.apply(this,arguments);uvsSyncMotion();decorate();return r;};const media=matchMedia('(prefers-reduced-motion: reduce)');media.addEventListener?.('change',()=>{uvsSyncMotion();decorate();});
 })();
 
 </script></body>
